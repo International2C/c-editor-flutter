@@ -9,29 +9,33 @@ import 'preview_png_exporter.dart';
 
 /// Paths share the same identity used by the canvas' image-frame overrides.
 class PreviewGifSource {
-  const PreviewGifSource(this.path, {required this.isAsset});
+  const PreviewGifSource(this.path, {required this.isAsset, this.bytes});
 
   final String path;
   final bool isAsset;
+  final Uint8List? bytes;
 }
 
 List<PreviewGifSource> previewDocumentGifSources(PreviewDocument document) {
   final sources = <String, PreviewGifSource>{};
-  void add(String? path, {required bool isAsset}) {
+  void add(String? path, {required bool isAsset, Uint8List? bytes}) {
     if (path == null || !path.toLowerCase().endsWith('.gif')) return;
-    sources.putIfAbsent(path, () => PreviewGifSource(path, isAsset: isAsset));
+    sources.putIfAbsent(
+      path,
+      () => PreviewGifSource(path, isAsset: isAsset, bytes: bytes),
+    );
   }
 
   final banner = document.banner;
   if (banner.kind == PreviewBannerSourceKind.userFile) {
-    add(banner.userFilePath, isAsset: false);
+    add(banner.userFilePath, isAsset: false, bytes: banner.userFileBytes);
   } else {
     add(banner.assetPath, isAsset: true);
   }
   for (final layer in document.layers.where((layer) => layer.visible)) {
     if (layer.kind == PreviewLayerKind.image) {
       if (layer.imagePath != null) {
-        add(layer.imagePath, isAsset: false);
+        add(layer.imagePath, isAsset: false, bytes: layer.imageBytes);
       } else {
         add(layer.imageAsset, isAsset: true);
       }
@@ -59,6 +63,9 @@ List<PreviewGifSource> previewDocumentGifSources(PreviewDocument document) {
 typedef PreviewGifBytesLoader = Future<Uint8List> Function(PreviewGifSource);
 
 Future<Uint8List> _loadSource(PreviewGifSource source) async {
+  if (source.bytes != null && source.bytes!.isNotEmpty) {
+    return source.bytes!;
+  }
   if (source.isAsset) {
     final data = await rootBundle.load(source.path);
     return data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);

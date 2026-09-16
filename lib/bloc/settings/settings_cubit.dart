@@ -1,3 +1,4 @@
+import 'package:c_editor/utils/document_lang.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -6,7 +7,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 part 'settings_state.dart';
 
 class SettingsCubit extends Cubit<SettingsState> {
-  SettingsCubit(this._prefs) : super(_initialState(_prefs));
+  SettingsCubit(this._prefs) : super(_initialState(_prefs)) {
+    setDocumentLanguage(state.locale.languageCode);
+  }
 
   final SharedPreferences _prefs;
 
@@ -50,6 +53,7 @@ class SettingsCubit extends Cubit<SettingsState> {
   void setLocale(Locale locale) {
     emit(state.copyWith(locale: locale));
     _prefs.setString('locale', locale.languageCode);
+    setDocumentLanguage(locale.languageCode);
   }
 
   void cycleTheme() {

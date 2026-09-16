@@ -10,6 +10,7 @@ import 'package:c_editor/data/app_bootstrap.dart';
 import 'package:c_editor/data/repository/level_repository.dart';
 import 'package:c_editor/plugins/plugin_manager.dart';
 import 'package:c_editor/screens/startup_loading_screen.dart';
+import 'package:c_editor/utils/document_lang.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -89,6 +90,7 @@ class _BootstrapAppState extends State<BootstrapApp> {
   @override
   void initState() {
     super.initState();
+    setDocumentLanguage(_startupLocale.languageCode);
     _load();
   }
 

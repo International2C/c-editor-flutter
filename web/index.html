@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
   <!--
     If you are serving your web app in a path other than the root, change the
@@ -19,8 +19,10 @@
   <meta charset="UTF-8">
   <meta content="IE=Edge" http-equiv="X-UA-Compatible">
   <meta name="description" content="Level Editor for Plants vs. Zombies 2 Chinese">
-  <!-- viewport-fit=cover is required for env(safe-area-inset-*) on iOS. -->
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <!-- Do not lock pinch-zoom: iOS then reports tap coordinates that do not
+       match the canvas, killing the bottom and trailing edge. Desktop-site
+       mode ignores that restriction. -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 
   <!-- iOS meta tags & icons -->
   <meta name="mobile-web-app-capable" content="yes">
@@ -38,26 +40,12 @@
     html, body {
       width: 100%;
       height: 100%;
-      min-height: 100dvh;
       margin: 0;
       padding: 0;
       overflow: hidden;
       overscroll-behavior: none;
-      touch-action: none;
-    }
-
-    /* Light-DOM fallback. Flutter often mounts this inside shadow DOM; the
-       script injects the same rule there. */
-    flt-semantics-placeholder {
-      pointer-events: none !important;
-      position: absolute !important;
-      left: -1px !important;
-      top: -1px !important;
-      right: auto !important;
-      bottom: auto !important;
-      width: 1px !important;
-      height: 1px !important;
-      overflow: hidden !important;
+      position: fixed;
+      inset: 0;
     }
   </style>
 </head>

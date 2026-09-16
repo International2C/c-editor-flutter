@@ -66,8 +66,22 @@ class _AppUiScalerState extends State<AppUiScaler> {
         );
   }
 
+  Widget _unscaledChild() {
+    return AppUiScale(
+      scale: 1.0,
+      child: widget.wrapMessenger
+          ? AppMessageMessenger(child: widget.child)
+          : widget.child,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
+    // Transform.scale is a known mobile-web hit-test footgun: the canvas
+    // still fills the screen, but pointers along the bottom and trailing
+    // edge miss the widgets painted there. Skip the scaler on web entirely.
+    if (kIsWeb) return _unscaledChild();
+
     final mediaQuery = MediaQuery.of(context);
 
     return LayoutBuilder(
@@ -85,14 +99,9 @@ class _AppUiScalerState extends State<AppUiScaler> {
           viewportExtent(constraints.maxHeight, mediaQuery.size.height),
         );
         final layoutViewport = _layoutViewport(visibleViewport);
-        // Mobile web already uses a device-width viewport. An extra
-        // Transform.scale from the top-left leaves untappable strips along the
-        // bottom and trailing edge — the same regions that start working after
-        // "Request desktop site", which also skips this compact scale.
         final requestedScale =
             widget.scale *
             (widget.applyCompactViewportScale &&
-                    !kIsWeb &&
                     layoutViewport.shortestSide < _compactViewportBreakpoint
                 ? _compactUiScaleFactor
                 : 1.0);

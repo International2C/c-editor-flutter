@@ -1,4 +1,3 @@
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart'
     show kIsWeb, listEquals, visibleForTesting;
 import 'package:flutter/material.dart';
@@ -23,6 +22,7 @@ import 'preview_toolbar_action.dart';
 import 'preview_generator_pickers.dart';
 import 'preview_layers_dialog.dart';
 import 'preview_sticker_catalog.dart';
+import 'preview_user_image.dart';
 import 'preview_gif_first_frames.dart';
 import 'preview_gif_png_notice_dialog.dart';
 import 'package:c_editor/bundled_plugins/preview_img_cplugin/lib/src/preview/stage_banner_resolver.dart';
@@ -1180,17 +1180,14 @@ class _PreviewGeneratorScreenState extends State<PreviewGeneratorScreen> {
   Future<void> _pickCustomBanner() async {
     final doc = _document;
     if (doc == null) return;
-    final result = await FilePicker.pickFiles(
-      type: FileType.image,
-      withData: false,
-    );
-    final path = result?.files.single.path;
-    if (path == null || path.isEmpty) return;
+    final picked = await pickPreviewUserImage();
+    if (picked == null) return;
     _pushHistory();
     setState(() {
       doc.banner = PreviewBannerRef(
         kind: PreviewBannerSourceKind.userFile,
-        userFilePath: path,
+        userFilePath: picked.path,
+        userFileBytes: picked.bytes,
       );
     });
   }
@@ -1211,13 +1208,12 @@ class _PreviewGeneratorScreenState extends State<PreviewGeneratorScreen> {
 
     String? path;
     String? asset;
+    Uint8List? bytes;
     if (choice.isCustom) {
-      final result = await FilePicker.pickFiles(
-        type: FileType.image,
-        withData: false,
-      );
-      path = result?.files.single.path;
-      if (path == null || path.isEmpty) return;
+      final picked = await pickPreviewUserImage();
+      if (picked == null) return;
+      path = picked.path;
+      bytes = picked.bytes;
     } else {
       asset = choice.assetPath;
       if (asset == null) return;
@@ -1226,7 +1222,9 @@ class _PreviewGeneratorScreenState extends State<PreviewGeneratorScreen> {
     var bounds = const Rect.fromLTWH(0.35, 0.25, 0.30, 0.40);
     try {
       ui.Image? decoded;
-      if (asset != null) {
+      if (bytes != null) {
+        decoded = await decodeImageFromList(bytes);
+      } else if (asset != null) {
         if (asset.toLowerCase().endsWith('.gif')) {
           decoded = await decodeFirstFrameFromAsset(asset);
         } else {
@@ -1258,6 +1256,7 @@ class _PreviewGeneratorScreenState extends State<PreviewGeneratorScreen> {
           bounds: bounds,
           scale: 1,
           imagePath: path,
+          imageBytes: bytes,
           imageAsset: asset,
         ),
       );

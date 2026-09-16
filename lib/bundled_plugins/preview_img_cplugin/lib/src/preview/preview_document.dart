@@ -1,4 +1,5 @@
 import 'dart:math' as math;
+import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:c_editor/data/repository/plant_repository.dart';
@@ -525,18 +526,21 @@ class PreviewBannerRef {
     required this.kind,
     this.stem,
     this.userFilePath,
+    this.userFileBytes,
     this.assetPath,
   });
 
   PreviewBannerSourceKind kind;
   String? stem;
   String? userFilePath;
+  Uint8List? userFileBytes;
   String? assetPath;
 
   PreviewBannerRef copy() => PreviewBannerRef(
     kind: kind,
     stem: stem,
     userFilePath: userFilePath,
+    userFileBytes: userFileBytes,
     assetPath: assetPath,
   );
 }
@@ -716,6 +720,7 @@ class PreviewLayer {
     List<PreviewItem>? items,
     List<PreviewIconSection>? sections,
     this.imagePath,
+    this.imageBytes,
     this.imageAsset,
     this.shapeKind,
     this.shapeFilled = false,
@@ -774,6 +779,7 @@ class PreviewLayer {
 
   // image overlay
   String? imagePath;
+  Uint8List? imageBytes;
   String? imageAsset;
 
   // shape
@@ -1019,6 +1025,7 @@ class PreviewLayer {
     items: items.map((e) => e.copy()).toList(),
     sections: sections.map((e) => e.copy()).toList(),
     imagePath: imagePath,
+    imageBytes: imageBytes,
     imageAsset: imageAsset,
     shapeKind: shapeKind,
     shapeFilled: shapeFilled,

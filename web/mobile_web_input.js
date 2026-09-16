@@ -1,23 +1,18 @@
-// Mobile browsers (not "desktop site") use Flutter's fullscreen a11y
-// placeholder and a visual viewport that often disagrees with the canvas.
-// That combination eats taps along the bottom and top-right. Desktop UA
-// never creates the fullscreen overlay, which is why requesting the PC
-// version appears to "fix" it.
+// Phone browsers keep a layout viewport that is taller/wider than what the
+// user can tap (Safari/Chrome toolbars, visualViewport offset, residual zoom).
+// Flutter then paints widgets where they cannot receive pointer events — most
+// visibly the bottom strip and the top-right AppBar. "Request desktop site"
+// avoids that by using a different viewport and UA. This script keeps the
+// document glued to the *visible* viewport instead.
 (function () {
   'use strict';
 
   var PLACEHOLDER = 'flt-semantics-placeholder';
   var VIEWPORT_CONTENT =
-    'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover';
-  var STYLE_ATTR = 'data-c-editor-mobile-input';
-  var PLACEHOLDER_CSS =
-    PLACEHOLDER +
-    '{pointer-events:none!important;position:absolute!important;' +
-    'left:-1px!important;top:-1px!important;right:auto!important;' +
-    'bottom:auto!important;width:1px!important;height:1px!important;' +
-    'overflow:hidden!important;}';
-
+    'width=device-width, initial-scale=1.0, viewport-fit=cover';
   var observed = typeof WeakSet === 'function' ? new WeakSet() : null;
+  var fitScheduled = false;
+  var fitting = false;
 
   function resetViewportScroll() {
     window.scrollTo(0, 0);
@@ -25,17 +20,74 @@
     if (document.body) document.body.scrollTop = 0;
   }
 
+  function setStyle(el, prop, value) {
+    if (el.style[prop] === value) return false;
+    el.style[prop] = value;
+    return true;
+  }
+
+  function fitToVisualViewport() {
+    if (fitting) return;
+    var vv = window.visualViewport;
+    var width = vv && vv.width ? vv.width : window.innerWidth;
+    var height = vv && vv.height ? vv.height : window.innerHeight;
+    var left = vv ? vv.offsetLeft : 0;
+    var top = vv ? vv.offsetTop : 0;
+    if (!width || !height) return;
+
+    fitting = true;
+    var html = document.documentElement;
+    var body = document.body;
+    var widthPx = Math.round(width * 1000) / 1000 + 'px';
+    var heightPx = Math.round(height * 1000) / 1000 + 'px';
+    var leftPx = Math.round(left * 1000) / 1000 + 'px';
+    var topPx = Math.round(top * 1000) / 1000 + 'px';
+
+    if (html) {
+      setStyle(html, 'width', widthPx);
+      setStyle(html, 'height', heightPx);
+      setStyle(html, 'overflow', 'hidden');
+    }
+    if (body) {
+      setStyle(body, 'position', 'fixed');
+      setStyle(body, 'margin', '0px');
+      setStyle(body, 'overflow', 'hidden');
+      setStyle(body, 'width', widthPx);
+      setStyle(body, 'height', heightPx);
+      setStyle(body, 'left', leftPx);
+      setStyle(body, 'top', topPx);
+      setStyle(body, 'right', 'auto');
+      setStyle(body, 'bottom', 'auto');
+    }
+
+    resetViewportScroll();
+    fitting = false;
+  }
+
+  function scheduleFit() {
+    if (fitScheduled) return;
+    fitScheduled = true;
+    requestAnimationFrame(function () {
+      fitScheduled = false;
+      fitToVisualViewport();
+    });
+  }
+
   function ensureViewportMeta() {
     var head = document.head;
     if (!head) return;
-    var meta = document.querySelector('meta[name="viewport"]');
-    if (!meta) {
-      meta = document.createElement('meta');
-      meta.setAttribute('name', 'viewport');
-      head.appendChild(meta);
+    var metas = document.querySelectorAll('meta[name="viewport"]');
+    if (!metas.length) {
+      var created = document.createElement('meta');
+      created.setAttribute('name', 'viewport');
+      created.setAttribute('content', VIEWPORT_CONTENT);
+      head.appendChild(created);
+      return;
     }
-    if (meta.getAttribute('content') !== VIEWPORT_CONTENT) {
-      meta.setAttribute('content', VIEWPORT_CONTENT);
+    for (var i = 0; i < metas.length; i++) {
+      if (metas[i].getAttribute('content') !== VIEWPORT_CONTENT) {
+        metas[i].setAttribute('content', VIEWPORT_CONTENT);
+      }
     }
   }
 
@@ -48,33 +100,18 @@
   function neutralizePlaceholder(el) {
     el.setAttribute('tabindex', '-1');
     el.style.setProperty('pointer-events', 'none', 'important');
-    el.style.setProperty('position', 'absolute', 'important');
-    el.style.setProperty('left', '-1px', 'important');
-    el.style.setProperty('top', '-1px', 'important');
-    el.style.setProperty('right', 'auto', 'important');
-    el.style.setProperty('bottom', 'auto', 'important');
-    el.style.setProperty('width', '1px', 'important');
-    el.style.setProperty('height', '1px', 'important');
-    el.style.setProperty('overflow', 'hidden', 'important');
-  }
-
-  function injectShadowStyle(shadow) {
-    if (!shadow || !shadow.appendChild) return;
-    if (shadow.querySelector && shadow.querySelector('style[' + STYLE_ATTR + ']')) {
-      return;
-    }
-    var style = document.createElement('style');
-    style.setAttribute(STYLE_ATTR, '');
-    style.appendChild(document.createTextNode(PLACEHOLDER_CSS));
-    shadow.appendChild(style);
+    el.style.setProperty('display', 'none', 'important');
+    if (el.remove) el.remove();
   }
 
   function walk(root) {
     if (!root) return;
-    if (isPlaceholder(root)) neutralizePlaceholder(root);
+    if (isPlaceholder(root)) {
+      neutralizePlaceholder(root);
+      return;
+    }
     var shadow = root.shadowRoot;
     if (shadow) {
-      injectShadowStyle(shadow);
       observe(shadow);
       walk(shadow);
     }
@@ -86,9 +123,7 @@
   }
 
   function observe(root) {
-    if (!root || !root.addEventListener || (observed && observed.has(root))) {
-      return;
-    }
+    if (!root || (observed && observed.has(root))) return;
     if (observed) observed.add(root);
     var observer = new MutationObserver(function (mutations) {
       for (var i = 0; i < mutations.length; i++) {
@@ -103,19 +138,28 @@
 
   function install() {
     ensureViewportMeta();
-    resetViewportScroll();
     observe(document);
     if (document.documentElement) walk(document.documentElement);
+    scheduleFit();
   }
 
   install();
   window.addEventListener('load', install);
-  window.addEventListener('pageshow', resetViewportScroll);
-  window.addEventListener('resize', resetViewportScroll);
+  window.addEventListener('pageshow', install);
+  window.addEventListener('resize', scheduleFit);
   window.addEventListener('orientationchange', install);
   window.addEventListener('flutter-first-frame', install);
+  window.addEventListener('focusout', scheduleFit, true);
+  document.addEventListener('visibilitychange', function () {
+    if (!document.hidden) install();
+  });
+  // iOS does not always deliver the first touch unless a listener exists.
+  window.addEventListener('touchstart', function () {}, {
+    capture: true,
+    passive: true,
+  });
   if (window.visualViewport) {
-    window.visualViewport.addEventListener('resize', resetViewportScroll);
-    window.visualViewport.addEventListener('scroll', resetViewportScroll);
+    window.visualViewport.addEventListener('resize', scheduleFit);
+    window.visualViewport.addEventListener('scroll', scheduleFit);
   }
 })();

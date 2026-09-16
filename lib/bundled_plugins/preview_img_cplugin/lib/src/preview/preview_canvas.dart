@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:c_editor/bundled_plugins/preview_img_cplugin/lib/src/preview/gif_first_frame.dart';
 import 'package:c_editor/bundled_plugins/preview_img_cplugin/lib/src/preview/preview_document.dart';
-import 'package:c_editor/bundled_plugins/preview_img_cplugin/lib/src/preview/preview_file_image.dart';
+import 'package:c_editor/bundled_plugins/preview_img_cplugin/lib/src/preview/preview_user_image.dart';
 import 'package:c_editor/bundled_plugins/preview_img_cplugin/lib/src/preview/preview_fonts.dart';
 import 'package:c_editor/bundled_plugins/preview_img_cplugin/lib/src/preview/preview_rich_text_controller.dart';
 import 'package:c_editor/screens/common/level_preview_grid_helpers.dart';
@@ -488,9 +488,10 @@ class PreviewCanvasState extends State<PreviewCanvas> {
       );
     }
     if (ref.kind == PreviewBannerSourceKind.userFile &&
-        ref.userFilePath != null) {
-      final fileImg = fileBannerImage(
-        ref.userFilePath!,
+        (ref.userFileBytes != null || ref.userFilePath != null)) {
+      final fileImg = previewUserImage(
+        path: ref.userFilePath,
+        bytes: ref.userFileBytes,
         fit: BoxFit.fill,
         width: kPreviewCanvasSize.width,
         height: kPreviewCanvasSize.height,
@@ -1551,13 +1552,15 @@ class _LayerWidgetState extends State<_LayerWidget> {
         width: width,
         height: height,
       );
-    } else if (layer.imagePath != null) {
+    } else if (layer.imageBytes != null || layer.imagePath != null) {
       img =
-          fileBannerImage(
-            layer.imagePath!,
+          previewUserImage(
+            path: layer.imagePath,
+            bytes: layer.imageBytes,
             fit: BoxFit.contain,
             width: width,
             height: height,
+            onError: () => const ColoredBox(color: Colors.black26),
           ) ??
           const ColoredBox(color: Colors.black26);
     } else if (layer.imageAsset != null) {
