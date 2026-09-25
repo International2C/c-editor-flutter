@@ -4585,7 +4585,6 @@ class _CustomStageAliasPromptDialogState
 
     return EscapeClosesModal(
       child: Dialog(
-        constraints: const BoxConstraints(minWidth: 0),
         child: SizedBox(
           width: dialogW,
           child: Padding(

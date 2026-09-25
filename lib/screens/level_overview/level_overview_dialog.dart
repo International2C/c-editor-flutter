@@ -358,7 +358,6 @@ class _LevelOverviewDialogState extends State<LevelOverviewDialog> {
       // Prefer Dialog over AlertDialog: AlertDialog wraps content in
       // IntrinsicWidth + Flexible, which can end up with size MISSING.
       return const Dialog(
-        constraints: BoxConstraints(minWidth: 0),
         child: SizedBox(
           width: 120,
           height: 120,
@@ -369,7 +368,7 @@ class _LevelOverviewDialogState extends State<LevelOverviewDialog> {
 
     if (levelDef == null) {
       return Dialog(
-        constraints: const BoxConstraints(minWidth: 0, maxWidth: 400),
+        constraints: const BoxConstraints(maxWidth: 400),
         child: Padding(
           padding: const EdgeInsets.fromLTRB(24, 20, 24, 12),
           child: Column(
@@ -446,7 +445,6 @@ class _LevelOverviewDialogState extends State<LevelOverviewDialog> {
         );
         return Dialog(
           backgroundColor: theme.colorScheme.surface,
-          constraints: const BoxConstraints(minWidth: 0),
           insetPadding: EdgeInsets.symmetric(
             horizontal: horizontalInset,
             vertical: verticalInset,
@@ -4910,7 +4908,6 @@ class _LevelOverviewDialogState extends State<LevelOverviewDialog> {
         return EscapeClosesModal(
           child: Dialog(
             backgroundColor: theme.colorScheme.surface,
-            constraints: const BoxConstraints(minWidth: 0),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(16),
             ),

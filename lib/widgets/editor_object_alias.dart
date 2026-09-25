@@ -356,35 +356,35 @@ class _PvzAliasInputDialogState extends State<_PvzAliasInputDialog> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
+    // Tight width so AlertDialog's IntrinsicWidth does not measure children.
+    // EditorResponsiveInputField uses LayoutBuilder, which cannot report
+    // intrinsic dimensions (see Flutter LayoutBuilder docs).
     return AlertDialog(
+      scrollable: true,
+      constraints: const BoxConstraints.tightFor(width: 400),
       title: Text(widget.title),
-      content: SingleChildScrollView(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Text(
-              widget.objClass,
-              style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                color: Theme.of(context).colorScheme.onSurfaceVariant,
-              ),
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Text(
+            widget.objClass,
+            style: Theme.of(context).textTheme.bodySmall?.copyWith(
+              color: Theme.of(context).colorScheme.onSurfaceVariant,
             ),
-            const SizedBox(height: 12),
-            SizedBox(
-              width: 400,
-              child: EditorResponsiveInputField(
-                label: l10n?.aliasLabel ?? 'Alias',
-                decoration: InputDecoration(errorText: _errorText),
-                builder: (context, decoration) => TextField(
-                  controller: _controller,
-                  autofocus: true,
-                  decoration: decoration,
-                  onSubmitted: (_) => _submit(),
-                ),
-              ),
+          ),
+          const SizedBox(height: 12),
+          EditorResponsiveInputField(
+            label: l10n?.aliasLabel ?? 'Alias',
+            decoration: InputDecoration(errorText: _errorText),
+            builder: (context, decoration) => TextField(
+              controller: _controller,
+              autofocus: true,
+              decoration: decoration,
+              onSubmitted: (_) => _submit(),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
       actions: [
         TextButton(

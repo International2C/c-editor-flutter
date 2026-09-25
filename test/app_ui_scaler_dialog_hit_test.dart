@@ -204,7 +204,6 @@ class _OwnedAliasDialogState extends State<_OwnedAliasDialog> {
   @override
   Widget build(BuildContext context) {
     return Dialog(
-      constraints: const BoxConstraints(minWidth: 0),
       child: SizedBox(
         width: 420,
         child: Padding(

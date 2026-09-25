@@ -10588,11 +10588,11 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get moduleDesc_StatueMazeModuleProperties =>
-      'Мини-игра «Лабиринт статуй» — нужно нажимать на правильные статуи в вращающейся сетке';
+      'Мини-игра «Лабиринт статуй» — нужно нажимать на правильные статуи в сетке, которая вращается';
 
   @override
   String get moduleHelpStatueMazeOverviewBody =>
-      'Модуль «Лабиринт статуй» добавляет мини-игру с вращающейся сеткой. Каждый раунд представляет сетку статуй, которые вращаются, и игрок должен успеть нажать на правильные, пока не закончилось время.';
+      'Модуль «Лабиринт статуй» добавляет мини-игру с вращающейся сеткой. Каждый раунд представляет лужайку со статуями, которые вращаются, и игрок должен успеть нажать на правильные, пока не закончилось время.';
 
   @override
   String get moduleHelpStatueMazeSetsBody =>
@@ -10682,15 +10682,16 @@ class AppLocalizationsRu extends AppLocalizations {
   String get statueMazeRemoveRotationConfirm => 'Удалить этот шаг вращения?';
 
   @override
-  String get moduleTitle_CamelMinigameProperties => 'Карточная игра «Верблюд»';
+  String get moduleTitle_CamelMinigameProperties =>
+      'Карточная игра «Память верблюдов»';
 
   @override
   String get moduleDesc_CamelMinigameProperties =>
-      'Мини-игра «Верблюд» — нужно находить пары карт, переворачивая их';
+      'Мини-игра «Память верблюдов» — нужно собирать одинаковые пары верблюдов, переворачивая их';
 
   @override
   String get moduleHelpCamelOverviewBody =>
-      'Мини-игра «Верблюд» размещает цепочки карт на газоне. Зомби вылезают из-под земли, а игрок должен успеть найти пары, переворачивая карты.';
+      'Мини-игра «Память верблюдов» размещает цепочки зомби на газоне. Зомби вылезают из-под земли, а игрок должен успеть найти пары, переворачивая верблюдов.';
 
   @override
   String get moduleHelpCamelTimingsBody =>
@@ -10737,23 +10738,23 @@ class AppLocalizationsRu extends AppLocalizations {
   String get camelShowTutorial => 'Показать обучение';
 
   @override
-  String get moduleTitle_OakTrainProperties => 'Стрельба дубового лучника';
+  String get moduleTitle_OakTrainProperties => 'Тренирока Дубопня';
 
   @override
   String get moduleDesc_OakTrainProperties =>
-      'Мини-игра стрельбы дубового лучника — нужно поражать в голову волны врагов';
+      'Мини-игра Тренирока Дубопня — нужно отстреливаться от волн зомби, с помощью Дубопня';
 
   @override
   String get moduleHelpOakTrainOverviewBody =>
-      'Мини-игра «Стрельба дубового лучника» размещает лучника на газоне. Волны врагов приближаются, и игрок должен набирать очки, уничтожая их. У лучника есть общий запас HP; зелья лечения и усиленные стрелы восполняются по таймеру.';
+      'Мини-игра «Тренирока Дубопня» в ней вам выдают уже посаженного Дубопня. Волны зомби наступают и игрок должен набирать очки, уничтожая их. У Дубопня есть определенный запас HP; зелья лечения и усиленные стрелы восполняются по таймеру.';
 
   @override
   String get moduleHelpOakTrainScoresBody =>
-      'ArrowScore — базовые очки атаки. WizardScore, ArchmageScore и BossScore — бонусные очки за уничтожение определённых типов врагов.';
+      'ArrowScore — базовые очки атаки. WizardScore, ArchmageScore и BossScore — бонусные очки за уничтожение определённых типов зомби.';
 
   @override
   String get moduleHelpOakTrainArrowsBody =>
-      'ArrowPowerNum — количество усиленных стрел за цикл. ArrowMultipleNum — количество разделяющихся стрел за цикл. HealNum — количество HP, восстанавливаемых зельем.';
+      'ArrowPowerNum — количество усиленных стрел за определенный период. ArrowMultipleNum — количество разделяющихся стрел за определенный период. HealNum — количество HP, восстанавливаемых зельем.';
 
   @override
   String get oakTrainTotalLife => 'Общее HP (TotalLife)';
@@ -10765,7 +10766,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get oakTrainWizardScore => 'Очки за волшебника (WizardScore)';
 
   @override
-  String get oakTrainArchmageScore => 'Очки за архи mageа (ArchmageScore)';
+  String get oakTrainArchmageScore => 'Очки за архимага (ArchmageScore)';
 
   @override
   String get oakTrainBossScore => 'Очки за босса (BossScore)';
@@ -10775,11 +10776,11 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get oakTrainArrowPowerNum =>
-      'Усиленные стрелы за цикл (ArrowPowerNum)';
+      'Усиленные стрелы за определенный период (ArrowPowerNum)';
 
   @override
   String get oakTrainArrowMultipleNum =>
-      'Разделяющиеся стрелы за цикл (ArrowMultipleNum)';
+      'Разделяющиеся стрелы за определенный период (ArrowMultipleNum)';
 
   @override
   String get oakTrainInitArrowsNum =>
@@ -10798,18 +10799,18 @@ class AppLocalizationsRu extends AppLocalizations {
   String get oakTrainInitArrowUnused => 'Unused';
 
   @override
-  String get moduleTitle_OakTrainIntroProperties => 'Обучение дубового лучника';
+  String get moduleTitle_OakTrainIntroProperties => 'Обучение Дубопня»';
 
   @override
   String get moduleDesc_OakTrainIntroProperties =>
-      'Вступительная анимация мини-игры «Стрельба дубового лучника»';
+      'Вступительная анимация мини-игры «Тренирока Дубопня»';
 
   @override
-  String get moduleTitle_GoldRoadProperties => 'Золотая дорога (Прополка)';
+  String get moduleTitle_GoldRoadProperties => 'Золотая дорога';
 
   @override
   String get moduleDesc_GoldRoadProperties =>
-      'Мини-игра из Затерянного города, где первая и последняя строки заблокированы для посадки';
+      'Мини-игра из Затерянного города, где первая и последняя линии лужайки заблокированы для посадки';
 
   @override
   String get goldRoadNonLostCityLawnWarningTitle =>
@@ -10817,14 +10818,14 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get goldRoadNonLostCityLawnWarning =>
-      '«Золотая дорога (Прополка)» предназначена для лужайки Затерянного города. Не рекомендуется использовать этот модуль на других лужайках, так как это плохо скажется на внешнем виде уровня.';
+      '«Золотая дорога» предназначена для лужайки Затерянного города. Не рекомендуется использовать этот модуль на других лужайках, так как это плохо скажется на внешнем виде уровня.';
 
   @override
   String get goldRoadDeepseaLawnWarningTitle => 'Несовместимая лужайка';
 
   @override
   String get goldRoadDeepseaLawnWarning =>
-      '«Золотая дорога (Прополка)» работает некорректно с лужайками подводного мира. Вместо блокировки первой и последней строк блокируются первая и пятая.';
+      '«Золотая дорога» работает некорректно с лужайками подводного мира. Вместо блокировки первой и последней линии лужайки блокируются первая и пятая.';
 
   @override
   String get goldRoadCustomLostCityLawnWarningTitle =>
@@ -10832,5 +10833,5 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get goldRoadCustomLostCityLawnWarning =>
-      '«Золотая дорога (Прополка)» предназначена для родной лужайки Затерянного города. Ваш уровень использует пользовательскую лужайку с ресурсами Затерянного города. Это всё равно может повлиять на внешний вид уровня. Используйте этот модуль с осторожностью.';
+      '«Золотая дорога» предназначена для родной лужайки Затерянного города. Ваш уровень использует пользовательскую лужайку с ресурсами Затерянного города. Это всё равно может повлиять на внешний вид уровня. Используйте этот модуль с осторожностью.';
 }
