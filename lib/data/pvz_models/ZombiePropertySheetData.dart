@@ -74,8 +74,8 @@ class ZombiePropertySheetData extends PvzModel {
   bool? canTriggerZombieWin;
   bool? chillInsteadOfFreeze;
   double? eliteScale;
-  int? armDropFraction;
-  int? headDropFraction;
+  double? armDropFraction;
+  double? headDropFraction;
 
   factory ZombiePropertySheetData.fromJson(Map<String, dynamic> json) {
     return ZombiePropertySheetData(
@@ -84,7 +84,7 @@ class ZombiePropertySheetData extends PvzModel {
       speedVariance: (json['SpeedVariance'] as num?)?.toDouble(),
       eatDPS: (json['EatDPS'] as num?)?.toDouble() ?? 0.0,
       weight: (json['Weight'] as num?)?.toInt() ?? 0,
-      wavePointCost: json['WavePointCost'] as int? ?? 0,
+      wavePointCost: (json['WavePointCost'] as num?)?.toInt() ?? 0,
       sizeType: json['SizeType'] as String?,
       hitRect: json['HitRect'] is Map<String, dynamic>
           ? RectData.fromJson(json['HitRect'] as Map<String, dynamic>)
@@ -111,8 +111,8 @@ class ZombiePropertySheetData extends PvzModel {
       canTriggerZombieWin: json['CanTriggerZombieWin'] as bool?,
       chillInsteadOfFreeze: json['ChillInsteadOfFreeze'] as bool?,
       eliteScale: (json['EliteScale'] as num?)?.toDouble(),
-      armDropFraction: json['ArmDropFraction'] as int?,
-      headDropFraction: json['HeadDropFraction'] as int?,
+      armDropFraction: (json['ArmDropFraction'] as num?)?.toDouble(),
+      headDropFraction: (json['HeadDropFraction'] as num?)?.toDouble(),
       resilience: () {
         final r = json['Resilience'];
         if (r == null) return null;

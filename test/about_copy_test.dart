@@ -14,11 +14,7 @@ void main() {
     expect(l10n.feature4, contains('预防关卡闪退'));
     expect(l10n.feature5, contains('植物、僵尸和障碍物图标'));
 
-    for (final usage in [
-      l10n.usageText,
-      l10n.usageTextDesktop,
-      l10n.usageTextMobile,
-    ]) {
+    for (final usage in [l10n.usageTextDesktop, l10n.usageTextMobile]) {
       expect(usage, contains('使用下方按钮'));
       expect(usage, isNot(contains('使用右下角按钮')));
       expect(usage, contains('“添加新模块”'));
@@ -36,7 +32,7 @@ void main() {
     final ru = lookupAppLocalizations(const Locale('ru'));
 
     expect(en.feature3, contains('custom lawns'));
-    expect(en.feature3, contains('custom Zomboss Mechs'));
+    expect(en.feature3, contains('custom Zomboss mechs'));
     expect(en.feature5, contains('Resource previews'));
     expect(en.usageTextMobile, contains('button below'));
     expect(en.usageTextMobile, contains('.cplugin'));

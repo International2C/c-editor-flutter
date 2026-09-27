@@ -5,7 +5,7 @@ const EdgeInsets kGridOverrideModuleSectionPadding = EdgeInsets.symmetric(
   vertical: 16,
 );
 
-/// Height shared by wave-group chips and the add (+) control.
+/// Minimum chip height, also used by the add (+) control.
 const double kGridOverrideGroupChipHeight = 44;
 
 /// Wave-group selector row used by Armrack / EnergyGrid module editors.
@@ -66,8 +66,10 @@ class _GroupChip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: kGridOverrideGroupChipHeight,
+    return ConstrainedBox(
+      constraints: const BoxConstraints(
+        minHeight: kGridOverrideGroupChipHeight,
+      ),
       child: Material(
         color: isSelected
             ? theme.colorScheme.primaryContainer
@@ -77,8 +79,10 @@ class _GroupChip extends StatelessWidget {
           onTap: onTap,
           borderRadius: BorderRadius.circular(8),
           child: Container(
-            height: kGridOverrideGroupChipHeight,
-            padding: const EdgeInsets.symmetric(horizontal: 12),
+            constraints: const BoxConstraints(
+              minHeight: kGridOverrideGroupChipHeight,
+            ),
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(8),
               border: Border.all(
@@ -91,10 +95,12 @@ class _GroupChip extends StatelessWidget {
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Text(
-                  label,
-                  style: theme.textTheme.labelLarge?.copyWith(
-                    fontWeight: FontWeight.bold,
+                Flexible(
+                  child: Text(
+                    label,
+                    style: theme.textTheme.labelLarge?.copyWith(
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
                 IconButton(

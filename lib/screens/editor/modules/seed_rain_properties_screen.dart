@@ -237,7 +237,7 @@ class _SeedRainPropertiesScreenState extends State<SeedRainPropertiesScreen> {
       case 2:
         return AppLocalizations.of(context)?.plantFood ?? 'Plant Food';
       default:
-        return 'Unknown';
+        return AppLocalizations.of(context)?.seedRainUnknownItem ?? 'Unknown';
     }
   }
 
@@ -525,7 +525,7 @@ class _SeedRainRowCard extends StatelessWidget {
       case 2:
         return l10n?.collectable ?? 'Collectible';
       default:
-        return 'Unknown';
+        return l10n?.seedRainUnknownItem ?? 'Unknown';
     }
   }
 
@@ -549,7 +549,7 @@ class _SeedRainRowCard extends StatelessWidget {
         if (info?.icon != null) return 'assets/images/zombies/${info!.icon}';
         return null;
       case 2:
-        return 'assets/images/others/plantfood.png';
+        return 'assets/images/others/plantfood.webp';
       default:
         return null;
     }

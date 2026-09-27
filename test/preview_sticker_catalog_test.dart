@@ -107,6 +107,36 @@ void main() {
     },
   );
 
+  test('lunar vein stickers have variant names and keep picker order', () {
+    const types = [
+      'lunar_mine_vein',
+      'lunar_mine_vein_hardened',
+      'lunar_mine_vein_fragile',
+      'lunar_mine_vein_fragile_plantfood',
+      'lunar_mine_vein_radiation',
+    ];
+    final variants = stickers
+        .where(
+          (entry) => types.any(
+            (type) => entry.assetPath == 'assets/images/griditems/$type.webp',
+          ),
+        )
+        .toList();
+    expect(
+      variants.map((entry) => entry.resourceNameKey),
+      types.map((type) => 'griditem_$type'),
+    );
+    for (final entry in variants) {
+      expect(entry.tag, 'griditems');
+      for (final locale in ['zh', 'en', 'ru']) {
+        expect(
+          ResourceNames.lookupWithLocale(locale, entry.resourceNameKey!),
+          isNot(entry.resourceNameKey),
+        );
+      }
+    }
+  });
+
   test('zombie stickers follow Zombies, ZombossMechs, then Zombosses JSON', () {
     final expected = <String>[];
     final seen = <String>{};

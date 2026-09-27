@@ -1,0 +1,155 @@
+[
+  {
+    "level": "UNCHARTED_ROMA_N_5",
+    "module": {
+      "aliases": [
+        "GladiatorRowModule"
+      ],
+      "objclass": "GladiatorRowModuleProperties",
+      "objdata": {
+        "ResourceGroupNames": [
+          "GladiatorRow",
+          "ZombieRomanTopShieldGroup",
+          "ZombieRomanBasicResGroup",
+          "ZombieRomanHealerGroup"
+        ],
+        "BaseConfig": "RTID(DefaultGladiatorRowConfig@PropertySheets)",
+        "GameplayVersion": 1,
+        "ZombieWinPunishmentZombiePool": [
+          {
+            "ZombieTypeName": "roman_flag",
+            "Weight": 10
+          },
+          {
+            "ZombieTypeName": "roman_armor1",
+            "Weight": 8
+          },
+          {
+            "ZombieTypeName": "roman_armor2",
+            "Weight": 4
+          },
+          {
+            "ZombieTypeName": "roman_armor3",
+            "Weight": 2
+          }
+        ],
+        "ZombieWinPunishmentZombieLevel": 1,
+        "Encounters": [
+          {
+            "Wave": 8,
+            "Row": 4,
+            "WarningDuration": 6.0,
+            "FirstCageDelay": 0.0,
+            "Spawns": [
+              {
+                "Time": 0.0,
+                "GridX": 6,
+                "Count": 2,
+                "Interval": 5.0,
+                "Level": 1,
+                "ZombieType": "roman_shield_top"
+              },
+              {
+                "Time": 10.0,
+                "GridX": 6,
+                "Count": 1,
+                "Interval": 5.0,
+                "Level": 1,
+                "ZombieType": "roman_healer"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  },
+  {
+    "level": "UNCHARTED_ROMA_N_8",
+    "module": {
+      "aliases": [
+        "GladiatorRowModule"
+      ],
+      "objclass": "GladiatorRowModuleProperties",
+      "objdata": {
+        "ResourceGroupNames": [
+          "GladiatorRow",
+          "ZombieRomanTopShieldGroup",
+          "ZombieRomanBasicResGroup",
+          "ZombieGladiatorGroup",
+          "ZombieRomanHealerGroup"
+        ],
+        "BaseConfig": "RTID(DefaultGladiatorRowConfig@PropertySheets)",
+        "GameplayVersion": 1,
+        "ZombieWinPunishmentZombiePool": [
+          {
+            "ZombieTypeName": "roman_flag",
+            "Weight": 10
+          },
+          {
+            "ZombieTypeName": "roman_armor1",
+            "Weight": 8
+          },
+          {
+            "ZombieTypeName": "roman_armor2",
+            "Weight": 4
+          },
+          {
+            "ZombieTypeName": "roman_armor3",
+            "Weight": 2
+          }
+        ],
+        "ZombieWinPunishmentZombieLevel": 1,
+        "Encounters": [
+          {
+            "Wave": 4,
+            "Row": 1,
+            "WarningDuration": 6.0,
+            "FirstCageDelay": 0.0,
+            "Spawns": [
+              {
+                "Time": 0.0,
+                "GridX": 6,
+                "Count": 2,
+                "Interval": 5.0,
+                "Level": 1,
+                "ZombieType": "roman_shield_top"
+              },
+              {
+                "Time": 10.0,
+                "GridX": 6,
+                "Count": 1,
+                "Interval": 5.0,
+                "Level": 1,
+                "ZombieType": "gladiator_zombie"
+              }
+            ]
+          },
+          {
+            "Wave": 12,
+            "Row": 3,
+            "WarningDuration": 6.0,
+            "FirstCageDelay": 0.0,
+            "Spawns": [
+              {
+                "Time": 0.0,
+                "GridX": 6,
+                "Count": 2,
+                "Interval": 4.5,
+                "Level": 1,
+                "ZombieType": "gladiator_zombie"
+              },
+              {
+                "Time": 9.0,
+                "GridX": 6,
+                "Count": 1,
+                "Interval": 4.5,
+                "Level": 1,
+                "ZombieType": "roman_healer"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  }
+]

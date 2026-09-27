@@ -1,5 +1,6 @@
 import 'package:c_editor/bundled_plugins/preview_img_cplugin/lib/src/preview/preview_document.dart';
 import 'package:c_editor/bundled_plugins/preview_img_cplugin/lib/src/preview/preview_layers_dialog.dart';
+import 'package:c_editor/bundled_plugins/preview_img_cplugin/lib/src/preview/preview_picker_session.dart';
 import 'package:c_editor/widgets/editor_components.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -52,6 +53,7 @@ Future<void> _open(
   WidgetTester tester,
   PreviewDocument doc, {
   String? selectedLayerId,
+  PreviewPickerSession? session,
   ValueChanged<String>? onSelected,
   ValueChanged<List<String>>? onReorder,
   String Function(PreviewLayerOrderEntry)? title,
@@ -77,6 +79,7 @@ Future<void> _open(
             child: TextButton(
               onPressed: () => showPreviewLayersDialog(
                 context: context,
+                session: session,
                 doc: doc,
                 selectedLayerId: selectedLayerId,
                 t: _t,
@@ -112,9 +115,11 @@ void main() {
           .toList();
       var selected = false;
       var reordered = false;
+      final session = PreviewPickerSession();
       await _open(
         tester,
         doc,
+        session: session,
         size: const Size(390, 700),
         platform: platform,
         onSelected: (_) => selected = true,
@@ -130,12 +135,26 @@ void main() {
         const ValueKey('previewLayersScrollbar'),
       );
       expect(scroll.offset, greaterThan(200));
+      final savedOffset = scroll.offset;
       expect(selected, isFalse);
       expect(reordered, isFalse);
       expect(doc.orderedLayerEntries.map((entry) => entry.id), originalOrder);
       expect(
         find.byKey(const ValueKey('previewLayersClose')).hitTestable(),
         findsOneWidget,
+      );
+      await tester.tap(find.byKey(const ValueKey('previewLayersClose')));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Open layers'));
+      await tester.pumpAndSettle();
+      expect(
+        tester
+            .widget<ReorderableListView>(
+              find.byKey(const ValueKey('previewLayersList')),
+            )
+            .scrollController!
+            .offset,
+        closeTo(savedOffset, 1),
       );
       expect(tester.takeException(), isNull);
     });

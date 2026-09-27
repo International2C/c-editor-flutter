@@ -139,14 +139,16 @@ class _FairyTaleWindEventScreenState extends State<FairyTaleWindEventScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Wind parameters',
+                        l10n?.fairyWindParameters ?? 'Wind parameters',
                         style: theme.textTheme.titleMedium?.copyWith(
                           fontWeight: FontWeight.bold,
                         ),
                       ),
                       const SizedBox(height: 16),
                       EditorResponsiveInputField(
-                        label: 'Duration',
+                        label:
+                            l10n?.fairyWindDuration ??
+                            'Duration (Duration; seconds)',
                         decoration: const InputDecoration(
                           border: OutlineInputBorder(),
                         ),
@@ -170,7 +172,9 @@ class _FairyTaleWindEventScreenState extends State<FairyTaleWindEventScreen> {
                       ),
                       const SizedBox(height: 12),
                       EditorResponsiveInputField(
-                        label: 'Velocity scale (VelocityScale)',
+                        label:
+                            l10n?.velocityScale ??
+                            'Speed multiplier (VelocityScale)',
                         builder: (context, decoration) => TextFormField(
                           initialValue: _data.velocityScale.toString(),
                           decoration: decoration,

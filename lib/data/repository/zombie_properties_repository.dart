@@ -67,18 +67,10 @@ class ZombiePropertiesRepository {
           final propsAlias = RtidParser.parse(typeData.properties)?.alias ?? '';
           final propsObj = propsFileMap[propsAlias];
           if (propsObj != null && propsObj.objData is Map<String, dynamic>) {
-            final sheet = ZombiePropertySheetData.fromJson(
-              propsObj.objData as Map<String, dynamic>,
-            );
             instance._originalPropsJson[typeName] = propsObj;
-            instance._statsCache[typeName] = ZombieStats(
-              id: typeName,
-              hp: sheet.hitpoints,
-              cost: sheet.wavePointCost,
-              weight: sheet.weight,
-              speed: sheet.speed,
-              eatDPS: sheet.eatDPS,
-              sizeType: sheet.sizeType ?? 'unknown',
+            instance._statsCache[typeName] = ZombieStats.fromPropertySheet(
+              typeName,
+              propsObj.objData as Map<String, dynamic>,
             );
           }
         } catch (_) {}

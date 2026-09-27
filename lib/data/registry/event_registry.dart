@@ -204,6 +204,17 @@ class EventRegistry {
       defaultObjClass: 'ZombiePotionActionProps',
       initialDataFactory: () => ZombiePotionActionPropsData(),
     ),
+    'TidalChangeWaveActionProps': EventMetadata(
+      titleKey: 'eventTitle_TidalChangeWaveActionProps',
+      descriptionKey: 'eventDesc_TidalChangeWaveActionProps',
+      icon: Icons.water_drop,
+      color: const Color(0xFF00ACC1),
+      darkColor: const Color(0xFF81D4FA),
+      category: EventCategory.environmental,
+      defaultAlias: 'TidalChangeEvent',
+      defaultObjClass: 'TidalChangeWaveActionProps',
+      initialDataFactory: () => TidalChangeWaveActionData(),
+    ),
     'BeachStageEventZombieSpawnerProps': EventMetadata(
       titleKey: 'eventTitle_BeachStageEventZombieSpawnerProps',
       descriptionKey: 'eventDesc_BeachStageEventZombieSpawnerProps',
@@ -224,17 +235,6 @@ class EventRegistry {
           return '';
         }
       },
-    ),
-    'TidalChangeWaveActionProps': EventMetadata(
-      titleKey: 'eventTitle_TidalChangeWaveActionProps',
-      descriptionKey: 'eventDesc_TidalChangeWaveActionProps',
-      icon: Icons.water_drop,
-      color: const Color(0xFF00ACC1),
-      darkColor: const Color(0xFF81D4FA),
-      category: EventCategory.environmental,
-      defaultAlias: 'TidalChangeEvent',
-      defaultObjClass: 'TidalChangeWaveActionProps',
-      initialDataFactory: () => TidalChangeWaveActionData(),
     ),
     'FrostWindWaveActionProps': EventMetadata(
       titleKey: 'eventTitle_FrostWindWaveActionProps',
@@ -407,6 +407,17 @@ class EventRegistry {
         }
       },
     ),
+    'GravityGeneratorWaveActionProps': EventMetadata(
+      titleKey: 'eventTitle_GravityGeneratorWaveActionProps',
+      descriptionKey: 'eventDesc_GravityGeneratorWaveActionProps',
+      icon: Icons.vertical_align_center,
+      color: const Color(0xFF7B1FA2),
+      darkColor: const Color(0xFFCE93D8),
+      category: EventCategory.environmental,
+      defaultAlias: 'Gravity',
+      defaultObjClass: 'GravityGeneratorWaveActionProps',
+      initialDataFactory: () => GravityGeneratorWaveActionPropsData(),
+    ),
     'FairyTaleFogWaveActionProps': EventMetadata(
       titleKey: 'eventTitle_FairyTaleFogWaveActionProps',
       descriptionKey: 'eventDesc_FairyTaleFogWaveActionProps',
@@ -439,6 +450,27 @@ class EventRegistry {
       defaultAlias: 'MagicMirrorEvent',
       defaultObjClass: 'WaveActionMagicMirrorTeleportationArrayProps',
       initialDataFactory: () => MagicMirrorWaveActionData(),
+    ),
+    'SpawnEagleFlagsWaveActionProps': EventMetadata(
+      titleKey: 'eventTitle_SpawnEagleFlagsWaveActionProps',
+      descriptionKey: 'eventDesc_SpawnEagleFlagsWaveActionProps',
+      icon: Icons.flag,
+      color: const Color(0xFFB78921),
+      darkColor: const Color(0xFFFFD54F),
+      category: EventCategory.gridItemSpawn,
+      defaultAlias: 'EagleFlagEvent',
+      defaultObjClass: 'SpawnEagleFlagsWaveActionProps',
+      initialDataFactory: () => SpawnEagleFlagsWaveActionPropsData(),
+      summaryProvider: (obj) {
+        try {
+          final data = SpawnEagleFlagsWaveActionPropsData.fromJson(
+            obj.objData as Map<String, dynamic>,
+          );
+          return '${data.flags.length}';
+        } catch (_) {
+          return '';
+        }
+      },
     ),
     'BarrelWaveActionProps': EventMetadata(
       titleKey: 'eventTitle_BarrelWaveActionProps',
@@ -520,6 +552,27 @@ class EventRegistry {
             obj.objData as Map<String, dynamic>,
           );
           return '${data.zombies.length}';
+        } catch (_) {
+          return '';
+        }
+      },
+    ),
+    'WaveActionZombieTentProps': EventMetadata(
+      titleKey: 'eventTitle_WaveActionZombieTentProps',
+      descriptionKey: 'eventDesc_WaveActionZombieTentProps',
+      icon: Icons.festival,
+      color: const Color(0xFFC62828),
+      darkColor: const Color(0xFFEF9A9A),
+      category: EventCategory.gridItemSpawn,
+      defaultAlias: 'FestivalZombieTentEvent',
+      defaultObjClass: 'WaveActionZombieTentProps',
+      initialDataFactory: () => WaveActionZombieTentPropsData(),
+      summaryProvider: (obj) {
+        try {
+          final data = WaveActionZombieTentPropsData.fromJson(
+            obj.objData as Map<String, dynamic>,
+          );
+          return '${data.zombieTents.length}';
         } catch (_) {
           return '';
         }

@@ -132,6 +132,10 @@ class EventSelectionScreen extends StatefulWidget {
           return isTitle
               ? l10n.eventTitle_SpawnRocketLandingWaveActionProps
               : l10n.eventDesc_SpawnRocketLandingWaveActionProps;
+        case 'GravityGeneratorWaveActionProps':
+          return isTitle
+              ? l10n.eventTitle_GravityGeneratorWaveActionProps
+              : l10n.eventDesc_GravityGeneratorWaveActionProps;
         case 'StormZombieSpawnerProps':
           return isTitle
               ? l10n.eventTitle_StormZombieSpawnerProps
@@ -148,10 +152,18 @@ class EventSelectionScreen extends StatefulWidget {
           return isTitle
               ? l10n.eventTitle_ZombieAtlantisShellActionProps
               : l10n.eventDesc_ZombieAtlantisShellActionProps;
+        case 'SpawnEagleFlagsWaveActionProps':
+          return isTitle
+              ? l10n.eventTitle_SpawnEagleFlagsWaveActionProps
+              : l10n.eventDesc_SpawnEagleFlagsWaveActionProps;
         case 'PumpkinHouseActionProps':
           return isTitle
               ? l10n.eventTitle_PumpkinHouseActionProps
               : l10n.eventDesc_PumpkinHouseActionProps;
+        case 'WaveActionZombieTentProps':
+          return isTitle
+              ? l10n.eventTitle_WaveActionZombieTentProps
+              : l10n.eventDesc_WaveActionZombieTentProps;
         case 'SpawnGravestonesWaveActionProps':
           return isTitle
               ? l10n.eventTitle_SpawnGravestonesWaveActionProps

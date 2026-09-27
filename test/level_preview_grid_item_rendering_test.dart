@@ -1,6 +1,7 @@
 import 'package:c_editor/screens/level_overview/level_overview_dialog.dart';
 import 'package:c_editor/screens/level_overview/level_overview_widgets.dart';
 import 'package:c_editor/data/level_parser.dart';
+import 'package:c_editor/data/lunar_mine_vein_type_catalog.dart';
 import 'package:c_editor/data/pvz_models.dart';
 import 'package:c_editor/data/repository/grid_item_repository.dart';
 import 'package:c_editor/data/repository/plant_repository.dart';
@@ -106,6 +107,55 @@ void main() {
       ZombossBattleRepository.init(),
       ResourceNames.ensureLoaded(),
     ]);
+  });
+
+  testWidgets('overview shows dormant vein variants and their grown crystals', (
+    tester,
+  ) async {
+    _setLargeViewport(tester);
+    final level = PvzLevelFile(
+      objects: [
+        PvzObject(
+          aliases: ['LunarMineVeins'],
+          objClass: 'LunarMineVeinModuleProperties',
+          objData: LunarMineVeinModulePropertiesData(
+            placements: [
+              for (var i = 0; i < kLunarMineVeinTypes.length; i++)
+                LunarMineVeinPlacementData(
+                  typeName: kLunarMineVeinTypes[i].type,
+                  gridX: i,
+                  emergenceWave: 5,
+                ),
+            ],
+          ).toJson(),
+        ),
+      ],
+    );
+    await tester.pumpWidget(_preview(level));
+    await tester.pumpAndSettle();
+    await tester.ensureVisible(find.byType(LawnGrid));
+    await tester.pumpAndSettle();
+
+    List<String> lawnAssets() => tester
+        .widgetList<AssetImageWidget>(
+          find.descendant(
+            of: find.byType(LawnGrid),
+            matching: find.byType(AssetImageWidget),
+          ),
+        )
+        .map((w) => w.assetPath)
+        .toList();
+
+    expect(lawnAssets(), kLunarMineVeinTypes.map((v) => v.iconAsset));
+    final sidebarLabel = find.descendant(
+      of: find.byType(ListView),
+      matching: find.text('Crystal Veins'),
+    );
+    await tester.ensureVisible(sidebarLabel);
+    await tester.tap(sidebarLabel);
+    await tester.pumpAndSettle();
+    expect(lawnAssets(), kLunarMineVeinTypes.map((v) => v.oreIconAsset));
+    expect(tester.takeException(), isNull);
   });
 
   testWidgets('selected grid items retain their type when plant IDs overlap', (

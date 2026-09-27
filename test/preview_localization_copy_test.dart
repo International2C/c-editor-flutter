@@ -68,7 +68,6 @@ void main() {
         'previewGenTunnelRoadCount',
         'previewGenPipelineCount',
         'previewGenMoldCount',
-        'previewGenEnergyTileCount',
         'previewGenGridItemCount',
         'previewGenMustProtect',
         'previewGenProtectPlantCount',
@@ -105,7 +104,6 @@ void main() {
       'previewGenCell': {'x', 'y'},
       'previewGenColumnRange': {'min', 'max'},
       'previewGenMeteorTiming': {'warn', 'poll'},
-      'previewGenMeteorTimingShort': {'warn'},
       'previewGenBronzeBatch': {'time', 'count'},
       'previewGenRailcartType': {'type'},
       'previewGenRailRange': {'col', 'start', 'end'},
@@ -134,6 +132,12 @@ void main() {
       'previewGenPiratePlankRows': {'rows'},
       'previewGenListCount': {'key', 'count'},
       'previewGenLayerLabel': {'type', 'number'},
+      'previewGenWeight': {'weight'},
+      'previewGenLevel': {'level'},
+      'previewGenSeconds': {'n'},
+      'previewGenSeeingStarsCells': {'count'},
+      'previewGenSeeingStarsCycle': {'wave'},
+      'previewGenSeeingStarsSettlement': {'n'},
     };
     expect(
       en.entries
@@ -168,9 +172,12 @@ void main() {
       expect(en[entry.key], entry.value.$2);
     }
 
-    expect(zh['previewGenBronzeCount'], contains(appZh['bronzeModuleTitle']!));
+    expect(
+      zh['previewGenBronzeCount'],
+      contains(appZh['moduleTitle_BronzeProperties']!),
+    );
     expect(en['previewGenBronzeCount'], contains('Bronze Matrix'));
-    expect(appEn['bronzeModuleTitle'], contains('Bronze Matrix'));
+    expect(appEn['moduleTitle_BronzeProperties'], contains('Bronze Matrix'));
     expect(zh['previewGenLastStandPlantFood'], contains(appZh['plantFood']!));
     expect(en['previewGenLastStandPlantFood'], contains('Plant Food'));
     expect(appZh['plantVaseOption'], contains('绿罐'));
@@ -182,8 +189,6 @@ void main() {
     expect(appEn['plantVaseOption'], contains('Green'));
     expect(appEn['zombieVaseOption'], contains('Purple'));
     expect(zh['previewGenPowerTileCount'], contains('能量瓷砖'));
-    expect(zh['previewGenEnergyTileCount'], contains('太极地砖'));
-    expect(en['previewGenEnergyTileCount'], contains('Taiji Tiles'));
     expect(zh['previewGenVaseNoPreset'], contains('砸罐子'));
     for (final text in zh.values) {
       expect(text, isNot(contains('青铜雕像')));

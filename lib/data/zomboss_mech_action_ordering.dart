@@ -1,5 +1,4 @@
 import 'package:c_editor/data/models/zomboss_mech_catalog.dart';
-import 'package:c_editor/data/zomboss_mech_action_utils.dart';
 import 'package:c_editor/data/pvz_models.dart';
 import 'package:c_editor/data/repository/zombie_properties_repository.dart';
 import 'package:c_editor/data/rtid_parser.dart';

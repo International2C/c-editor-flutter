@@ -10,6 +10,7 @@ import 'package:c_editor/l10n/resource_names.dart';
 import 'package:c_editor/widgets/asset_image.dart'
     show AssetImageWidget, imageAltCandidates;
 import 'package:c_editor/widgets/editor_components.dart';
+import 'package:c_editor/widgets/editor_numeric_text_field.dart';
 import 'package:c_editor/widgets/editor_object_alias.dart';
 
 /// Ice Age glacier-block zombie weights (`GlacierModuleProperties`).
@@ -478,7 +479,7 @@ class _ColumnCard extends StatelessWidget {
                   return _EntryRow(
                     key: ValueKey(
                       'col_${columnIndex}_entry_${e.key}_'
-                      '${e.value.typeName}_${e.value.weight}_${e.value.level}',
+                      '${e.value.typeName}_${column.entries.length}',
                     ),
                     entry: e.value,
                     l10n: l10n,
@@ -612,9 +613,9 @@ class _EntryRow extends StatelessWidget {
       child: EditorResponsiveInputField(
         label: weightLabel,
         decoration: _fieldDecoration(),
-        builder: (context, decoration) => TextFormField(
-          key: ValueKey('w_${entry.typeName}_${entry.weight}'),
-          initialValue: '${entry.weight}',
+        builder: (context, decoration) => EditorNumericTextField(
+          key: const ValueKey('glacierZombieWeight'),
+          value: entry.weight,
           style: theme.textTheme.bodyLarge,
           decoration: decoration,
           keyboardType: const TextInputType.numberWithOptions(decimal: true),

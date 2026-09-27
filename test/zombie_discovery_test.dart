@@ -39,6 +39,39 @@ void main() {
     await Future.wait([ReferenceRepository.init(), GridItemRepository.init()]);
   });
 
+  for (final legacy in [false, true]) {
+    test('Bungee zombies are discovered with legacy fields: $legacy', () {
+      final level = _levelWithActions([
+        PvzObject(
+          aliases: ['BungeeDropEvent0'],
+          objClass: 'BungeeWaveActionProps',
+          objData: {
+            legacy ? 'Target' : 'target': {'mX': 6, 'mY': 2},
+            legacy ? 'ZombieName' : 'zombieName': 'tutorial',
+            'Level': 1,
+          },
+        ),
+      ]);
+      expect(_discover(level), {'tutorial'});
+    });
+  }
+
+  test('Bungee discovery uses the official value when legacy keys coexist', () {
+    final level = _levelWithActions([
+      PvzObject(
+        aliases: ['BungeeDropEvent0'],
+        objClass: 'BungeeWaveActionProps',
+        objData: {
+          'target': {'mX': 6, 'mY': 2},
+          'zombieName': 'tutorial',
+          'ZombieName': 'mummy',
+          'Level': 1,
+        },
+      ),
+    ]);
+    expect(_discover(level), {'tutorial'});
+  });
+
   test('Atlantis tide movement and tide changes are not zombies', () {
     final level = _levelWithActions([
       for (final direction in const ['left', 'right'])

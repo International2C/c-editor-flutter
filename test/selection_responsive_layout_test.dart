@@ -50,6 +50,20 @@ void main() {
     expect(MusicSuffixCatalog.orderedCodes, isNot(contains('circus')));
   });
 
+  test('Roman music entries use the requested order and their own icons', () {
+    final codes = MusicSuffixCatalog.orderedCodes;
+    expect(codes[codes.indexOf('TeamBoss') + 1], 'TeamBossRoman');
+    expect(codes[codes.indexOf('SilkRoad') + 1], 'Roman');
+    expect(
+      MusicSuffixCatalog.iconAsset('TeamBossRoman'),
+      'assets/images/round_icons/Suffix_TeamBossRoman.webp',
+    );
+    expect(
+      MusicSuffixCatalog.iconAsset('Roman'),
+      'assets/images/round_icons/Suffix_Roman.webp',
+    );
+  });
+
   testWidgets('lawn and music grids contain maximum-scale text', (
     tester,
   ) async {

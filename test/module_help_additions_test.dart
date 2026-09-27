@@ -54,7 +54,7 @@ void main() {
           sectionTitles: [
             '• Overview',
             '• Parameter settings',
-            '• Plant tiers',
+            '• Plant levels',
           ],
           bodyExcerpt: 'most zombies do not have matching zombie card icons',
           build: (level) => SeedRainPropertiesScreen(

@@ -1,3 +1,6 @@
+import 'package:c_editor/data/oak_archery_preview.dart';
+import 'package:c_editor/l10n/app_localizations.dart';
+import 'package:c_editor/l10n/app_localizations_en.dart';
 import 'dart:math' as math;
 
 import 'package:collection/collection.dart';
@@ -61,9 +64,67 @@ PreviewModuleInfoPayload previewModuleInfoBuild({
   required String objClass,
   required PreviewModuleL10n t,
   PreviewModuleResourceName? resourceName,
+  AppLocalizations? appL10n,
 }) {
   final name = resourceName ?? _fallbackResourceName;
+  final l10n = appL10n ?? AppLocalizationsEn();
   switch (objClass) {
+    case 'OakTrainProperties':
+      final raw = _objMap(levelFile, objClass);
+      if (raw == null) return const PreviewModuleInfoPayload(lines: []);
+      final fields = oakArcheryFields(
+        OakTrainPropertiesData.fromJson(raw),
+        l10n,
+      );
+      final lines = fields.map((f) => '${f.label}: ${f.value}').toList();
+      final (rows, cols) = LevelParser.getGridDimensionsFromFile(levelFile);
+      return PreviewModuleInfoPayload(
+        lines: lines,
+        gridNotes: lines,
+        lawnRows: rows,
+        lawnCols: cols,
+        sections: [
+          PreviewIconSection(
+            items: [
+              _plantItem(
+                'oakshooter',
+                label: name(PreviewModuleResourceKind.plant, 'oakshooter'),
+                gridX: 0,
+                gridY: 2,
+              ),
+            ],
+          ),
+        ],
+      );
+    case 'WaveGeneratorProperties':
+      final raw = _objMap(levelFile, objClass);
+      if (raw == null) return const PreviewModuleInfoPayload(lines: []);
+      final data = WaveGeneratorPropertiesData.fromJson(raw);
+      return PreviewModuleInfoPayload(
+        lines: waveGeneratorPreviewLines(
+          data,
+          l10n,
+          (id) => name(PreviewModuleResourceKind.zombie, id),
+        ),
+        sections: [
+          for (var i = 0; i < data.waves.length; i++)
+            PreviewIconSection(
+              title: [
+                '${l10n.waveLabel} ${i + 1}',
+                waveSpawnDelaySummary(l10n, data, data.waves[i]),
+              ].where((s) => s.isNotEmpty).join(' · '),
+              items: [
+                for (final z in data.waves[i].zombies)
+                  _zombieItem(
+                    z.type,
+                    label:
+                        '${name(PreviewModuleResourceKind.zombie, z.type)}${data.isRiseFromGroundMode ? ' · ${waveSpawnPositionSummary(l10n, z)}' : ''}',
+                  ),
+              ],
+            ),
+        ],
+      );
+
     case 'SeedBankProperties':
       return _seedBank(levelFile, t);
     case 'ConveyorSeedBankProperties':
@@ -77,6 +138,8 @@ PreviewModuleInfoPayload previewModuleInfoBuild({
       return _protectPlants(levelFile, t, name);
     case 'ProtectTheGridItemChallengeProperties':
       return _protectGridItems(levelFile, t, name);
+    case 'PVZ1SeeingStarsModuleProperties':
+      return _seeingStars(levelFile, t, name);
     case 'VaseBreakerPresetProperties':
     case 'VaseBreakerArcadeModuleProperties':
     case 'VaseBreakerFlowModuleProperties':
@@ -132,12 +195,14 @@ List<PreviewIconSection>? previewModuleInfoSections({
   required String objClass,
   required PreviewModuleL10n t,
   PreviewModuleResourceName? resourceName,
+  AppLocalizations? appL10n,
 }) {
   final built = previewModuleInfoBuild(
     levelFile: levelFile,
     objClass: objClass,
     t: t,
     resourceName: resourceName,
+    appL10n: appL10n,
   );
   return built.sections.isEmpty ? null : built.sections;
 }
@@ -147,12 +212,14 @@ String? previewModuleInfoTextSummary({
   required String objClass,
   required PreviewModuleL10n t,
   PreviewModuleResourceName? resourceName,
+  AppLocalizations? appL10n,
 }) {
   final body = previewModuleInfoBuild(
     levelFile: levelFile,
     objClass: objClass,
     t: t,
     resourceName: resourceName,
+    appL10n: appL10n,
   ).textBody;
   return body.isEmpty ? null : body;
 }
@@ -177,6 +244,8 @@ List<String> previewPresentModuleObjClasses(PvzLevelFile levelFile) {
 
   // Prefer modules we have structured readers for; keep others as generic dump.
   const preferred = {
+    'OakTrainProperties',
+    'WaveGeneratorProperties',
     'SeedBankProperties',
     'ConveyorSeedBankProperties',
     'InitialPlantEntryProperties',
@@ -184,6 +253,7 @@ List<String> previewPresentModuleObjClasses(PvzLevelFile levelFile) {
     'InitialZombieProperties',
     'ProtectThePlantChallengeProperties',
     'ProtectTheGridItemChallengeProperties',
+    'PVZ1SeeingStarsModuleProperties',
     'VaseBreakerPresetProperties',
     'VaseBreakerArcadeModuleProperties',
     'VaseBreakerFlowModuleProperties',
@@ -260,6 +330,30 @@ String _clean(String raw) {
 String _fallbackResourceName(PreviewModuleResourceKind kind, String raw) =>
     _clean(raw);
 
+String _seedBankMethod(PreviewModuleL10n t, String method) => switch (method) {
+  'chooser' => t('previewGenSeedBankChooser', 'Choose Your Seeds'),
+  'preset' => t('previewGenSeedBankPreset', 'Locked and Loaded'),
+  _ => method,
+};
+
+String _railcartType(PreviewModuleL10n t, String type) => switch (type) {
+  'railcart_cowboy' => t('previewGenRailcartCowboy', 'Wild West mine cart'),
+  'railcart_future' => t('previewGenRailcartFuture', 'Far Future mine cart'),
+  'railcart_egypt' => t('previewGenRailcartEgypt', 'Ancient Egypt mine cart'),
+  'railcart_pirate' => t('previewGenRailcartPirate', 'Pirate Seas mine cart'),
+  'railcart_worldcup' => t(
+    'previewGenRailcartWorldcup',
+    'Ice Hockey mine cart',
+  ),
+  _ => type,
+};
+
+String _weight(PreviewModuleL10n t, int weight) =>
+    t('previewGenWeight', 'Weight: {weight}', {'weight': weight});
+
+String _seconds(PreviewModuleL10n t, num seconds) =>
+    t('previewGenSeconds', '{n}s', {'n': _fmtNum(seconds)});
+
 String _unknownAsset() => 'assets/images/others/unknown.webp';
 
 PvzObject? _obj(PvzLevelFile levelFile, String objClass) =>
@@ -328,7 +422,7 @@ PreviewModuleInfoPayload _seedBank(
 
   final lines = <String>[
     t('previewGenSeedBankMethod', 'Method: {method}', {
-      'method': data.selectionMethod,
+      'method': _seedBankMethod(t, data.selectionMethod),
     }),
     t('previewGenSeedBankSlots', 'Slots: {count}', {
       'count': data.overrideSeedSlotsCount ?? 8,
@@ -398,7 +492,7 @@ PreviewModuleInfoPayload _conveyor(
     final id = _clean(e.plantType);
     if (id.isEmpty || !seen.add(id)) continue;
     final labelParts = <String>[];
-    if (e.weight != 100) labelParts.add('w${e.weight}');
+    if (e.weight != 100) labelParts.add(_weight(t, e.weight));
     if (e.maxCount > 0) labelParts.add('≤${e.maxCount}');
     items.add(
       _plantItem(id, label: labelParts.isEmpty ? null : labelParts.join(' ')),
@@ -526,13 +620,13 @@ PreviewModuleInfoPayload _initialZombies(
       'count': placements.length,
     }),
     for (final p in placements.take(12))
-      '${name(PreviewModuleResourceKind.zombie, p.$1)} ${_cell(t, p.$2, p.$3)}${p.$4 != null && p.$4!.isNotEmpty ? ' (${p.$4})' : ''}',
+      '${name(PreviewModuleResourceKind.zombie, p.$1)} ${_cell(t, p.$2, p.$3)}${p.$4 != null && p.$4!.isNotEmpty ? ' (${name(PreviewModuleResourceKind.zombieCondition, p.$4!)})' : ''}',
     if (placements.length > 12) '…',
   ];
   final conditionNotes = [
     for (final p in placements)
       if (p.$4 != null && p.$4!.isNotEmpty)
-        '${name(PreviewModuleResourceKind.zombie, p.$1)}: ${p.$4}',
+        '${name(PreviewModuleResourceKind.zombie, p.$1)}: ${name(PreviewModuleResourceKind.zombieCondition, p.$4!)}',
   ];
   final (rows, cols) = _lawnDims(levelFile);
 
@@ -646,6 +740,69 @@ PreviewModuleInfoPayload _protectGridItems(
                       _clean(g.gridItemType),
                       gridX: g.gridX,
                       gridY: g.gridY,
+                    ),
+              ],
+            ),
+          ],
+  );
+}
+
+PreviewModuleInfoPayload _seeingStars(
+  PvzLevelFile levelFile,
+  PreviewModuleL10n t,
+  PreviewModuleResourceName name,
+) {
+  final data = readSeeingStarsModuleData(levelFile);
+  if (data == null) {
+    return PreviewModuleInfoPayload(
+      lines: [t('previewGenModuleInfoNoData', 'No module data on this level')],
+    );
+  }
+  final cells = _cellsList(data.matchPlants.map((p) => (p.gridX, p.gridY)));
+  final lines = <String>[
+    t('previewGenSeeingStarsCells', 'Target plants: {count}', {
+      'count': data.matchPlants.length,
+    }),
+    t('previewGenSeeingStarsCycle', 'Waves loop back to wave {wave}', {
+      'wave': data.cycleIndex + 1,
+    }),
+    t(
+      'previewGenSeeingStarsSettlement',
+      'Win settles {n}s after the pattern is complete',
+      {'n': _fmtNum(data.settlementDuration)},
+    ),
+    if (cells.isNotEmpty) cells,
+  ];
+  final (rows, cols) = _lawnDims(levelFile);
+
+  return PreviewModuleInfoPayload(
+    lines: lines,
+    gridNotes: [
+      t('previewGenSeeingStarsCycle', 'Waves loop back to wave {wave}', {
+        'wave': data.cycleIndex + 1,
+      }),
+      t(
+        'previewGenSeeingStarsSettlement',
+        'Win settles {n}s after the pattern is complete',
+        {'n': _fmtNum(data.settlementDuration)},
+      ),
+    ],
+    lawnRows: rows,
+    lawnCols: cols,
+    sections: data.matchPlants.isEmpty
+        ? const []
+        : [
+            PreviewIconSection(
+              title: t('previewGenSeeingStarsCells', 'Target plants: {count}', {
+                'count': data.matchPlants.length,
+              }),
+              items: [
+                for (final p in data.matchPlants.take(96))
+                  if (_clean(p.matchTypeName).isNotEmpty)
+                    _plantItem(
+                      _clean(p.matchTypeName),
+                      gridX: p.gridX,
+                      gridY: p.gridY,
                     ),
               ],
             ),
@@ -881,8 +1038,8 @@ PreviewModuleInfoPayload _lunarVeins(
           items: [
             for (final p in byWave[w]!)
               PreviewItem(
-                id: 'lunar_mine_vein_${p.gridX}_${p.gridY}',
-                assetPath: GridItemRepository.getIconPath('lunar_mine_vein'),
+                id: '${p.typeName}_${p.gridX}_${p.gridY}',
+                assetPath: GridItemRepository.getIconPath(p.typeName),
                 gridX: p.gridX,
                 gridY: p.gridY,
               ),
@@ -1081,13 +1238,13 @@ PreviewModuleInfoPayload _seedRain(
     if (plant != null && plant.isNotEmpty) {
       final id = _clean(plant);
       lines.add(
-        '${name(PreviewModuleResourceKind.plant, id)} · ${_times(t, e.maxCount)} · w${e.weight}',
+        '${name(PreviewModuleResourceKind.plant, id)} · ${_times(t, e.maxCount)} · ${_weight(t, e.weight)}',
       );
       items.add(_plantItem(id, label: _times(t, e.maxCount)));
     } else if (zombie != null && zombie.isNotEmpty) {
       final id = _clean(zombie);
       lines.add(
-        '${name(PreviewModuleResourceKind.zombie, id)} · ${_times(t, e.maxCount)} · w${e.weight}',
+        '${name(PreviewModuleResourceKind.zombie, id)} · ${_times(t, e.maxCount)} · ${_weight(t, e.weight)}',
       );
       items.add(_zombieItem(id, label: _times(t, e.maxCount)));
     }
@@ -1157,7 +1314,9 @@ PreviewModuleInfoPayload _dropShip(
           for (var i = 0; i < (1 + w.imp).clamp(1, 12); i++)
             _zombieItem(
               _dropShipImpId(),
-              label: i == 0 ? 'Lv${w.impLv}' : null,
+              label: i == 0
+                  ? t('previewGenLevel', 'Lv{level}', {'level': w.impLv})
+                  : null,
             ),
         ],
       ),
@@ -1204,7 +1363,7 @@ PreviewModuleInfoPayload _bronze(
         'count': byTime[time]!.length,
       }),
     for (final i in items.take(10))
-      '${name(PreviewModuleResourceKind.zombie, _bronzeZombieId(i.kind))} ${_cell(t, i.mX, i.mY)} @${i.spawnTime}s',
+      '${name(PreviewModuleResourceKind.zombie, _bronzeZombieId(i.kind))} ${_cell(t, i.mX, i.mY)} @${_seconds(t, i.spawnTime)}',
     if (items.length > 10) '…',
   ];
   return PreviewModuleInfoPayload(
@@ -1280,7 +1439,9 @@ PreviewModuleInfoPayload _railcart(
     );
   }
   final lines = <String>[
-    t('previewGenRailcartType', 'Type: {type}', {'type': data.railcartType}),
+    t('previewGenRailcartType', 'Type: {type}', {
+      'type': _railcartType(t, data.railcartType),
+    }),
     t('previewGenRailcartCount', '{count} carts', {
       'count': data.railcarts.length,
     }),
@@ -1319,7 +1480,9 @@ PreviewModuleInfoPayload _railcart(
   return PreviewModuleInfoPayload(
     lines: lines,
     gridNotes: [
-      t('previewGenRailcartType', 'Type: {type}', {'type': data.railcartType}),
+      t('previewGenRailcartType', 'Type: {type}', {
+        'type': _railcartType(t, data.railcartType),
+      }),
     ],
     lawnRows: rows,
     lawnCols: cols,
@@ -1623,7 +1786,7 @@ PreviewModuleInfoPayload _sunDropper(
           PreviewItem(
             id: 'sun',
             assetPath: 'assets/images/rift_themes/sun.webp',
-            label: '${_fmtNum(data.initialSunDropDelay)}s',
+            label: _seconds(t, data.initialSunDropDelay),
           ),
         ],
       ),
@@ -1716,6 +1879,14 @@ PreviewModuleInfoPayload _genericDump(
   }
   PreviewModuleResourceKind? kindFor(String hint) {
     final value = hint.toLowerCase().replaceAll('_', '');
+    if (value.contains('condition')) {
+      if (value.contains('zombie')) {
+        return PreviewModuleResourceKind.zombieCondition;
+      }
+      if (value.contains('plant')) {
+        return PreviewModuleResourceKind.plantCondition;
+      }
+    }
     if (value.contains('tool')) return PreviewModuleResourceKind.tool;
     if (value.contains('griditem')) return PreviewModuleResourceKind.gridItem;
     if (value.contains('zombie')) return PreviewModuleResourceKind.zombie;
@@ -1739,6 +1910,9 @@ PreviewModuleInfoPayload _genericDump(
     ].contains(key.toLowerCase());
     final kind =
         kindFor(key) ??
+        (key.toLowerCase().contains('condition')
+            ? kindFor('${objClass}Condition')
+            : null) ??
         kindFor(RtidParser.parse(raw)?.source ?? '') ??
         (genericType ? kindFor(scope) ?? kindFor(objClass) : null);
     // Do not guess the resource type for arbitrary custom labels/aliases.
@@ -1750,7 +1924,12 @@ PreviewModuleInfoPayload _genericDump(
     if (lines.length >= 14) break;
     final key = e.key.toString();
     final v = e.value;
-    if (v is num || v is bool) {
+    if (v is bool) {
+      final value = v
+          ? t('previewGenValueYes', 'Yes')
+          : t('previewGenValueNo', 'No');
+      lines.add('$key: $value');
+    } else if (v is num) {
       lines.add('$key: $v');
     } else if (v is String && v.length <= 48) {
       lines.add('$key: ${displayResource(v, key)}');

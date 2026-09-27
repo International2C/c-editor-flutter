@@ -79,7 +79,7 @@ void main() {
     );
   });
 
-  testWidgets('Moon BaseZ coming soon uses the Moon-specific message', (
+  testWidgets('Moon BaseZ no longer lists the coming-soon placeholder', (
     tester,
   ) async {
     await tester.pumpWidget(
@@ -98,15 +98,17 @@ void main() {
     await tester.ensureVisible(find.text('Moon BaseZ'));
     await tester.tap(find.text('Moon BaseZ'));
     await tester.pumpAndSettle();
-    await tester.ensureVisible(find.text('coming_soon'));
-    await tester.tap(find.text('coming_soon'));
+    await tester.enterText(find.byType(TextField).first, 'coming_soon');
     await tester.pumpAndSettle();
 
-    expect(find.text('A Message from Space'), findsOneWidget);
     expect(
-      find.text('Moon BaseZ Part 2 is coming soon. Keep a lookout!'),
-      findsOneWidget,
+      find.byKey(const ValueKey('plantSelectionIcon-coming_soon')),
+      findsNothing,
     );
+    expect(find.byType(AlertDialog), findsNothing);
+    await tester.enterText(find.byType(TextField).first, 'cosmicsaucer');
+    await tester.pumpAndSettle();
+    expect(find.text('Cosmic Saucer'), findsOneWidget);
   });
 
   testWidgets('rift theme list uses icons and opens target details', (
@@ -324,10 +326,10 @@ void main() {
       'beach_octopus',
       'new_pvp_beach_octopus',
       'renai_perfumer',
-      'spring_wizard',
-      'sportzball_wizard',
       'roman_healer',
       'new_pvp_roman_healer',
+      'spring_wizard',
+      'sportzball_wizard',
     ]);
     expect(affected('miner_cheating'), [
       'prospector',

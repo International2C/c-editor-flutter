@@ -34,6 +34,38 @@ on:
         required: false
         type: string
         default: '3.44.0'
+  workflow_call:
+    inputs:
+      build_id:
+        description: 'Unique build identifier'
+        required: false
+        type: string
+        default: ''
+      ios_path:
+        description: 'Path to iOS project'
+        required: false
+        type: string
+        default: 'ios'
+      scheme:
+        description: 'Xcode scheme to build'
+        required: false
+        type: string
+        default: ''
+      use_signing:
+        description: 'Enable code signing'
+        required: false
+        type: boolean
+        default: false
+      configuration:
+        description: 'Build configuration'
+        required: false
+        type: string
+        default: 'Release'
+      flutter_version:
+        description: 'Flutter version'
+        required: false
+        type: string
+        default: '3.44.0'
 
 jobs:
   build:

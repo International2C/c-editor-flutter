@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:c_editor/data/level_parser.dart';
+import 'package:c_editor/data/registry/issue_registry.dart';
 import 'package:c_editor/data/pvz_models.dart';
 import 'package:c_editor/data/registry/module_registry.dart';
 import 'package:c_editor/data/repository/plant_repository.dart';
-import 'package:c_editor/data/rtid_parser.dart';
 import 'package:c_editor/l10n/app_localizations.dart';
 import 'package:c_editor/l10n/resource_names.dart';
 import 'package:c_editor/screens/select/magic_hat_spawn_preview_screen.dart';
@@ -273,22 +272,7 @@ class _PlantSelectionScreenState extends State<PlantSelectionScreen> {
   Set<String> _levelModuleObjClasses() {
     final lf = widget.levelFile;
     if (lf == null) return {};
-    final parsed = LevelParser.parseLevel(lf);
-    final levelDef = parsed.levelDef;
-    if (levelDef == null) return {};
-    final objectMap = parsed.objectMap;
-    final set = <String>{};
-    for (final rtid in levelDef.modules) {
-      final info = RtidParser.parse(rtid);
-      if (info == null) continue;
-      if (info.source == 'CurrentLevel') {
-        final obj = objectMap[info.alias];
-        if (obj != null) set.add(obj.objClass);
-      } else if (info.source == 'LevelModules') {
-        set.add(info.alias);
-      }
-    }
-    return set;
+    return LevelIssueContext.fromLevel(lf).moduleObjClasses;
   }
 
   _PlantBlockedReason? _chooserBlockedReasonForPlant(PlantInfo plant) {
@@ -399,23 +383,15 @@ class _PlantSelectionScreenState extends State<PlantSelectionScreen> {
 
   Future<void> _showComingSoonPlantBlockedDialog(BuildContext context) async {
     final l10n = AppLocalizations.of(context);
-    final isMoonTag = _selectedTag == PlantTag.worldMoon;
     await showDialog<void>(
       context: context,
       builder: (ctx) => AlertDialog(
         scrollable: true,
-        title: Text(
-          isMoonTag
-              ? (l10n?.stayTunedMoonPlantBlockedTitle ?? 'A Message from Space')
-              : (l10n?.comingSoonPlantBlockedTitle ?? 'To Be Continued'),
-        ),
+        title: Text(l10n?.comingSoonPlantBlockedTitle ?? 'To Be Continued'),
         content: Text(
-          isMoonTag
-              ? (l10n?.stayTunedMoonPlantBlockedMessage ??
-                    'Moon BaseZ Part 2 is coming soon. Keep a lookout!')
-              : (l10n?.comingSoonPlantBlockedMessage ??
-                    'The plants are still growing strong. Stay tuned for '
-                        'future updates!'),
+          l10n?.comingSoonPlantBlockedMessage ??
+              'The plants are still growing strong. Stay tuned for '
+                  'future updates!',
         ),
         actions: [
           TextButton(
@@ -521,6 +497,40 @@ class _PlantSelectionScreenState extends State<PlantSelectionScreen> {
     });
   }
 
+  void _selectAllVisible(
+    List<PlantInfo> plants,
+    Set<String> levelModuleObjClasses,
+  ) {
+    final selectableIds = plants
+        .where(
+          (plant) => _plantBlockedReason(plant, levelModuleObjClasses) == null,
+        )
+        .map((plant) => plant.id)
+        .toList(growable: false);
+    if (selectableIds.isEmpty) return;
+
+    setState(() {
+      if (widget.allowDuplicateSelection) {
+        final existing = _selectedIdsWithDuplicates.toSet();
+        final missing = selectableIds
+            .where((id) => !existing.contains(id))
+            .toList(growable: false);
+        if (missing.isEmpty) {
+          _selectedIdsWithDuplicates.removeWhere(selectableIds.contains);
+        } else {
+          _selectedIdsWithDuplicates.addAll(missing);
+        }
+      } else {
+        final allSelected = selectableIds.every(_selectedIds.contains);
+        if (allSelected) {
+          _selectedIds.removeAll(selectableIds);
+        } else {
+          _selectedIds.addAll(selectableIds);
+        }
+      }
+    });
+  }
+
   bool _isMagicHatPlant(PlantInfo plant) =>
       plant.id.startsWith('minigame_imitater');
 
@@ -585,8 +595,12 @@ class _PlantSelectionScreenState extends State<PlantSelectionScreen> {
       crossAxisSpacing: 8,
       childAspectRatio: 0.65,
     );
+    final fabBackground = theme.colorScheme.primaryContainer;
+    final fabForeground = theme.colorScheme.onPrimaryContainer;
     final confirmation = widget.isMultiSelect
         ? FloatingActionButton(
+            backgroundColor: fabBackground,
+            foregroundColor: fabForeground,
             onPressed: _isLoaded
                 ? () {
                     final ids = _filterChooserSelectablePlantIds(
@@ -598,6 +612,16 @@ class _PlantSelectionScreenState extends State<PlantSelectionScreen> {
                   }
                 : null,
             child: const Icon(Icons.check),
+          )
+        : null;
+    final selectAll = widget.isMultiSelect
+        ? SelectionGridSelectAllButton(
+            label: l10n?.selectAll ?? 'Select ALL',
+            backgroundColor: fabBackground,
+            foregroundColor: fabForeground,
+            onPressed: _isLoaded && plants.isNotEmpty
+                ? () => _selectAllVisible(plants, levelModuleObjClasses)
+                : null,
           )
         : null;
 
@@ -724,6 +748,7 @@ class _PlantSelectionScreenState extends State<PlantSelectionScreen> {
               itemCount: plants.length,
               gridDelegate: gridDelegate,
               confirmation: confirmation,
+              selectAll: selectAll,
               builder: (context, gridPadding) => !_isLoaded
                   ? const Center(child: CircularProgressIndicator())
                   : plants.isEmpty

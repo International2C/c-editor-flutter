@@ -36,7 +36,6 @@ void main() {
           body: LevelSettingsTab(
             levelDef: levelDef,
             objectMap: objects,
-            missingModules: const [],
             onEditBasicInfo: () {},
             onEditModule: edited.add,
             onRemoveModule: (_) {},
@@ -99,7 +98,6 @@ void main() {
           body: LevelSettingsTab(
             levelDef: levelDef,
             objectMap: objects,
-            missingModules: const [],
             onEditBasicInfo: () {},
             onEditModule: edited.add,
             onRemoveModule: (_) {},
@@ -168,7 +166,6 @@ void main() {
           body: LevelSettingsTab(
             levelDef: levelDef,
             objectMap: objects,
-            missingModules: const [],
             onEditBasicInfo: () {},
             onEditModule: (_) {},
             onRemoveModule: (_) {},

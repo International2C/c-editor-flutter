@@ -12,6 +12,7 @@ class ReferenceRepository {
 
   Map<String, PvzObject>? _moduleCache;
   final Set<String> _validGridItemAliases = {};
+  final Map<String, PvzObject> _gridItemTypesByName = {};
 
   /// Load LevelModules.json and GridItemTypes.json from assets. Call once (e.g. when entering editor).
   static Future<void> init() async {
@@ -39,6 +40,14 @@ class ReferenceRepository {
       final gridList = gridMap['objects'] as List<dynamic>? ?? [];
       for (final e in gridList) {
         final obj = e as Map<String, dynamic>;
+        final object = PvzObject.fromJson(obj);
+        final data = object.objData;
+        if (object.objClass == 'GridItemType' && data is Map) {
+          final typeName = data['TypeName'];
+          if (typeName is String && typeName.isNotEmpty) {
+            instance._gridItemTypesByName[typeName] = object;
+          }
+        }
         final aliases = obj['aliases'] as List<dynamic>? ?? [];
         for (final a in aliases) {
           instance._validGridItemAliases.add(a.toString());
@@ -54,6 +63,10 @@ class ReferenceRepository {
   }
 
   PvzObject? objectForAlias(String alias) => _moduleCache?[alias];
+
+  /// Some built-in types (such as armrack) have a TypeName but no RTID alias.
+  PvzObject? gridItemTypeForName(String typeName) =>
+      _gridItemTypesByName[typeName];
 
   /// Returns true if alias is in GridItemTypes.json. If not loaded, returns true (permissive).
   bool isValidGridItem(String alias) {

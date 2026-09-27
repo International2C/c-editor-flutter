@@ -39,9 +39,14 @@ class $IconData implements $Instance {
 
   /// Instantiate a new [$IconData] from [args]
   static $Value? $new(Runtime runtime, $Value? target, List<$Value?> args) {
+    // IconData params are @mustBeConst for icon tree-shaking; dart_eval
+    // supplies runtime values, so this bridge cannot use constants.
     return $IconData.wrap(IconData(
+      // ignore: non_const_argument_for_const_parameter
       args[0]!.$value,
+      // ignore: non_const_argument_for_const_parameter
       fontFamily: args[1]?.$value,
+      // ignore: non_const_argument_for_const_parameter
       fontPackage: args[2]?.$value,
       matchTextDirection: args[3]?.$value ?? false,
     ));

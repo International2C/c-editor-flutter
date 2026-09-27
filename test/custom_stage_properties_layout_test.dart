@@ -1,4 +1,5 @@
 import 'package:c_editor/data/custom_stage_level_utils.dart';
+import 'package:c_editor/data/music_suffix_catalog.dart';
 import 'package:c_editor/data/pvz_models.dart';
 import 'package:c_editor/data/repository/stage_catalog_repository.dart';
 import 'package:c_editor/l10n/app_localizations.dart';
@@ -11,6 +12,7 @@ void main() {
   setUpAll(() async {
     await ResourceNames.ensureLoaded();
     await StageCatalogRepository.init();
+    await MusicSuffixCatalog.init();
   });
 
   testWidgets('custom stage bounded text stays inside a narrow large UI', (
@@ -58,6 +60,58 @@ void main() {
     );
   });
 
+  testWidgets('Roman custom lawn keeps its name and can select rift music', (
+    tester,
+  ) async {
+    final option = StageCatalogRepository.stageBaseOptions().firstWhere(
+      (option) => option.alias == 'UnchartedRomaStage',
+    );
+    final level = PvzLevelFile(objects: []);
+    CustomStageLevelUtils.createCustomStage(
+      levelFile: level,
+      alias: 'CustomRoman',
+      baseOption: option,
+    );
+
+    await tester.pumpWidget(
+      MaterialApp(
+        locale: const Locale('en'),
+        supportedLocales: AppLocalizations.supportedLocales,
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        home: CustomStagePropertiesScreen(
+          alias: 'CustomRoman',
+          levelFile: level,
+          onChanged: () {},
+          onBack: () {},
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+    // Base lawn, lawn appearance, and music all identify Roman Glory.
+    expect(find.text('Roman Glory'), findsNWidgets(3));
+    expect(find.text('Spacetime Rift (Zombosseum)'), findsNothing);
+    final music = find.text('Roman Glory').last;
+    await tester.ensureVisible(music);
+    await tester.tap(music);
+    await tester.pumpAndSettle();
+    await tester.enterText(find.byType(TextField), 'TeamBossRoman');
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Zombot Hot-Rodicus (Spacetime Rift Version)'));
+    await tester.pumpAndSettle();
+
+    expect(
+      find.text('Zombot Hot-Rodicus (Spacetime Rift Version)'),
+      findsOneWidget,
+    );
+    final exported = PvzLevelFile.fromJson(level.toJson()).objects.single;
+    expect(exported.objClass, option.objclass);
+    expect(exported.objData, {
+      ...option.objdata,
+      'MusicSuffix': 'TeamBossRoman',
+    });
+    expect(tester.takeException(), isNull);
+  });
+
   testWidgets('Moon custom stage exposes the cosmic Plant Food interval', (
     tester,
   ) async {
@@ -97,9 +151,7 @@ void main() {
     await tester.pump();
 
     expect(
-      (stage.objData as Map<String, dynamic>)[
-        'CosmicPlantfoodFillSeconds'
-      ],
+      (stage.objData as Map<String, dynamic>)['CosmicPlantfoodFillSeconds'],
       25.5,
     );
   });

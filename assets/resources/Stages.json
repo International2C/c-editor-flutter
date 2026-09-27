@@ -12282,249 +12282,6 @@
     ]
   },
   {
-    "objclass": "StageModuleProperties",
-    "implementations": [
-      {
-        "alias": "MoonGrappleStage",
-        "objdata": {
-      "ResourceGroupNames": [
-        "Egypt_Gravestone",
-        "Game_Tombstones_Dynamic",
-        "DelayLoad_Background_Moon_Grapple",
-        "Dirt_Spawn_Modern",
-        "AudioModern",
-        "ModernLootPinatas"
-      ],
-      "GroupsToUnloadForAds": [
-        "DelayLoad_Background_Moon_Grapple"
-      ],
-      "StagePrefix": "aquarium",
-      "BackgroundResourceGroup": "DelayLoad_Background_Moon_Grapple",
-      "BackgroundImagePrefix": "IMAGE_BACKGROUNDS_MOON_GRAPPLE",
-      "LevelPowerupSet": "LevelPowerupsDefault",
-      "BasicZombieTypeName": "tutorial",
-      "FlagZombieTypeName": "tutorial_flag",
-      "FlagVeteranZombieTypeNames": [
-        "tutorial_flag_veteran"
-      ],
-      "Armor1ZombieTypeName": "tutorial_armor1",
-      "Armor2ZombieTypeName": "tutorial_armor2",
-      "RailcartDefaultTypeName": "railcart_egypt",
-      "GravestoneDefaultTypeName": "gravestone_tutorial",
-      "DirtSpawnEffectName": "POPANIM_EFFECTS_DIRT_SPAWN_MODERN",
-      "MusicSuffix": "Atlantis",
-      "AmbientAudioSuffix": "Atlantis_Currents_BG",
-      "DisabledStreetCells": [
-        {
-          "mX": 0,
-          "mY": 0
-        },
-        {
-          "mX": 0,
-          "mY": 1
-        },
-        {
-          "mX": 0,
-          "mY": 2
-        },
-        {
-          "mX": 0,
-          "mY": 3
-        },
-        {
-          "mX": 0,
-          "mY": 4
-        },
-        {
-          "mX": 0,
-          "mY": 5
-        },
-        {
-          "mX": 0,
-          "mY": 6
-        },
-        {
-          "mX": 0,
-          "mY": 7
-        },
-        {
-          "mX": 0,
-          "mY": 8
-        },
-        {
-          "mX": 0,
-          "mY": 9
-        },
-        {
-          "mX": 1,
-          "mY": 0
-        },
-        {
-          "mX": 1,
-          "mY": 1
-        },
-        {
-          "mX": 1,
-          "mY": 2
-        },
-        {
-          "mX": 1,
-          "mY": 3
-        },
-        {
-          "mX": 1,
-          "mY": 4
-        },
-        {
-          "mX": 1,
-          "mY": 5
-        },
-        {
-          "mX": 1,
-          "mY": 6
-        },
-        {
-          "mX": 1,
-          "mY": 7
-        },
-        {
-          "mX": 1,
-          "mY": 8
-        },
-        {
-          "mX": 1,
-          "mY": 9
-        },
-        {
-          "mX": 2,
-          "mY": 0
-        },
-        {
-          "mX": 2,
-          "mY": 1
-        },
-        {
-          "mX": 2,
-          "mY": 2
-        },
-        {
-          "mX": 2,
-          "mY": 3
-        },
-        {
-          "mX": 2,
-          "mY": 4
-        },
-        {
-          "mX": 2,
-          "mY": 5
-        },
-        {
-          "mX": 2,
-          "mY": 6
-        },
-        {
-          "mX": 2,
-          "mY": 7
-        },
-        {
-          "mX": 2,
-          "mY": 8
-        },
-        {
-          "mX": 2,
-          "mY": 9
-        },
-        {
-          "mX": 5,
-          "mY": 9
-        },
-        {
-          "mX": 6,
-          "mY": 0
-        },
-        {
-          "mX": 6,
-          "mY": 1
-        },
-        {
-          "mX": 6,
-          "mY": 2
-        },
-        {
-          "mX": 6,
-          "mY": 3
-        },
-        {
-          "mX": 6,
-          "mY": 4
-        },
-        {
-          "mX": 6,
-          "mY": 5
-        },
-        {
-          "mX": 6,
-          "mY": 6
-        },
-        {
-          "mX": 6,
-          "mY": 7
-        },
-        {
-          "mX": 6,
-          "mY": 8
-        },
-        {
-          "mX": 6,
-          "mY": 9
-        },
-        {
-          "mX": 7,
-          "mY": 0
-        },
-        {
-          "mX": 7,
-          "mY": 6
-        },
-        {
-          "mX": 7,
-          "mY": 7
-        },
-        {
-          "mX": 7,
-          "mY": 8
-        },
-        {
-          "mX": 7,
-          "mY": 9
-        },
-        {
-          "mX": 8,
-          "mY": 0
-        },
-        {
-          "mX": 8,
-          "mY": 6
-        },
-        {
-          "mX": 8,
-          "mY": 7
-        },
-        {
-          "mX": 8,
-          "mY": 8
-        },
-        {
-          "mX": 8,
-          "mY": 9
-        }
-      ]
-        }
-      }
-    ]
-  },
-  {
     "objclass": "MoonStageProperties",
     "fields": [
       {
@@ -12833,6 +12590,48 @@
         ]
       },
       {
+        "name": "ShadowBoostable",
+        "type": "object",
+        "fields": [
+          {
+            "name": "ListType",
+            "type": "string",
+            "default": "whitelist"
+          },
+          {
+            "name": "List",
+            "type": "List<string>",
+            "default": [
+              "moonflower",
+              "shadowshroom",
+              "nightshade",
+              "dusklobber",
+              "grimrose",
+              "shadowpeashooter",
+              "shadowvanilla",
+              "dragonbabybruit",
+              "dragonbruit",
+              "gloomvine"
+            ]
+          }
+        ],
+        "default": {
+          "ListType": "whitelist",
+          "List": [
+            "moonflower",
+            "shadowshroom",
+            "nightshade",
+            "dusklobber",
+            "grimrose",
+            "shadowpeashooter",
+            "shadowvanilla",
+            "dragonbabybruit",
+            "dragonbruit",
+            "gloomvine"
+          ]
+        }
+      },
+      {
         "name": "StagePrefix",
         "type": "string",
         "default": "moon"
@@ -13080,7 +12879,22 @@
               "mY": 9
             }
           ],
-          "CosmicPlantfoodFillSeconds": 50.0
+          "CosmicPlantfoodFillSeconds": 50.0,
+          "ShadowBoostable": {
+            "ListType": "whitelist",
+            "List": [
+              "moonflower",
+              "shadowshroom",
+              "nightshade",
+              "dusklobber",
+              "grimrose",
+              "shadowpeashooter",
+              "shadowvanilla",
+              "dragonbabybruit",
+              "dragonbruit",
+              "gloomvine"
+            ]
+          }
         },
         "image": "Stage_Moon.webp",
         "tag": "main"
@@ -20356,6 +20170,246 @@
         "tag": "extra"
       },
       {
+        "alias": "MoonGrappleStage",
+        "objdata": {
+          "ResourceGroupNames": [
+            "Egypt_Gravestone",
+            "Game_Tombstones_Dynamic",
+            "DelayLoad_Background_Moon_Grapple",
+            "Dirt_Spawn_Modern",
+            "AudioModern",
+            "ModernLootPinatas"
+          ],
+          "GroupsToUnloadForAds": [
+            "DelayLoad_Background_Moon_Grapple"
+          ],
+          "StagePrefix": "aquarium",
+          "BackgroundResourceGroup": "DelayLoad_Background_Moon_Grapple",
+          "BackgroundImagePrefix": "IMAGE_BACKGROUNDS_MOON_GRAPPLE",
+          "LevelPowerupSet": "LevelPowerupsDefault",
+          "BasicZombieTypeName": "tutorial",
+          "FlagZombieTypeName": "tutorial_flag",
+          "FlagVeteranZombieTypeNames": [
+            "tutorial_flag_veteran"
+          ],
+          "Armor1ZombieTypeName": "tutorial_armor1",
+          "Armor2ZombieTypeName": "tutorial_armor2",
+          "RailcartDefaultTypeName": "railcart_egypt",
+          "GravestoneDefaultTypeName": "gravestone_tutorial",
+          "DirtSpawnEffectName": "POPANIM_EFFECTS_DIRT_SPAWN_MODERN",
+          "MusicSuffix": "Moon",
+          "AmbientAudioSuffix": "Atlantis_Currents_BG",
+          "DisabledStreetCells": [
+            {
+              "mX": 0,
+              "mY": 0
+            },
+            {
+              "mX": 0,
+              "mY": 1
+            },
+            {
+              "mX": 0,
+              "mY": 2
+            },
+            {
+              "mX": 0,
+              "mY": 3
+            },
+            {
+              "mX": 0,
+              "mY": 4
+            },
+            {
+              "mX": 0,
+              "mY": 5
+            },
+            {
+              "mX": 0,
+              "mY": 6
+            },
+            {
+              "mX": 0,
+              "mY": 7
+            },
+            {
+              "mX": 0,
+              "mY": 8
+            },
+            {
+              "mX": 0,
+              "mY": 9
+            },
+            {
+              "mX": 1,
+              "mY": 0
+            },
+            {
+              "mX": 1,
+              "mY": 1
+            },
+            {
+              "mX": 1,
+              "mY": 2
+            },
+            {
+              "mX": 1,
+              "mY": 3
+            },
+            {
+              "mX": 1,
+              "mY": 4
+            },
+            {
+              "mX": 1,
+              "mY": 5
+            },
+            {
+              "mX": 1,
+              "mY": 6
+            },
+            {
+              "mX": 1,
+              "mY": 7
+            },
+            {
+              "mX": 1,
+              "mY": 8
+            },
+            {
+              "mX": 1,
+              "mY": 9
+            },
+            {
+              "mX": 2,
+              "mY": 0
+            },
+            {
+              "mX": 2,
+              "mY": 1
+            },
+            {
+              "mX": 2,
+              "mY": 2
+            },
+            {
+              "mX": 2,
+              "mY": 3
+            },
+            {
+              "mX": 2,
+              "mY": 4
+            },
+            {
+              "mX": 2,
+              "mY": 5
+            },
+            {
+              "mX": 2,
+              "mY": 6
+            },
+            {
+              "mX": 2,
+              "mY": 7
+            },
+            {
+              "mX": 2,
+              "mY": 8
+            },
+            {
+              "mX": 2,
+              "mY": 9
+            },
+            {
+              "mX": 5,
+              "mY": 9
+            },
+            {
+              "mX": 6,
+              "mY": 0
+            },
+            {
+              "mX": 6,
+              "mY": 1
+            },
+            {
+              "mX": 6,
+              "mY": 2
+            },
+            {
+              "mX": 6,
+              "mY": 3
+            },
+            {
+              "mX": 6,
+              "mY": 4
+            },
+            {
+              "mX": 6,
+              "mY": 5
+            },
+            {
+              "mX": 6,
+              "mY": 6
+            },
+            {
+              "mX": 6,
+              "mY": 7
+            },
+            {
+              "mX": 6,
+              "mY": 8
+            },
+            {
+              "mX": 6,
+              "mY": 9
+            },
+            {
+              "mX": 7,
+              "mY": 0
+            },
+            {
+              "mX": 7,
+              "mY": 6
+            },
+            {
+              "mX": 7,
+              "mY": 7
+            },
+            {
+              "mX": 7,
+              "mY": 8
+            },
+            {
+              "mX": 7,
+              "mY": 9
+            },
+            {
+              "mX": 8,
+              "mY": 0
+            },
+            {
+              "mX": 8,
+              "mY": 6
+            },
+            {
+              "mX": 8,
+              "mY": 7
+            },
+            {
+              "mX": 8,
+              "mY": 8
+            },
+            {
+              "mX": 8,
+              "mY": 9
+            }
+          ]
+        },
+        "image": "Stage_MoonGrappleStage.webp",
+        "tag": "special"
+      },
+      {
         "alias": "NewYearDaylightStage",
         "objdata": {
           "ResourceGroupNames": [
@@ -23272,7 +23326,8 @@
             "Game_Tombstones_Dynamic",
             "Tombstone_Dark_Effects",
             "DelayLoad_Background_Team_Boss",
-            "AudioTutorial"
+            "AudioTutorial",
+            "ZombossGlobalAudio"
           ],
           "GroupsToUnloadForAds": [
             "DelayLoad_Background_Team_Boss"
@@ -23288,7 +23343,7 @@
           "FlagZombieTypeName": "tutorial_flag",
           "Armor1ZombieTypeName": "tutorial_armor1",
           "Armor2ZombieTypeName": "tutorial_armor2",
-          "MusicSuffix": "Roman",
+          "MusicSuffix": "TeamBossRoman",
           "AmbientAudioSuffix": "Amb_Tutorial_Garden_BG_LP",
           "RailcartDefaultTypeName": "railcart_tutotial",
           "GravestoneDefaultTypeName": "gravestone_tutorial",
@@ -25822,6 +25877,193 @@
           ]
         },
         "image": "Stage_PU41.webp",
+        "tag": "extra"
+      },
+      {
+        "alias": "UnchartedRomaStage",
+        "objdata": {
+          "ResourceGroupNames": [
+            "Egypt_Gravestone",
+            "Game_Tombstones_Dynamic",
+            "Tombstone_Dark_Effects",
+            "DelayLoad_Background_Team_Boss",
+            "Roman_Amb_World_SFX",
+            "AudioTutorial"
+          ],
+          "GroupsToUnloadForAds": [
+            "DelayLoad_Background_Team_Boss"
+          ],
+          "StagePrefix": "roman",
+          "BackgroundResourceGroup": "DelayLoad_Background_Team_Boss",
+          "BackgroundImagePrefix": "IMAGE_BACKGROUNDS_TEAM_BOSS",
+          "BackgroundImageLeft": "ROMAN_LEFT",
+          "BackgroundImageMiddle": "ROMAN",
+          "BackgroundImageRight": "ROMAN_RIGHT",
+          "LevelPowerupSet": "LevelPowerupsDefault",
+          "BasicZombieTypeName": "roman",
+          "FlagZombieTypeName": "roman_flag",
+          "Armor1ZombieTypeName": "roman_armor1",
+          "Armor2ZombieTypeName": "roman_armor2",
+          "MusicSuffix": "Roman",
+          "AmbientAudioSuffix": "Amb_Tutorial_Garden_BG_LP",
+          "RailcartDefaultTypeName": "railcart_tutotial",
+          "GravestoneDefaultTypeName": "gravestone_tutorial",
+          "DisabledStreetCells": [
+            {
+              "mX": 0,
+              "mY": 0
+            },
+            {
+              "mX": 0,
+              "mY": 1
+            },
+            {
+              "mX": 0,
+              "mY": 2
+            },
+            {
+              "mX": 0,
+              "mY": 3
+            },
+            {
+              "mX": 0,
+              "mY": 4
+            },
+            {
+              "mX": 0,
+              "mY": 5
+            },
+            {
+              "mX": 0,
+              "mY": 6
+            },
+            {
+              "mX": 0,
+              "mY": 7
+            },
+            {
+              "mX": 0,
+              "mY": 8
+            },
+            {
+              "mX": 0,
+              "mY": 9
+            },
+            {
+              "mX": 1,
+              "mY": 0
+            },
+            {
+              "mX": 1,
+              "mY": 1
+            },
+            {
+              "mX": 1,
+              "mY": 2
+            },
+            {
+              "mX": 1,
+              "mY": 3
+            },
+            {
+              "mX": 1,
+              "mY": 4
+            },
+            {
+              "mX": 1,
+              "mY": 5
+            },
+            {
+              "mX": 1,
+              "mY": 6
+            },
+            {
+              "mX": 1,
+              "mY": 7
+            },
+            {
+              "mX": 1,
+              "mY": 8
+            },
+            {
+              "mX": 1,
+              "mY": 9
+            },
+            {
+              "mX": 2,
+              "mY": 0
+            },
+            {
+              "mX": 2,
+              "mY": 1
+            },
+            {
+              "mX": 2,
+              "mY": 2
+            },
+            {
+              "mX": 2,
+              "mY": 3
+            },
+            {
+              "mX": 2,
+              "mY": 4
+            },
+            {
+              "mX": 2,
+              "mY": 5
+            },
+            {
+              "mX": 2,
+              "mY": 6
+            },
+            {
+              "mX": 2,
+              "mY": 7
+            },
+            {
+              "mX": 2,
+              "mY": 8
+            },
+            {
+              "mX": 2,
+              "mY": 9
+            },
+            {
+              "mX": 3,
+              "mY": 9
+            },
+            {
+              "mX": 5,
+              "mY": 9
+            },
+            {
+              "mX": 7,
+              "mY": 9
+            },
+            {
+              "mX": 7,
+              "mY": 8
+            },
+            {
+              "mX": 7,
+              "mY": 7
+            },
+            {
+              "mX": 8,
+              "mY": 9
+            },
+            {
+              "mX": 8,
+              "mY": 8
+            },
+            {
+              "mX": 8,
+              "mY": 7
+            }
+          ]
+        },
+        "image": "Stage_TeamBoss.webp",
         "tag": "extra"
       },
       {

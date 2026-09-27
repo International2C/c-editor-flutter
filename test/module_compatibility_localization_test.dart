@@ -25,26 +25,34 @@ void main() {
     }
   });
 
-  test('wave generator help uses the requested general caution', () {
-    const expectedBodies = {
-      'zh': '可能与部分模块不兼容，造成关卡闪退，请谨慎使用。',
-      'en':
-          'May be incompatible with some modules and cause the level '
-          'to crash. Use with caution.',
-      'ru':
-          'Может быть несовместим с некоторыми модулями и вызывать '
-          'сбой уровня. Используйте с осторожностью.',
-    };
-    for (final entry in expectedBodies.entries) {
-      final arb = _appLocale(entry.key);
-      expect(
-        arb['waveGeneratorModuleHelpIncompatBody'],
-        entry.value,
-        reason: entry.key,
-      );
-      expect(arb['waveGeneratorModuleHelpIncompat'], isNotEmpty);
-    }
-  });
+  test(
+    'wave generator and Gladiatorial Row help include the compatibility warning',
+    () {
+      for (final locale in locales) {
+        final arb = _appLocale(locale);
+        final warning =
+            arb['gladiatorWaveGeneratorCompatibilityWarning'] as String;
+        expect(warning, isNotEmpty, reason: locale);
+        expect(
+          arb['waveGeneratorModuleHelpIncompatBody'],
+          contains(warning),
+          reason: locale,
+        );
+        // Help may summarize the incompatibility without repeating the banner.
+        expect(
+          arb['gladiatorHelpTips'],
+          contains(switch (locale) {
+            'zh' => '波次生成器下也不会生效',
+            'en' => 'does not work with Wave Generator',
+            _ => 'не работает с Генератором волн',
+          }),
+          reason: locale,
+        );
+        expect(arb['gladiatorCompatibilityWarningTitle'], isNotEmpty);
+        expect(arb['waveGeneratorModuleHelpIncompat'], isNotEmpty);
+      }
+    },
+  );
 
   test('retains actual wave system conflicts and unrelated module help', () {
     for (final locale in locales) {

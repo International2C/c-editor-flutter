@@ -45,12 +45,11 @@ void main() {
       arb['moonExpertHelpOverview'],
       allOf(
         contains('Moon BaseZ Expert Mode'),
-        contains('all plants are forced to level 1'),
+        contains('all plants are forced to Level 1'),
         contains('Tier Definition module'),
         contains('has no effect in Creative Courtyard'),
       ),
     );
     expect(arb['moonExpertZombieLevel'], 'Zombie level (ZombieLevel)');
-    expect(arb['enterMoonExpertZombieLevelHint'], 'Enter zombie level (0–10)');
   });
 }

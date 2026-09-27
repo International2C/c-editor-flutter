@@ -10,6 +10,7 @@ import 'package:c_editor/widgets/asset_image.dart'
 import 'package:c_editor/theme/app_theme.dart'
     show pvzPurpleDark, pvzPurpleLight;
 import 'package:c_editor/widgets/editor_components.dart';
+import 'package:c_editor/utils/target_zombie_check.dart';
 import 'package:c_editor/widgets/editor_object_alias.dart';
 
 /// Zombie Sun Drop module: editable sun drop values for tiers 1–6.
@@ -233,6 +234,20 @@ class _ZombieSunDropModuleScreenState extends State<ZombieSunDropModuleScreen> {
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           widget.onRequestZombieSelection((selectedIds) {
+            final l10n = AppLocalizations.of(context);
+            for (final id in selectedIds) {
+              if (isTargetZombieBlocked(id, widget.levelFile)) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(
+                      l10n?.targetZombieRequiresOakTrain ??
+                          'Target zombies require the OakTrain module. Please add OakTrain to the level first.',
+                    ),
+                  ),
+                );
+                return;
+              }
+            }
             _addZombies(selectedIds);
           });
         },

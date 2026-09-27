@@ -30,16 +30,12 @@ class _MoonExpertModuleScreenState extends State<MoonExpertModuleScreen> {
   late String _alias;
   late PvzObject _moduleObj;
   late MoonExpertPropertiesData _data;
-  late TextEditingController _levelController;
-  late FocusNode _levelFocusNode;
 
   @override
   void initState() {
     super.initState();
     _alias = aliasFromRtid(widget.rtid);
     _loadData();
-    _levelFocusNode = FocusNode();
-    _levelFocusNode.addListener(() => setState(() {}));
   }
 
   void _loadData() {
@@ -59,19 +55,11 @@ class _MoonExpertModuleScreenState extends State<MoonExpertModuleScreen> {
     } catch (_) {
       _data = MoonExpertPropertiesData();
     }
-    _levelController = TextEditingController(text: '${_data.zombieLevel}');
   }
 
   void _save() {
     _moduleObj.objData = _data.toJson();
     widget.onChanged();
-  }
-
-  @override
-  void dispose() {
-    _levelFocusNode.dispose();
-    _levelController.dispose();
-    super.dispose();
   }
 
   void _handleAliasChanged(String newAlias) {
@@ -132,7 +120,7 @@ class _MoonExpertModuleScreenState extends State<MoonExpertModuleScreen> {
           ),
         ],
       ),
-      body: Padding(
+      body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -163,22 +151,25 @@ class _MoonExpertModuleScreenState extends State<MoonExpertModuleScreen> {
                     ],
                   ),
                   const SizedBox(height: 8),
-                  TextField(
-                    focusNode: _levelFocusNode,
-                    controller: _levelController,
-                    keyboardType: TextInputType.number,
+                  DropdownButtonFormField<int>(
+                    key: const ValueKey('moonExpertZombieLevel'),
+                    initialValue:
+                        _data.zombieLevel >= 0 && _data.zombieLevel <= 10
+                        ? _data.zombieLevel
+                        : null,
+                    isExpanded: true,
                     decoration: editorInputDecoration(
                       context,
-                      hintText:
-                          l10n?.enterMoonExpertZombieLevelHint ??
-                          'Enter zombie level (0–10)',
                       focusColor: accentColor,
-                      isFocused: _levelFocusNode.hasFocus,
                     ),
+                    items: [
+                      for (var level = 0; level <= 10; level++)
+                        DropdownMenuItem(value: level, child: Text('$level')),
+                    ],
                     onChanged: (value) {
-                      final parsed = int.tryParse(value) ?? _data.zombieLevel;
+                      if (value == null) return;
                       setState(() {
-                        _data.zombieLevel = parsed.clamp(0, 10);
+                        _data.zombieLevel = value;
                         _save();
                       });
                     },

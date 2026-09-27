@@ -143,7 +143,7 @@ class _RaidingPartyEventScreenState extends State<RaidingPartyEventScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Spawn parameters',
+                        l10n?.spawnParameters ?? 'Spawn parameters',
                         style: theme.textTheme.titleMedium?.copyWith(
                           fontWeight: FontWeight.bold,
                         ),
@@ -151,7 +151,7 @@ class _RaidingPartyEventScreenState extends State<RaidingPartyEventScreen> {
                       const SizedBox(height: 16),
                       _buildIntField(
                         theme,
-                        'Group size (GroupSize)',
+                        l10n?.groupSize ?? 'Group size (GroupSize)',
                         _data.groupSize,
                         (v) {
                           _data = RaidingPartyEventData(
@@ -165,7 +165,8 @@ class _RaidingPartyEventScreenState extends State<RaidingPartyEventScreen> {
                       const SizedBox(height: 12),
                       _buildIntField(
                         theme,
-                        'Total zombies (SwashbucklerCount)',
+                        l10n?.swashbucklerCount ??
+                            'Total zombies (SwashbucklerCount)',
                         _data.swashbucklerCount,
                         (v) {
                           _data = RaidingPartyEventData(
@@ -179,7 +180,8 @@ class _RaidingPartyEventScreenState extends State<RaidingPartyEventScreen> {
                       const SizedBox(height: 12),
                       _buildIntField(
                         theme,
-                        'Time between groups (TimeBetweenGroups)',
+                        l10n?.timeBetweenGroups ??
+                            'Time between groups (TimeBetweenGroups)',
                         _data.timeBetweenGroups,
                         (v) {
                           _data = RaidingPartyEventData(

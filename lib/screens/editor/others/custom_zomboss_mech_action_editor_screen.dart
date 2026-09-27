@@ -1,3 +1,4 @@
+import 'package:c_editor/widgets/autosave.dart';
 import 'dart:async';
 import 'dart:convert';
 
@@ -728,9 +729,12 @@ class _CustomZombossMechActionEditorScreenState
     });
   }
 
-  Future<void> _saveAndExit() async {
+  Future<void> _saveAndExit({bool automatic = false}) async {
     final result = await _saveAction();
-    if (result != null && mounted) _exitWithResult(result);
+    if (result != null && mounted) {
+      if (automatic) showAutosavedMessage(context);
+      _exitWithResult(result);
+    }
   }
 
   void _restoreInitialState() {
@@ -754,6 +758,14 @@ class _CustomZombossMechActionEditorScreenState
       return;
     }
     _exitDialogOpen = true;
+    if (autosaveEnabled(context, AutosaveTarget.zombossAction)) {
+      try {
+        await _saveAndExit(automatic: true);
+      } finally {
+        _exitDialogOpen = false;
+      }
+      return;
+    }
     final l10n = AppLocalizations.of(context);
     final choice = await showDialog<_CustomActionExitChoice>(
       context: context,

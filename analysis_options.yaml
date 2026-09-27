@@ -16,6 +16,12 @@ analyzer:
     - "**/*.freezed.dart"
     - third_party/flutter_eval/example/**
     - third_party/flutter_eval/test/**
+    - android/**
+    - ios/**
+    - web/**
+    - windows/**
+    - macos/**
+    - linux/**
 
 
 linter:

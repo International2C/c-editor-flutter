@@ -1,3 +1,6 @@
+import 'package:c_editor/bloc/settings/settings_cubit.dart';
+import 'package:c_editor/widgets/app_message.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'dart:ui' as ui;
 
 import 'package:c_editor/bundled_plugins/preview_img_cplugin/lib/src/preview/preview_canvas.dart';
@@ -26,8 +29,13 @@ PreviewCanvas _canvas(WidgetTester tester) =>
 Future<void> _openGenerator(
   WidgetTester tester, {
   Future<PreviewExportResult> Function(ui.Image, String)? exporter,
+  bool autosave = false,
 }) async {
-  SharedPreferences.setMockInitialValues({});
+  SharedPreferences.setMockInitialValues({
+    AutosaveTarget.previewImage.preferenceKey: autosave,
+  });
+  final settings = SettingsCubit(await SharedPreferences.getInstance());
+  addTearDown(settings.close);
   await tester.binding.setSurfaceSize(const Size(1200, 900));
   addTearDown(() => tester.binding.setSurfaceSize(null));
   final seedBank = PvzObject(
@@ -38,23 +46,28 @@ Future<void> _openGenerator(
     },
   );
   await tester.pumpWidget(
-    MaterialApp(
-      home: Builder(
-        builder: (context) => Scaffold(
-          body: Center(
-            child: FilledButton(
-              onPressed: () => Navigator.of(context).push(
-                MaterialPageRoute<void>(
-                  builder: (_) => PreviewGeneratorScreen(
-                    host: _Host(),
-                    levelFile: PvzLevelFile(objects: [seedBank]),
-                    parsed: ParsedLevelData(objectMap: {'SeedBank': seedBank}),
-                    fileName: 'keyboard-exit.json',
-                    imageExporter: exporter,
+    BlocProvider.value(
+      value: settings,
+      child: MaterialApp(
+        home: Builder(
+          builder: (context) => Scaffold(
+            body: Center(
+              child: FilledButton(
+                onPressed: () => Navigator.of(context).push(
+                  MaterialPageRoute<void>(
+                    builder: (_) => PreviewGeneratorScreen(
+                      host: _Host(),
+                      levelFile: PvzLevelFile(objects: [seedBank]),
+                      parsed: ParsedLevelData(
+                        objectMap: {'SeedBank': seedBank},
+                      ),
+                      fileName: 'keyboard-exit.json',
+                      imageExporter: exporter,
+                    ),
                   ),
                 ),
+                child: const Text('Open generator'),
               ),
-              child: const Text('Open generator'),
             ),
           ),
         ),
@@ -132,6 +145,94 @@ Future<void> _deletePlants(WidgetTester tester) async {
 }
 
 void main() {
+  tearDown(AppMessage.hide);
+  for (final fail in [false, true]) {
+    testWidgets(
+      'preview autosave ${fail ? "failure retains document and permits retry" : "succeeds before leaving"}',
+      (tester) async {
+        var exports = 0;
+        var shouldFail = fail;
+        final messages = <String>[];
+        void recordMessage() {
+          final message = AppMessage.controller.message;
+          if (message != null) messages.add(message);
+        }
+
+        AppMessage.controller.addListener(recordMessage);
+        addTearDown(() => AppMessage.controller.removeListener(recordMessage));
+        await _openGenerator(
+          tester,
+          autosave: true,
+          exporter: (_, _) async {
+            exports++;
+            if (shouldFail) throw StateError('Test autosave failure');
+            return PreviewExportResult(
+              path: 'automatic.png',
+              bytes: Uint8List(0),
+            );
+          },
+        );
+        await tester.tap(
+          find.byKey(const ValueKey('previewGeneratorBackButton')),
+        );
+        await _finishExport(tester);
+        expect(
+          find.byKey(const ValueKey('previewGeneratorExitDialog')),
+          findsNothing,
+        );
+        expect(exports, 1);
+        if (fail) {
+          expect(find.byType(PreviewGeneratorScreen), findsOneWidget);
+          expect(find.text('Export failed'), findsOneWidget);
+          expect(messages, isEmpty);
+          shouldFail = false;
+          await tester.tap(
+            find.byKey(const ValueKey('previewGeneratorBackButton')),
+          );
+          await _finishExport(tester);
+          expect(exports, 2);
+        }
+        expect(find.byType(PreviewGeneratorScreen), findsNothing);
+        expect(messages, contains('Automatically saved to: automatic.png'));
+        expect(tester.takeException(), isNull);
+        AppMessage.hide();
+      },
+    );
+  }
+
+  testWidgets(
+    'autosave does not discard the preview when the window becomes too narrow',
+    (tester) async {
+      var exports = 0;
+      await _openGenerator(
+        tester,
+        autosave: true,
+        exporter: (_, _) async {
+          exports++;
+          return PreviewExportResult(path: 'resized.png', bytes: Uint8List(0));
+        },
+      );
+      await tester.binding.setSurfaceSize(const Size(320, 800));
+      await tester.pumpAndSettle();
+      await tester.tap(
+        find.byKey(const ValueKey('previewGeneratorBackButton')),
+      );
+      await _finishExport(tester);
+      expect(find.byType(PreviewGeneratorScreen), findsOneWidget);
+      expect(exports, 0);
+      await tester.binding.setSurfaceSize(const Size(1200, 900));
+      await tester.pumpAndSettle();
+      await tester.tap(
+        find.byKey(const ValueKey('previewGeneratorBackButton')),
+      );
+      await _finishExport(tester);
+      expect(exports, 1);
+      expect(find.byType(PreviewGeneratorScreen), findsNothing);
+      expect(tester.takeException(), isNull);
+      AppMessage.hide();
+    },
+  );
+
   TestWidgetsFlutterBinding.ensureInitialized();
   setUp(() {
     // CachingAssetBundle stores Futures, whose completion callbacks belong to

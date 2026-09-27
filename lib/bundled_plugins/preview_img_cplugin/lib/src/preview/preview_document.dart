@@ -18,7 +18,7 @@ String previewPlantLikeAssetPath(String id) {
   if (plant?.iconAssetPath != null) return plant!.iconAssetPath!;
 
   if (id == 'plantfood' || id == 'tool_plantfood') {
-    return 'assets/images/others/plantfood.png';
+    return 'assets/images/others/plantfood.webp';
   }
   if (id == 'sun' || id == 'sun_large') {
     return 'assets/images/others/sun_large.webp';

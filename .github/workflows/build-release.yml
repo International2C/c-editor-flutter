@@ -4,10 +4,13 @@ on:
   push:
     branches: [main]
   workflow_dispatch:
+  workflow_call:
 
 concurrency:
-  group: build-release-${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
+  # Keep push/dispatch cancellable, but give each reusable-workflow call its
+  # own group so a Publish run is not cancelled by a concurrent main push.
+  group: build-release-${{ github.workflow }}-${{ github.ref }}-${{ github.event_name == 'workflow_call' && github.run_id || github.event_name }}
+  cancel-in-progress: ${{ github.event_name != 'workflow_call' }}
 
 env:
   FLUTTER_VERSION: "3.44.0"

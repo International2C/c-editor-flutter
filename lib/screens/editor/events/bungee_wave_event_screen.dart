@@ -42,8 +42,6 @@ class _BungeeWaveEventScreenState extends State<BungeeWaveEventScreen> {
   late PvzObject _moduleObj;
   late BungeeWaveActionData _data;
   late String _alias;
-  late TextEditingController _levelController;
-  late FocusNode _levelFocusNode;
 
   bool get _isDeepSeaLawn {
     final parsed = LevelParser.parseLevel(widget.levelFile);
@@ -58,8 +56,6 @@ class _BungeeWaveEventScreenState extends State<BungeeWaveEventScreen> {
     super.initState();
     _alias = aliasFromRtid(widget.rtid);
     _loadData();
-    _levelFocusNode = FocusNode();
-    _levelFocusNode.addListener(() => setState(() {}));
   }
 
   void _loadData() {
@@ -107,14 +103,6 @@ class _BungeeWaveEventScreenState extends State<BungeeWaveEventScreen> {
       _moduleObj.objData = _data.toJson();
       WidgetsBinding.instance.addPostFrameCallback((_) => widget.onChanged());
     }
-    _levelController = TextEditingController(text: '${_data.level}');
-  }
-
-  @override
-  void dispose() {
-    _levelFocusNode.dispose();
-    _levelController.dispose();
-    super.dispose();
   }
 
   void _sync() {
@@ -274,25 +262,31 @@ class _BungeeWaveEventScreenState extends State<BungeeWaveEventScreen> {
                           context,
 
                           focusColor: appBarColor,
-                          isFocused: _levelFocusNode.hasFocus,
                         ),
-                        builder: (context, decoration) => TextField(
-                          focusNode: _levelFocusNode,
-                          controller: _levelController,
-                          decoration: decoration,
-                          keyboardType: TextInputType.number,
-                          onChanged: (v) {
-                            final n = int.tryParse(v);
-                            if (n != null && n >= 1 && n <= 10) {
-                              _data = BungeeWaveActionData(
-                                target: _data.target,
-                                zombieName: _data.zombieName,
-                                level: n,
-                              );
-                              _sync();
-                            }
-                          },
-                        ),
+                        builder: (context, decoration) =>
+                            DropdownButtonFormField<int>(
+                              key: const ValueKey('bungeeZombieLevel'),
+                              initialValue: _data.level.clamp(0, 10),
+                              isExpanded: true,
+                              items: List.generate(
+                                11,
+                                (level) => DropdownMenuItem(
+                                  value: level,
+                                  child: Text('$level'),
+                                ),
+                              ),
+                              decoration: decoration,
+                              onChanged: (level) {
+                                if (level != null) {
+                                  _data = BungeeWaveActionData(
+                                    target: _data.target,
+                                    zombieName: _data.zombieName,
+                                    level: level,
+                                  );
+                                  _sync();
+                                }
+                              },
+                            ),
                       ),
                     ],
                   ),

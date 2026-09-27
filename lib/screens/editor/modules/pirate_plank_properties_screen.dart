@@ -32,7 +32,7 @@ class PiratePlankPropertiesScreen extends StatefulWidget {
 class _PiratePlankPropertiesScreenState
     extends State<PiratePlankPropertiesScreen> {
   static const _objClass = 'PiratePlankProperties';
-  static const _plankAsset = 'assets/images/others/Pirate_Seas_Planks.png';
+  static const _plankAsset = 'assets/images/others/Pirate_Seas_Planks.webp';
   static const _plankColSpan = 4;
   static const _stackedLayoutBreakpoint = 760.0;
 

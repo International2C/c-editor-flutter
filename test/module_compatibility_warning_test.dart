@@ -3,7 +3,10 @@ import 'dart:convert';
 import 'package:c_editor/data/level_validator.dart';
 import 'package:c_editor/data/pvz_models.dart';
 import 'package:c_editor/data/registry/conflict_registry.dart';
+import 'package:c_editor/data/registry/issue_registry.dart';
 import 'package:c_editor/l10n/app_localizations.dart';
+import 'package:c_editor/screens/editor/modules/gladiator_row_module_screen.dart';
+import 'package:c_editor/screens/editor/modules/wave_generator_module_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -72,6 +75,118 @@ void main() {
   ];
 
   for (final locale in const [Locale('zh'), Locale('en'), Locale('ru')]) {
+    testWidgets(
+      '${locale.languageCode}: Gladiatorial Row warns only with an active Wave Generator',
+      (tester) async {
+        await _withContext(tester, locale, (context) {
+          final l10n = AppLocalizations.of(context)!;
+          for (final classes in [
+            {'GladiatorRowModuleProperties'},
+            {'WaveGeneratorProperties'},
+            {'GladiatorRowModuleProperties', 'WaveManagerModuleProperties'},
+            {'GladiatorRowModuleProperties', 'WaveGeneratorProperties'},
+          ]) {
+            final level = _levelWithModules(classes);
+            final original = jsonEncode(level.toJson());
+            final issues = LevelValidator.validate(context, level).where(
+              (issue) =>
+                  issue.message ==
+                  l10n.gladiatorWaveGeneratorCompatibilityWarning,
+            );
+            final incompatible =
+                classes.contains('GladiatorRowModuleProperties') &&
+                classes.contains('WaveGeneratorProperties');
+            expect(issues, hasLength(incompatible ? 1 : 0));
+            if (incompatible) expect(issues.single.isError, isFalse);
+            expect(jsonEncode(level.toJson()), original);
+            if (incompatible) {
+              // Either module being unlinked must clear the warning, even if its object remains.
+              for (final retained in [0, 1]) {
+                level.objects.first.objData['Modules'] = [
+                  'RTID(Module$retained@CurrentLevel)',
+                ];
+                expect(
+                  LevelIssueRegistry.forLevel(context, level).where(
+                    (issue) =>
+                        issue.id ==
+                        'gladiatorWaveGeneratorCompatibilityWarning',
+                  ),
+                  isEmpty,
+                );
+              }
+            }
+          }
+        });
+      },
+    );
+
+    testWidgets(
+      '${locale.languageCode}: both editors display and clear the Gladiatorial Row warning',
+      (tester) async {
+        tester.view.physicalSize = const Size(360, 900);
+        tester.view.devicePixelRatio = 1;
+        addTearDown(tester.view.reset);
+        final l10n = lookupAppLocalizations(locale);
+        for (final generatorEditor in [false, true]) {
+          final level = _levelWithModules({
+            'GladiatorRowModuleProperties',
+            'WaveGeneratorProperties',
+          });
+          level.objects[1].objData = GladiatorRowModulePropertiesData()
+              .toJson();
+          level.objects[2].objData = WaveGeneratorPropertiesData().toJson();
+          Widget app() => MaterialApp(
+            locale: locale,
+            localizationsDelegates: AppLocalizations.localizationsDelegates,
+            supportedLocales: AppLocalizations.supportedLocales,
+            builder: (context, child) => MediaQuery(
+              data: MediaQuery.of(
+                context,
+              ).copyWith(textScaler: TextScaler.linear(1.6)),
+              child: child!,
+            ),
+            home: generatorEditor
+                ? WaveGeneratorModuleScreen(
+                    rtid: 'RTID(Module1@CurrentLevel)',
+                    levelFile: level,
+                    onChanged: () {},
+                    onBack: () {},
+                    onRequestZombieSelection: (_) {},
+                  )
+                : GladiatorRowModuleScreen(
+                    rtid: 'RTID(Module0@CurrentLevel)',
+                    levelFile: level,
+                    onChanged: () {},
+                    onBack: () {},
+                  ),
+          );
+          await tester.pumpWidget(app());
+          await tester.pumpAndSettle();
+          final banner = find.byKey(
+            const ValueKey('gladiatorWaveGeneratorCompatibilityWarning'),
+          );
+          expect(banner, findsOneWidget);
+          expect(
+            find.descendant(
+              of: banner,
+              matching: find.text(
+                l10n.gladiatorWaveGeneratorCompatibilityWarning,
+              ),
+            ),
+            findsOneWidget,
+          );
+          expect(tester.takeException(), isNull);
+          level.objects.first.objData['Modules'] = [
+            'RTID(Module${generatorEditor ? 1 : 0}@CurrentLevel)',
+          ];
+          await tester.pumpWidget(app());
+          await tester.pumpAndSettle();
+          expect(banner, findsNothing);
+          expect(tester.takeException(), isNull);
+        }
+      },
+    );
+
     for (final classes in compatibleGroups) {
       testWidgets(
         '${locale.languageCode}: verified-compatible modules do not warn: ${classes.join(', ')}',

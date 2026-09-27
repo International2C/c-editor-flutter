@@ -54,8 +54,8 @@ void main() {
 
     expect(
       assetNames.map(LevelTemplateUtils.idOf),
-      orderedEquals(List.generate(13, (i) => i + 1)),
+      orderedEquals(List.generate(12, (i) => i + 1)),
     );
-    expect(assetNames.last, '13_moon_grapple_example.json');
+    expect(assetNames.last, '12_custom_lawn_example.json');
   });
 }

@@ -1,4 +1,5 @@
 import 'package:c_editor/data/pvz_models.dart';
+import 'package:c_editor/data/registry/warning_registry.dart';
 import 'package:c_editor/l10n/app_localizations.dart';
 import 'package:c_editor/screens/editor/modules/glacier_module_screen.dart';
 import 'package:c_editor/screens/editor/modules/zombie_sun_drop_module_screen.dart';
@@ -68,7 +69,7 @@ void main() {
         findsNothing,
       );
 
-      final weight = find.byKey(const ValueKey('w_mummy_2'));
+      final weight = find.byKey(const ValueKey('glacierZombieWeight'));
       final levelField = find.byKey(const ValueKey('lv_mummy_4'));
       expect(weight, findsOneWidget);
       expect(levelField, findsOneWidget);
@@ -148,27 +149,49 @@ void main() {
   testWidgets('glacier compatibility warnings use independent titles', (
     tester,
   ) async {
+    late AppLocalizations l10n;
     await tester.pumpWidget(
       _localizedApp(
-        Scaffold(
-          body: LevelSettingsTab(
-            levelDef: LevelDefinitionData(),
-            objectMap: const {},
-            missingModules: const [],
-            showGlacierModuleCompatibilityWarning: true,
-            showGlacierModuleUnderwaterWarning: true,
-            showIceAgePlantPuzzleWarning: true,
-            onEditBasicInfo: () {},
-            onEditModule: (_) {},
-            onRemoveModule: (_) {},
-            onReorderModules:
-                ({
-                  required isCoreSection,
-                  required oldIndex,
-                  required newIndex,
-                }) {},
-            onNavigateToAddModule: () {},
-          ),
+        Builder(
+          builder: (context) {
+            l10n = AppLocalizations.of(context)!;
+            return Scaffold(
+              body: LevelSettingsTab(
+                levelDef: LevelDefinitionData(),
+                objectMap: const {},
+                issues: [
+                  LevelWarning(
+                    id: 'glacierModuleCompatibilityWarning',
+                    severity: LevelWarningSeverity.warning,
+                    title: l10n.glacierModuleCompatibilityWarningTitle,
+                    message: l10n.glacierModuleCompatibilityWarning,
+                  ),
+                  LevelWarning(
+                    id: 'glacierModuleUnderwaterWarning',
+                    severity: LevelWarningSeverity.warning,
+                    title: l10n.glacierModuleUnderwaterWarningTitle,
+                    message: l10n.glacierModuleUnderwaterWarning,
+                  ),
+                  LevelWarning(
+                    id: 'iceAgePlantPuzzleWarning',
+                    severity: LevelWarningSeverity.warning,
+                    title: l10n.iceAgePlantPuzzleVariationWarningTitle,
+                    message: l10n.iceAgePlantPuzzleVariationWarning,
+                  ),
+                ],
+                onEditBasicInfo: () {},
+                onEditModule: (_) {},
+                onRemoveModule: (_) {},
+                onReorderModules:
+                    ({
+                      required isCoreSection,
+                      required oldIndex,
+                      required newIndex,
+                    }) {},
+                onNavigateToAddModule: () {},
+              ),
+            );
+          },
         ),
       ),
     );

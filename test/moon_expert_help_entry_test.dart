@@ -38,10 +38,7 @@ void main() {
     tester,
   ) async {
     var changes = 0;
-    final module = await _pumpMoonEditor(
-      tester,
-      onChanged: () => changes++,
-    );
+    final module = await _pumpMoonEditor(tester, onChanged: () => changes++);
     final l10n = AppLocalizationsEn();
     final fieldLabel = find.text(l10n.moonExpertZombieLevel);
     final fieldTooltip = find.byWidgetPredicate(
@@ -66,13 +63,21 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.text(l10n.moonExpertZombieLevelTooltip), findsOneWidget);
 
-    final numberField = find.byWidgetPredicate(
-      (widget) =>
-          widget is TextField &&
-          widget.keyboardType == TextInputType.number,
+    final field = find.byKey(const ValueKey('moonExpertZombieLevel'));
+    final dropdown = find.descendant(
+      of: field,
+      matching: find.byType(DropdownButton<int>),
     );
-    await tester.enterText(numberField, '7');
-    await tester.pump();
+    expect(
+      tester.widget<DropdownButton<int>>(dropdown).items!.map((e) => e.value),
+      List.generate(11, (i) => i),
+    );
+    await tester.tap(field);
+    await tester.pumpAndSettle();
+    await tester.ensureVisible(find.text('7').last);
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('7').last);
+    await tester.pumpAndSettle();
     expect(module.objData['ZombieLevel'], 7);
     expect(changes, 1);
     expect(tester.takeException(), isNull);
@@ -86,9 +91,7 @@ void main() {
     final mouse = await tester.createGesture(kind: PointerDeviceKind.mouse);
     await mouse.addPointer(location: Offset.zero);
     addTearDown(mouse.removePointer);
-    await mouse.moveTo(
-      tester.getCenter(find.text(l10n.moonExpertZombieLevel)),
-    );
+    await mouse.moveTo(tester.getCenter(find.text(l10n.moonExpertZombieLevel)));
     await tester.pump(const Duration(seconds: 1));
     await tester.pumpAndSettle();
     expect(find.text(l10n.moonExpertZombieLevelTooltip), findsOneWidget);

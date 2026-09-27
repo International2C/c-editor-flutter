@@ -72,6 +72,10 @@ abstract class ZombossMechL10n {
     String alias, {
     String? fallback,
   }) {
+    if (alias == 'ZombossSpawnJump') {
+      return AppLocalizations.of(context)?.zombossMechSummonJump ??
+          'Summon jump';
+    }
     final fb = fallback ?? alias;
     final implKey = actionImplementationKey(mechId, alias);
     final localized = ResourceNames.lookup(context, implKey);

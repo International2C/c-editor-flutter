@@ -656,15 +656,14 @@ class _CustomStagePropertiesScreenState
       );
     }
 
-    final backgroundDisplay = StageCatalogRepository.resolveBackgroundDisplay(
-      backgroundImagePrefix: _objdata['BackgroundImagePrefix'] as String?,
-      backgroundResourceGroup: _objdata['BackgroundResourceGroup'] as String?,
-      resourceGroupNames: _resourceGroups,
-      groupsToUnloadForAds: _groupsToUnload,
-    );
-    final backgroundName = backgroundDisplay == null
+    final backgroundNameKey =
+        CustomStageLevelUtils.displayLawnAppearanceNameKey(
+          objclass: _objclass,
+          objdata: _objdata,
+        );
+    final backgroundName = backgroundNameKey.isEmpty
         ? (_objdata['BackgroundImagePrefix'] as String? ?? '—')
-        : ResourceNames.lookup(context, backgroundDisplay.nameKey);
+        : ResourceNames.lookup(context, backgroundNameKey);
     final baseStageNameKey = _stageBaseOption == null
         ? ''
         : 'stage_${_stageBaseOption!.alias}';

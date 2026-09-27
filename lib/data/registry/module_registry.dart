@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:c_editor/l10n/app_localizations.dart';
 import 'package:c_editor/data/pvz_models.dart';
+import 'package:c_editor/utils/custom_icons.dart';
 
 enum ModuleCategory { base, mode, scene, gimmick }
 
@@ -90,7 +91,21 @@ class ModuleRegistry {
         return meta.copyWith(objClass: objClass);
       }
     }
+    for (final meta in registry.values) {
+      if (meta.defaultAlias == alias) {
+        return meta.copyWith(objClass: objClass);
+      }
+    }
     return getMetadata(objClass);
+  }
+
+  static ModuleMetadata? getMetadataByAlias(String alias) {
+    for (final meta in registry.values) {
+      if (meta.defaultAlias == alias) {
+        return meta;
+      }
+    }
+    return null;
   }
 
   static List<ModuleMetadata> getAllModules() => all;
@@ -124,8 +139,6 @@ class ModuleRegistry {
         return l10n.moduleTitle_SunDropperProperties;
       case 'moduleTitle_MoonExpertProperties':
         return l10n.moduleTitle_MoonExpertProperties;
-      case 'moduleTitle_MoonGrappleModuleProperties':
-        return l10n.moduleTitle_MoonGrappleModuleProperties;
       case 'moduleTitle_MoonLifeSupportSystemProperties':
         return l10n.moduleTitle_MoonLifeSupportSystemProperties;
       case 'moduleTitle_LunarTerminalModuleProperties':
@@ -134,6 +147,8 @@ class ModuleRegistry {
         return l10n.moduleTitle_LunarMineVeinModuleProperties;
       case 'moduleTitle_RadiationMeteorModuleProperties':
         return l10n.moduleTitle_RadiationMeteorModuleProperties;
+      case 'moduleTitle_GladiatorRowModuleProperties':
+        return l10n.moduleTitle_GladiatorRowModuleProperties;
       case 'moduleTitle_LevelMutatorMaxSunProps':
         return l10n.moduleTitle_LevelMutatorMaxSunProps;
       case 'moduleTitle_LevelMutatorStartingPlantfoodProps':
@@ -262,6 +277,18 @@ class ModuleRegistry {
         return l10n.moduleTitle_PVZ1PassageModuleProperties;
       case 'moduleTitle_PVZ1CopycatsModuleProperties':
         return l10n.moduleTitle_PVZ1CopycatsModuleProperties;
+      case 'moduleTitle_StatueMazeModuleProperties':
+        return l10n.moduleTitle_StatueMazeModuleProperties;
+      case 'moduleTitle_CamelMinigameProperties':
+        return l10n.moduleTitle_CamelMinigameProperties;
+      case 'moduleTitle_OakTrainProperties':
+        return l10n.moduleTitle_OakTrainProperties;
+      case 'moduleTitle_OakTrainIntroProperties':
+        return l10n.moduleTitle_OakTrainIntroProperties;
+      case 'moduleTitle_PVZ1SeeingStarsModuleProperties':
+        return l10n.moduleTitle_PVZ1SeeingStarsModuleProperties;
+      case 'moduleTitle_GoldRoadProperties':
+        return l10n.moduleTitle_GoldRoadProperties;
       default:
         return key;
     }
@@ -296,8 +323,6 @@ class ModuleRegistry {
         return l10n.moduleDesc_SunDropperProperties;
       case 'moduleDesc_MoonExpertProperties':
         return l10n.moduleDesc_MoonExpertProperties;
-      case 'moduleDesc_MoonGrappleModuleProperties':
-        return l10n.moduleDesc_MoonGrappleModuleProperties;
       case 'moduleDesc_MoonLifeSupportSystemProperties':
         return l10n.moduleDesc_MoonLifeSupportSystemProperties;
       case 'moduleDesc_LunarTerminalModuleProperties':
@@ -306,6 +331,8 @@ class ModuleRegistry {
         return l10n.moduleDesc_LunarMineVeinModuleProperties;
       case 'moduleDesc_RadiationMeteorModuleProperties':
         return l10n.moduleDesc_RadiationMeteorModuleProperties;
+      case 'moduleDesc_GladiatorRowModuleProperties':
+        return l10n.moduleDesc_GladiatorRowModuleProperties;
       case 'moduleDesc_LevelMutatorMaxSunProps':
         return l10n.moduleDesc_LevelMutatorMaxSunProps;
       case 'moduleDesc_LevelMutatorStartingPlantfoodProps':
@@ -434,6 +461,18 @@ class ModuleRegistry {
         return l10n.moduleDesc_PVZ1PassageModuleProperties;
       case 'moduleDesc_PVZ1CopycatsModuleProperties':
         return l10n.moduleDesc_PVZ1CopycatsModuleProperties;
+      case 'moduleDesc_PVZ1SeeingStarsModuleProperties':
+        return l10n.moduleDesc_PVZ1SeeingStarsModuleProperties;
+      case 'moduleDesc_StatueMazeModuleProperties':
+        return l10n.moduleDesc_StatueMazeModuleProperties;
+      case 'moduleDesc_CamelMinigameProperties':
+        return l10n.moduleDesc_CamelMinigameProperties;
+      case 'moduleDesc_OakTrainProperties':
+        return l10n.moduleDesc_OakTrainProperties;
+      case 'moduleDesc_OakTrainIntroProperties':
+        return l10n.moduleDesc_OakTrainIntroProperties;
+      case 'moduleDesc_GoldRoadProperties':
+        return l10n.moduleDesc_GoldRoadProperties;
       default:
         return key;
     }
@@ -518,7 +557,7 @@ class ModuleRegistry {
     'BronzeDeadWinConProperties': ModuleMetadata(
       titleKey: 'moduleTitle_BronzeDeadWinConProperties',
       descriptionKey: 'moduleDesc_BronzeDeadWinConProperties',
-      icon: Icons.emoji_events,
+      icon: Icons.fitness_center,
       isCore: false,
       category: ModuleCategory.base,
       defaultAlias: 'BronzeDeadWinCon',
@@ -637,6 +676,17 @@ class ModuleRegistry {
       initialDataFactory: () => MoonExpertPropertiesData(),
       routeId: 'MoonExpertModule',
     ),
+    'CamelMinigameProperties': ModuleMetadata(
+      titleKey: 'moduleTitle_CamelMinigameProperties',
+      descriptionKey: 'moduleDesc_CamelMinigameProperties',
+      icon: CustomIcons.camel,
+      isCore: true,
+      allowMultiple: false,
+      category: ModuleCategory.mode,
+      defaultAlias: 'CamelMinigame',
+      initialDataFactory: () => CamelMinigamePropertiesData(),
+      routeId: 'CamelMinigame',
+    ),
     'LastStandMinigameProperties': ModuleMetadata(
       titleKey: 'moduleTitle_LastStandMinigameProperties',
       descriptionKey: 'moduleDesc_LastStandMinigameProperties',
@@ -742,6 +792,29 @@ class ModuleRegistry {
       initialDataFactory: () => EvilDavePropertiesData(),
       routeId: 'UnknownDetail',
     ),
+    'OakTrainProperties': ModuleMetadata(
+      titleKey: 'moduleTitle_OakTrainProperties',
+      descriptionKey: 'moduleDesc_OakTrainProperties',
+      icon: Icons.gps_fixed,
+      isCore: true,
+      allowMultiple: false,
+      category: ModuleCategory.mode,
+      defaultAlias: 'OakTrain',
+      initialDataFactory: () => OakTrainPropertiesData(),
+      routeId: 'OakTrain',
+    ),
+    'OakTrainIntroProperties': ModuleMetadata(
+      titleKey: 'moduleTitle_OakTrainIntroProperties',
+      descriptionKey: 'moduleDesc_OakTrainIntroProperties',
+      icon: Icons.gps_fixed,
+      isCore: false,
+      category: ModuleCategory.mode,
+      defaultAlias: 'OakTrainTutorial',
+      defaultSource: 'CurrentLevel',
+      initialDataFactory: () => <String, dynamic>{},
+      routeId: 'UnknownDetail',
+      objClass: 'OakTrainIntroProperties',
+    ),
     'BowlingMinigameProperties': ModuleMetadata(
       titleKey: 'moduleTitle_BowlingMinigameProperties',
       descriptionKey: 'moduleDesc_BowlingMinigameProperties',
@@ -794,6 +867,28 @@ class ModuleRegistry {
       initialDataFactory: () => VaseBreakerFlowModuleData(),
       routeId: 'UnknownDetail',
     ),
+    'GoldRoadProperties': ModuleMetadata(
+      titleKey: 'moduleTitle_GoldRoadProperties',
+      descriptionKey: 'moduleDesc_GoldRoadProperties',
+      icon: Icons.route,
+      isCore: false,
+      category: ModuleCategory.mode,
+      defaultAlias: 'DefaultGoldRoad',
+      defaultSource: 'LevelModules',
+      routeId: 'UnknownDetail',
+      objClass: 'GoldRoadProperties',
+    ),
+    'StatueMazeModuleProperties': ModuleMetadata(
+      titleKey: 'moduleTitle_StatueMazeModuleProperties',
+      descriptionKey: 'moduleDesc_StatueMazeModuleProperties',
+      icon: Icons.account_balance,
+      isCore: true,
+      allowMultiple: false,
+      category: ModuleCategory.mode,
+      defaultAlias: 'StatueMazeModule',
+      initialDataFactory: () => StatueMazeModulePropertiesData.createDefault(),
+      routeId: 'StatueMazeModule',
+    ),
     'SeedRainProperties': ModuleMetadata(
       titleKey: 'moduleTitle_SeedRainProperties',
       descriptionKey: 'moduleDesc_SeedRainProperties',
@@ -834,6 +929,17 @@ class ModuleRegistry {
       defaultAlias: 'PVZ1CopycatsModule',
       initialDataFactory: () => PVZ1CopycatsModulePropertiesData(),
       routeId: 'PVZ1CopycatsModule',
+    ),
+    'PVZ1SeeingStarsModuleProperties': ModuleMetadata(
+      titleKey: 'moduleTitle_PVZ1SeeingStarsModuleProperties',
+      descriptionKey: 'moduleDesc_PVZ1SeeingStarsModuleProperties',
+      icon: Icons.star_outline,
+      isCore: true,
+      allowMultiple: false,
+      category: ModuleCategory.mode,
+      defaultAlias: 'PVZ1SeeingStars',
+      initialDataFactory: () => PVZ1SeeingStarsModulePropertiesData(),
+      routeId: 'PVZ1SeeingStarsModule',
     ),
     'IncreasedCostModuleProperties': ModuleMetadata(
       titleKey: 'moduleTitle_IncreasedCostModuleProperties',
@@ -1256,18 +1362,6 @@ class ModuleRegistry {
       defaultSource: 'LevelModules',
       routeId: 'MoonLifeSupportSystem',
     ),
-    'MoonGrappleModuleProperties': ModuleMetadata(
-      titleKey: 'moduleTitle_MoonGrappleModuleProperties',
-      descriptionKey: 'moduleDesc_MoonGrappleModuleProperties',
-      icon: Icons.anchor,
-      isCore: true,
-      allowMultiple: false,
-      category: ModuleCategory.gimmick,
-      defaultAlias: 'MoonGrappleDefault',
-      defaultSource: 'CurrentLevel',
-      initialDataFactory: () => MoonGrappleModulePropertiesData.createDefault(),
-      routeId: 'MoonGrappleModule',
-    ),
     'LunarTerminalModuleProperties': ModuleMetadata(
       titleKey: 'moduleTitle_LunarTerminalModuleProperties',
       descriptionKey: 'moduleDesc_LunarTerminalModuleProperties',
@@ -1289,6 +1383,17 @@ class ModuleRegistry {
       defaultAlias: 'RadiationMeteorModule',
       initialDataFactory: () => RadiationMeteorModulePropertiesData(),
       routeId: 'RadiationMeteorModule',
+    ),
+    'GladiatorRowModuleProperties': ModuleMetadata(
+      titleKey: 'moduleTitle_GladiatorRowModuleProperties',
+      descriptionKey: 'moduleDesc_GladiatorRowModuleProperties',
+      icon: Icons.emoji_events,
+      isCore: true,
+      allowMultiple: false,
+      category: ModuleCategory.gimmick,
+      defaultAlias: 'GladiatorRowModule',
+      initialDataFactory: () => GladiatorRowModulePropertiesData(),
+      routeId: 'GladiatorRowModule',
     ),
     'WitchModuleProperties': const ModuleMetadata(
       titleKey: 'moduleTitle_WitchModuleProperties',

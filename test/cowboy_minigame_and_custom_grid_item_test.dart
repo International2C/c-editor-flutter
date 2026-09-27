@@ -757,7 +757,7 @@ void main() {
     );
     await tester.pumpAndSettle();
 
-    expect(find.text('Alias (English letters only)'), findsOneWidget);
+    expect(find.text('Alias (English letters only; no spaces)'), findsOneWidget);
     expect(find.text('InitialGridItems'), findsOneWidget);
   });
 }

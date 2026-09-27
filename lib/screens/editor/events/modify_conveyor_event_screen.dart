@@ -352,7 +352,8 @@ class _ModifyConveyorEventScreenState extends State<ModifyConveyorEventScreen> {
                         const SizedBox(width: 12),
                         Expanded(
                           child: Text(
-                            'Level has no conveyor module. This event may not work.',
+                            l10n?.modifyConveyorMissingModule ??
+                                'Level has no conveyor module. This event may not work.',
                             style: TextStyle(color: theme.colorScheme.error),
                           ),
                         ),

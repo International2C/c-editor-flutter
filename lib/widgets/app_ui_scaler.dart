@@ -275,11 +275,15 @@ class _RenderScaledViewport extends RenderProxyBox {
 
   @override
   bool hitTestChildren(BoxHitTestResult result, {required Offset position}) {
+    final child = this.child;
+    // Dialog overlays can briefly (or after a failed layout) leave a
+    // ConstrainedBox with size MISSING; never hit-test unsized children.
+    if (child == null || !child.hasSize) return false;
     return result.addWithPaintTransform(
       transform: _scale == 1.0 ? null : _paintTransform,
       position: position,
       hitTest: (result, position) {
-        return child?.hitTest(result, position: position) ?? false;
+        return child.hitTest(result, position: position);
       },
     );
   }

@@ -87,7 +87,9 @@ class _CustomFishPropertiesScreenState
   }
 
   String _formatRect(dynamic v) {
-    if (v is! Map) return 'Default';
+    if (v is! Map) {
+      return AppLocalizations.of(context)?.defaultPropertiesLabel ?? 'Default';
+    }
     final m = v as Map<String, dynamic>;
     final x = m['mX'] as num? ?? 0;
     final y = m['mY'] as num? ?? 0;
@@ -97,7 +99,9 @@ class _CustomFishPropertiesScreenState
   }
 
   String _formatPoint(dynamic v) {
-    if (v is! Map) return 'Default';
+    if (v is! Map) {
+      return AppLocalizations.of(context)?.defaultPropertiesLabel ?? 'Default';
+    }
     final m = v as Map<String, dynamic>;
     final x = m['x'] as num? ?? 0;
     final y = m['y'] as num? ?? 0;
@@ -153,9 +157,19 @@ class _CustomFishPropertiesScreenState
             const SizedBox(height: 8),
             Row(
               children: [
-                Expanded(child: _numberField(wController, label: 'W')),
+                Expanded(
+                  child: _numberField(
+                    wController,
+                    label: l10n?.width ?? 'Width',
+                  ),
+                ),
                 const SizedBox(width: 8),
-                Expanded(child: _numberField(hController, label: 'H')),
+                Expanded(
+                  child: _numberField(
+                    hController,
+                    label: l10n?.height ?? 'Height',
+                  ),
+                ),
               ],
             ),
           ],
@@ -312,7 +326,7 @@ class _CustomFishPropertiesScreenState
     required double value,
   }) {
     return _DoubleInputField(
-      key: ValueKey('$key-$value'),
+      key: ValueKey(key),
       label: label,
       value: value,
       onChanged: (v) => _updateProps(key, v),

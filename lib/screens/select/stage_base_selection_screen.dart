@@ -221,7 +221,10 @@ class _StageBaseSelectionScreenState extends State<StageBaseSelectionScreen> {
                     color: theme.colorScheme.outline,
                   ),
                   const SizedBox(height: 16),
-                  Text('No lawn found', style: theme.textTheme.bodyLarge),
+                  Text(
+                    l10n?.noStageBaseFound ?? 'No lawn found',
+                    style: theme.textTheme.bodyLarge,
+                  ),
                 ],
               ),
             )

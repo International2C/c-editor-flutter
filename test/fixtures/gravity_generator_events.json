@@ -1,0 +1,238 @@
+[
+  {
+    "level": "MOON14_B",
+    "event": {
+      "aliases": [
+        "GravityW3"
+      ],
+      "objclass": "GravityGeneratorWaveActionProps",
+      "objdata": {
+        "ActivationDelay": 7,
+        "DeployDuration": 1,
+        "ChargeDuration": 2,
+        "RetractDuration": 5,
+        "PlantExitDelay": 6,
+        "ZombieRiseDuration": 1.5,
+        "ZombieTranslateDuration": 4,
+        "ZombieFallDuration": 0.7,
+        "ZombieLiftHeight": 100,
+        "ZombieForwardDistance": 64,
+        "HeavyPlantSinkDuration": 0.5,
+        "TargetRestriction": [],
+        "WarningMessage": "",
+        "GravityLevel": "anti",
+        "TargetType": "plant",
+        "Range": {
+          "mX": -1,
+          "mY": 0,
+          "mWidth": 3,
+          "mHeight": 1
+        },
+        "Duration": 8
+      }
+    }
+  },
+  {
+    "level": "MOON14_B",
+    "event": {
+      "aliases": [
+        "GravityW6"
+      ],
+      "objclass": "GravityGeneratorWaveActionProps",
+      "objdata": {
+        "ActivationDelay": 4,
+        "DeployDuration": 1,
+        "ChargeDuration": 2,
+        "RetractDuration": 5,
+        "PlantExitDelay": 6,
+        "ZombieRiseDuration": 1.5,
+        "ZombieTranslateDuration": 4,
+        "ZombieFallDuration": 0.7,
+        "ZombieLiftHeight": 100,
+        "ZombieForwardDistance": 128,
+        "HeavyPlantSinkDuration": 0.5,
+        "TargetRestriction": [
+          "cosmoss",
+          "cosmicpea",
+          "cosmicmushroom",
+          "cosmicnut",
+          "gravitree",
+          "cosmicsaucer"
+        ],
+        "WarningMessage": "",
+        "GravityLevel": "anti",
+        "TargetType": "grid",
+        "Range": {
+          "mX": 0,
+          "mY": 0,
+          "mWidth": 3,
+          "mHeight": 1
+        },
+        "Duration": 8,
+        "TargetGrid": {
+          "mX": 6,
+          "mY": 2
+        }
+      }
+    }
+  },
+  {
+    "level": "MOON14_B",
+    "event": {
+      "aliases": [
+        "GravityW10"
+      ],
+      "objclass": "GravityGeneratorWaveActionProps",
+      "objdata": {
+        "ActivationDelay": 12,
+        "DeployDuration": 1,
+        "ChargeDuration": 2,
+        "RetractDuration": 5,
+        "PlantExitDelay": 6,
+        "ZombieRiseDuration": 1.5,
+        "ZombieTranslateDuration": 4,
+        "ZombieFallDuration": 0.7,
+        "ZombieLiftHeight": 100,
+        "ZombieForwardDistance": 64,
+        "HeavyPlantSinkDuration": 0.5,
+        "TargetRestriction": [],
+        "WarningMessage": "",
+        "GravityLevel": "heavy",
+        "TargetType": "grid",
+        "Range": {
+          "mX": 0,
+          "mY": 0,
+          "mWidth": 3,
+          "mHeight": 2
+        },
+        "Duration": 12,
+        "TargetGrid": {
+          "mX": 0,
+          "mY": 0
+        }
+      }
+    }
+  },
+  {
+    "level": "MOON22",
+    "event": {
+      "aliases": [
+        "GravityW4"
+      ],
+      "objclass": "GravityGeneratorWaveActionProps",
+      "objdata": {
+        "ActivationDelay": 0,
+        "DeployDuration": 1,
+        "ChargeDuration": 2,
+        "RetractDuration": 5,
+        "PlantExitDelay": 6,
+        "ZombieRiseDuration": 1.5,
+        "ZombieTranslateDuration": 4,
+        "ZombieFallDuration": 0.7,
+        "ZombieLiftHeight": 100,
+        "ZombieForwardDistance": 64,
+        "HeavyPlantSinkDuration": 0.5,
+        "TargetRestriction": [],
+        "WarningMessage": "",
+        "GravityLevel": "anti",
+        "TargetType": "grid",
+        "Range": {
+          "mX": 0,
+          "mY": 0,
+          "mWidth": 3,
+          "mHeight": 3
+        },
+        "Duration": 8,
+        "TargetGrid": {
+          "mX": 0,
+          "mY": 0
+        }
+      }
+    }
+  },
+  {
+    "level": "MOON22",
+    "event": {
+      "aliases": [
+        "GravityW7"
+      ],
+      "objclass": "GravityGeneratorWaveActionProps",
+      "objdata": {
+        "ActivationDelay": 0,
+        "DeployDuration": 1,
+        "ChargeDuration": 2,
+        "RetractDuration": 5,
+        "PlantExitDelay": 6,
+        "ZombieRiseDuration": 1.5,
+        "ZombieTranslateDuration": 4,
+        "ZombieFallDuration": 0.7,
+        "ZombieLiftHeight": 100,
+        "ZombieForwardDistance": 64,
+        "HeavyPlantSinkDuration": 0.5,
+        "TargetRestriction": [],
+        "WarningMessage": "",
+        "GravityLevel": "heavy",
+        "TargetType": "grid",
+        "Range": {
+          "mX": 0,
+          "mY": 0,
+          "mWidth": 3,
+          "mHeight": 3
+        },
+        "Duration": 12,
+        "TargetGrid": {
+          "mX": 2,
+          "mY": 1
+        }
+      }
+    }
+  },
+  {
+    "level": "MOON22",
+    "event": {
+      "aliases": [
+        "GravityW10"
+      ],
+      "objclass": "GravityGeneratorWaveActionProps",
+      "objdata": {
+        "ActivationDelay": 4,
+        "DeployDuration": 1,
+        "ChargeDuration": 2,
+        "RetractDuration": 5,
+        "PlantExitDelay": 6,
+        "ZombieRiseDuration": 1.5,
+        "ZombieTranslateDuration": 4,
+        "ZombieFallDuration": 0.7,
+        "ZombieLiftHeight": 100,
+        "ZombieForwardDistance": 192,
+        "HeavyPlantSinkDuration": 0.5,
+        "TargetRestriction": [
+          "moon",
+          "moon_armor1",
+          "moon_armor3",
+          "fumeshroom",
+          "snapdragon",
+          "cosmoss",
+          "cosmicpea",
+          "cosmicnut",
+          "gravitree",
+          "cosmicsaucer"
+        ],
+        "WarningMessage": "",
+        "GravityLevel": "anti",
+        "TargetType": "grid",
+        "Range": {
+          "mX": 0,
+          "mY": 0,
+          "mWidth": 3,
+          "mHeight": 1
+        },
+        "Duration": 8,
+        "TargetGrid": {
+          "mX": 6,
+          "mY": 1
+        }
+      }
+    }
+  }
+]

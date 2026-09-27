@@ -385,7 +385,7 @@ void main() {
     );
     await tester.pumpAndSettle();
 
-    final label = find.text('Alias (English letters only)');
+    final label = find.text('Alias (English letters only; no spaces)');
     final aliasField = find.byType(TextField).first;
     expect(label, findsOneWidget);
     expect(tester.widget<TextField>(aliasField).decoration?.labelText, isNull);

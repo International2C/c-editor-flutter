@@ -1,0 +1,160 @@
+name: Publish GitHub Release
+
+# Manually orchestrates the desktop/Android + iOS release builds, then
+# downloads artifacts (auto-extracted by download-artifact), re-zips portable
+# bundles, takes the single binary from non-portable artifacts, and uploads
+# everything to a GitHub Release tagged from pubspec.yaml.
+on:
+  workflow_dispatch:
+    inputs:
+      use_ios_signing:
+        description: 'Sign the iOS IPA (requires iOS signing secrets)'
+        required: false
+        type: boolean
+        default: false
+      draft:
+        description: 'Create the release as a draft'
+        required: false
+        type: boolean
+        default: true
+
+concurrency:
+  group: publish-release
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+  actions: read
+
+jobs:
+  build-desktop:
+    name: Build Windows / Linux / Android
+    uses: ./.github/workflows/build-release.yml
+    secrets: inherit
+
+  build-ios:
+    name: Build iOS
+    uses: ./.github/workflows/ios-build-release.yml
+    secrets: inherit
+    with:
+      use_signing: ${{ inputs.use_ios_signing }}
+      configuration: Release
+
+  publish:
+    name: Collect artifacts and publish release
+    needs: [build-desktop, build-ios]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Release metadata
+        id: release
+        run: bash .github/scripts/release-vars.sh
+
+      - name: Download all build artifacts
+        uses: actions/download-artifact@v7
+        with:
+          path: artifacts
+
+      - name: Prepare release assets
+        id: assets
+        env:
+          VERSION: ${{ steps.release.outputs.version }}
+        run: |
+          set -euo pipefail
+          mkdir -p release-assets
+
+          shopt -s nullglob
+          artifact_dirs=(artifacts/*/)
+          if [ ${#artifact_dirs[@]} -eq 0 ]; then
+            echo "No artifacts downloaded."
+            exit 1
+          fi
+
+          for dir in "${artifact_dirs[@]}"; do
+            name="$(basename "$dir")"
+            echo "::group::Processing artifact: ${name}"
+
+            if [[ "$name" == *portable* ]]; then
+              # download-artifact already extracted the bundle — zip it back
+              # for the release asset.
+              dest="release-assets/${name}.zip"
+              (
+                cd "$dir"
+                zip -rq "$OLDPWD/${dest}" .
+              )
+              echo "Portable re-zipped -> ${dest}"
+            else
+              # Single installer/package binary inside the extracted artifact.
+              mapfile -t files < <(
+                find "$dir" -mindepth 1 -maxdepth 1 -type f | sort
+              )
+              if [ ${#files[@]} -eq 0 ]; then
+                mapfile -t files < <(find "$dir" -type f | sort)
+              fi
+              if [ ${#files[@]} -eq 0 ]; then
+                echo "No files found inside ${name}"
+                exit 1
+              fi
+              src="${files[0]}"
+              dest="release-assets/$(basename "$src")"
+              if [ -e "$dest" ]; then
+                echo "Duplicate release asset name: $(basename "$src")"
+                exit 1
+              fi
+              cp "$src" "$dest"
+              echo "Binary -> ${dest} (from ${src})"
+            fi
+
+            echo "::endgroup::"
+          done
+
+          echo "Prepared assets:"
+          ls -lh release-assets
+          {
+            echo "tag=v${VERSION}"
+            echo "title=C-Editor ${VERSION}"
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Create or update GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ steps.assets.outputs.tag }}
+          TITLE: ${{ steps.assets.outputs.title }}
+          DRAFT: ${{ inputs.draft }}
+        run: |
+          set -euo pipefail
+          shopt -s nullglob
+          assets=(release-assets/*)
+          if [ ${#assets[@]} -eq 0 ]; then
+            echo "No release assets to upload."
+            exit 1
+          fi
+
+          draft_flag=()
+          if [ "$DRAFT" = "true" ]; then
+            draft_flag=(--draft)
+          fi
+
+          if gh release view "$TAG" >/dev/null 2>&1; then
+            echo "Release ${TAG} already exists — uploading assets (clobber)."
+            gh release edit "$TAG" --title "$TITLE" "${draft_flag[@]}"
+            gh release upload "$TAG" "${assets[@]}" --clobber
+          else
+            echo "Creating release ${TAG}."
+            gh release create "$TAG" \
+              --title "$TITLE" \
+              --generate-notes \
+              "${draft_flag[@]}" \
+              "${assets[@]}"
+          fi
+
+          echo "## Release published" >> "$GITHUB_STEP_SUMMARY"
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+          echo "- **Tag:** \`${TAG}\`" >> "$GITHUB_STEP_SUMMARY"
+          echo "- **Title:** ${TITLE}" >> "$GITHUB_STEP_SUMMARY"
+          echo "- **URL:** $(gh release view "$TAG" --json url -q .url)" >> "$GITHUB_STEP_SUMMARY"
+          echo "- **Assets:**" >> "$GITHUB_STEP_SUMMARY"
+          for asset in "${assets[@]}"; do
+            echo "  - \`$(basename "$asset")\`" >> "$GITHUB_STEP_SUMMARY"
+          done

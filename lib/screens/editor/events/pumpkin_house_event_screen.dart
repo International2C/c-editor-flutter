@@ -434,9 +434,11 @@ class _PumpkinHouseItemCard extends StatelessWidget {
 
     return Card(
       clipBehavior: Clip.antiAlias,
-      child: SizedBox(
+      child: Container(
         width: EditorItemCardLayout.cardWidth(context),
-        height: EditorItemCardLayout.gridItemCardHeight,
+        constraints: const BoxConstraints(
+          minHeight: EditorItemCardLayout.gridItemCardHeight,
+        ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -467,6 +469,18 @@ class _PumpkinHouseItemCard extends StatelessWidget {
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                   ),
+                  const SizedBox(height: 2),
+                  Tooltip(
+                    message: item.type,
+                    child: Text(
+                      item.type,
+                      style: theme.textTheme.bodySmall?.copyWith(
+                        color: theme.colorScheme.onSurfaceVariant,
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
                   if (showCoordinates)
                     Padding(
                       padding: const EdgeInsets.only(top: 4),
@@ -480,11 +494,13 @@ class _PumpkinHouseItemCard extends StatelessWidget {
                             size: 16,
                           ),
                           const SizedBox(width: 4),
-                          Text(
-                            'R${item.location.y + 1}:C${item.location.x + 1}',
-                            style: theme.textTheme.bodySmall?.copyWith(
-                              color: editorWarningBannerForeground(
-                                theme.brightness,
+                          Expanded(
+                            child: Text(
+                              'R${item.location.y + 1}:C${item.location.x + 1}',
+                              style: theme.textTheme.bodySmall?.copyWith(
+                                color: editorWarningBannerForeground(
+                                  theme.brightness,
+                                ),
                               ),
                             ),
                           ),

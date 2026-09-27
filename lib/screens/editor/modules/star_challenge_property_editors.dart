@@ -18,6 +18,7 @@ import 'package:c_editor/screens/select/zombie_selection_screen.dart';
 import 'package:c_editor/widgets/asset_image.dart'
     show AssetImageWidget, imageAltCandidates;
 import 'package:c_editor/widgets/editor_components.dart';
+import 'package:c_editor/widgets/editor_numeric_text_field.dart';
 import 'package:c_editor/widgets/custom_stage_editor_widgets.dart';
 
 String _resolveZombieDisplayType(String typeName) {
@@ -140,9 +141,8 @@ class StarChallengeLabeledIntField extends StatelessWidget {
   Widget build(BuildContext context) {
     return EditorResponsiveInputField(
       label: label,
-      builder: (context, decoration) => TextFormField(
-        key: ValueKey('$label-$value'),
-        initialValue: value.toString(),
+      builder: (context, decoration) => EditorNumericTextField(
+        value: value,
         decoration: decoration,
         keyboardType: TextInputType.number,
         onChanged: (s) => onChanged(int.tryParse(s) ?? value),

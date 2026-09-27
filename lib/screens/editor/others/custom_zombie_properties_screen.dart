@@ -398,17 +398,23 @@ class _CustomZombiePropertiesScreenState
   }
 
   String _formatRect(RectData? rect) {
-    if (rect == null) return 'Default';
+    if (rect == null) {
+      return AppLocalizations.of(context)?.defaultPropertiesLabel ?? 'Default';
+    }
     return 'X:${rect.mX}, Y:${rect.mY}, W:${rect.mWidth}, H:${rect.mHeight}';
   }
 
   String _formatPoint(Point2D? pt) {
-    if (pt == null) return 'Default';
+    if (pt == null) {
+      return AppLocalizations.of(context)?.defaultPropertiesLabel ?? 'Default';
+    }
     return 'X:${pt.x}, Y:${pt.y}';
   }
 
   String _formatPoint3D(Point3DDouble? pt) {
-    if (pt == null) return 'Default';
+    if (pt == null) {
+      return AppLocalizations.of(context)?.defaultPropertiesLabel ?? 'Default';
+    }
     return 'X:${pt.x}, Y:${pt.y}, Z:${pt.z}';
   }
 
@@ -439,9 +445,19 @@ class _CustomZombiePropertiesScreenState
             const SizedBox(height: 8),
             Row(
               children: [
-                Expanded(child: _numberField(wController, label: 'Width')),
+                Expanded(
+                  child: _numberField(
+                    wController,
+                    label: l10n?.width ?? 'Width',
+                  ),
+                ),
                 const SizedBox(width: 8),
-                Expanded(child: _numberField(hController, label: 'Height')),
+                Expanded(
+                  child: _numberField(
+                    hController,
+                    label: l10n?.height ?? 'Height',
+                  ),
+                ),
               ],
             ),
           ],

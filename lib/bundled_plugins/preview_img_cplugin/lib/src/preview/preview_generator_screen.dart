@@ -1,3 +1,5 @@
+import 'package:c_editor/widgets/autosave.dart';
+import 'package:c_editor/l10n/app_localizations.dart';
 import 'package:flutter/foundation.dart'
     show kIsWeb, listEquals, visibleForTesting;
 import 'package:flutter/material.dart';
@@ -21,6 +23,7 @@ import 'preview_toolbar_prefs.dart';
 import 'preview_toolbar_action.dart';
 import 'preview_generator_pickers.dart';
 import 'preview_layers_dialog.dart';
+import 'preview_picker_session.dart';
 import 'preview_sticker_catalog.dart';
 import 'preview_user_image.dart';
 import 'preview_gif_first_frames.dart';
@@ -172,6 +175,10 @@ class PreviewGeneratorScreen extends StatefulWidget {
 class _PreviewGeneratorScreenState extends State<PreviewGeneratorScreen> {
   final _boundaryKey = GlobalKey();
   final _stickerPickerSession = PreviewStickerPickerSession();
+  final _bannerPickerSession = PreviewPickerSession();
+  final _moduleInfoPickerSession = PreviewPickerSession();
+  final _figuresPickerSession = PreviewPickerSession();
+  final _layersPickerSession = PreviewPickerSession();
   final _textController = PreviewRichTextController();
   // Content fields use UI text; preview styling belongs only on the canvas.
   final _textContentController = TextEditingController();
@@ -1161,6 +1168,7 @@ class _PreviewGeneratorScreenState extends State<PreviewGeneratorScreen> {
       banners: banners,
       t: _t,
       currentStem: doc.banner.stem,
+      session: _bannerPickerSession,
     );
     if (chosen == null || !mounted) return;
     if (chosen == '__custom__') {
@@ -1268,7 +1276,11 @@ class _PreviewGeneratorScreenState extends State<PreviewGeneratorScreen> {
 
   Future<void> _openFiguresMenu() async {
     _endTextEdit();
-    final choice = await showPreviewFiguresPicker(context: context, t: _t);
+    final choice = await showPreviewFiguresPicker(
+      context: context,
+      t: _t,
+      session: _figuresPickerSession,
+    );
     if (choice == null || !mounted) return;
     setState(() {
       _tool = PreviewEditTool.figures;
@@ -1322,6 +1334,7 @@ class _PreviewGeneratorScreenState extends State<PreviewGeneratorScreen> {
     if (!mounted || !identical(doc, _document)) return;
     await showPreviewLayersDialog(
       context: context,
+      session: _layersPickerSession,
       doc: doc,
       selectedLayerId: _selectedLayerId,
       t: _t,
@@ -1375,6 +1388,7 @@ class _PreviewGeneratorScreenState extends State<PreviewGeneratorScreen> {
 
     final objClass = await showPreviewModuleInfoPicker(
       context: context,
+      session: _moduleInfoPickerSession,
       classes: classes,
       titleForClass: (ctx, objClass) =>
           ModuleRegistry.getMetadata(objClass).getTitle(ctx),
@@ -1390,6 +1404,7 @@ class _PreviewGeneratorScreenState extends State<PreviewGeneratorScreen> {
     String l10n(String key, String fallback, [Map<String, Object?>? args]) =>
         _t(key, fallback, args);
     final payload = previewModuleInfoBuild(
+      appL10n: AppLocalizations.of(context),
       levelFile: widget.levelFile,
       objClass: objClass,
       t: l10n,
@@ -1582,7 +1597,7 @@ class _PreviewGeneratorScreenState extends State<PreviewGeneratorScreen> {
     });
   }
 
-  Future<bool> _export() async {
+  Future<bool> _export({bool automatic = false}) async {
     if (_exporting || _confirmingGifExport || _document == null) return false;
     _endTextEdit();
     final document = _document!;
@@ -1637,16 +1652,20 @@ class _PreviewGeneratorScreenState extends State<PreviewGeneratorScreen> {
       }
       if (!mounted) return false;
       _savedDocumentSnapshot = exportedSnapshot;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-            _t(
-              'previewGenExportOk',
-              'Saved preview to {path}',
-            ).replaceAll('{path}', result.path),
+      if (automatic) {
+        showAutosavedMessage(context, path: result.path);
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              _t(
+                'previewGenExportOk',
+                'Saved preview to {path}',
+              ).replaceAll('{path}', result.path),
+            ),
           ),
-        ),
-      );
+        );
+      }
       return true;
     } catch (e) {
       if (!mounted) return false;
@@ -1688,7 +1707,12 @@ class _PreviewGeneratorScreenState extends State<PreviewGeneratorScreen> {
     _confirmingExit = true;
     try {
       _endTextEdit();
-      final choice = !_widthAvailable || !_hasUnsavedChanges
+      final automatic = autosaveEnabled(context, AutosaveTarget.previewImage);
+      final choice = !_hasUnsavedChanges
+          ? _PreviewExitChoice.discard
+          : automatic
+          ? _PreviewExitChoice.save
+          : !_widthAvailable
           ? _PreviewExitChoice.discard
           : await showDialog<_PreviewExitChoice>(
               context: context,
@@ -1722,7 +1746,7 @@ class _PreviewGeneratorScreenState extends State<PreviewGeneratorScreen> {
             );
       if (!mounted || choice == null) return;
       if (choice == _PreviewExitChoice.save &&
-          (!await _export() || _hasUnsavedChanges)) {
+          (!await _export(automatic: automatic) || _hasUnsavedChanges)) {
         return;
       }
       if (!mounted) return;

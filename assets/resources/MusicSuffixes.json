@@ -30,10 +30,11 @@
     "BGMc",
     "BGMd",
     "TeamBoss",
+    "TeamBossRoman",
     "SilkRoad",
+    "Roman",
     "Sportz",
     "Gnomiverse",
-    "Roman",
     "rift"
   ],
   "iconFiles": {
@@ -66,6 +67,7 @@
     "ghostdom": "Stage_Underground.webp",
     "SilkRoad": "Suffix_SilkRoad.webp",
     "TeamBoss": "Suffix_retro.webp",
+    "TeamBossRoman": "Suffix_TeamBossRoman.webp",
     "Sportz": "Stage_DaveCup.webp",
     "Gnomiverse": "Suffix_Gnomiverse.webp",
     "Roman": "Suffix_Roman.webp",

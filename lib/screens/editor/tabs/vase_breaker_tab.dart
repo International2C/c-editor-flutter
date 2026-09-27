@@ -43,7 +43,7 @@ class _VaseBreakerTabState extends State<VaseBreakerTab> {
   int get _gridCols => _isDeepSeaLawn ? 10 : 9;
 
   static const _collectableTypes = [
-    _CollectableType('plantfood', 'Plant Food', 'plantfood.png'),
+    _CollectableType('plantfood', 'Plant Food', 'plantfood.webp'),
     _CollectableType('sun_large', 'Large Sun', 'sun_large.webp'),
     _CollectableType('rails', 'Rails', 'rails.webp'),
     _CollectableType('rail', 'Rails', 'rails.webp'),

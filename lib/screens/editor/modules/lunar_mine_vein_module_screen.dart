@@ -1,8 +1,11 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:c_editor/data/level_parser.dart';
+import 'package:c_editor/data/lunar_mine_vein_type_catalog.dart';
 import 'package:c_editor/data/pvz_models.dart';
 import 'package:c_editor/l10n/app_localizations.dart';
+import 'package:c_editor/l10n/resource_names.dart';
+import 'package:c_editor/widgets/asset_image.dart';
 import 'package:c_editor/widgets/editor_components.dart';
 import 'package:c_editor/widgets/editor_object_alias.dart';
 import 'package:c_editor/widgets/grid_override_placement_grid.dart';
@@ -28,13 +31,13 @@ class LunarMineVeinModuleScreen extends StatefulWidget {
 
 class _LunarMineVeinModuleScreenState extends State<LunarMineVeinModuleScreen> {
   static const _objClass = 'LunarMineVeinModuleProperties';
-  static const _asset = 'assets/images/griditems/lunar_mine_vein.webp';
 
   late String _alias;
   late PvzObject _moduleObject;
   late LunarMineVeinModulePropertiesData _data;
   int _selectedX = 0;
   int _selectedY = 0;
+  String _selectedType = kLunarMineVeinTypes.first.type;
 
   int get _gridRows =>
       LevelParser.getGridDimensionsFromFile(widget.levelFile).$1;
@@ -72,6 +75,7 @@ class _LunarMineVeinModuleScreenState extends State<LunarMineVeinModuleScreen> {
     if (_data.placements.isNotEmpty) {
       _selectedX = _data.placements.first.gridX;
       _selectedY = _data.placements.first.gridY;
+      _selectedType = _data.placements.first.typeName;
     }
   }
 
@@ -81,20 +85,28 @@ class _LunarMineVeinModuleScreenState extends State<LunarMineVeinModuleScreen> {
     setState(() {});
   }
 
-  bool _hasAt(int col, int row) =>
-      _data.placements.any((entry) => entry.gridX == col && entry.gridY == row);
+  LunarMineVeinPlacementData? _itemAt(int col, int row) => _data.placements
+      .firstWhereOrNull((entry) => entry.gridX == col && entry.gridY == row);
 
   void _tapCell(int col, int row) {
     setState(() {
       _selectedX = col;
       _selectedY = row;
     });
-    if (_hasAt(col, row)) {
-      return;
+    final existing = _itemAt(col, row);
+    if (existing != null) {
+      if (existing.typeName == _selectedType) return;
+      existing.typeName = _selectedType;
+    } else {
+      _data.placements.add(
+        LunarMineVeinPlacementData(
+          typeName: _selectedType,
+          gridX: col,
+          gridY: row,
+          emergenceWave: 1,
+        ),
+      );
     }
-    _data.placements.add(
-      LunarMineVeinPlacementData(gridX: col, gridY: row, emergenceWave: 1),
-    );
     _sync();
   }
 
@@ -113,6 +125,123 @@ class _LunarMineVeinModuleScreenState extends State<LunarMineVeinModuleScreen> {
       onChanged: widget.onChanged,
     );
     setState(() => _alias = value);
+  }
+
+  Widget _buildTypePalette(BuildContext context) {
+    final theme = Theme.of(context);
+    const preferredWidth = 112.0;
+    const spacing = 8.0;
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final cardWidth = constraints.maxWidth.clamp(0.0, preferredWidth);
+        final columns =
+            ((constraints.maxWidth + spacing) / (preferredWidth + spacing))
+                .floor()
+                .clamp(1, kLunarMineVeinTypes.length);
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            for (
+              var start = 0;
+              start < kLunarMineVeinTypes.length;
+              start += columns
+            ) ...[
+              if (start > 0) const SizedBox(height: spacing),
+              IntrinsicHeight(
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    for (
+                      var i = start;
+                      i < start + columns && i < kLunarMineVeinTypes.length;
+                      i++
+                    ) ...[
+                      if (i > start) const SizedBox(width: spacing),
+                      SizedBox(
+                        width: cardWidth,
+                        child: _buildTypeCard(
+                          context,
+                          theme,
+                          kLunarMineVeinTypes[i],
+                        ),
+                      ),
+                    ],
+                  ],
+                ),
+              ),
+            ],
+          ],
+        );
+      },
+    );
+  }
+
+  Widget _buildTypeCard(
+    BuildContext context,
+    ThemeData theme,
+    LunarMineVeinTypeInfo info,
+  ) {
+    final typeSelected = _selectedType == info.type;
+    final label = ResourceNames.lookup(context, 'griditem_${info.type}');
+    return InkWell(
+      key: ValueKey('lunar-vein-type-${info.type}'),
+      onTap: () => setState(() => _selectedType = info.type),
+      borderRadius: BorderRadius.circular(8),
+      child: Container(
+        width: 112,
+        padding: const EdgeInsets.all(8),
+        decoration: BoxDecoration(
+          color: typeSelected
+              ? theme.colorScheme.primaryContainer
+              : theme.colorScheme.surfaceContainerHighest,
+          borderRadius: BorderRadius.circular(8),
+          border: Border.all(
+            color: typeSelected
+                ? theme.colorScheme.primary
+                : Colors.transparent,
+            width: 2,
+          ),
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            SizedBox(
+              height: 48,
+              child: AssetImageWidget(
+                assetPath: info.iconAsset,
+                fit: BoxFit.contain,
+              ),
+            ),
+            const SizedBox(height: 4),
+            Tooltip(
+              message: label,
+              child: Text(
+                label,
+                textAlign: TextAlign.center,
+                maxLines: 3,
+                overflow: TextOverflow.ellipsis,
+                style: theme.textTheme.labelMedium?.copyWith(
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+            const SizedBox(height: 2),
+            Tooltip(
+              message: info.type,
+              child: Text(
+                info.type,
+                textAlign: TextAlign.center,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: theme.textTheme.labelSmall?.copyWith(
+                  color: theme.colorScheme.onSurfaceVariant,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 
   @override
@@ -143,6 +272,27 @@ class _LunarMineVeinModuleScreenState extends State<LunarMineVeinModuleScreen> {
                 HelpSectionData(
                   title: l10n?.overview ?? 'Overview',
                   body: l10n?.lunarMineVeinHelpOverview ?? '',
+                ),
+                HelpSectionData(
+                  title: ResourceNames.lookup(
+                    context,
+                    'griditem_lunar_mine_vein_hardened',
+                  ),
+                  body: l10n?.lunarMineVeinHelpHardened ?? '',
+                ),
+                HelpSectionData(
+                  title: ResourceNames.lookup(
+                    context,
+                    'griditem_lunar_mine_vein_fragile',
+                  ),
+                  body: l10n?.lunarMineVeinHelpFragile ?? '',
+                ),
+                HelpSectionData(
+                  title: ResourceNames.lookup(
+                    context,
+                    'griditem_lunar_mine_vein_radiation',
+                  ),
+                  body: l10n?.lunarMineVeinHelpRadiation ?? '',
                 ),
                 HelpSectionData(
                   title: l10n?.lunarMineVeinHelpWaveTitle ?? 'Wave numbering',
@@ -188,6 +338,15 @@ class _LunarMineVeinModuleScreenState extends State<LunarMineVeinModuleScreen> {
                     ),
                     const SizedBox(height: 12),
                     Text(
+                      l10n?.lunarMineVeinTypePalette ?? 'Crystal vein type',
+                      style: theme.textTheme.titleSmall?.copyWith(
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    _buildTypePalette(context),
+                    const SizedBox(height: 16),
+                    Text(
                       '${l10n?.selectedPosition ?? 'Selected position'}: '
                       'R${_selectedY + 1} : C${_selectedX + 1}',
                     ),
@@ -199,8 +358,12 @@ class _LunarMineVeinModuleScreenState extends State<LunarMineVeinModuleScreen> {
                       selectedRow: _selectedY,
                       onPrimaryTap: _tapCell,
                       onRemoveAt: _removeAt,
-                      cellImageAt: (col, row) =>
-                          _hasAt(col, row) ? _asset : null,
+                      cellImageAt: (col, row) {
+                        final item = _itemAt(col, row);
+                        return item == null
+                            ? null
+                            : lunarMineVeinIconAsset(item.typeName);
+                      },
                       cellImageScaleAt: (_, _) => 0.92,
                     ),
                     if (selected != null) ...[

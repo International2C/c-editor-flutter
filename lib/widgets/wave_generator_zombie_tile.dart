@@ -501,6 +501,7 @@ class WaveGeneratorZombieIconChip extends StatelessWidget {
     required this.codename,
     required this.iconPath,
     this.rowLabel,
+    this.positionTooltip,
     this.sourceBadge,
   });
 
@@ -508,6 +509,7 @@ class WaveGeneratorZombieIconChip extends StatelessWidget {
   final String codename;
   final String? iconPath;
   final String? rowLabel;
+  final String? positionTooltip;
   final String? sourceBadge;
 
   @override
@@ -533,7 +535,9 @@ class WaveGeneratorZombieIconChip extends StatelessWidget {
           : theme.colorScheme.onPrimary;
     }
 
-    final tooltip = rowLabel != null && rowLabel!.isNotEmpty
+    final tooltip = positionTooltip != null
+        ? '$localizedName\n$codename\n$positionTooltip'
+        : rowLabel != null && rowLabel!.isNotEmpty
         ? '$localizedName\n$codename · R$rowLabel'
         : '$localizedName\n$codename';
 

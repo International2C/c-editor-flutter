@@ -1,3 +1,4 @@
+import 'package:c_editor/widgets/autosave.dart';
 import 'package:flutter/material.dart';
 import 'package:c_editor/data/custom_portal_level_utils.dart';
 import 'package:c_editor/data/pvz_models.dart';
@@ -127,13 +128,23 @@ class _CustomPortalPropertiesScreenState
     });
   }
 
-  void _saveAndExit() {
-    _exitWithResult(_savePortal());
+  void _saveAndExit({bool automatic = false}) {
+    final result = _savePortal();
+    if (automatic) showAutosavedMessage(context);
+    _exitWithResult(result);
   }
 
   Future<void> _confirmExit() async {
     if (_exitDialogOpen || !mounted) return;
     _exitDialogOpen = true;
+    if (autosaveEnabled(context, AutosaveTarget.portal)) {
+      try {
+        _saveAndExit(automatic: true);
+      } finally {
+        _exitDialogOpen = false;
+      }
+      return;
+    }
     final l10n = AppLocalizations.of(context);
     final choice = await showDialog<_CustomPortalExitChoice>(
       context: context,

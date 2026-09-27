@@ -1,3 +1,7 @@
+import 'package:c_editor/bloc/settings/settings_cubit.dart';
+import 'package:c_editor/widgets/app_message.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:c_editor/data/models/zomboss_mech_catalog.dart';
 import 'package:c_editor/data/pvz_models.dart';
 import 'package:c_editor/l10n/app_localizations.dart';
@@ -28,6 +32,138 @@ const _catalog = ZombossMechCatalogEntry(
 );
 
 void main() {
+  testWidgets(
+    'custom autosave retains invalid edits and an unrelated setting does not bypass confirmation',
+    (tester) async {
+      SharedPreferences.setMockInitialValues({'autosave': true});
+      final settings = SettingsCubit(await SharedPreferences.getInstance());
+      addTearDown(settings.close);
+      final level = PvzLevelFile(objects: []);
+      await tester.pumpWidget(
+        BlocProvider.value(
+          value: settings,
+          child: MaterialApp(
+            locale: const Locale('en'),
+            localizationsDelegates: AppLocalizations.localizationsDelegates,
+            supportedLocales: AppLocalizations.supportedLocales,
+            home: Builder(
+              builder: (context) => Scaffold(
+                body: TextButton(
+                  onPressed: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) =>
+                          CustomResilienceShieldEditorScreen(levelFile: level),
+                    ),
+                  ),
+                  child: const Text('Open'),
+                ),
+              ),
+            ),
+          ),
+        ),
+      );
+      await tester.tap(find.text('Open'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.byIcon(Icons.arrow_back));
+      await tester.pumpAndSettle();
+      expect(find.text('Unsaved changes'), findsOneWidget);
+      await tester.tap(find.text('Stay'));
+      await tester.pumpAndSettle();
+      settings.setAutosaveTargets({AutosaveTarget.resilienceShield});
+      await tester.enterText(find.byType(TextFormField).first, '');
+      await tester.tap(find.byIcon(Icons.arrow_back));
+      await tester.pumpAndSettle();
+      expect(find.byType(CustomResilienceShieldEditorScreen), findsOneWidget);
+      expect(level.objects, isEmpty);
+      expect(find.byType(AlertDialog), findsNothing);
+      await tester.enterText(find.byType(TextFormField).first, 'ValidShield');
+      await tester.tap(find.byIcon(Icons.arrow_back));
+      await tester.pumpAndSettle();
+      expect(find.byType(CustomResilienceShieldEditorScreen), findsNothing);
+      expect(level.objects, isNotEmpty);
+      AppMessage.hide();
+      expect(tester.takeException(), isNull);
+    },
+  );
+
+  tearDown(AppMessage.hide);
+  for (final target in [
+    AutosaveTarget.zombossAction,
+    AutosaveTarget.portal,
+    AutosaveTarget.resilienceShield,
+  ]) {
+    testWidgets(
+      '${target.name}: back saves and returns the edited object without prompting',
+      (tester) async {
+        SharedPreferences.setMockInitialValues({target.preferenceKey: true});
+        final cubit = SettingsCubit(await SharedPreferences.getInstance());
+        addTearDown(cubit.close);
+        final level = PvzLevelFile(objects: []);
+        final messages = <String>[];
+        void recordMessage() {
+          final message = AppMessage.controller.message;
+          if (message != null) messages.add(message);
+        }
+
+        AppMessage.controller.addListener(recordMessage);
+        addTearDown(() => AppMessage.controller.removeListener(recordMessage));
+        String? returned;
+        final screen = switch (target) {
+          AutosaveTarget.zombossAction => CustomZombossMechActionEditorScreen(
+            catalog: _catalog,
+            levelFile: level,
+          ),
+          AutosaveTarget.portal => CustomPortalPropertiesScreen(
+            levelFile: level,
+            basePortalType: 'egypt',
+          ),
+          _ => CustomResilienceShieldEditorScreen(levelFile: level),
+        };
+        await tester.pumpWidget(
+          BlocProvider.value(
+            value: cubit,
+            child: MaterialApp(
+              locale: const Locale('en'),
+              localizationsDelegates: AppLocalizations.localizationsDelegates,
+              supportedLocales: AppLocalizations.supportedLocales,
+              home: Builder(
+                builder: (context) => Scaffold(
+                  body: TextButton(
+                    onPressed: () async {
+                      returned = await Navigator.push<String>(
+                        context,
+                        MaterialPageRoute(builder: (_) => screen),
+                      );
+                    },
+                    child: const Text('Open editor'),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        );
+        await tester.tap(find.text('Open editor'));
+        await tester.pumpAndSettle();
+        if (target == AutosaveTarget.zombossAction) {
+          await tester.enterText(
+            find.byType(TextFormField).first,
+            'AutoSavedAction',
+          );
+        }
+        await tester.tap(find.byIcon(Icons.arrow_back));
+        await tester.pumpAndSettle();
+        expect(find.byType(AlertDialog), findsNothing);
+        expect(find.text('Open editor'), findsOneWidget);
+        expect(level.objects, isNotEmpty);
+        expect(returned, isNotEmpty);
+        expect(messages, contains('Automatically saved'));
+        expect(tester.takeException(), isNull);
+        AppMessage.hide();
+      },
+    );
+  }
+
   testWidgets('top-left exit closes an untouched new custom action', (
     tester,
   ) async {
@@ -58,7 +194,7 @@ void main() {
     final actionSaveIcon = tester.widget<Icon>(find.byIcon(Icons.save));
     expect(
       actionSaveIcon.color,
-      Theme.of(tester.element(find.byIcon(Icons.save))).colorScheme.primary,
+      tester.widget<AppBar>(find.byType(AppBar)).foregroundColor,
     );
     expect(find.byTooltip('Save'), findsOneWidget);
     await tester.tap(find.byIcon(Icons.arrow_back));

@@ -55,6 +55,20 @@
     {
       "objclass": "GridItemType",
       "aliases": [
+        "gravestone_moon_illusionist"
+      ],
+      "objdata": {
+        "TypeName": "gravestone_moon_illusionist",
+        "GridItemClass": "GridItemGravestone",
+        "ResourceGroups": [
+          "ZombieMoonIllusionistGroup"
+        ],
+        "Properties": "RTID(GridItemMoonIllusionistGravestoneDefault@PropertySheets)"
+      }
+    },
+    {
+      "objclass": "GridItemType",
+      "aliases": [
         "gravestone_shovelplant"
       ],
       "objdata": {
@@ -906,6 +920,30 @@
         "TypeName": "hotRodicusFireWallBlue",
         "GridItemClass": "GridItemHotRodicusFireWall",
         "Properties": "RTID(GridItemHotRodicusFireWallBlue@PropertySheets)",
+        "ResourceGroups": []
+      }
+    },
+    {
+      "objclass": "GridItemType",
+      "aliases": [
+        "romanHotRodicusFireWallRed"
+      ],
+      "objdata": {
+        "TypeName": "romanHotRodicusFireWallRed",
+        "GridItemClass": "GridItemRomanHotRodicusFireWall",
+        "Properties": "RTID(GridItemRomanHotRodicusFireWallRed@PropertySheets)",
+        "ResourceGroups": []
+      }
+    },
+    {
+      "objclass": "GridItemType",
+      "aliases": [
+        "romanHotRodicusFireWallBlue"
+      ],
+      "objdata": {
+        "TypeName": "romanHotRodicusFireWallBlue",
+        "GridItemClass": "GridItemRomanHotRodicusFireWall",
+        "Properties": "RTID(GridItemRomanHotRodicusFireWallBlue@PropertySheets)",
         "ResourceGroups": []
       }
     },
@@ -3491,6 +3529,38 @@
     {
       "objclass": "GridItemType",
       "aliases": [
+        "gingle_king"
+      ],
+      "objdata": {
+        "TypeName": "gingle_king",
+        "GridItemClass": "PVZ2GingleKingGridItem",
+        "Properties": "RTID(PVZ2GingleKingGridItemDefault@PropertySheets)",
+        "ResourceGroups": [
+          "UI_WHACKZOMBIE",
+          "UI_WHACKZOMBIEAudio",
+          "Missile_Explosion_Common",
+          "PlantImpPear"
+        ]
+      }
+    },
+    {
+      "objclass": "GridItemType",
+      "aliases": [
+        "gingle_soldier"
+      ],
+      "objdata": {
+        "TypeName": "gingle_soldier",
+        "GridItemClass": "SoldierGridItem",
+        "Properties": "RTID(PVZ2GingleSoldierGridItemDefault@PropertySheets)",
+        "ResourceGroups": [
+          "UI_WHACKZOMBIE",
+          "UI_WHACKZOMBIEAudio"
+        ]
+      }
+    },
+    {
+      "objclass": "GridItemType",
+      "aliases": [
         "gingle_liondance"
       ],
       "objdata": {
@@ -4816,6 +4886,90 @@
     {
       "objclass": "GridItemType",
       "aliases": [
+        "lunar_mine_ore_fragile"
+      ],
+      "objdata": {
+        "TypeName": "lunar_mine_ore_fragile",
+        "GridItemClass": "LunarMineFragileOre",
+        "ResourceGroups": [
+          "LunarMine"
+        ],
+        "Properties": "RTID(LunarMineOreFragile@PropertySheets)"
+      }
+    },
+    {
+      "objclass": "GridItemType",
+      "aliases": [
+        "lunar_mine_ore_fragile_plantfood"
+      ],
+      "objdata": {
+        "TypeName": "lunar_mine_ore_fragile_plantfood",
+        "GridItemClass": "LunarMineFragilePlantFoodOre",
+        "ResourceGroups": [
+          "LunarMine"
+        ],
+        "Properties": "RTID(LunarMineOreFragilePlantFood@PropertySheets)"
+      }
+    },
+    {
+      "objclass": "GridItemType",
+      "aliases": [
+        "lunar_mine_ore_radiation"
+      ],
+      "objdata": {
+        "TypeName": "lunar_mine_ore_radiation",
+        "GridItemClass": "LunarMineRadiationOre",
+        "ResourceGroups": [
+          "LunarMine"
+        ],
+        "Properties": "RTID(LunarMineOreRadiation@PropertySheets)"
+      }
+    },
+    {
+      "objclass": "GridItemType",
+      "aliases": [
+        "lunar_mine_ore_hardened_shell"
+      ],
+      "objdata": {
+        "TypeName": "lunar_mine_ore_hardened_shell",
+        "GridItemClass": "LunarMineHardenedShell",
+        "ResourceGroups": [
+          "LunarMine"
+        ],
+        "Properties": "RTID(LunarMineHardenedShellDefault@PropertySheets)"
+      }
+    },
+    {
+      "objclass": "GridItemType",
+      "aliases": [
+        "lunar_mine_ore_hardened_shell_moon13_start"
+      ],
+      "objdata": {
+        "TypeName": "lunar_mine_ore_hardened_shell_moon13_start",
+        "GridItemClass": "LunarMineHardenedShell",
+        "ResourceGroups": [
+          "LunarMine"
+        ],
+        "Properties": "RTID(LunarMineHardenedShellMoon13Start@PropertySheets)"
+      }
+    },
+    {
+      "objclass": "GridItemType",
+      "aliases": [
+        "lunar_mine_ore_hardened_core"
+      ],
+      "objdata": {
+        "TypeName": "lunar_mine_ore_hardened_core",
+        "GridItemClass": "LunarMineOre",
+        "ResourceGroups": [
+          "LunarMine"
+        ],
+        "Properties": "RTID(LunarMineOreHardenedCore@PropertySheets)"
+      }
+    },
+    {
+      "objclass": "GridItemType",
+      "aliases": [
         "lunar_mine_vein"
       ],
       "objdata": {
@@ -4825,6 +4979,76 @@
           "LunarMine"
         ],
         "Properties": "RTID(LunarMineVeinDefault@PropertySheets)"
+      }
+    },
+    {
+      "objclass": "GridItemType",
+      "aliases": [
+        "lunar_mine_vein_fragile"
+      ],
+      "objdata": {
+        "TypeName": "lunar_mine_vein_fragile",
+        "GridItemClass": "LunarMineVein",
+        "ResourceGroups": [
+          "LunarMine"
+        ],
+        "Properties": "RTID(LunarMineVeinFragile@PropertySheets)"
+      }
+    },
+    {
+      "objclass": "GridItemType",
+      "aliases": [
+        "lunar_mine_vein_fragile_plantfood"
+      ],
+      "objdata": {
+        "TypeName": "lunar_mine_vein_fragile_plantfood",
+        "GridItemClass": "LunarMineVein",
+        "ResourceGroups": [
+          "LunarMine"
+        ],
+        "Properties": "RTID(LunarMineVeinFragilePlantFood@PropertySheets)"
+      }
+    },
+    {
+      "objclass": "GridItemType",
+      "aliases": [
+        "lunar_mine_vein_radiation"
+      ],
+      "objdata": {
+        "TypeName": "lunar_mine_vein_radiation",
+        "GridItemClass": "LunarMineVein",
+        "ResourceGroups": [
+          "LunarMine"
+        ],
+        "Properties": "RTID(LunarMineVeinRadiation@PropertySheets)"
+      }
+    },
+    {
+      "objclass": "GridItemType",
+      "aliases": [
+        "lunar_mine_vein_hardened"
+      ],
+      "objdata": {
+        "TypeName": "lunar_mine_vein_hardened",
+        "GridItemClass": "LunarMineVein",
+        "ResourceGroups": [
+          "LunarMine"
+        ],
+        "Properties": "RTID(LunarMineVeinHardened@PropertySheets)"
+      }
+    },
+    {
+      "objclass": "GridItemType",
+      "aliases": [
+        "moon_ending_generator"
+      ],
+      "objdata": {
+        "TypeName": "moon_ending_generator",
+        "GridItemClass": "MoonEndingGravityGenerator",
+        "ResourceGroups": [
+          "GravityGenerator"
+        ],
+        "Properties": "RTID(MoonEndingGeneratorDefault@PropertySheets)"
       }
     },
     {
@@ -6856,6 +7080,147 @@
         "ResourceGroups": [
           "Teleport_Beacon"
         ]
+      }
+    },
+    {
+      "objclass": "GridItemType",
+      "aliases": [
+        "roman_eagle_flag"
+      ],
+      "objdata": {
+        "TypeName": "roman_eagle_flag",
+        "GridItemClass": "GridItemEagleFlag",
+        "ResourceGroups": [
+          "EagleFlag"
+        ],
+        "Properties": "RTID(GridItemEagleFlagDefault@PropertySheets)"
+      }
+    },
+    {
+      "objclass": "GridItemType",
+      "aliases": [
+        "roman_eagle_flag_gold_chicken"
+      ],
+      "objdata": {
+        "TypeName": "roman_eagle_flag_gold_chicken",
+        "GridItemClass": "GridItemEagleFlagGoldChicken",
+        "ResourceGroups": [
+          "EagleFlag"
+        ],
+        "Properties": "RTID(GridItemEagleFlagGoldChickenDefault@PropertySheets)"
+      }
+    },
+    {
+      "objclass": "GridItemType",
+      "aliases": [
+        "gladiator_trophy"
+      ],
+      "objdata": {
+        "TypeName": "gladiator_trophy",
+        "GridItemClass": "GridItemGladiatorTrophy",
+        "Properties": "RTID(GridItemGladiatorTrophyDefault@PropertySheets)",
+        "ResourceGroups": [
+          "GladiatorRow"
+        ]
+      }
+    },
+    {
+      "objclass": "GridItemType",
+      "aliases": [
+        "gladiator_plant_tile"
+      ],
+      "objdata": {
+        "TypeName": "gladiator_plant_tile",
+        "GridItemClass": "GridItemGladiatorVisual",
+        "Properties": "RTID(GridItemGladiatorPlantTile@PropertySheets)",
+        "ResourceGroups": [
+          "GoldTileModule"
+        ]
+      }
+    },
+    {
+      "objclass": "GridItemType",
+      "aliases": [
+        "gladiator_lava_tile"
+      ],
+      "objdata": {
+        "TypeName": "gladiator_lava_tile",
+        "GridItemClass": "GridItemGladiatorLava",
+        "Properties": "RTID(GridItemGladiatorLavaTile@PropertySheets)",
+        "ResourceGroups": [
+          "GladiatorRow"
+        ]
+      }
+    },
+    {
+      "objclass": "GridItemType",
+      "aliases": [
+        "gladiator_fence_top"
+      ],
+      "objdata": {
+        "TypeName": "gladiator_fence_top",
+        "GridItemClass": "GridItemGladiatorVisual",
+        "Properties": "RTID(GridItemGladiatorFenceTop@PropertySheets)",
+        "ResourceGroups": [
+          "PlantSpikerock"
+        ]
+      }
+    },
+    {
+      "objclass": "GridItemType",
+      "aliases": [
+        "gladiator_fence_bottom"
+      ],
+      "objdata": {
+        "TypeName": "gladiator_fence_bottom",
+        "GridItemClass": "GridItemGladiatorVisual",
+        "Properties": "RTID(GridItemGladiatorFenceBottom@PropertySheets)",
+        "ResourceGroups": [
+          "PlantSpikerock"
+        ]
+      }
+    },
+    {
+      "objclass": "GridItemType",
+      "aliases": [
+        "gladiator_fence_end"
+      ],
+      "objdata": {
+        "TypeName": "gladiator_fence_end",
+        "GridItemClass": "GridItemGladiatorVisual",
+        "Properties": "RTID(GridItemGladiatorFence@PropertySheets)",
+        "ResourceGroups": [
+          "LevelCommon2"
+        ]
+      }
+    },
+    {
+      "objclass": "GridItemType",
+      "aliases": [
+        "nagasalak_vortex"
+      ],
+      "objdata": {
+        "TypeName": "nagasalak_vortex",
+        "GridItemClass": "GridItemNagaSalakVortex",
+        "ResourceGroups": [
+          "PlantNagaSalak"
+        ],
+        "Properties": "RTID(GridItemNagaSalakVortexDefault@PropertySheets)"
+      }
+    },
+    {
+      "objclass": "GridItemType",
+      "aliases": [
+        "nagasalak_puffer"
+      ],
+      "objdata": {
+        "TypeName": "nagasalak_puffer",
+        "GridItemClass": "GridItemNagaSalakPuffer",
+        "ResourceGroups": [
+          "PlantNagaSalak",
+          "FishesGroup"
+        ],
+        "Properties": "RTID(GridItemNagaSalakPufferDefault@PropertySheets)"
       }
     }
   ]

@@ -3558,14 +3558,14 @@
         "icon": "icon_gravitree.webp"
     },
     {
-        "id": "darkmatter_dragonfruit",
-        "name": "plant_darkmatter_dragonfruit",
+        "id": "dmdragonfruit",
+        "name": "plant_dmdragonfruit",
         "tags": [
             "Orange",
             "Ranger",
             "Chinese"
         ],
-        "icon": "icon_darkmatter_dragonfruit.webp"
+        "icon": "icon_dmdragonfruit.webp"
     },
     {
         "id": "phoenixfloat",
@@ -3576,6 +3576,28 @@
             "Chinese"
         ],
         "icon": "icon_phoenixfloat.webp"
+    },
+    {
+        "id": "cosmicsaucer",
+        "name": "plant_cosmicsaucer",
+        "tags": [
+            "Purple",
+            "Trapper",
+            "Magic",
+            "Chinese"
+        ],
+        "icon": "icon_cosmicsaucer.webp"
+    },
+    {
+        "id": "nagasalak",
+        "name": "plant_nagasalak",
+        "tags": [
+            "Orange",
+            "Ice",
+            "Ranger",
+            "Chinese"
+        ],
+        "icon": "icon_nagasalak.gif"
     },
     {
         "id": "smallcherry",

@@ -4,6 +4,8 @@ import 'dart:typed_data';
 
 import 'package:web/web.dart';
 
+import 'web_picked_file.dart';
+
 /// In-memory folder import via `<input webkitdirectory>` (no File System Access API).
 class WebFolderPicker {
   WebFolderPicker._();
@@ -12,7 +14,7 @@ class WebFolderPicker {
 
   static final _levelPattern = RegExp(r'\.(json|hujson|rton|zlib|bin|smf)$', caseSensitive: false);
 
-  WebFolderImportCache? _cache;
+  WebPickCache? _cache;
 
   bool get isSupported => true;
 
@@ -63,7 +65,7 @@ class WebFolderPicker {
       }
 
       final folderName = _folderNameFromFiles(files);
-      _cache = WebFolderImportCache(name: folderName, entries: entries);
+      _cache = WebPickCache(name: folderName, entries: entries);
       settle((name: folderName, paths: entries.keys.toList()));
     }
 
@@ -82,23 +84,8 @@ class WebFolderPicker {
     return completer.future;
   }
 
-  Future<Uint8List?> readFolderImportEntry(String path) async {
-    final file = _cache?.entries[path];
-    if (file == null) return null;
-
-    final reader = FileReader();
-    final completer = Completer<Uint8List?>();
-    reader.onLoadEnd.listen((_) {
-      if (reader.error != null) {
-        completer.complete(null);
-        return;
-      }
-      final buffer = (reader.result as JSArrayBuffer?)?.toDart;
-      completer.complete(buffer?.asUint8List());
-    });
-    reader.readAsArrayBuffer(file);
-    return completer.future;
-  }
+  Future<Uint8List?> readFolderImportEntry(String path) async =>
+      await _cache?.read(path);
 
   void releaseFolderImport() {
     _cache = null;
@@ -125,11 +112,4 @@ class WebFolderPicker {
     final slash = rel.indexOf('/');
     return slash >= 0 ? rel.substring(0, slash) : 'Imported folder';
   }
-}
-
-class WebFolderImportCache {
-  WebFolderImportCache({required this.name, required this.entries});
-
-  final String name;
-  final Map<String, File> entries;
 }

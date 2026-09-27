@@ -1,11 +1,15 @@
 import 'dart:convert';
 
+/// Spawn actions must reference the built-in jump, even in level-local actions.
+const zombossSpawnJumpActionRtid = 'RTID(ZombossSpawnJump@ZombieActions)';
+
 /// Objclasses for jump actions that can be used in both phase lists and retreat.
 const zombossJumpActionObjclasses = <String>{
   'ZombossJumpActionDefinition',
   'ZombossSteamJumpActionDefinition',
   'ZombossSteamRandomJumpActionDefinition',
   'ZombossQigongJumpActionDefinition',
+  'ZombossRomanHotRodicusJumpActionDefinition',
 };
 
 bool isZombossJumpActionObjclass(String objclass) =>
@@ -195,8 +199,9 @@ class ZombossMechCatalogEntry {
   List<ZombossMechCatalogAction> get retreatCatalogActions =>
       catalogActions.where(isRetreatPhaseCatalogAction).toList();
 
-  List<ZombossMechCatalogAction> get jumpCatalogActions =>
-      catalogActions.where((a) => isZombossJumpActionObjclass(a.objclass)).toList();
+  List<ZombossMechCatalogAction> get jumpCatalogActions => catalogActions
+      .where((a) => isZombossJumpActionObjclass(a.objclass))
+      .toList();
 
   ZombossMechObjclassGroup? groupForAlias(String alias) {
     for (final group in actions) {

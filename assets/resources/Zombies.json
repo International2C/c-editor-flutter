@@ -174,6 +174,47 @@
     "icon": "zombie_camel_onehump.webp"
   },
   {
+    "id": "camel_segment_touch",
+    "name": "zombie_camel_segment_touch",
+    "tags": [
+      "Egypt_Pirate",
+      "Basic",
+      "International"
+    ],
+    "icon": "zombie_camel_segment_touch.webp"
+  },
+  {
+    "id": "camel_onehump_touch",
+    "name": "zombie_camel_onehump_touch",
+    "tags": [
+      "Egypt_Pirate",
+      "Basic",
+      "International"
+    ],
+    "icon": "zombie_camel_segment_touch.webp"
+  },
+  {
+    "id": "camel_twohump_touch",
+    "name": "zombie_camel_twohump_touch",
+    "tags": [
+      "Egypt_Pirate",
+      "Evildave",
+      "Basic",
+      "International"
+    ],
+    "icon": "zombie_camel_segment_touch.webp"
+  },
+  {
+    "id": "camel_manyhump_touch",
+    "name": "zombie_camel_manyhump_touch",
+    "tags": [
+      "Egypt_Pirate",
+      "Basic",
+      "International"
+    ],
+    "icon": "zombie_camel_segment_touch.webp"
+  },
+  {
     "id": "pharaoh",
     "name": "zombie_pharaoh",
     "tags": [
@@ -1081,7 +1122,7 @@
     "tags": [
       "Dark_Beach",
       "Basic",
-      "International"
+      "Chinese"
     ],
     "icon": "zombie_dark_archmage.webp"
   },
@@ -1114,6 +1155,73 @@
       "Chinese"
     ],
     "icon": "zombie_zombie_towerdefend_boss.webp"
+  },
+  {
+    "id": "zombie_target_bottle",
+    "name": "zombie_target_bottle",
+    "tags": [
+      "Dark_Beach",
+      "Chinese"
+    ],
+    "icon": "zombie_target_bottle.webp"
+  },
+  {
+    "id": "zombie_target_arrow_blue",
+    "name": "zombie_target_arrow_blue",
+    "tags": [
+      "Dark_Beach",
+      "Chinese"
+    ],
+    "icon": "zombie_target_arrow_blue.webp"
+  },
+  {
+    "id": "zombie_target_arrow_purple",
+    "name": "zombie_target_arrow_purple",
+    "tags": [
+      "Dark_Beach",
+      "Chinese"
+    ],
+    "icon": "zombie_target_arrow_purple.webp"
+  },
+  {
+    "id": "zombie_target_arrow_yellow",
+    "name": "zombie_target_arrow_yellow",
+    "tags": [
+      "Dark_Beach",
+      "Chinese"
+    ],
+    "icon": "zombie_target_arrow_yellow.webp"
+  },
+  {
+    "id": "zombie_target_archmage",
+    "name": "zombie_target_archmage",
+    "tags": [
+      "Dark_Beach",
+      "Basic",
+      "Chinese"
+    ],
+    "icon": "zombie_dark_archmage.webp"
+  },
+  {
+    "id": "zombie_target_wizard",
+    "name": "zombie_target_wizard",
+    "tags": [
+      "Dark_Beach",
+      "Basic",
+      "Pet",
+      "Chinese"
+    ],
+    "icon": "zombie_dark_wizard.webp"
+  },
+  {
+    "id": "zombie_target_gargantuar",
+    "name": "zombie_target_gargantuar",
+    "tags": [
+      "Dark_Beach",
+      "Gargantuar",
+      "Chinese"
+    ],
+    "icon": "zombie_dark_gargantuar.webp"
   },
   {
     "id": "beach",
@@ -4605,6 +4713,56 @@
     "icon": "zombie_supernova_gargantuar_beacon.webp"
   },
   {
+    "id": "zombie_moon_blade",
+    "name": "zombie_moon_blade",
+    "tags": [
+      "Moon",
+      "Basic",
+      "Chinese"
+    ],
+    "icon": "zombie_moon_blade.webp"
+  },
+  {
+    "id": "zombie_moon_illusionist",
+    "name": "zombie_moon_illusionist",
+    "tags": [
+      "Moon",
+      "Basic",
+      "Chinese"
+    ],
+    "icon": "zombie_moon_illusionist.webp"
+  },
+  {
+    "id": "supernova_gargantuar_gemini",
+    "name": "zombie_supernova_gargantuar_gemini",
+    "tags": [
+      "Moon",
+      "Gargantuar",
+      "Chinese"
+    ],
+    "icon": "zombie_supernova_gargantuar_gemini.webp"
+  },
+  {
+    "id": "zombie_supernova_imp",
+    "name": "zombie_supernova_imp",
+    "tags": [
+      "Moon",
+      "Imp",
+      "Chinese"
+    ],
+    "icon": "zombie_supernova_imp.webp"
+  },
+  {
+    "id": "lunar_radiation_gargantuar",
+    "name": "zombie_lunar_radiation_gargantuar",
+    "tags": [
+      "Moon",
+      "Gargantuar",
+      "Chinese"
+    ],
+    "icon": "zombie_lunar_radiation_gargantuar.webp"
+  },
+  {
     "id": "fairy_tale",
     "name": "zombie_fairy_tale",
     "tags": [
@@ -7652,8 +7810,7 @@
     "id": "stay_tuned",
     "name": "zombie_stay_tuned",
     "tags": [
-      "Tale_ZCorp",
-      "Moon"
+      "Tale_ZCorp"
     ],
     "icon": "to_be_continued.webp"
   }

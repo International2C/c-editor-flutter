@@ -10,6 +10,10 @@ class WaveGeneratorPropertiesData extends PvzModel {
     this.waveSpendingPoints = 100,
     this.waveSpendingPointIncrement = 100,
     this.waves = const [],
+    this.isRiseFromGroundMode = false,
+    this.ignoreFlagCarriers = false,
+    this.spawnColStart,
+    this.spawnColEnd,
   });
 
   List<WaveGeneratorPoolEntryData> addToZombiePool;
@@ -18,6 +22,10 @@ class WaveGeneratorPropertiesData extends PvzModel {
   int waveSpendingPoints;
   int waveSpendingPointIncrement;
   List<WaveGeneratorWaveData> waves;
+  bool isRiseFromGroundMode;
+  bool ignoreFlagCarriers;
+  int? spawnColStart;
+  int? spawnColEnd;
 
   bool get spendingPointsValid =>
       waveSpendingPoints <= waveSpendingPointIncrement;
@@ -48,6 +56,10 @@ class WaveGeneratorPropertiesData extends PvzModel {
       waveSpendingPointIncrement:
           json['WaveSpendingPointIncrement'] as int? ?? 100,
       waves: waves,
+      isRiseFromGroundMode: json['IsRiseFromGroundMode'] as bool? ?? false,
+      ignoreFlagCarriers: json['IgnoreFlagCarriers'] as bool? ?? false,
+      spawnColStart: json['SpawnColStart'] as int?,
+      spawnColEnd: json['SpawnColEnd'] as int?,
     );
   }
 
@@ -60,6 +72,12 @@ class WaveGeneratorPropertiesData extends PvzModel {
       'WaveCount': waves.length,
       'WaveSpendingPoints': waveSpendingPoints,
       'WaveSpendingPointIncrement': waveSpendingPointIncrement,
+      if (isRiseFromGroundMode) 'IsRiseFromGroundMode': true,
+      if (ignoreFlagCarriers) 'IgnoreFlagCarriers': true,
+      if (isRiseFromGroundMode || spawnColStart != null)
+        'SpawnColStart': isRiseFromGroundMode ? 2 : spawnColStart,
+      if (isRiseFromGroundMode || spawnColEnd != null)
+        'SpawnColEnd': isRiseFromGroundMode ? 2 : spawnColEnd,
       'Waves': waves.map((w) => w.toJson()).toList(),
     };
   }

@@ -84,9 +84,6 @@ class AppLocalizationsRu extends AppLocalizations {
   String get expand => 'Развернуть';
 
   @override
-  String get obtainableInLevel => 'Можно получить на уровне';
-
-  @override
   String get allZombiesInLevel => 'Все зомби на уровне';
 
   @override
@@ -109,9 +106,6 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get witchLabel => 'Появление тыквенных ведьм';
-
-  @override
-  String get lawnMowerLabel => 'Газонокосилки';
 
   @override
   String get lawnMowerTypeLabel => 'Тип газонокосилок';
@@ -218,6 +212,19 @@ class AppLocalizationsRu extends AppLocalizations {
   String get clearCache => 'Очистить кэш';
 
   @override
+  String get autosave => 'Автосохранение';
+
+  @override
+  String get autosaveOn => 'Автосохранение: вкл.';
+
+  @override
+  String get autosaveOff => 'Автосохранение: выкл.';
+
+  @override
+  String get autosaveSubtitle =>
+      'Автоматически сохранять изменения при выходе из уровня';
+
+  @override
   String get ultra => 'Ультра';
 
   @override
@@ -287,12 +294,6 @@ class AppLocalizationsRu extends AppLocalizations {
   @override
   String get pluginTrustWarningBody =>
       'Плагины выполняют код внутри C-Editor. Устанавливайте плагины только из доверенных источников. Доступ к файлам и сети по умолчанию ограничен, но вредоносные плагины всё ещё могут нарушить работу интерфейса редактора.';
-
-  @override
-  String get pluginInstalledSection => 'Установленные плагины';
-
-  @override
-  String get pluginScreensSection => 'Функции и экраны';
 
   @override
   String get pluginEmpty =>
@@ -378,9 +379,6 @@ class AppLocalizationsRu extends AppLocalizations {
   String get pluginIdLabel => 'ID';
 
   @override
-  String get pluginLinks => 'Ссылки';
-
-  @override
   String get pluginLinkWebsite => 'Сайт';
 
   @override
@@ -429,77 +427,6 @@ class AppLocalizationsRu extends AppLocalizations {
   String get shareLevelFailed => 'Не удалось поделиться файлом уровня';
 
   @override
-  String get shareAsFile => 'Поделиться файлом';
-
-  @override
-  String get shareAsPreview => 'Поделиться превью';
-
-  @override
-  String get selectBackground => 'Выберите фон';
-
-  @override
-  String get autoSelectBackground => 'Автоподбор';
-
-  @override
-  String get customBackground => 'Свой фон';
-
-  @override
-  String get selectPlantList => 'Выберите список растений';
-
-  @override
-  String get levelContainsCustomZombies =>
-      'В уровне присутствуют кастомные зомби';
-
-  @override
-  String get generatingPreview => 'Создание превью...';
-
-  @override
-  String get saveToGallery => 'Сохранить в галерею';
-
-  @override
-  String get imageSavedSuccessfully => 'Изображение успешно сохранено';
-
-  @override
-  String get shareOptionTitle => 'Как поделиться?';
-
-  @override
-  String get selectLevelType => 'Выберите тип уровня';
-
-  @override
-  String get autoSelectLevelType => 'Выбор заранее';
-
-  @override
-  String get manualSelectLevelType => 'Выбор игроком';
-
-  @override
-  String get levelTypeAdventure => 'Приключение';
-
-  @override
-  String get levelTypeLastStand => 'Последний рубеж';
-
-  @override
-  String get levelTypeConveyor => 'Конвейер';
-
-  @override
-  String get levelTypeSeedRain => 'Дождь из семян';
-
-  @override
-  String get levelTypeIPlant => 'Я растение';
-
-  @override
-  String get levelTypeOldStyle => 'Старый тип';
-
-  @override
-  String get levelTypeUnknown => 'Неизвестно';
-
-  @override
-  String get selectFolder => 'Выбрать папку';
-
-  @override
-  String get storagePermissionHint =>
-      'Требуется разрешение на доступ к хранилищу. Включите «Разрешить управление всеми файлами» в настройках.';
-
-  @override
   String get storagePermissionDialogTitle =>
       'Требуется разрешение на хранилище';
 
@@ -521,9 +448,6 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get selectFolderButton => 'Выбрать папку';
-
-  @override
-  String get uploadToWebsite => 'Загрузить на сайт';
 
   @override
   String get importFiles => 'Импортировать файлы';
@@ -556,10 +480,6 @@ class AppLocalizationsRu extends AppLocalizations {
       'Импорт папки не поддерживается в этом браузере.';
 
   @override
-  String get uploadLevelPickerTitle =>
-      'Выберите один или несколько уровней для загрузки';
-
-  @override
   String get smartUploadTitle => 'Дубликат файла';
 
   @override
@@ -586,37 +506,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get smartUploadCopyAll => 'Загрузить все как копии';
 
   @override
-  String get localFileKeepTitle => 'Сохранить уровень из браузера?';
-
-  @override
-  String localFileKeepMessage(String fileName) {
-    return 'Этот уровень хранится только в браузере:\n\n$fileName\n\nСохранить его при подключении локальной папки?';
-  }
-
-  @override
-  String get localFileKeep => 'Сохранить';
-
-  @override
-  String get localFileDiscard => 'Удалить';
-
-  @override
-  String get localFileKeepAll => 'Сохранить все';
-
-  @override
-  String get localFileDiscardAll => 'Удалить все';
-
-  @override
   String get openFolder => 'Открыть папку';
-
-  @override
-  String get levelLibraryPath => 'Папка рабочего пространства';
-
-  @override
-  String get levelLibraryPathHint =>
-      'Уровни хранятся в этой папке. На iOS можно выбрать любую папку — доступ сохраняется после перезапуска.';
-
-  @override
-  String get pathCopied => 'Путь скопирован в буфер обмена';
 
   @override
   String get useDefaultLibraryFolder => 'Использовать папку по умолчанию';
@@ -657,11 +547,6 @@ class AppLocalizationsRu extends AppLocalizations {
   @override
   String get exportSelectFile =>
       'Выберите архив уровней для экспорта (.rsb.smf)';
-
-  @override
-  String exportSelectedFile(String path) {
-    return 'Выбранный файл: $path';
-  }
 
   @override
   String get backupRecommendationTitle =>
@@ -718,23 +603,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get backupProgressTitle => 'Создание резервной копии…';
 
   @override
-  String transferProgressCount(int completed, int total) {
-    return '$completed / $total';
-  }
-
-  @override
-  String get folderAccessError =>
-      'Выбранная папка доступна только для чтения или недоступна. Пожалуйста, выберите другую папку.';
-
-  @override
-  String get webFolderImportNotice =>
-      'Папка импортирована в хранилище браузера. В этом браузере изменения не записываются на диск автоматически — используйте «Экспорт».';
-
-  @override
   String get favorite => 'В избранное';
-
-  @override
-  String get unfavorite => 'Убрать из избранного';
 
   @override
   String get move => 'Переместить';
@@ -803,9 +672,6 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get proceed => 'Продолжить';
-
-  @override
-  String get startExport => 'Приступить';
 
   @override
   String get exportProceed => 'Продолжить';
@@ -911,9 +777,6 @@ class AppLocalizationsRu extends AppLocalizations {
   String get deepCopy => 'Полная копия';
 
   @override
-  String get discordLabel => 'Наш Discord сервер:';
-
-  @override
   String get comingSoon => 'Скоро';
 
   @override
@@ -930,9 +793,6 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get copyEventTarget => 'Целевая волна';
-
-  @override
-  String get targetWaveIndex => 'Номер целевой волны';
 
   @override
   String get targetWaveAlreadyContainsEvent =>
@@ -1076,9 +936,6 @@ class AppLocalizationsRu extends AppLocalizations {
   String get returnUp => 'Назад';
 
   @override
-  String get jsonFile => 'JSON-файл';
-
-  @override
   String get convertToJson => 'Преобразовать в JSON';
 
   @override
@@ -1156,10 +1013,6 @@ class AppLocalizationsRu extends AppLocalizations {
   String get usageSection => 'Использование';
 
   @override
-  String get usageText =>
-      '1. Папка: при первом запуске нажмите значок папки в правом верхнем углу и выберите каталог с JSON-файлами уровней.\n2. Открыть/Создать: нажмите уровень в списке для редактирования или используйте кнопку ниже, чтобы создать новый уровень из шаблона.\n3. Модули: используйте «Добавить новый модуль» в редакторе, чтобы расширять возможности уровня.\n4. Сохранить: после редактирования нажмите кнопку сохранения в правом верхнем углу — изменения автоматически запишутся в исходный JSON-файл.\n5. Преобразование файлов уровней: JSON можно конвертировать в HUJSON для хот-апдейта (перед импортом вручную смените расширение с .hujson на .json) или в зашифрованный RTON для использования в dynamic.rsb.smf.\n6. Плагины: плагины запускают дополнительный код и добавляют новые функции и интерфейсы, расширяя возможности редактора. Помимо встроенных плагинов, новые можно получить, установив локальный файл .cplugin или введя URL. Функции плагинов можно включать и отключать независимо.\n7. Загружайте JSON-уровни на официальном портале авторов «Продвинутого творческого двора» Plants vs. Zombies 2 (требуется вход).\n8. На странице «Creative Courtyard · Recommended Levels Showcase» можно посмотреть идентификаторы ранее рекомендованных официальных уровней и причины их выбора. Игра в эти уровни поддерживает их авторов и помогает улучшить собственные навыки проектирования.\n9. Если у вас есть вопросы или нужна помощь с продвинутым созданием уровней, присоединяйтесь к Discord-серверу Plants vs. Zombies и пишите в ветке канала PvZ2C-Modding.';
-
-  @override
   String get usageTextDesktop =>
       '1. Папка: при первом запуске щёлкните значок папки в правом верхнем углу и выберите каталог с JSON-файлами уровней.\n2. Открыть/Создать: щёлкните уровень в списке для редактирования или используйте кнопку ниже, чтобы создать новый уровень из шаблона.\n3. Модули: используйте «Добавить новый модуль» в редакторе, чтобы расширять возможности уровня.\n4. Сохранить: после редактирования щёлкните кнопку сохранения в правом верхнем углу — изменения автоматически запишутся в исходный JSON-файл.\n5. Преобразование файлов уровней: JSON можно конвертировать в HUJSON для хот-апдейта (перед импортом вручную смените расширение с .hujson на .json) или в зашифрованный RTON для использования в dynamic.rsb.smf.\n6. Плагины: плагины запускают дополнительный код и добавляют новые функции и интерфейсы, расширяя возможности редактора. Помимо встроенных плагинов, новые можно получить, установив локальный файл .cplugin или введя URL. Функции плагинов можно включать и отключать независимо.\n7. Загружайте JSON-уровни на официальном портале авторов «Продвинутого творческого двора» Plants vs. Zombies 2 (требуется вход).\n8. На странице «Creative Courtyard · Recommended Levels Showcase» можно посмотреть идентификаторы ранее рекомендованных официальных уровней и причины их выбора. Игра в эти уровни поддерживает их авторов и помогает улучшить собственные навыки проектирования.\n9. Если у вас есть вопросы или нужна помощь с продвинутым созданием уровней, присоединяйтесь к Discord-серверу Plants vs. Zombies и пишите в ветке канала PvZ2C-Modding.';
 
@@ -1178,9 +1031,6 @@ class AppLocalizationsRu extends AppLocalizations {
   @override
   String get cEditorInviteLabel =>
       'Ссылка-приглашение на Discord-сервер C-Editor:';
-
-  @override
-  String get linksSubsection => 'Ссылки';
 
   @override
   String get creditsSection => 'Благодарности';
@@ -1289,9 +1139,6 @@ class AppLocalizationsRu extends AppLocalizations {
   String get templateCustomLawnExample => 'Пример пользовательской лужайки';
 
   @override
-  String get templateMoonGrappleExample => 'Пример уровня «Лунный крюк»';
-
-  @override
   String get unsavedChanges => 'Несохранённые изменения';
 
   @override
@@ -1305,123 +1152,6 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get saved => 'Сохранено';
-
-  @override
-  String get moonGrappleSaveBlockedTitle =>
-      'Невозможно сохранить уровень «Лунный крюк»';
-
-  @override
-  String get moonGrappleSaveBlockedMessage =>
-      'Для сохранения уровня «Лунный крюк» необходимо как минимум 3 раунда.';
-
-  @override
-  String moonGrappleRound(int round) {
-    return 'Раунд $round';
-  }
-
-  @override
-  String get moonGrappleTargetScore => 'Целевой счёт';
-
-  @override
-  String get moonGrappleSpawnThreshold => 'Порог появления';
-
-  @override
-  String get moonGrappleSpawnInterval => 'Интервал появления';
-
-  @override
-  String get moonGrappleMinimumSpeed => 'Минимальная скорость';
-
-  @override
-  String get moonGrappleMaximumSpeed => 'Максимальная скорость';
-
-  @override
-  String get moonGrappleRenderingFixed => 'Определение отображения фиксировано';
-
-  @override
-  String get moonGrappleRemoveSpawnObject => 'Удалить объект появления';
-
-  @override
-  String get moonGrappleSpawnWeight => 'Вес появления';
-
-  @override
-  String get moonGrappleReturnSpeedFactor => 'Множитель скорости возврата';
-
-  @override
-  String get moonGrappleScore => 'Счёт';
-
-  @override
-  String get moonGrappleExperience => 'Опыт';
-
-  @override
-  String get moonGrappleCollisionRadius => 'Радиус столкновения';
-
-  @override
-  String get moonGrappleRemoveRound => 'Удалить раунд';
-
-  @override
-  String get moonGrappleAddSpawnObject => 'Добавить объект появления';
-
-  @override
-  String get moonGrappleBackgroundObjects => 'Фоновые объекты';
-
-  @override
-  String get moonGrappleRemoveBackgroundObject => 'Удалить фоновый объект';
-
-  @override
-  String get moonGrappleAnimationArtCenterFixed =>
-      'Анимация и центр изображения фиксированы';
-
-  @override
-  String get moonGrappleSpeed => 'Скорость';
-
-  @override
-  String get moonGrappleAddBackgroundObject => 'Добавить фоновый объект';
-
-  @override
-  String get moonGrappleHookGameplay => 'Игровой процесс с крюком';
-
-  @override
-  String get moonGrappleShipPosition => 'Позиция корабля';
-
-  @override
-  String get moonGrappleMinimumHookDistance => 'Минимальная дальность крюка';
-
-  @override
-  String get moonGrappleMaximumHookDistance => 'Максимальная дальность крюка';
-
-  @override
-  String get moonGrappleFiringArcDegrees => 'Угол запуска';
-
-  @override
-  String get moonGrappleLaunchSpeed => 'Скорость запуска';
-
-  @override
-  String get moonGrappleEmptyReturnSpeed => 'Скорость возврата без груза';
-
-  @override
-  String get moonGrappleLoadedReturnSpeed => 'Скорость возврата с грузом';
-
-  @override
-  String get moonGrappleHookCollisionRadius => 'Радиус столкновения крюка';
-
-  @override
-  String get moonGrappleSpawnLayout => 'Расположение появления';
-
-  @override
-  String get moonGrappleFormationSpacing => 'Интервал построения';
-
-  @override
-  String get moonGrappleFormationYOffset => 'Смещение построения по Y';
-
-  @override
-  String get moonGrappleAddRound => 'Добавить раунд';
-
-  @override
-  String get moduleDesc_MoonGrappleModuleProperties =>
-      'Настройка игры «Лунный крюк» на Лунной базе.';
-
-  @override
-  String get moduleTitle_MoonGrappleModuleProperties => 'Лунный крюк';
 
   @override
   String get failedToLoadLevel =>
@@ -1716,9 +1446,6 @@ class AppLocalizationsRu extends AppLocalizations {
   String get confirmRemove => 'Удалить';
 
   @override
-  String get addModule => 'Добавить модуль';
-
-  @override
   String get settings => 'Настройки';
 
   @override
@@ -1737,19 +1464,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get zombossBattle => 'Бой с Зомбоссом';
 
   @override
-  String get moveSourceSameAsDest => 'Исходная и целевая папки совпадают';
-
-  @override
-  String get moveSuccess => 'Перемещение выполнено';
-
-  @override
-  String get moveFail => 'Ошибка перемещения';
-
-  @override
   String get rootFolder => 'Корень';
-
-  @override
-  String get createEmptyWave => 'Добавить пустую волну';
 
   @override
   String get createEmptyWaveContainer => 'Создать пустой контейнер волн';
@@ -1772,18 +1487,7 @@ class AppLocalizationsRu extends AppLocalizations {
       'У уровня есть модуль волн, но отсутствует объект WaveManagerProperties.';
 
   @override
-  String get waveTimelineHint =>
-      'Нажмите на событие для редактирования. Нажмите + для добавления.';
-
-  @override
-  String get waveTimelineHintDetail => 'Смахните влево для удаления волны.';
-
-  @override
   String get waveTimelineGuideTitle => 'Инструкция';
-
-  @override
-  String get waveTimelineGuideBody =>
-      'Свайп вправо: управление событиями волны\nСвайп влево: удалить волну\nНажмите на очки: ожидание по зомби';
 
   @override
   String get waveTimelineGuideBodyDesktop =>
@@ -1791,7 +1495,7 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get waveTimelineGuideBodyMobile =>
-      'Свайп вправо: управление событиями волны\nСвайп влево: удалить волну\nНажмите на очки: ожидание по зомби';
+      'Нажмите на волну: управление событиями\nСвайп влево: удалить волну\nНажмите на очки: ожидание по зомби';
 
   @override
   String get waveDeadLinksTitle => 'Неверные ссылки';
@@ -1857,13 +1561,6 @@ class AppLocalizationsRu extends AppLocalizations {
   String get customZombieOrphanDeleteErase => 'Удалить из уровня';
 
   @override
-  String get editCustomZombieProperties =>
-      'Редактировать свойства кастомного зомби';
-
-  @override
-  String get makeZombieAsCustom => 'Сделать зомби кастомным';
-
-  @override
   String get customLabel => 'Пользовательский';
 
   @override
@@ -1910,23 +1607,15 @@ class AppLocalizationsRu extends AppLocalizations {
   }
 
   @override
-  String get waveEmptyRowHint => 'Пустая волна (свайп влево/вправо)';
-
-  @override
   String get waveEmptyRowHintDesktop =>
-      'Пустая волна (щёлкните для управления)';
+      'Пустая волна (нажмите для управления, перетащите сюда события)';
 
   @override
-  String get waveEmptyRowHintMobile => 'Пустая волна (свайп влево/вправо)';
+  String get waveEmptyRowHintMobile =>
+      'Пустая волна (нажмите для управления, перетащите сюда события)';
 
   @override
   String get removeFromWave => 'Удалить из волны';
-
-  @override
-  String get deleteEventEntityTitle => 'Удалить объект события?';
-
-  @override
-  String get deleteEventEntityBody => 'Это удалит объект события из уровня.';
 
   @override
   String waveEventsTitle(int wave) {
@@ -2051,12 +1740,6 @@ class AppLocalizationsRu extends AppLocalizations {
   String get jam8Bit => '8-бит';
 
   @override
-  String get noWaves => 'Нет волн';
-
-  @override
-  String get addFirstWave => 'Добавьте первую волну.';
-
-  @override
   String get deleteWave => 'Удалить волну';
 
   @override
@@ -2169,12 +1852,6 @@ class AppLocalizationsRu extends AppLocalizations {
   String get moduleEditorInProgress => 'Редактор модуля в разработке';
 
   @override
-  String get dataEmpty => 'Данные пусты';
-
-  @override
-  String get saveSuccess => 'Сохранено успешно';
-
-  @override
   String get saveFail => 'Ошибка сохранения';
 
   @override
@@ -2183,13 +1860,6 @@ class AppLocalizationsRu extends AppLocalizations {
   @override
   String get confirmRemoveRefMessage =>
       'Удалить эту ссылку? Данные объекта останутся до удаления всех ссылок.';
-
-  @override
-  String get deleteEventConfirmCheckbox =>
-      'Я понимаю, что это действие нельзя отменить';
-
-  @override
-  String get noZombiesInLane => 'Нет зомби на этой полосе';
 
   @override
   String get code => 'Код';
@@ -2232,24 +1902,11 @@ class AppLocalizationsRu extends AppLocalizations {
       'Использование нестандартных условий победы может вызвать сбой уровня из-за конфликтов модулей. Используйте с осторожностью.';
 
   @override
-  String get hintTextDisplay => 'Текст подсказки (Description)';
-
-  @override
-  String get beatTheLevelDialogIntro =>
-      'Показывать текст подсказки во всплывающем окне в начале уровня.';
-
-  @override
   String get beatTheLevelDialogHint =>
       'Поддерживает китайский; для многострочного текста вводите переносы напрямую, \\n не нужен. Примечание: подсказки не отображаются в iOS courtyard.';
 
   @override
-  String get levelHintText => 'Текст подсказки уровня';
-
-  @override
   String get missingModules => 'Отсутствующие модули';
-
-  @override
-  String get moduleConflict => 'Конфликт модулей';
 
   @override
   String get conflictTitle_ModuleLogic => 'Логический конфликт модулей';
@@ -2332,6 +1989,40 @@ class AppLocalizationsRu extends AppLocalizations {
       'Генератор волн хранит данные волн внутри модуля и не может использоваться вместе с отдельным контейнером менеджера волн.';
 
   @override
+  String conflictDesc_CamelMinigameNonTouchZombies(String zombies) {
+    return '«Память мумии» поддерживает только специальных зомби-верблюдов этой мини-игры. Обнаружены другие зомби: $zombies. Их появление на уровне приведёт к вылету игры. Замените или удалите их.';
+  }
+
+  @override
+  String get targetZombieRequiresOakTrain =>
+      'Особые зомби мини-игры лучше работают со своим модулем. Добавьте «Стрельба Пня Лучника» на уровень.';
+
+  @override
+  String get conflictDesc_CamelMinigameIntro =>
+      '«Память мумии» конфликтует с модулем вступления уровня. Совместное использование вызывает ошибки перехода в начале уровня.';
+
+  @override
+  String get targetZombieInWaveManagerWarningTitle => 'Совместимость зомби';
+
+  @override
+  String get targetZombieInWaveManagerWarning =>
+      'Особые зомби мини-игры «Стрельба Пня Лучника» не могут использовать способности в обычных событиях менеджера волн, таких как «Обычная волна» и «Волна с рыбами». Используйте «Спавн из-под земли» или пользовательских зомби для похожего результата.';
+
+  @override
+  String get oakTrainUnderwaterWarningTitle => 'Совместимость карты';
+
+  @override
+  String get oakTrainUnderwaterWarning =>
+      'Базовая карта — Подводный мир или Лунная база. Пень Лучник из мини-игры может не выжить на такой карте. При необходимости заранее разместите кислородные водоросли или моховые плитки.';
+
+  @override
+  String get waveGeneratorRiseFromGroundWarningTitle => 'Особенности появления';
+
+  @override
+  String get waveGeneratorRiseFromGroundWarning =>
+      'При включённом появлении из-под земли (IsRiseFromGroundMode) большинство зомби не может двигаться или использовать способности. Если указана только строка без позиции появления, она игнорируется: зомби появляется в первой клетке первой строки. Используйте случайные строки или задайте конкретные позиции.';
+
+  @override
   String get missingPlantModuleWarningTitle =>
       'Отсутствует модуль для параллельных растений';
 
@@ -2382,6 +2073,9 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get selectPlant => 'Выбрать растение';
+
+  @override
+  String get selectAll => 'Выбрать все';
 
   @override
   String get searchPlant => 'Поиск растения';
@@ -2480,24 +2174,13 @@ class AppLocalizationsRu extends AppLocalizations {
   String get modifyConveyorEntryEditTitle => 'Параметры записи конвейера';
 
   @override
-  String get moduleTitle_UnchartedModeNo42UniverseModule =>
-      'Модуль вселенной 42';
-
-  @override
-  String get moduleDesc_UnchartedModeNo42UniverseModule =>
-      'Включает растения параллельной вселенной No 42';
-
-  @override
-  String get moduleTitle_PVZ2MausoleumModuleUnchartedMode =>
-      'Модуль Подземного Дворца';
-
-  @override
-  String get moduleDesc_PVZ2MausoleumModuleUnchartedMode =>
-      'Включает растения Подземного Дворца';
-
-  @override
   String plantModuleRequiredMessage(String moduleName) {
     return 'Чтобы выбрать это растение, нужно добавить модуль «$moduleName».';
+  }
+
+  @override
+  String zombieModuleRequiredMessage(String moduleName) {
+    return 'Чтобы выбрать этого зомби, нужно добавить модуль «$moduleName».';
   }
 
   @override
@@ -2507,9 +2190,6 @@ class AppLocalizationsRu extends AppLocalizations {
   @override
   String get realmExclusivePlantChooserBlockedMessage =>
       'Растения некоторых реалмов нельзя выбрать в режиме выбора. Используйте предустановку, конвейер, выпадение карт и другие способы.';
-
-  @override
-  String get hiddenPlantChooserBlockedLabel => 'Нельзя выбрать растение';
 
   @override
   String get hiddenPlantChooserBlockedTitle => 'Нельзя выбрать растение';
@@ -2529,16 +2209,6 @@ class AppLocalizationsRu extends AppLocalizations {
       'Растения продолжают расти и крепнуть. Следите за будущими обновлениями!';
 
   @override
-  String get stayTunedMoonPlantBlockedTitle => 'Послание из космоса';
-
-  @override
-  String get stayTunedMoonPlantBlockedMessage =>
-      'Вторая часть «Лунной Базы» скоро выйдет. Следите за новостями!';
-
-  @override
-  String get stayTunedMoonZombieBlockedLabel => 'Послание из космоса';
-
-  @override
   String get stayTunedMoonZombieBlockedTitle => 'Послание из космоса';
 
   @override
@@ -2546,18 +2216,11 @@ class AppLocalizationsRu extends AppLocalizations {
       'Вторая часть «Лунной Базы» скоро выйдет. Следите за новостями!';
 
   @override
-  String get stayTunedTaleZCorpZombieBlockedLabel =>
-      'История ZCorp еще не закончена';
-
-  @override
   String get stayTunedTaleZCorpZombieBlockedTitle => 'Продолжение следует';
 
   @override
   String get stayTunedTaleZCorpZombieBlockedMessage =>
       'Вторая глава ZCorp скоро выйдет. Следите за новостями!';
-
-  @override
-  String get stayTunedZombieBlockedLabel => 'Следите за новостями';
 
   @override
   String get stayTunedZombieBlockedTitle => 'Продолжение следует';
@@ -2663,13 +2326,6 @@ class AppLocalizationsRu extends AppLocalizations {
   @override
   String get spermWhaleModuleNotDeepSeaWarning =>
       'Рекомендуется использовать этот модуль на лужайках Подводного мира. На лужайках, отличных от «20 000 лье под водой»/Атлантиды, возможны проблемы совместимости.';
-
-  @override
-  String get spermWhaleModuleLawnPreview => 'Сетка газона (ориентир)';
-
-  @override
-  String get spermWhaleModuleLawnPreviewHint =>
-      'Глубоководный газон 6×10; обычный 5×9.';
 
   @override
   String get moduleTitle_PennyClassroomModuleProperties => 'Уровень растений';
@@ -2911,18 +2567,11 @@ class AppLocalizationsRu extends AppLocalizations {
       'Растения в начале уровня';
 
   @override
-  String get frozenPlantPlacementTitle =>
-      'Растения в начале уровня (устаревший модуль с возможностью сделать замороженные растения)';
-
-  @override
   String get frozenPlantPlacementLastStand =>
       'Сжигание всех растений при старте уровня';
 
   @override
   String get frozenPlantPlacementSelectedPosition => 'Выбранная позиция';
-
-  @override
-  String get frozenPlantPlacementPlaceHere => 'Разместить растение';
 
   @override
   String get frozenPlantPlacementPlantList => 'Список растений (по рядам)';
@@ -3135,9 +2784,6 @@ class AppLocalizationsRu extends AppLocalizations {
       'Настройка отображения плиток с подкормкой на газоне (только волна 1)';
 
   @override
-  String get bronzeModuleTitle => 'Бронзовые статуи';
-
-  @override
   String get bronzeModuleHelpTitle => 'Бронзовые статуи';
 
   @override
@@ -3165,9 +2811,6 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get bronzeModuleAddTitle => 'Добавить тип статуи';
-
-  @override
-  String get bronzeModuleTypeLabel => 'Тип';
 
   @override
   String get bronzeModuleSpawnTimeLabel => 'Время пробуждения (с)';
@@ -3294,12 +2937,42 @@ class AppLocalizationsRu extends AppLocalizations {
       'Появление атлантических ракушек на сетке';
 
   @override
+  String get eventTitle_SpawnEagleFlagsWaveActionProps =>
+      'Появление орлиных штандартов';
+
+  @override
+  String get eventDesc_SpawnEagleFlagsWaveActionProps =>
+      'Размещает орлиные штандарты в указанных клетках';
+
+  @override
+  String get eventHelpEagleStandardBody =>
+      'Проходящие мимо зомби могут подобрать орлиный штандарт. После гибели носителя штандарт падает на землю, и другие зомби могут подбирать его снова и снова. Зомби со штандартом снижает получаемый урон и даёт невосприимчивость к эффектам контроля всем зомби в области 3×3.\n\nОбычные растения не могут атаковать штандарт. Когда он лежит на земле, Магнитогриб и Золотой Магнитогриб могут его уничтожить.';
+
+  @override
+  String get eventHelpEagleStandardEligibleZombiesTitle => 'Подходящие зомби';
+
+  @override
+  String get eventHelpEagleStandardEligibleZombiesBody =>
+      'В текущей версии орлиный штандарт могут подбирать только зомби-римляне, римляне с конусом, римляне с ведром, римляне-рыцари, бюстоголовые римляне, римляне с флагом и римские бесенята. Остальные зомби проходят мимо, игнорируя штандарт, но всё равно получают усиления от его носителя.';
+
+  @override
+  String get eventHelpEagleStandardUsage =>
+      'Выберите клетку и нажмите «+», чтобы добавить орлиный штандарт. В одной клетке можно разместить несколько штандартов и удалять их с помощью карточек ниже. Размер сетки зависит от текущего газона; штандарты за его пределами отображаются отдельно.';
+
+  @override
   String get eventTitle_PumpkinHouseActionProps =>
       'Появление тыквенных домиков';
 
   @override
   String get eventDesc_PumpkinHouseActionProps =>
       'Размещает тыквенные домики в указанных клетках';
+
+  @override
+  String get eventTitle_WaveActionZombieTentProps => 'Появление палаток зомби';
+
+  @override
+  String get eventDesc_WaveActionZombieTentProps =>
+      'Размещает палатки зомби, периодически призывающие зомби из взвешенного пула';
 
   @override
   String get eventTitle_SpawnGravestonesWaveActionProps => 'Появление могил';
@@ -3460,18 +3133,6 @@ class AppLocalizationsRu extends AppLocalizations {
   String get zombieVaseOption => 'Ваза с зомби';
 
   @override
-  String get plantVaseOptionDescription =>
-      'Выберите карточку растения для зелёной вазы.';
-
-  @override
-  String get zombieVaseOptionDescription =>
-      'Выберите зомби для фиолетовой вазы.';
-
-  @override
-  String get collectableVaseOptionDescription =>
-      'Выберите предмет, который будет находиться внутри вазы.';
-
-  @override
   String get searchZombie => 'Поиск зомби';
 
   @override
@@ -3488,9 +3149,6 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get itemLabel => 'Предмет';
-
-  @override
-  String get railcartSettings => 'Настройки рельсов';
 
   @override
   String get railcartType => 'Тип вагонетки';
@@ -3655,15 +3313,6 @@ class AppLocalizationsRu extends AppLocalizations {
   String get enableResilience => 'Включить устойчивость';
 
   @override
-  String get resilienceSource => 'Источник';
-
-  @override
-  String get resiliencePreset => 'Существующий';
-
-  @override
-  String get resilienceCustom => 'Свой';
-
-  @override
   String get resiliencePresetSelect => 'Выбранный щит устойчивости';
 
   @override
@@ -3686,22 +3335,11 @@ class AppLocalizationsRu extends AppLocalizations {
   String get resilienceExtraDamageThreshold => 'Доп. порог урона устойчивости';
 
   @override
-  String get resilienceCodename => 'Кодовое имя';
+  String get resilienceCodename =>
+      'Кодовое имя (только английские буквы; без пробелов)';
 
   @override
   String get resilienceCodenameHint => 'напр. CustomResilience0';
-
-  @override
-  String get resistances => 'Сопротивления';
-
-  @override
-  String get zombieResilience => 'Броня / Устойчивость';
-
-  @override
-  String get resilienceEnable => 'Включить броню';
-
-  @override
-  String get weakTypeExplosive => 'Взрыв';
 
   @override
   String get instantKillResistance => 'Устойчивость к мгновенной смерти';
@@ -3761,12 +3399,6 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get resilienceEditCustom => 'Редактировать щит';
-
-  @override
-  String get resilienceSourceResilienceConfig => 'ResilienceConfig';
-
-  @override
-  String get resilienceSourceCurrentLevel => 'CurrentLevel';
 
   @override
   String get resilienceTypeAll => 'Все типы';
@@ -3862,7 +3494,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get addModuleAliasTitle => 'Добавить модуль';
 
   @override
-  String get aliasLabel => 'Псевдоним';
+  String get aliasLabel => 'Псевдоним (только английские буквы; без пробелов)';
 
   @override
   String get add => 'Добавить';
@@ -3933,12 +3565,6 @@ class AppLocalizationsRu extends AppLocalizations {
   String get plantFood => 'Подкормка';
 
   @override
-  String get selectGridItem => 'Выбрать предмет';
-
-  @override
-  String get addItemTitle => 'Добавить препятствие';
-
-  @override
   String get initialPlantLayout => 'Начальная расстановка растений';
 
   @override
@@ -4000,9 +3626,6 @@ class AppLocalizationsRu extends AppLocalizations {
   String get rainIntervalSeconds => 'Интервал падения (сек)';
 
   @override
-  String get startingPlantFood => 'Начальная подкормка';
-
-  @override
   String get bowlingFoulLine => 'Линия запрета посадки';
 
   @override
@@ -4057,10 +3680,6 @@ class AppLocalizationsRu extends AppLocalizations {
   String get dinoWaveDuration => 'Время на поле (волны)';
 
   @override
-  String get eventHelpDinoType =>
-      'Какой динозавр появится на поле. У каждого вида своё поведение при помощи зомби.';
-
-  @override
   String get eventHelpDinoRow =>
       'Ряд появления динозавра (с 0). На картах глубокого моря доступен ряд 5.';
 
@@ -4075,10 +3694,6 @@ class AppLocalizationsRu extends AppLocalizations {
   String get unknownModuleHelpTitle => 'Неизвестный модуль';
 
   @override
-  String get unknownModuleHelpBody =>
-      'Модуль не зарегистрирован в интерпретаторе уровней.';
-
-  @override
   String get noEditorForModule => 'Редактор для этого модуля недоступен';
 
   @override
@@ -4087,9 +3702,6 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get invalidEventTitle => 'Недействительное событие';
-
-  @override
-  String get invalidEventBody => 'Объект события не удалось разобрать.';
 
   @override
   String get invalidReference => 'Недействительная ссылка';
@@ -4115,9 +3727,6 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get waveStartMessage => 'Сообщение при старте волны';
-
-  @override
-  String get zombieTypeZombieName => 'Тип зомби (ZombieName)';
 
   @override
   String get optional => 'Необязательно';
@@ -4200,15 +3809,6 @@ class AppLocalizationsRu extends AppLocalizations {
   @override
   String get fishPropertiesEntryHelp =>
       'Нажмите на ячейку, затем добавьте рыб. Нажмите + для встроенной рыбы. Нажмите на карточку рыбы для копирования, удаления, переключения варианта или создания кастомной. Кастомные рыбы отображают синий значок C. Рыбы вне газона показываются с предупреждением.';
-
-  @override
-  String get fishAddCustom => 'Добавить пользовательскую рыбу';
-
-  @override
-  String get addFishLabel => 'Добавить рыбу';
-
-  @override
-  String get addBuiltInFishLabel => 'Добавить встроенную рыбу';
 
   @override
   String get makeFishAsCustom => 'Сделать пользовательской';
@@ -4485,6 +4085,60 @@ class AppLocalizationsRu extends AppLocalizations {
       'Выберите клетку и нажмите «+», чтобы разместить тыквенный домик (5×9 или 6×10 в зависимости от этапа).';
 
   @override
+  String get eventHelpZombieTentBody =>
+      'Размещает палатки зомби на выбранных клетках. У каждой палатки своё здоровье; она периодически призывает зомби из взвешенного пула (ZombieTypesToSpawn). Для праздничной палатки используйте TentType=zombie_festival_tent, для обычной — zombie_tent.';
+
+  @override
+  String get eventHelpZombieTentUsage =>
+      'Выберите клетку и нажмите «+», затем настройте тип палатки, здоровье, интервал производства и добавьте зомби с весом и уровнем. В JSON уровня Column и Row нумеруются с 1.';
+
+  @override
+  String get eventHelpZombieTentFieldsTitle => 'Описание параметров';
+
+  @override
+  String get eventHelpZombieTentFields =>
+      'TentType: zombie_tent или zombie_festival_tent.\nHitpoints: прочность палатки.\nProductionInterval: секунды между попытками призыва.\nZombieTypesToSpawn: ZombieTypeName, Weight (относительный шанс), Level (0 = уровень лужайки по умолчанию).';
+
+  @override
+  String get eventZombieTentSpawn => 'Событие: появление палаток зомби';
+
+  @override
+  String get zombieTentSectionTitle => 'Палатки на выбранной клетке';
+
+  @override
+  String get zombieTentTypeLabel => 'Тип палатки (TentType)';
+
+  @override
+  String get zombieTentTypeNormal => 'Обычная палатка';
+
+  @override
+  String get zombieTentTypeFestival => 'Праздничная палатка';
+
+  @override
+  String get zombieTentHitpoints => 'Прочность';
+
+  @override
+  String get zombieTentProductionInterval => 'Интервал производства (с)';
+
+  @override
+  String get zombieTentZombiesSection => 'Зомби для призыва';
+
+  @override
+  String get zombieTentWeight => 'Вес';
+
+  @override
+  String get zombieTentAddZombie => 'Добавить зомби';
+
+  @override
+  String get zombieTentAddTent => 'Добавить палатку';
+
+  @override
+  String get zombieTentDeleteTitle => 'Удалить палатку';
+
+  @override
+  String get zombieTentDeleteConfirm => 'Удалить эту палатку?';
+
+  @override
   String get eventHelpFairyFogBody =>
       'Создаёт туман, дающий зомби щиты. Только ветер развеивает.';
 
@@ -4590,9 +4244,6 @@ class AppLocalizationsRu extends AppLocalizations {
   String get schoolBusAddZombie => 'Добавить зомби';
 
   @override
-  String get schoolBusRowsHint => 'Ряды с 1: ряд 1 = сверху, 5/6 = снизу.';
-
-  @override
   String get eventHelpThunderWaveBody =>
       'Молнии случайно бьют во время волны. Каждая молния может быть положительной (полезной) или отрицательной (вредной для растений).';
 
@@ -4686,25 +4337,6 @@ class AppLocalizationsRu extends AppLocalizations {
       'Это последняя бочка. У события не останется бочек. Продолжить?';
 
   @override
-  String get eventHelpGraveSpawnWait =>
-      'Задержка от начала волны до появления зомби.';
-
-  @override
-  String get eventHelpStormBody =>
-      'Песчаная буря или метель телепортирует зомби вперёд.';
-
-  @override
-  String get eventHelpStormColumns =>
-      'Колонка 0 — слева, 9 — справа. Начало < конец.';
-
-  @override
-  String get eventHelpStormLevels =>
-      'Уровень и ряд зомби внутри бури нельзя задавать независимо. Ручное изменение уровня зомби не действует: уровень по умолчанию определяется последовательностью уровней газона.';
-
-  @override
-  String get eventHelpGroundSpawnBody => 'Настройка зомби этой волны.';
-
-  @override
   String get moduleHelpDeathHoleBody =>
       'После того как растение выкопано или съедено, на его клетке на некоторое время остаётся непригодная для посадки яма.';
 
@@ -4730,18 +4362,6 @@ class AppLocalizationsRu extends AppLocalizations {
   String get seedRainAddContentTitle => 'Добавить содержимое дождя из семян';
 
   @override
-  String get seedRainAddPlantDescription =>
-      'Выберите одну или несколько карточек растений, которые будут падать с неба.';
-
-  @override
-  String get seedRainAddZombieDescription =>
-      'Выберите одну или несколько карточек зомби, которые будут падать с неба.';
-
-  @override
-  String get seedRainAddPlantFoodDescription =>
-      'Добавьте подкормку как возможный выпадающий предмет.';
-
-  @override
   String get moduleHelpRailcartBody =>
       'Здесь можно размещать вагонетки и рельсы и выбирать вид вагонетки. Нажмите клетку один раз для размещения и ещё раз для удаления.';
 
@@ -4763,12 +4383,6 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get initialTidePosition => 'Начальная позиция прилива';
-
-  @override
-  String get moduleHelpManholeBody => 'Определяет подземные трубы Steam Age.';
-
-  @override
-  String get moduleHelpManholeEdit => 'Режим начало/конец, затем тап по сетке.';
 
   @override
   String get moduleHelpWeatherBody =>
@@ -4883,9 +4497,6 @@ class AppLocalizationsRu extends AppLocalizations {
   String get attractionConfig => 'Настройка притяжения';
 
   @override
-  String get placePlant => 'Разместить растение';
-
-  @override
   String get plantList => 'Список растений (строки сначала)';
 
   @override
@@ -4917,9 +4528,6 @@ class AppLocalizationsRu extends AppLocalizations {
   String get manholePipeline => 'Люковая труба';
 
   @override
-  String get manholePipelines => 'Люковые трубы';
-
-  @override
   String get manholePipelineHelpTitle => 'Люковый трубопровод';
 
   @override
@@ -4929,9 +4537,6 @@ class AppLocalizationsRu extends AppLocalizations {
   @override
   String get manholePipelineHelpEditing =>
       'Переключайте режим начала/конца, затем нажмите на сетку для размещения.';
-
-  @override
-  String get smokePollutionModuleTitle => 'Модуль дымовых люков';
 
   @override
   String get smokePollutionModuleHelpTitle => 'Справка: дымовые люки';
@@ -4968,25 +4573,16 @@ class AppLocalizationsRu extends AppLocalizations {
   String get zombiePotion => 'Зелье зомби';
 
   @override
-  String get zombiePotionSettings => 'Настройки зелий зомби';
-
-  @override
   String get zombiePotionHelpTitle => 'Справка по модулю зелий зомби';
 
   @override
   String get eventTimeRift => 'Событие временного разлома';
 
   @override
-  String get deathHole => 'Дыра смерти';
-
-  @override
   String get seedRain => 'Семенной дождь';
 
   @override
   String get eventFrostWind => 'Событие ледяного ветра';
-
-  @override
-  String get lastStandSettings => 'Настройки последнего рубежа';
 
   @override
   String get lastStandInitialResourceSettings => 'Начальные ресурсы';
@@ -5015,16 +4611,10 @@ class AppLocalizationsRu extends AppLocalizations {
   }
 
   @override
-  String get conveyorManualPacketSpawning => 'Ручное создание карточек';
-
-  @override
   String get cowboyMinigameSettings => 'Настройки мини-игры «Неудачный загон»';
 
   @override
   String get cowboyMinigameBeginString => 'Текст подсказки';
-
-  @override
-  String get cowboyMinigameBeginStringHidden => 'Не показывать текст';
 
   @override
   String get cowboyMinigameBeginStringDefault => 'Стандартный текст';
@@ -5181,10 +4771,6 @@ class AppLocalizationsRu extends AppLocalizations {
       'Настроить обучение мини-игры «Сам за себя»';
 
   @override
-  String get singleHandedTutorialSettings =>
-      'Настройки обучения мини-игры «Сам за себя»';
-
-  @override
   String get singleHandedTutorialWaveForStartRocket => 'Волна появления ракет';
 
   @override
@@ -5306,9 +4892,6 @@ class AppLocalizationsRu extends AppLocalizations {
   String get customGridItemReplaceAction => 'Заменить';
 
   @override
-  String get roofFlowerPot => 'Цветочный горшок на крыше';
-
-  @override
   String get roofFlowerPotColumns => 'Диапазон цветочных горшков';
 
   @override
@@ -5331,9 +4914,6 @@ class AppLocalizationsRu extends AppLocalizations {
   String get bowlingMinigame => 'Мини-игра в боулинг';
 
   @override
-  String get zombieMoveFast => 'Быстрое движение зомби';
-
-  @override
   String get eventPotionDrop => 'Событие падения зелья';
 
   @override
@@ -5343,19 +4923,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get eventPumpkinHouseSpawn => 'Событие: тыквенные домики';
 
   @override
-  String get eventSchoolBusSpawn => 'Событие: фургон с мороженым';
-
-  @override
-  String get warMist => 'Военный туман';
-
-  @override
-  String get eventDino => 'Событие динозавра';
-
-  @override
   String get duration => 'Длительность';
-
-  @override
-  String get sunDropper => 'Солнечный дождь';
 
   @override
   String get eventFairyWind => 'Событие сказочного ветра';
@@ -5388,9 +4956,6 @@ class AppLocalizationsRu extends AppLocalizations {
   String get zombieSpawnWait => 'Ожидание спавна зомби';
 
   @override
-  String get selectCustomZombie => 'Выбрать кастомного зомби';
-
-  @override
   String get change => 'Изменить';
 
   @override
@@ -5401,9 +4966,6 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get applyBatchLevel => 'Применить групповой уровень?';
-
-  @override
-  String get conveyorBelt => 'Конвейер';
 
   @override
   String get starChallenges => 'Звёздные испытания';
@@ -5425,9 +4987,6 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get addGridItem => 'Разместить препятствие';
-
-  @override
-  String get plantLevels => 'Уровни растений';
 
   @override
   String get scope => 'Область';
@@ -5453,9 +5012,6 @@ class AppLocalizationsRu extends AppLocalizations {
   String get autoCount => 'Автосчёт';
 
   @override
-  String get overrideStartingPlantfood => 'Переопределить начальную еду';
-
-  @override
   String get startingPlantfoodOverride => 'Переопределение начальной еды';
 
   @override
@@ -5463,9 +5019,6 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get iconImage => 'Изображение иконки';
-
-  @override
-  String get overrideMaxSun => 'Переопределить максимум солнца';
 
   @override
   String get maxSunOverride => 'Переопределение макс. солнца';
@@ -5490,9 +5043,6 @@ class AppLocalizationsRu extends AppLocalizations {
   @override
   String get moonExpertHelpOverview =>
       'Задаёт единый уровень зомби для всего уровня и сбрасывает все растения на 1 уровень, перекрывая другие настройки уровней растений и зомби.';
-
-  @override
-  String get enterMoonExpertZombieLevelHint => 'Введите уровень зомби (0–10)';
 
   @override
   String get startingPlantfoodHelpTitle => 'Модуль начальной еды';
@@ -5528,9 +5078,6 @@ class AppLocalizationsRu extends AppLocalizations {
   String get initialZombieLayout => 'Начальная расстановка зомби';
 
   @override
-  String get placeZombie => 'Разместить зомби';
-
-  @override
   String get manualInput => 'Ручной ввод';
 
   @override
@@ -5540,16 +5087,10 @@ class AppLocalizationsRu extends AppLocalizations {
   String get points => 'Очки';
 
   @override
-  String get eventStorm => 'Событие бури';
-
-  @override
   String get row => 'Ряд';
 
   @override
   String get addType => 'Добавить тип';
-
-  @override
-  String get plantFunExperimental => 'Растение (Развлечение/Эксп.)';
 
   @override
   String get availableZombies => 'Доступные зомби';
@@ -5597,9 +5138,6 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get addTool => 'Добавить инструмент';
-
-  @override
-  String get increasedCost => 'Повышенная стоимость';
 
   @override
   String get powerTile => 'Силовая плитка';
@@ -5655,12 +5193,6 @@ class AppLocalizationsRu extends AppLocalizations {
   }
 
   @override
-  String get eventStandardSpawn => 'Событие: обычная волна';
-
-  @override
-  String get eventGroundSpawn => 'Событие: появление из-под земли';
-
-  @override
   String get eventEditorInDevelopment => 'Редактор событий в разработке';
 
   @override
@@ -5672,9 +5204,6 @@ class AppLocalizationsRu extends AppLocalizations {
   @override
   String get levelHasNoTideProperties =>
       'В уровне нет TideProperties. Событие может не работать.';
-
-  @override
-  String get changePosition => 'Изменить позицию';
 
   @override
   String get changePositionChangeAmount => 'Изменить позицию (ChangeAmount)';
@@ -5710,9 +5239,6 @@ class AppLocalizationsRu extends AppLocalizations {
   String get damagePerSecond => 'Урон в секунду';
 
   @override
-  String get pipe => 'Труба';
-
-  @override
   String get stageMismatch => 'Несовпадение этапа';
 
   @override
@@ -5727,12 +5253,6 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get plankRowsDeepSea => 'Ряды досок (0–5)';
-
-  @override
-  String get selectedRows => 'Выбранные ряды';
-
-  @override
-  String get indexLabel => 'Индекс';
 
   @override
   String get selectWeatherType => 'Выбрать тип погоды';
@@ -5759,19 +5279,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get potionTypeList => 'Список типов зелий';
 
   @override
-  String get initial => 'Начальное';
-
-  @override
   String get max => 'Макс';
-
-  @override
-  String get spawnTimerShort => 'Интервал появления';
-
-  @override
-  String get minSec => 'Мин (сек)';
-
-  @override
-  String get maxSec => 'Макс (сек)';
 
   @override
   String get ignoreGravestoneSubtitle =>
@@ -5779,16 +5287,6 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get thisPortalSpawns => 'Этот портал создаёт:';
-
-  @override
-  String startEndFormat(int sx, int sy, int ex, int ey) {
-    return 'Начало: ($sx, $sy)  Конец: ($ex, $ey)';
-  }
-
-  @override
-  String indexN(int n) {
-    return 'Индекс: $n';
-  }
 
   @override
   String get noItemsAddHint =>
@@ -5928,9 +5426,6 @@ class AppLocalizationsRu extends AppLocalizations {
   String get gravestonePool => 'Пул надгробий (GravestonePool)';
 
   @override
-  String get removePlants => 'Удалить растения';
-
-  @override
   String get current => 'Текущий';
 
   @override
@@ -5957,12 +5452,6 @@ class AppLocalizationsRu extends AppLocalizations {
   }
 
   @override
-  String get eventGraveSpawnSubtitle => 'Событие: вылезание из препятствий';
-
-  @override
-  String get eventStormSpawnSubtitle => 'Событие: появление бури';
-
-  @override
   String get eventHelpGraveSpawnBody =>
       'Событие призывает зомби из определённых препятствий, например из могил Тёмных Веков.';
 
@@ -5977,10 +5466,6 @@ class AppLocalizationsRu extends AppLocalizations {
   @override
   String get eventHelpStormColumnRange =>
       'Колонки 0–9. Левый край — 0, правый — 9. Начальная колонка меньше конечной.';
-
-  @override
-  String get eventHelpStormZombieLevels =>
-      'Уровень и ряд зомби внутри бури нельзя задавать независимо. Ручное изменение уровня зомби не действует: уровень по умолчанию определяется последовательностью уровней газона.';
 
   @override
   String get spawnParameters => 'Параметры появления';
@@ -6060,9 +5545,6 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get ztPerksAddTitle => 'Добавить баффы зомби';
-
-  @override
-  String get ztPerksTypeAlreadyAssigned => 'Бафф этого типа уже назначен.';
 
   @override
   String get eventHelpJitteredZtPerks =>
@@ -6233,13 +5715,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get zombossMechType => 'Тип зомбота';
 
   @override
-  String get unknownZombossMech => 'Неизвестный зомбот';
-
-  @override
   String get zombossMechSelection => 'Выбор зомбота';
-
-  @override
-  String get zombossMechBaseLabel => 'Базовый зомбот';
 
   @override
   String get zombossMechBaseHint =>
@@ -6247,9 +5723,6 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get zombossMechSelectBaseTitle => 'Выбор базового зомбота';
-
-  @override
-  String get zombossMechChangeBase => 'Сменить базовый зомбота';
 
   @override
   String get zombossMechUsedProperties => 'Используемые свойства';
@@ -6280,12 +5753,6 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get zombossBattleRemoveTunnelDefend => 'Удалить и тоннели';
-
-  @override
-  String get zombossBattleChangeBase => 'Сменить базового Зомбосса';
-
-  @override
-  String get zombossBattleBaseLabel => 'Базовый Зомбосс';
 
   @override
   String get zombossBattleBaseHint =>
@@ -6328,14 +5795,6 @@ class AppLocalizationsRu extends AppLocalizations {
       'Строка сетки, где появляется Зомбосс.';
 
   @override
-  String get zombossBattleStartStageIndexLabel =>
-      'Начальная фаза (ZombossStartStageIndex)';
-
-  @override
-  String get zombossBattleStartStageIndexHint =>
-      'С какой фазы босса начинается бой (0 — первая фаза).';
-
-  @override
   String get zombossBattleSkipPlantingLabel =>
       'Пропустить посадку (SkipPlanting)';
 
@@ -6372,14 +5831,6 @@ class AppLocalizationsRu extends AppLocalizations {
       'Требуемое количество соответствует числу растений в списке.';
 
   @override
-  String get protectItemsOverview =>
-      'Предметы в списке должны выжить; потеря — провал уровня.';
-
-  @override
-  String get protectItemsAutoCount =>
-      'Требуемое количество соответствует числу предметов в списке.';
-
-  @override
   String positionsCount(int count) {
     return 'Позиций: $count';
   }
@@ -6410,9 +5861,6 @@ class AppLocalizationsRu extends AppLocalizations {
   String get selectFromPresetHint => 'Выберите из списка условий';
 
   @override
-  String get spawnTimer => 'Таймер призыва';
-
-  @override
   String get potionTypes => 'Типы зелий';
 
   @override
@@ -6421,10 +5869,6 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get conveyorCardPool => 'Пул карт конвейера';
-
-  @override
-  String get toolCardsUseFixedLevel =>
-      'Инструментальные карты используют фиксированный уровень';
 
   @override
   String get maxLimits => 'Верхние пределы';
@@ -6471,16 +5915,6 @@ class AppLocalizationsRu extends AppLocalizations {
   String get zombiePool => 'Пул зомби';
 
   @override
-  String plantLevelsCount(int count) {
-    return 'Уровни растений: $count';
-  }
-
-  @override
-  String lvN(int n) {
-    return 'Ур. $n';
-  }
-
-  @override
   String get protectGridItems => 'Защищать объекты сетки';
 
   @override
@@ -6506,11 +5940,6 @@ class AppLocalizationsRu extends AppLocalizations {
       'Применяется к защите растений, семенному дождю и другим модулям.';
 
   @override
-  String mustProtectCountFormat(int count) {
-    return 'Нужно защитить: $count';
-  }
-
-  @override
   String get noWaveManagerPropsFound =>
       'Объект WaveManagerProperties не найден.';
 
@@ -6518,13 +5947,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get itemsSortedByRow => 'Предметы (по рядам)';
 
   @override
-  String get eventStormSpawn => 'Событие: штормовой спавн';
-
-  @override
   String get stormEvent => 'Штормовое событие';
-
-  @override
-  String get makeCustom => 'Сделать кастомным';
 
   @override
   String get zombieLevelsBody =>
@@ -6598,12 +6021,6 @@ class AppLocalizationsRu extends AppLocalizations {
     );
     return '$_temp0';
   }
-
-  @override
-  String get zombiesCarryingPlants => 'Зомби с пакетами семян';
-
-  @override
-  String get zombiesCarryingPlantFood => 'Зомби с подкормкой';
 
   @override
   String get description => 'Описание';
@@ -6704,23 +6121,52 @@ class AppLocalizationsRu extends AppLocalizations {
   String get levelLabel => 'Уровень: ';
 
   @override
+  String get fairyFogType => 'Уровень тумана (FogType)';
+
+  @override
+  String fairyFogLevel(int level) {
+    return 'Уровень $level';
+  }
+
+  @override
+  String get fairyFogMovingTime => 'Время перемещения (MovingTime; секунды)';
+
+  @override
+  String get fairyFogRangeX => 'Начальный столбец (mX; с 0)';
+
+  @override
+  String get fairyFogRangeY => 'Начальная строка (mY; с 0)';
+
+  @override
+  String get fairyFogRangeWidth => 'Ширина (mWidth; клетки)';
+
+  @override
+  String get fairyFogRangeHeight => 'Высота (mHeight; клетки)';
+
+  @override
+  String get fairyWindParameters => 'Параметры ветра';
+
+  @override
+  String get fairyWindDuration => 'Длительность (Duration; секунды)';
+
+  @override
+  String get modifyConveyorMissingModule =>
+      'В уровне нет модуля конвейера. Это событие может не сработать.';
+
+  @override
+  String get renaiWavePreviewEmpty => 'Нет событий волн (только каток/плитки)';
+
+  @override
+  String get decompressZlib => 'Распаковать ZLib';
+
+  @override
+  String get compressWithZlib => 'Сжать в ZLib';
+
+  @override
+  String get seedRainUnknownItem => 'Неизвестный предмет';
+
+  @override
   String get mistParameters => 'Параметры тумана';
-
-  @override
-  String get sunDropParameters => 'Параметры падения солнца';
-
-  @override
-  String get initialDropDelay =>
-      'Начальная задержка падения (InitialSunDropDelay; секунды)';
-
-  @override
-  String get baseCountdown => 'Базовый обратный отсчёт';
-
-  @override
-  String get maxCountdown => 'Макс. обратный отсчёт';
-
-  @override
-  String get countdownRange => 'Диапазон отсчёта';
 
   @override
   String get increasePerSun => 'Увеличение за солнце';
@@ -6758,10 +6204,6 @@ class AppLocalizationsRu extends AppLocalizations {
   String get selectGroup => 'Выбрать группу';
 
   @override
-  String get gridTapAddRemove =>
-      'Сетка (нажмите — добавить/изменить, долгое нажатие — удалить)';
-
-  @override
   String get sunBombHelpOverview => 'Обзор';
 
   @override
@@ -6793,9 +6235,6 @@ class AppLocalizationsRu extends AppLocalizations {
       'Одно значение на ряд (0–4 стандарт, 0–5 глубокое море). Размер массива подстраивается при открытии.';
 
   @override
-  String get bombPropertiesFuseLength => 'Длина';
-
-  @override
   String get damage => 'Урон';
 
   @override
@@ -6812,12 +6251,6 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get enterMaxSunHint => 'Введите макс. солнце (напр., 9900)';
-
-  @override
-  String get optionalLabelHint => 'Необязательная подпись';
-
-  @override
-  String get imageResourceIdHint => 'ID ресурса IMAGE_...';
 
   @override
   String get enterStartingPlantfoodHint =>
@@ -6856,9 +6289,6 @@ class AppLocalizationsRu extends AppLocalizations {
   @override
   String get seedBankAdvancedGameplayBody =>
       'В режиме предустановленного выбора Банк семян перед Конвейером заставляет растения с конвейера расходовать солнце, а Банк семян после Конвейера позволяет высаживать предустановленные растения бесплатно.';
-
-  @override
-  String get seedBankIZombie => 'Банк семян (Я, зомби)';
 
   @override
   String get basicRules => 'Основные правила';
@@ -6968,9 +6398,6 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get gridItemCategorySpawnableObjects => 'Появляющиеся препятствия';
-
-  @override
-  String get sunDropperConfigTitle => 'Настройка падения солнца';
 
   @override
   String get customLocalParams => 'Пользовательские локальные параметры';
@@ -7316,10 +6743,6 @@ class AppLocalizationsRu extends AppLocalizations {
       'Включает таймер отчаяния на финальной фазе Босса. Только добавление/удаление — значение таймера берётся из листа свойств Босса (напр. ZombossFinalStageTimeLimited у Цинь Шихуанди), а не из параметров модуля.';
 
   @override
-  String get finalStageTimeLimitedChallengeTitle =>
-      'Лимит времени финальной фазы';
-
-  @override
   String get finalStageTimeLimitedChallengeHelpTitle =>
       'Модуль лимита времени финальной фазы';
 
@@ -7374,9 +6797,6 @@ class AppLocalizationsRu extends AppLocalizations {
   @override
   String get moduleDesc_InitialGridItemGulliverTunnelProperties =>
       'Предустановленные тоннели Гулливера на газоне';
-
-  @override
-  String get witchModuleTitle => 'Тыквенная ведьма';
 
   @override
   String get witchModuleHelpTitle => 'Модуль тыквенной ведьмы';
@@ -7455,9 +6875,6 @@ class AppLocalizationsRu extends AppLocalizations {
       'Задаёт пользовательские модификаторы уровня (Погоня Пенни / Дорога Воспоминаний)';
 
   @override
-  String get riftThemeModuleTitle => 'Модификаторы уровня';
-
-  @override
   String get riftThemeHelpTitle => 'Модуль модификаторов уровня';
 
   @override
@@ -7483,29 +6900,10 @@ class AppLocalizationsRu extends AppLocalizations {
       'Модификаторы не выбраны. Нажмите кнопку ниже, чтобы выбрать модификаторы.';
 
   @override
-  String get riftThemeAddTheme => 'Добавить модификаторы';
-
-  @override
   String get riftThemeSelectThemes => 'Выбрать модификаторы';
 
   @override
-  String get riftThemeSelectTheme => 'Модификатор';
-
-  @override
-  String get riftThemeSearchPlaceholder => 'Поиск по названию или id';
-
-  @override
-  String get riftThemeAlreadyAdded => 'Уже добавлен';
-
-  @override
   String get riftThemeNoSearchResults => 'Модификаторы не найдены';
-
-  @override
-  String get riftThemeAllUsedTitle => 'Все модификаторы добавлены';
-
-  @override
-  String get riftThemeAllUsedMessage =>
-      'Все модификаторы уже в списке. Каждый можно добавить только один раз.';
 
   @override
   String get moduleTitle_ZombieRushModuleProperties =>
@@ -7588,6 +6986,94 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get pvz1CopycatsAddZombie => 'Добавить зомби в белый список';
+
+  @override
+  String get moduleTitle_PVZ1SeeingStarsModuleProperties => 'Увидеть звёзды';
+
+  @override
+  String get moduleDesc_PVZ1SeeingStarsModuleProperties =>
+      'Настройка целевых растений и цикла волн мини-игры «Увидеть звёзды»';
+
+  @override
+  String get pvz1SeeingStarsModuleTitle => 'Увидеть звёзды';
+
+  @override
+  String get pvz1SeeingStarsSectionParams => 'Параметры';
+
+  @override
+  String get pvz1SeeingStarsSectionMatchPlants =>
+      'Целевые растения (MatchPlants)';
+
+  @override
+  String get pvz1SeeingStarsHelpMatchPlants =>
+      'Выберите клетку на сетке и добавьте растение. Если в ней уже есть растение, новое заменит его. В уровне эти растения отображаются как полупрозрачные подсказки. Победа наступает, когда на всех целевых клетках посажены соответствующие растения. На целевых клетках можно сажать только соответствующее целевое растение и растения-лианы; другие растения на них посадить нельзя.';
+
+  @override
+  String get pvz1SeeingStarsFieldCycleIndexLabel => 'Волна цикла (CycleIndex)';
+
+  @override
+  String get pvz1SeeingStarsHelpCycleIndex =>
+      'Индекс первой волны, с которой возобновляется призыв после последней волны; отсчёт начинается с 0. Например, если в уровне 15 волн и указано 5, после 15-й волны начинается 6-я. Волны повторяются, пока узор не будет завершён.';
+
+  @override
+  String get pvz1SeeingStarsFieldSettlementDurationLabel =>
+      'Задержка засчёта (SettlementDuration)';
+
+  @override
+  String get pvz1SeeingStarsHelpSettlementDuration =>
+      'После завершения узора начинается задержка на указанное число секунд. По её окончании засчитывается победа, даже если на целевых клетках уже нет соответствующих растений. Задержка действует только при отсутствии модулей «Полная зачистка» и «Разгром Бронзы».';
+
+  @override
+  String get pvz1SeeingStarsHelpOverview =>
+      'Настраивает мини-игру Аллеи воспоминаний «Увидеть звёзды». Название происходит от уровня первой игры, где нужно было высадить карамболы в форме звезды. Следуйте подсказкам на газоне и посадите соответствующие растения в указанных клетках, чтобы победить. Тем временем заданные волны зомби повторяются и мешают расстановке растений.';
+
+  @override
+  String get pvz1SeeingStarsHelpFieldsTitle => 'Описание полей';
+
+  @override
+  String get pvz1SeeingStarsHelpWinCon =>
+      'Не используйте этот модуль вместе с «Полной зачисткой», «Разгромом Бронзы», «Таймером», «Лабиринтом зомби» и другими модулями со своими условиями завершения уровня. Они могут переопределить условие победы «Звёздного узора» или нарушить его работу.\nКроме того, «Звёздный узор» несовместим с генератором волн: их совместное использование вызывает вылет игры. Будьте осторожны.';
+
+  @override
+  String get pvz1SeeingStarsMatchPlantsEmpty =>
+      'Узор ещё не задан. Выберите любую клетку на сетке и добавьте растение.';
+
+  @override
+  String get seeingStarsWinConWarningTitle => 'Конфликт условий победы';
+
+  @override
+  String get seeingStarsWinConWarning =>
+      '«Увидеть звёзды» завершает уровень, когда узор собран. Не используйте его вместе с «Полной зачисткой», «Разгромом Бронзы», «Таймером», «Лабиринтом зомби» и другими модулями со своими условиями завершения уровня: они могут переопределить его условие победы или нарушить его работу.';
+
+  @override
+  String get seeingStarsCycleWaveLabel =>
+      'Волна цикла (CycleIndex, отсчёт с 0)';
+
+  @override
+  String get seeingStarsSettlementLabel =>
+      'Задержка засчёта (SettlementDuration, секунды)';
+
+  @override
+  String get pvz1SeeingStarsHelpTipsTitle => 'Дружеское напоминание';
+
+  @override
+  String get seeingStarsCompatibilityWarningTitle =>
+      'Предупреждение о совместимости модулей';
+
+  @override
+  String get seeingStarsCompatibilityWarning =>
+      '«Увидеть звёзды» несовместим с генератором волн и приведёт к сбою уровня. Используйте с осторожностью.';
+
+  @override
+  String get seeingStarsCycleWaveBadge => 'Цикл волн';
+
+  @override
+  String seeingStarsCycleWaveInfo(int wave) {
+    return 'После последней волны призыв зомби возобновляется с волны $wave. Волны повторяются, пока на всех целевых клетках не будут посажены соответствующие растения.';
+  }
+
+  @override
+  String get seeingStarsMatchPlants => 'Целевые растения';
 
   @override
   String get magicHatSpawnPreviewTitle => 'Шляпа — возможные растения';
@@ -7683,20 +7169,11 @@ class AppLocalizationsRu extends AppLocalizations {
       'Волна (0 = волна 1, 1 = волна 2, ...)';
 
   @override
-  String get appearanceLabel => 'Появление';
-
-  @override
-  String get airDropShipGroupLabel => 'Группа';
-
-  @override
   String get moduleTitle_RenaiModuleProperties => 'Ренессанс';
 
   @override
   String get moduleDesc_RenaiModuleProperties =>
       'Включает функционал колеса и плиток Ренессанса, позволяет настраивать статуи';
-
-  @override
-  String get renaiModuleTitle => 'Модуль Ренессанса';
 
   @override
   String get renaiModuleHelpTitle => 'Справка по модулю Ренессанса';
@@ -7736,9 +7213,6 @@ class AppLocalizationsRu extends AppLocalizations {
       'Включите ночь, чтобы добавить ночные статуи';
 
   @override
-  String get renaiModuleAddStatue => 'Добавить статую';
-
-  @override
   String get renaiModuleCarveWave => 'Волна оживления';
 
   @override
@@ -7757,17 +7231,11 @@ class AppLocalizationsRu extends AppLocalizations {
   String get renaiModulePreviewRevivingStatues => 'Воскрешаемые статуи:';
 
   @override
-  String get renaiModuleStatueCarve => 'Оживление статуи';
-
-  @override
   String get moduleTitle_DropShipProperties => 'Воздушный сброс';
 
   @override
   String get moduleDesc_DropShipProperties =>
       'Настройка волн сброса импов с воздуха';
-
-  @override
-  String get airDropShipModuleTitle => 'Воздушный сброс';
 
   @override
   String get airDropShipModuleHelpTitle => 'Справка по воздушному сбросу';
@@ -7785,9 +7253,6 @@ class AppLocalizationsRu extends AppLocalizations {
   @override
   String get airDropShipModuleHelpImpsBody =>
       'Индекс волны с 0. Доп. количество бесят — число дополнительных бесят поверх минимум одного.';
-
-  @override
-  String get airDropShipModuleAppearWaves => 'Волны появления';
 
   @override
   String get airDropShipModuleAppearances => 'Группы сброса';
@@ -7944,11 +7409,6 @@ class AppLocalizationsRu extends AppLocalizations {
   }
 
   @override
-  String glacierModuleEntryLabel(int index) {
-    return 'Запись $index';
-  }
-
-  @override
   String get glacierModuleNoEntries =>
       'Для этого столбца пока не настроено содержимое.';
 
@@ -7961,17 +7421,6 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get glacierModuleAddZombieContent => 'Добавить зомби';
-
-  @override
-  String get glacierModuleAddZombieDescription =>
-      'Выберите зомби, который может появиться после разрушения ледяной глыбы.';
-
-  @override
-  String get glacierModuleAddEmptyDescription =>
-      'Добавьте отдельно взвешенный результат, при котором ледяная глыба не выпускает зомби.';
-
-  @override
-  String get glacierModuleSelectZombie => 'Выбрать зомби';
 
   @override
   String get glacierModuleEmptyType =>
@@ -8000,9 +7449,6 @@ class AppLocalizationsRu extends AppLocalizations {
   @override
   String get moduleDesc_HeianWindModuleProperties =>
       'Настройка ветров, влияющих на зомби в волнах';
-
-  @override
-  String get heianWindModuleTitle => 'Ветер Хэйан';
 
   @override
   String get heianWindModuleHelpTitle => 'Справка по ветру Хэйан';
@@ -8167,18 +7613,6 @@ class AppLocalizationsRu extends AppLocalizations {
   String get tooltipJsonViewer => 'Просмотр/редактирование JSON';
 
   @override
-  String get tooltipAdd => 'Добавить';
-
-  @override
-  String get tooltipDecrease => 'Уменьшить';
-
-  @override
-  String get tooltipIncrease => 'Увеличить';
-
-  @override
-  String get bungeeWaveEventTitle => 'Событие сброса с парашютом';
-
-  @override
   String get bungeeWaveEventHelpTitle => 'Событие сброса с парашютом';
 
   @override
@@ -8219,9 +7653,6 @@ class AppLocalizationsRu extends AppLocalizations {
       'Солнце за зомби по уровням (Погоня Пенни); отключает солнечную лопату';
 
   @override
-  String get zombieSunDropTitle => 'Настройка солнца за зомби';
-
-  @override
   String get zombieSunDropHelpTitle => 'Солнце за зомби';
 
   @override
@@ -8252,9 +7683,6 @@ class AppLocalizationsRu extends AppLocalizations {
       'Настройте солнце для уровней 1–6. При уровне выше 6 используется значение 1-го уровня.';
 
   @override
-  String get zombieSunDropTier => 'Уровень';
-
-  @override
   String zombieSunDropTierLabel(int tier) {
     return 'Уровень $tier';
   }
@@ -8266,9 +7694,6 @@ class AppLocalizationsRu extends AppLocalizations {
   @override
   String get moduleDesc_PickupCollectableTutorialProperties =>
       'Зомби, роняющий монетку + текст диалога подбора';
-
-  @override
-  String get pickupCollectableTutorialTitle => 'Обучение с монеткой';
 
   @override
   String get pickupCollectableTutorialHelpTitle => 'Обучение с монеткой';
@@ -8387,16 +7812,14 @@ class AppLocalizationsRu extends AppLocalizations {
       'Обнаружено несколько одинаковых модулей босса. Выберите нужный экземпляр в списке модулей в настройках уровня.';
 
   @override
-  String get zombossMechStageActions => 'Действия';
-
-  @override
   String get zombossMechActions => 'Действия';
 
   @override
   String get zombossMechPropertiesLabel => 'Свойства';
 
   @override
-  String get zombossMechAliasLabel => 'Псевдоним';
+  String get zombossMechAliasLabel =>
+      'Псевдоним (только английские буквы; без пробелов)';
 
   @override
   String get zombossMechDeletePhase => 'Удалить фазу';
@@ -8464,6 +7887,9 @@ class AppLocalizationsRu extends AppLocalizations {
   String get zombossMechSelectAction => 'Выбрать действие';
 
   @override
+  String get zombossMechSummonJump => 'Прыжок при призыве';
+
+  @override
   String get zombossMechSelectRetreatAction => 'Выбрать отступление';
 
   @override
@@ -8495,9 +7921,6 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get zombossMechNoActionsFound => 'Действия не найдены';
-
-  @override
-  String get zombossMechCustomActionLabel => 'Своё (CurrentLevel)';
 
   @override
   String zombossCustomActionBaseAction(String action) {
@@ -8593,13 +8016,6 @@ class AppLocalizationsRu extends AppLocalizations {
       'Очистить неверное значение и восстановить значение по умолчанию';
 
   @override
-  String get zombossMechCatalogActionReadOnly =>
-      'Встроенные действия здесь не редактируются. Создайте своё действие, чтобы изменить списки зомби.';
-
-  @override
-  String get zombossMechRetreatDisabled => 'Отключено';
-
-  @override
   String get zombossMechOpenGlacierModule =>
       'Перейти к настройкам модуля ледяных глыб';
 
@@ -8661,16 +8077,10 @@ class AppLocalizationsRu extends AppLocalizations {
   String get zombossMechAddPhase => 'Добавить фазу';
 
   @override
-  String get zombossMechRemovePhase => 'Удалить фазу';
-
-  @override
   String get zombossMechHitPoints => 'Очки здоровья';
 
   @override
   String get continueAnyway => 'Всё равно продолжить';
-
-  @override
-  String get armrackModuleTitle => 'Оружейные стойки';
 
   @override
   String get armrackModuleHelpTitle => 'Модуль оружейных стоек';
@@ -8690,21 +8100,10 @@ class AppLocalizationsRu extends AppLocalizations {
       'Выберите тип стойки и нажмите на клетку (одна на клетку). ПКМ или долгое нажатие удаляет стойку с клетки.';
 
   @override
-  String get armrackModuleHelpWaveLimit => 'Ограничение по волнам';
-
-  @override
-  String get armrackModuleHelpWaveLimitBody =>
-      'Из-за ограничения игры в игре действуют только записи волны 1. Другие группы волн можно редактировать здесь и сохранять в файл уровня, но на временной шкале отображается только волна 1.';
-
-  @override
   String get armrackModuleTypePalette => 'Тип стойки';
 
   @override
   String get armrackModuleExpectationLabel => 'Оружейные стойки';
-
-  @override
-  String get armrackModuleIgnoredWaveOverridesWarning =>
-      'В уровне есть переопределения оружейных стоек для волн, отличных от 1. Они сохраняются, но не отображаются на временной шкале, так как игра применяет только волну 1.';
 
   @override
   String armrackModuleRequiredMessage(String moduleName) {
@@ -8715,9 +8114,6 @@ class AppLocalizationsRu extends AppLocalizations {
   String renaiGridItemModuleRequiredMessage(String moduleName) {
     return 'Для корректной работы колеса Ренессанса требуется модуль «$moduleName». Добавить его?';
   }
-
-  @override
-  String get energyGridModuleTitle => 'Плитки с подкормкой';
 
   @override
   String get energyGridModuleHelpTitle => 'Модуль плиток с подкормкой';
@@ -8737,22 +8133,11 @@ class AppLocalizationsRu extends AppLocalizations {
       'Нажмите пустую клетку, чтобы поставить плитку (одна на клетку). ПКМ или долгое нажатие удаляет плитку.';
 
   @override
-  String get energyGridModuleHelpWaveLimit => 'Ограничение по волнам';
-
-  @override
-  String get energyGridModuleHelpWaveLimitBody =>
-      'Из-за ограничения игры в игре действуют только записи волны 1. Другие группы волн можно редактировать здесь и сохранять в файл уровня, но на временной шкале отображается только волна 1.';
-
-  @override
   String get energyGridModuleTapToPlace =>
       'Нажмите пустую клетку, чтобы поставить плитку с подкормкой.';
 
   @override
   String get energyGridModuleExpectationLabel => 'Плитки с подкормкой';
-
-  @override
-  String get energyGridModuleIgnoredWaveOverridesWarning =>
-      'В уровне есть переопределения плиток с подкормкой для волн, отличных от 1. Они сохраняются, но не отображаются на временной шкале, так как игра применяет только волну 1.';
 
   @override
   String get energyGridModuleWarningMessage =>
@@ -8764,10 +8149,6 @@ class AppLocalizationsRu extends AppLocalizations {
   @override
   String get gridOverrideModuleWaveFieldOneBased =>
       'Волна модуля (1 = начальный пресет, 2+ = появление в волне генератора N−1)';
-
-  @override
-  String get gridOverrideModuleTimelineNote =>
-      'На временной шкале отображаются только записи волны 1.';
 
   @override
   String get gridOverrideModuleInitialWaveNote =>
@@ -8811,9 +8192,6 @@ class AppLocalizationsRu extends AppLocalizations {
   String waveGeneratorGridOverrideWavePreviewTitle(int wave, String label) {
     return 'Волна $wave — $label';
   }
-
-  @override
-  String get mechanismPlankSettings => 'Настройки объединённых вагонеток';
 
   @override
   String get mechanismPlankStartColumn => 'Стартовая колонка (mx)';
@@ -9003,9 +8381,6 @@ class AppLocalizationsRu extends AppLocalizations {
   String get waveGeneratorTabLabel => 'Линия генерации волн';
 
   @override
-  String get waveGeneratorModuleTitle => 'Генератор волн';
-
-  @override
   String get waveGeneratorModuleHelpTitle =>
       'Справка по модулю генератора волн';
 
@@ -9042,7 +8417,7 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get waveGeneratorModuleHelpIncompatBody =>
-      'Генератор волн нельзя использовать одновременно с менеджером волн, модулем «Ренессанс» или модулем «Тыквенная ведьма»: это приведёт к сбою уровня.';
+      'Генератор волн может быть несовместим с некоторыми модулями, например со «Звёздным узором», что приводит к сбою уровня. Используйте с осторожностью.\nГладиаторский ряд не работает с Генератором волн. Используйте Менеджер волн.';
 
   @override
   String get waveGeneratorModuleHelpRow => 'Номера рядов';
@@ -9075,6 +8450,44 @@ class AppLocalizationsRu extends AppLocalizations {
   @override
   String get waveGeneratorSpendingCompatibilityWarning =>
       'Начальные очки случайного призыва превышают прирост очков за волну; это может привести к сбою при загрузке уровня.';
+
+  @override
+  String get waveGeneratorRiseFromGround =>
+      'Появление из-под земли (IsRiseFromGroundMode)';
+
+  @override
+  String get waveGeneratorRiseFromGroundHint =>
+      'Зомби по умолчанию выходят из-под земли, а не входят справа';
+
+  @override
+  String get waveGeneratorWaveSpawnTime =>
+      'Задержка появления волны (WaveSpawnTime; время: секунды)';
+
+  @override
+  String get waveGeneratorWaveSpawnTimeHint =>
+      'Минимальное ожидание между появлением предыдущей и текущей волн. Действует только при включённом появлении из-под земли (IsRiseFromGroundMode). После завершения появления предыдущей волны начинается отсчёт задержки текущей волны. По его окончании появляются зомби текущей волны.\nЕсли включён WaitUntilAllZombiesDie, должны выполниться оба условия. Пространственно-временная чёрная дыра в конце предыдущей волны отменяет эту задержку: дальнейшее появление начинается примерно через 8 секунд после её срабатывания.';
+
+  @override
+  String get waveGeneratorZombieTargetValidTime =>
+      'Время на поле (TargetValidTime; время: секунды)';
+
+  @override
+  String get waveGeneratorZombieTargetValidTimeHint =>
+      'Время, в течение которого сфера остаётся на поле после появления. Если оставить пустым, она исчезнет через 1,5 секунды.';
+
+  @override
+  String get waveGeneratorZombieRiseGridX => 'Колонка появления (Rise_GridX)';
+
+  @override
+  String get waveGeneratorZombieRiseGridXHint =>
+      'Столбец, в котором зомби появляется из-под земли.';
+
+  @override
+  String get waveGeneratorZombieRiseGridY => 'Ряд появления (Rise_GridY)';
+
+  @override
+  String get waveGeneratorZombieRiseGridYHint =>
+      'Строка, в которой зомби появляется из-под земли. Имеет приоритет над параметром Row генератора волн.';
 
   @override
   String waveGeneratorWaveCountSummary(int count) {
@@ -9113,19 +8526,8 @@ class AppLocalizationsRu extends AppLocalizations {
   String get waveGeneratorEmptyWaveRow => 'Нет фиксированного призыва';
 
   @override
-  String get waveGeneratorRandomSpawnsEnabled => 'Случайный призыв включён';
-
-  @override
-  String get waveGeneratorRandomSpawnsDisabled =>
-      'Случайный призыв на этой волне отключён';
-
-  @override
   String get waveGeneratorRandomZombiesLabel =>
       'Текущий пул случайного призыва';
-
-  @override
-  String get waveGeneratorWavePoolDisabled =>
-      'На этой волне случайный призыв не выполняется, но изменения пула зомби вступают в силу с этой волны.';
 
   @override
   String get waveGeneratorDisableRandomSpawns =>
@@ -9138,10 +8540,6 @@ class AppLocalizationsRu extends AppLocalizations {
   @override
   String get waveGeneratorWaitUntilAllDie =>
       'Создать эту волну после уничтожения всех зомби предыдущей волны (WaitUntilAllZombiesDie)';
-
-  @override
-  String get waveGeneratorNoScriptedZombies =>
-      'На этой волне нет фиксированного призыва.';
 
   @override
   String get waveGeneratorSpawnPlantFood =>
@@ -9162,10 +8560,6 @@ class AppLocalizationsRu extends AppLocalizations {
   @override
   String get waveGeneratorWavePointIncrementHint =>
       'Изменяет прирост очков для последующих волн и действует только при заданных очках случайного призыва текущей волны (WavePointStart).';
-
-  @override
-  String get waveGeneratorWavePointIncrementInactiveHint =>
-      'Без очков случайного призыва текущей волны (WavePointStart) этот параметр не действует, но сохранённое значение не удаляется.';
 
   @override
   String get waveGeneratorWavePointOverride =>
@@ -9217,14 +8611,6 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get waveGeneratorWaveScreenSubtitle => 'Модуль генератора волн';
-
-  @override
-  String get waveGeneratorWaveScreenHelpTitle =>
-      'Справка по модулю генератора волн';
-
-  @override
-  String get waveGeneratorWaveScreenHelpBody =>
-      'Во время случайного призыва игра выбирает по весу одного из зомби, доступных за оставшиеся очки, вычитает его стоимость и снова фильтрует кандидатов, пока доступных зомби не останется. Неиспользованные очки не переносятся на следующую волну. Фиксированный спавн добавляется непосредственно в текущую волну и не расходует очки случайного спавна.';
 
   @override
   String get waveGeneratorRandomSpawnsSectionTitle => 'Случайный призыв';
@@ -9447,7 +8833,8 @@ class AppLocalizationsRu extends AppLocalizations {
   String get customStageSectionAdvanced => 'Дополнительно';
 
   @override
-  String get customStageAlias => 'Псевдоним лужайки';
+  String get customStageAlias =>
+      'Псевдоним лужайки (только английские буквы; без пробелов)';
 
   @override
   String get customStageNoResourceGroups => 'В списке нет групп ресурсов';
@@ -9520,9 +8907,6 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get importResourceGroupFromStage => 'Из лужайки';
-
-  @override
-  String get importResourceGroupSourceStage => 'Исходная лужайка';
 
   @override
   String get searchResourceGroup => 'Поиск группы ресурсов';
@@ -9608,9 +8992,6 @@ class AppLocalizationsRu extends AppLocalizations {
       'Встроенные в редактор пользовательские лужайки';
 
   @override
-  String get editCustomStage => 'Редактировать пользовательскую лужайку';
-
-  @override
   String get startupLoadingLocalization => 'локализаций';
 
   @override
@@ -9660,98 +9041,10 @@ class AppLocalizationsRu extends AppLocalizations {
       'Рекомендуется отредактировать выбранные уровни для исправления ошибок или выбрать другие файлы.';
 
   @override
-  String validationProgress(int current, int total) {
-    return 'Проверка $current / $total';
-  }
-
-  @override
-  String get invalid_rsb_version => 'Неверная версия RSB, должна быть 3 или 4';
-
-  @override
-  String get invalid_file_list_offset => 'Неверное смещение списка файлов';
-
-  @override
-  String get invalid_rsb_ver_3_resource_offset =>
-      'Неверное смещение ресурса для RSB версии 3';
-
-  @override
-  String get invalid_composite_name => 'Неверное имя композита';
-
-  @override
-  String get out_of_range_1 => 'Выход за пределы диапазона poolIndex';
-
-  @override
-  String get out_of_range_2 => 'Выход за пределы диапазона индекса пакета';
-
-  @override
-  String get invalid_rsg_name => 'Неверное имя RSG';
-
-  @override
-  String get invalid_packet_width => 'Неверная ширина пакета';
-
-  @override
-  String get invalid_packet_height => 'Неверная высота пакета';
-
-  @override
-  String get invalid_item_packet => 'Неверный пакет элемента';
-
-  @override
-  String get invalid_rsg_number => 'Неверный индекс RSG';
-
-  @override
-  String get invalid_part2_offset => 'Неверное смещение Part2';
-
-  @override
-  String get invalid_head_length => 'Неверная длина заголовка';
-
-  @override
-  String get rsb_is_corrupted => 'Этот RSB поврежден';
-
-  @override
-  String get invalid_ptx_info_eachlength => 'Информация PTX неверна';
-
-  @override
-  String get invalid_end_offset => 'Неверное конечное смещение';
-
-  @override
-  String get invalid_rsb_head =>
-      'Несоответствие магического числа RSB, должно начинаться с \"1BSR\"';
-
-  @override
-  String get invalid_ptx_info_each_length => 'Неверная информация PTX';
-
-  @override
-  String get category_out_of_length => 'Категория выходит за пределы длины';
-
-  @override
-  String get name_path_must_be_ascii =>
-      'Путь имени должен соответствовать ASCII';
-
-  @override
-  String get invalid_rsg_magic =>
-      'Неверное магическое число RSG, должно начинаться с \"PGSR\"';
-
-  @override
-  String get invalid_rsg_version => 'Неверная версия RSG, должна быть 3 или 4';
-
-  @override
-  String get invalid_rsg_compression_flag =>
-      'Неверный флаг сжатия RSG, поддерживаются только от 0 до 3';
-
-  @override
-  String get mismatch_zlib_magic =>
-      'Несоответствие магического числа PopCap Zlib, должно начинаться с 0xDEADFED4';
-
-  @override
   String get customPortalAdd => 'Новый пользовательский портал';
 
   @override
   String get customPortalSingleName => 'Пользовательский портал';
-
-  @override
-  String customPortalName(int index) {
-    return 'Пользовательский портал $index';
-  }
 
   @override
   String get customPortalCreateTitle => 'Создать пользовательский портал';
@@ -9778,11 +9071,6 @@ class AppLocalizationsRu extends AppLocalizations {
   @override
   String get customPortalUnusedSingleMessage =>
       'Пользовательский портал больше не используется. Удалить связанные с ним объекты данных из уровня?';
-
-  @override
-  String customPortalUnusedMessage(int index) {
-    return 'Пользовательский портал $index больше не используется. Удалить связанные с ним объекты данных из уровня?';
-  }
 
   @override
   String get customPortalAppearanceSection => 'Внешний вид портала';
@@ -9824,12 +9112,6 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get customPortalZombieTypes => 'Доступные типы зомби';
-
-  @override
-  String get customPortalMinimumQuantity => 'Минимальное количество';
-
-  @override
-  String get customPortalMaximumQuantity => 'Максимальное количество';
 
   @override
   String get customPortalSpawnInterval => 'Интервал появления зомби';
@@ -9947,7 +9229,22 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get lunarMineVeinHelpOverview =>
-      'В начале уровня размещает на поле жилы лунных энергетических кристаллов, часто встречающиеся на Лунной Базе. Изначально жилы не дают энергии. На заданной волне на прежнем месте вырастает лунный энергетический кристалл, после чего его можно добывать для получения энергии.';
+      'В начале уровня размещает на поле жилы лунных энергетических кристаллов, часто встречающиеся на Лунной Базе. Изначально жилы не дают энергии. На заданной волне на их месте вырастают кристаллы соответствующего типа, которые можно добывать с учётом их свойств. Выберите тип жилы и нажмите на клетку для размещения. Для удаления нажмите правой кнопкой мыши или используйте долгое нажатие на мобильном устройстве.';
+
+  @override
+  String get lunarMineVeinTypePalette => 'Тип кристаллической жилы';
+
+  @override
+  String get lunarMineVeinHelpHardened =>
+      'Защищена прочной внешней оболочкой из камня. Прежде чем начать обычную добычу, оболочку нужно разрушить атаками растений. Такая жила всегда создаёт кристалл с прочной оболочкой, имеющий 3000 единиц здоровья.';
+
+  @override
+  String get lunarMineVeinHelpFragile =>
+      'Добыча непрерывно расходует прочность кристалла, пока он не расколется. Также можно разместить особые хрупкие кристаллические жилы, содержащие космическую подкормку.';
+
+  @override
+  String get lunarMineVeinHelpRadiation =>
+      'Периодически испускает радиацию во все стороны. Облучённые растения случайным образом превращаются в другие растения, а зомби получают урон или мутируют в Космического Радиационного Гаргантюа. Космические Радиационные Гаргантюа обладают огромным запасом здоровья и при гибели также облучают ближайшие растения и зомби.';
 
   @override
   String get lunarMineVeinHelpWaveTitle => 'Нумерация волн';
@@ -9973,6 +9270,132 @@ class AppLocalizationsRu extends AppLocalizations {
   @override
   String get moonPlacementGestureHint =>
       'Нажмите пустую клетку, чтобы добавить объект. Щёлкните правой кнопкой или удерживайте занятую клетку, чтобы удалить его.';
+
+  @override
+  String get moduleTitle_GladiatorRowModuleProperties => 'Гладиаторский ряд';
+
+  @override
+  String get moduleDesc_GladiatorRowModuleProperties =>
+      'Временно изолирует пять клеток ряда; исход поединка определяет награду или наказание';
+
+  @override
+  String get gladiatorSettings =>
+      'Общие настройки поединков, наград и наказаний';
+
+  @override
+  String get gladiatorArenaDuration =>
+      'Длительность поединка (ArenaDuration, секунды)';
+
+  @override
+  String get gladiatorRewardCount =>
+      'Награда подкормкой (PlantWinPlantfoodCount)';
+
+  @override
+  String get gladiatorPunishmentCount =>
+      'Число штрафных клеток с зомби (ZombieWinPunishmentCageCount)';
+
+  @override
+  String get gladiatorPunishmentDuration =>
+      'Длительность штрафного десанта (ZombieWinPunishmentDuration, секунды)';
+
+  @override
+  String get gladiatorPunishmentLevel =>
+      'Уровень зомби наказания (ZombieWinPunishmentZombieLevel)';
+
+  @override
+  String get gladiatorEncounters => 'Расписание поединков (Encounters)';
+
+  @override
+  String get gladiatorWave => 'Волна запуска (Wave, отсчёт с 0)';
+
+  @override
+  String get gladiatorRow => 'Ряд (Row, отсчёт с 0)';
+
+  @override
+  String get gladiatorWarningDuration =>
+      'Предупреждение перед появлением Зомбосса (WarningDuration, секунды)';
+
+  @override
+  String get gladiatorFirstCageDelay =>
+      'Задержка сброса первой клетки (FirstCageDelay, секунды)';
+
+  @override
+  String get gladiatorPreviewTitle => 'Предпросмотр области поединка';
+
+  @override
+  String get gladiatorPreviewLegend =>
+      'Зелёная клетка обозначает кубок, закреплённый в столбце 5; красные — остальные клетки арены. Значки зомби показывают позиции сброса клеток, а число на клетке — количество зомби. Нажмите на сетку, чтобы выбрать ряд.';
+
+  @override
+  String get gladiatorSpawns => 'Расписание высадки из клеток (Spawns)';
+
+  @override
+  String get gladiatorAddSpawn => 'Добавить высадку';
+
+  @override
+  String get gladiatorSpawnTime =>
+      'Задержка появления после начала поединка (Time, секунды)';
+
+  @override
+  String get gladiatorSpawnColumn => 'Столбец появления (GridX, отсчёт с 0)';
+
+  @override
+  String get gladiatorSpawnCount => 'Количество зомби (Count)';
+
+  @override
+  String get gladiatorSpawnInterval => 'Интервал появления (Interval, секунды)';
+
+  @override
+  String get gladiatorSpawnLevel => 'Уровень зомби (Level)';
+
+  @override
+  String get gladiatorPunishmentPool =>
+      'Пул зомби за поражение (ZombieWinPunishmentZombiePool)';
+
+  @override
+  String get gladiatorPunishmentHint =>
+      'После поражения штрафные клетки выбирают зомби из этого списка по весам. Чем больше вес, тем выше шанс выбора.';
+
+  @override
+  String get gladiatorAddPunishment => 'Добавить штрафного зомби';
+
+  @override
+  String get gladiatorWeight => 'Вес появления (Weight)';
+
+  @override
+  String get gladiatorCompatibilityWarningTitle =>
+      'Предупреждение о совместимости модулей';
+
+  @override
+  String get gladiatorWaveGeneratorCompatibilityWarning =>
+      'Гладиаторский ряд не работает с Генератором волн. Используйте Менеджер волн.';
+
+  @override
+  String get gladiatorUnderwaterMismatchWarning =>
+      'Текущая лужайка использует шестирядный облик Подводного мира. Гладиаторский ряд на ней не появится. Используйте лужайку с пятью рядами.';
+
+  @override
+  String get gladiatorLegacyModeWarning =>
+      'Режим поединка этого модуля (GameplayVersion) не установлен в 1. Возможно, используется устаревший режим вместо поединка с кубком, поэтому область гладиаторского ряда нельзя показать в предпросмотре.';
+
+  @override
+  String get gladiatorUseTrophyMode =>
+      'Переключиться на режим поединка с кубком';
+
+  @override
+  String get gladiatorHelpTipsTitle => 'Полезные советы';
+
+  @override
+  String get gladiatorHelpOverview =>
+      'Этот модуль настраивает механизм «Гладиаторский ряд», который запускается на заданных волнах и часто встречается в тайном мире «Римская слава». На указанной волне римский Зомбосс появляется в выбранном ряду и временно перекрывает пять соседних клеток. Растения и зомби внутри уничтожаются, а растения и зомби снаружи прекращают двигаться и действовать.\nВ центре арены поднимается кубок. Зомби прибывают в клетках, сбрасываемых справа. Защитите кубок до окончания отсчёта, чтобы победить. Победа приносит много подкормки; при поражении на лужайку сбрасываются клетки с большим количеством зомби. После поединка растения и зомби, оставшиеся внутри арены, уничтожаются.';
+
+  @override
+  String get gladiatorHelpUsage =>
+      'Длительность поединка, количество подкормки за победу и параметры сброса клеток при поражении сверху, а также список зомби для наказания и их веса снизу — общие настройки для всех поединков модуля. Нажмите «Добавить поединок», чтобы настроить отдельный поединок. При добавлении зомби его группы ресурсов автоматически добавляются в модуль. Волна (Wave), ряд (Row) и столбец появления (GridX) нумеруются с 0: Wave 0 соответствует волне 1 на временной шкале, а Wave 4 — волне 5. По умолчанию редактор использует режим поединка с кубком (GameplayVersion 1). Значение 0 включает другой, устаревший режим поединка, который можно изучить в режиме ручного редактирования.';
+
+  @override
+  String get gladiatorHelpTips =>
+      'Во время поединка посадка растений не расходует солнце, но растения по-прежнему занимают часть запаса энергии системы жизнеобеспечения.\nМгновенно убивающие атаки Гаргантюа и подобных зомби не повреждают кубок.\nСнаряды растений, вылетающие за пределы арены, задерживаются ограждениями. Зомби, покинувшие арену, а также зомби, чьи отдельные способности нацелены за её пределы, замирают. После окончания отсчёта они освобождаются и продолжают наступление.\nГладиаторский ряд не появляется на шестирядных лужайках с обликом Подводного мира, таких как «20 000 лье под водой» или «Атлантида». Модуль «Гладиаторский ряд» также не работает с Генератором волн.';
 
   @override
   String get radiationMeteorHelpTitle => 'Исцеляющий метеорит';
@@ -10028,6 +9451,155 @@ class AppLocalizationsRu extends AppLocalizations {
       'Метеориты, падающие на этой волне:';
 
   @override
+  String get eventTitle_GravityGeneratorWaveActionProps =>
+      'Генератор гравитации';
+
+  @override
+  String get eventDesc_GravityGeneratorWaveActionProps =>
+      'Применяет разные состояния гравитации к растениям или клеткам';
+
+  @override
+  String get gravityLevel => 'Состояние гравитации (GravityLevel)';
+
+  @override
+  String get gravityAnti => 'Антигравитация (anti)';
+
+  @override
+  String get gravityHeavy => 'Гипергравитация (heavy)';
+
+  @override
+  String get gravityTargetType => 'Тип цели (TargetType)';
+
+  @override
+  String get gravityTargetPlant => 'Случайное растение (plant)';
+
+  @override
+  String get gravityTargetGrid => 'Заданная клетка (grid)';
+
+  @override
+  String get gravityRangeX => 'Смещение по горизонтали (Range.mX)';
+
+  @override
+  String get gravityRangeY => 'Смещение по вертикали (Range.mY)';
+
+  @override
+  String get gravityRangeWidth => 'Ширина области (Range.mWidth, клеток)';
+
+  @override
+  String get gravityRangeHeight => 'Высота области (Range.mHeight, клеток)';
+
+  @override
+  String get gravityTargetX => 'Столбец цели (TargetGrid.mX, с 0)';
+
+  @override
+  String get gravityTargetY => 'Строка цели (TargetGrid.mY, с 0)';
+
+  @override
+  String get gravityPreviewTitle => 'Предпросмотр области действия гравитации';
+
+  @override
+  String get gravityPlantRangeHint =>
+      'Случайное растение на лужайке служит опорной точкой. Эффект действует на растения и зомби в заданной области. Крест отмечает выбранное растение. Область начинается с учётом смещения и простирается вправо и вниз, включая начальную клетку. Отрицательные смещения сдвигают начало влево или вверх.';
+
+  @override
+  String get gravityGridRangeHint =>
+      'Ряды и столбцы нумеруются с 0. Нажмите на сетку, чтобы выбрать опорную клетку. Начало области определяется этой клеткой и смещениями по горизонтали и вертикали. Область простирается вправо и вниз; ширина и высота включают начальную клетку. При нулевых смещениях ширина 3 и высота 1 охватывают выбранную клетку и две клетки справа.';
+
+  @override
+  String get gravityCenterLegend => 'Крест: опорная точка';
+
+  @override
+  String get gravityRestrictions =>
+      'Растения и зомби, на которых эффект не действует (TargetRestriction)';
+
+  @override
+  String get gravityRestrictionHint =>
+      'Растения и зомби из этого списка не подвержены действию гравитационного поля. Пустой список не исключает дополнительные типы.';
+
+  @override
+  String get gravityAddPlantRestriction => 'Добавить невосприимчивые растения';
+
+  @override
+  String get gravityAddZombieRestriction => 'Добавить невосприимчивых зомби';
+
+  @override
+  String get gravityAdvancedSettings => 'Параметры действий и времени';
+
+  @override
+  String get gravityActivationDelay =>
+      'Задержка активации (ActivationDelay, сек.)';
+
+  @override
+  String get gravityDuration =>
+      'Длительность состояния гравитации (Duration, секунды)';
+
+  @override
+  String get gravityDeployDuration =>
+      'Время развёртывания устройства (DeployDuration, секунды)';
+
+  @override
+  String get gravityChargeDuration =>
+      'Зарядка перед применением гравитации (ChargeDuration, секунды)';
+
+  @override
+  String get gravityRetractDuration =>
+      'Время возврата и перезарядки устройства (RetractDuration, секунды)';
+
+  @override
+  String get gravityPlantExitDelay =>
+      'Время до исчезновения парящего растения (PlantExitDelay, секунды)';
+
+  @override
+  String get gravityZombieRiseDuration =>
+      'Время подъёма зомби (ZombieRiseDuration, секунды)';
+
+  @override
+  String get gravityZombieTranslateDuration =>
+      'Время перемещения зомби в воздухе (ZombieTranslateDuration, секунды)';
+
+  @override
+  String get gravityZombieFallDuration =>
+      'Время приземления зомби в конечной точке (ZombieFallDuration, секунды)';
+
+  @override
+  String get gravityZombieLiftHeight =>
+      'Высота подъёма зомби (ZombieLiftHeight)';
+
+  @override
+  String get gravityZombieForwardDistance =>
+      'Дальность движения зомби (ZombieForwardDistance, 64 пикселя = 1 клетка)';
+
+  @override
+  String get gravityHeavyPlantSinkDuration =>
+      'Время погружения растения (HeavyPlantSinkDuration, сек.)';
+
+  @override
+  String get gravityHelpParametersTitle => 'Описание параметров';
+
+  @override
+  String get gravityHelpParameters =>
+      'По умолчанию событие содержит все параметры для антигравитации и гипергравитации. В настройках действий отображаются только параметры выбранного режима. При переключении значения другого режима сохраняются.';
+
+  @override
+  String get gravityHelpTipsTitle => 'Полезный совет';
+
+  @override
+  String get gravitySequentialNotice =>
+      'События генератора гравитации не могут выполняться одновременно. Предыдущая последовательность антигравитации или гипергравитации должна завершиться до следующей. Разносите время запуска событий.';
+
+  @override
+  String get gravityHelpOverview =>
+      'Устройство на базе зомби, которое активируется как заранее заданное событие на указанной волне. Выдвинувшись из базы, оно захватывает растения или зомби в заданной области и выпускает гравитационный луч, изменяя их состояние гравитации и нарушая ритм атак растений и передвижение зомби.';
+
+  @override
+  String get gravityHelpAnti =>
+      'Выбранные растения медленно поднимаются и через некоторое время улетают с поля боя. Выбранные зомби поднимаются и перемещаются вперёд, получая в воздухе иммунитет к прямолинейным выстрелам.\nЕсли растение под действием антигравитации находится в радиусе атаки Гравидрева, Гравидрево атакует и снимает антигравитацию с растений в своём радиусе. Само Гравидрево невосприимчиво к генератору гравитации: его нельзя поднять в воздух или вдавить в землю.';
+
+  @override
+  String get gravityHelpHeavy =>
+      'Выбранные растения наполовину вдавливаются в землю. В этом состоянии они не могут атаковать, но зомби по-прежнему могут их есть. Выбранные зомби уверенно движутся вперёд и становятся невосприимчивыми к отбрасыванию.\nКосмическая Тарелка снимает гипергравитацию с зомби и переводит их в состояние парения. Она также снимает гипергравитацию с растений, возвращая их в нормальное состояние.';
+
+  @override
   String get rocketLandingHelpTitle => 'Приземление раке';
 
   @override
@@ -10052,13 +9624,6 @@ class AppLocalizationsRu extends AppLocalizations {
   String get rocketLandingSettings => 'Настройки ракеты';
 
   @override
-  String get rocketPoolCount => 'Количество ракет (Count)';
-
-  @override
-  String get rocketSpawnCount =>
-      'Общее количество создаваемых объектов (SpawnCount)';
-
-  @override
   String get rocketSpawnInterval =>
       'Интервал появления (SpawnInterval, секунды)';
 
@@ -10074,7 +9639,7 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get powerUpsHelpOverview =>
-      'Эта механика триумфально вернулась в Реалме 13-й годовщины и позволяет уничтожать зомби особыми способностями, пока действует усиление. После включения модуля можно задать точное число бесплатных применений каждой способности на уровне. Обратите внимание: Power Snow и Power Flame из международной версии отсутствуют в китайской версии.';
+      'Эта механика триумфально вернулась в Реалме 13-й годовщины и позволяет уничтожать зомби особыми способностями, пока действует усиление. После включения модуля можно задать точное число бесплатных применений каждой способности на уровне. Обратите внимание: Power Snow и Power Flame из международной версии отсутствуют в китайской версии. Усиления из режимов «Разбивание ваз» и «Beghouled» также нельзя добавить с помощью этого модуля.';
 
   @override
   String get powerUpsAddTitle => 'Добавить способность';
@@ -10109,4 +9674,344 @@ class AppLocalizationsRu extends AppLocalizations {
   @override
   String get powerPinchInfo =>
       'Сведите два пальца на зомби, словно ножницы, чтобы отрезать ему голову и быстро устранить угрозу.';
+
+  @override
+  String get moduleTitle_StatueMazeModuleProperties => 'Лабиринт зомби';
+
+  @override
+  String get moduleDesc_StatueMazeModuleProperties =>
+      'Найдите всех зомби, спрятанных в статуях, после вращения массива';
+
+  @override
+  String get moduleHelpStatueMazeOverviewBody =>
+      'Мини-игра эпохи Ренессанса. Она состоит из нескольких раундов. В каждом раунде на поле появляется массив статуй, в некоторых из которых спрятаны зомби-аристократы. В начале раунда игроку показывают расположение спрятанных зомби, затем весь массив несколько раз поворачивается, испытывая его память. После вращений игрок должен с помощью ограниченного запаса инструментов разбить все статуи со спрятанными зомби. Если попытки закончились, а найдены ещё не все зомби, уровень проигран. Когда попытки заканчиваются, игрок также может купить дополнительные за самоцветы.';
+
+  @override
+  String get moduleHelpStatueMazeTimingTitle => 'Параметры времени';
+
+  @override
+  String get moduleHelpStatueMazeTimingBody =>
+      'Время начального показа (DisplayTime): Время от показа статуй со спрятанными зомби до начала первого вращения.\nПолная длительность шага (WaitDuration): Всё время от начала текущего вращения до начала следующего. Последний шаг вращения в каждом раунде также длится всё указанное время; только затем игрок получает возможность действовать.\nДлительность вращения (RotateTime): Время воспроизведения текущей анимации поворота на 90°.\nТаким образом, фактическая пауза между вращениями равна полной длительности шага минус длительность вращения. Если вращение длится дольше шага, следующее вращение начнётся до завершения предыдущего и сбросит параметры движения статуй. Это может привести к неправильным траекториям или сбоям анимации.\nПереход с чёрным экраном между раундами имеет фиксированную длительность, которую нельзя изменить в настройках уровня.';
+
+  @override
+  String get statueMazeDisplayTime =>
+      'Время начального показа (DisplayTime; секунды)';
+
+  @override
+  String get statueMazeTargetNum => 'Количество зомби (TargetNum)';
+
+  @override
+  String get statueMazeBonusLife => 'Дополнительные попытки (BonusLife)';
+
+  @override
+  String get statueMazeWaitDuration =>
+      'Полная длительность шага (WaitDuration; секунды)';
+
+  @override
+  String get statueMazeRotateTime =>
+      'Длительность вращения (RotateTime; секунды)';
+
+  @override
+  String get statueMazeAddSet => 'Добавить раунд';
+
+  @override
+  String get statueMazeSets => 'Раунды вращения';
+
+  @override
+  String get statueMazeRotations => 'Шаги вращения';
+
+  @override
+  String get statueMazeGridSize => 'Размер массива';
+
+  @override
+  String get statueMazeNoRotations => 'Шаги вращения ещё не добавлены';
+
+  @override
+  String get moduleHelpStatueMazeRotationsBody =>
+      'В каждом раунде можно добавить несколько шагов вращения. Каждый шаг поворачивает весь массив на 90°. «C» означает вращение по часовой стрелке, «AC» — против часовой стрелки. Нажмите кнопку воспроизведения под сеткой, чтобы просмотреть все шаги вращения текущего раунда.';
+
+  @override
+  String get statueMazeRotationsHint =>
+      'Нажмите стрелку, чтобы сменить направление вращения. Нажмите карточку, чтобы изменить параметры этого шага. Удерживайте карточку, чтобы удалить шаг.';
+
+  @override
+  String get statueMazeRemoveRotationConfirm => 'Удалить этот шаг вращения?';
+
+  @override
+  String get camelGenerationParameters => 'Параметры появления';
+
+  @override
+  String get camelSpawnDistance => 'Расстояние появления';
+
+  @override
+  String get camelSpawnPreview => 'Предпросмотр расстояний появления';
+
+  @override
+  String get camelSpawnCoordinatesHint =>
+      'Горизонтальные координаты отсчитываются от левой границы первого столбца: 0, по 64 единицы на клетку. Цветные линии показывают положения параметров появления. Дополнительное смещение назад применяется, только если место появления уже занято зомби.';
+
+  @override
+  String get camelCompatibilityWarning =>
+      'Этот модуль подходит только для уровней со специальными зомби-верблюдами игры «Память мумии» и банком семян в режиме «Пресет». Появление других зомби или режим выбора семян приведут к вылету игры.';
+
+  @override
+  String get camelHelpSpawningTitle => 'Появление зомби';
+
+  @override
+  String get camelHelpTutorialTitle => 'Обучающий диалог';
+
+  @override
+  String get camelHelpTipsTitle => 'Полезный совет';
+
+  @override
+  String get moduleHelpCamelTutorialBody =>
+      'Если включить «Показывать обучающий диалог», перед началом уровня Дейв и Пенни объяснят, как победить, собирая пары. Всегда используется диалог первого прохождения Древнего Египта — дня 7.';
+
+  @override
+  String get moduleHelpCamelTipsBody =>
+      'Этот модуль подходит только для уровней со специальными зомби-верблюдами игры «Память мумии» и банком семян в режиме «Пресет». Появление других зомби или режим выбора семян приведут к вылету игры.\nРастения могут взаимодействовать с этими зомби-верблюдами как обычно, но при гипнозе, гибели и некоторых других воздействиях возможны ошибки анимации.';
+
+  @override
+  String get conflictDesc_CamelMinigameChooser =>
+      '«Память мумии» конфликтует с режимом выбора семян и приводит к вылету уровня. Переключите банк семян в режим «Пресет».';
+
+  @override
+  String get moduleTitle_CamelMinigameProperties => 'Память мумии';
+
+  @override
+  String get moduleDesc_CamelMinigameProperties =>
+      'Настройка области появления и параметров зомби-верблюдов в мини-игре «Память мумии»';
+
+  @override
+  String get moduleHelpCamelOverviewBody =>
+      'Мини-игра, доступная только в Древнем Египте. Специальные зомби-верблюды игры «Память мумии» появляются из-под земли. Нажмите на зомби, чтобы перевернуть его табличку и открыть символ, а затем найдите пару. При совпадении двух символов оба зомби сразу погибают. Если символы различаются, таблички переворачиваются обратно, а зомби продолжают движение. Если остаётся только один зомби или два зомби с разными символами, они погибают сразу после переворота своих табличек.';
+
+  @override
+  String get moduleHelpCamelSpawningBody =>
+      'С этим модулем зомби из стандартных событий появления, включая «Обычная волна» и «Волна с рыбами», выходят прямо из-под земли. Область появления задаётся параметрами. Горизонтальная координата 0 соответствует левой границе первого столбца; ширина клетки — 64 единицы. Этот способ появления не влияет на зомби, создаваемых другими событиями и модулями, такими как «Песчаная буря», «Воздушный сброс» и «Появление могил».';
+
+  @override
+  String get camelAdditionalXBuffer =>
+      'Дополнительное смещение назад при занятом месте появления (AdditionalXBufferBetweenChains)';
+
+  @override
+  String get camelRiseStagger =>
+      'Интервал выхода соседних зомби-верблюдов одной группы (CamelSegmentRiseStagger; время: секунды)';
+
+  @override
+  String get camelCardMatchTime =>
+      'Время реакции на совпадение (CardMatchTime; время: секунды)';
+
+  @override
+  String get camelCardMatchingTime =>
+      'Время переворота таблички (CardMatchingTime; время: секунды)';
+
+  @override
+  String get camelCardNoMatchTime =>
+      'Время ожидания после несовпадения символов или переворота одной таблички (CardNoMatchTime; время: секунды)';
+
+  @override
+  String get camelCardTypesUsed => 'Виды символов (CardTypesUsed)';
+
+  @override
+  String get camelTutorialRiseDelay =>
+      'Время выхода из-под земли (InitialTutorialZombieRiseDelay; время: секунды)';
+
+  @override
+  String get camelMaxSpawnX => 'Максимальное расстояние появления (MaxSpawnX)';
+
+  @override
+  String get camelMinSpawnXEnd =>
+      'Конечная позиция максимального расстояния появления (MinSpawnXEnd)';
+
+  @override
+  String get camelMinSpawnXStart =>
+      'Начальная позиция минимального расстояния появления (MinSpawnXStart)';
+
+  @override
+  String get camelShowTutorial => 'Показывать обучающий диалог (ShowTutorial)';
+
+  @override
+  String get moduleTitle_OakTrainProperties => 'Стрельбище Пня Лучника';
+
+  @override
+  String get moduleDesc_OakTrainProperties =>
+      'Управляйте Пнём Лучником, поражайте цели стрелами и набирайте очки';
+
+  @override
+  String get moduleHelpOakTrainOverviewBody =>
+      'Мини-игра Тёмных веков. В первом столбце третьей строки заранее размещается Пень Лучник. Управляйте им и используйте три вида стрел, чтобы поражать цели в голову и победить. Если здоровье Пня Лучника закончится или зомби доберётся до дома, игра будет проиграна.';
+
+  @override
+  String get moduleHelpOakTrainScoresBody =>
+      'За победу над разными видами зомби начисляется разное количество очков. При завершении уровня они переводятся в монеты; в режиме творческого двора подбор этих монет не действует. Эти очки считаются отдельно от очков за убийства в модуле подсчёта очков и не учитываются в испытаниях на набор очков.';
+
+  @override
+  String get moduleHelpOakTrainArrowsBody =>
+      'Пень Лучник стреляет тремя видами стрел: обычные поражают одну цель, усиленные наносят двойной урон в небольшой области, а рассеивающиеся выпускаются веером из семи отдельных стрел. Когда обычные стрелы заканчиваются, через 10 секунд автоматически загружаются 12 новых. Другие стрелы можно получить, стреляя по цветным сферам на поле. Рассеивающиеся стрелы также можно купить за алмазы во время уровня.';
+
+  @override
+  String get oakTrainTotalLife => 'Общее HP (TotalLife)';
+
+  @override
+  String get oakTrainArrowScore => 'Очки базовой атаки (ArrowScore)';
+
+  @override
+  String get oakTrainWizardScore => 'Очки за волшебника (WizardScore)';
+
+  @override
+  String get oakTrainArchmageScore => 'Очки за архимага (ArchmageScore)';
+
+  @override
+  String get oakTrainBossScore => 'Очки за босса-Гаргантюа (BossScore)';
+
+  @override
+  String get oakTrainHealNum => 'Здоровье от зелья исцеления (HealNum)';
+
+  @override
+  String get oakTrainArrowPowerNum =>
+      'Усиленные стрелы из синей сферы (ArrowPowerNum)';
+
+  @override
+  String get oakTrainArrowMultipleNum =>
+      'Рассеивающиеся стрелы из жёлтой сферы (ArrowMultipleNum)';
+
+  @override
+  String get oakTrainInitArrowsNum => 'Начальное количество стрел';
+
+  @override
+  String get oakTrainInitArrowNormal => 'Обычные стрелы';
+
+  @override
+  String get oakTrainInitArrowPower => 'Усиленные стрелы';
+
+  @override
+  String get oakTrainInitArrowSplit => 'Рассеивающиеся стрелы';
+
+  @override
+  String get moduleTitle_OakTrainIntroProperties =>
+      'Обучение «Стрельба Пня Лучника»';
+
+  @override
+  String get moduleDesc_OakTrainIntroProperties =>
+      'Показывает основы мини-игры «Стрельба Пня Лучника» перед началом уровня';
+
+  @override
+  String get moduleTitle_GoldRoadProperties => 'Золотая дорога';
+
+  @override
+  String get moduleDesc_GoldRoadProperties =>
+      'Мини-игра из Затерянного города, где первая и последняя линии лужайки заблокированы для посадки';
+
+  @override
+  String get goldRoadNonLostCityLawnWarningTitle =>
+      'Особенности внешнего вида лужайки';
+
+  @override
+  String get goldRoadNonLostCityLawnWarning =>
+      '«Золотая дорога» — модуль мини-игры из Затерянного города, поэтому на её участках без газона изображён узор солнца, характерный для этой лужайки. При использовании с другим оформлением лужайки это может повлиять на общий вид уровня.';
+
+  @override
+  String get goldRoadDeepseaLawnWarningTitle =>
+      'Особенности совместимости с лужайкой';
+
+  @override
+  String get goldRoadDeepseaLawnWarning =>
+      '«Золотая дорога» убирает газон только в первом и пятом рядах. Это относится и к шестирядным лужайкам с оформлением Подводного мира — учитывайте это при использовании модуля.';
+
+  @override
+  String get moduleHelpOakTrainZombiesBody =>
+      'Для этого модуля используются отдельные варианты зомби, чьи способности отличаются от обычного режима защиты. Они появляются через генератор волн с включённым появлением из-под земли. В обычных событиях менеджера волн, таких как «Обычная волна» и «Волна с рыбами», их способности не работают. Для похожего результата используйте «Спавн из-под земли» или пользовательских зомби.\nСферы, дающие стрелы, в коде также являются зомби. Их способности зависят от модуля мини-игры и появления из-под земли; при отдельном создании без этих условий могут пропасть текстуры и эффекты.';
+
+  @override
+  String get oakTrainHealthTitle => 'Здоровье Пня Лучника';
+
+  @override
+  String get oakTrainScoresTitle => 'Начисление очков';
+
+  @override
+  String get oakTrainArrowsTitle => 'Получение стрел';
+
+  @override
+  String get oakTrainHelpArrowsTitle => 'Виды стрел';
+
+  @override
+  String get oakTrainHelpScoresTitle => 'Правила подсчёта очков';
+
+  @override
+  String get oakTrainHelpZombiesTitle => 'Особые зомби';
+
+  @override
+  String waveGeneratorColumnOption(int number, String index) {
+    return 'Столбец $number ($index)';
+  }
+
+  @override
+  String waveGeneratorRowOption(int number, String index) {
+    return 'Строка $number ($index)';
+  }
+
+  @override
+  String waveGeneratorDelaySummary(String seconds) {
+    return 'Задержка появления этой волны: $seconds с';
+  }
+
+  @override
+  String waveGeneratorDelayInactiveSummary(String seconds) {
+    return 'Задержка: $seconds с (без появления из-под земли не действует)';
+  }
+
+  @override
+  String waveGeneratorPositionSummary(String column, String row) {
+    return 'Место появления: $column, $row';
+  }
+
+  @override
+  String get waveGeneratorPositionUnset => 'Не задано';
+
+  @override
+  String get oakTrainTutorialIntroWarningTitle => 'Совместимость модулей';
+
+  @override
+  String get oakTrainTutorialIntroWarning =>
+      'Обучение «Стрельба Пня Лучника» конфликтует с модулем вступительной заставки. При их совместном использовании зомби начинают появляться до завершения обучения.';
+
+  @override
+  String statueMazeMissingRotationsWarning(String rounds) {
+    return 'В раундах $rounds модуля «Лабиринт зомби» нет шагов вращения, что приведёт к вылету игры. Добавьте хотя бы один шаг вращения в каждый раунд.';
+  }
+
+  @override
+  String get moduleHelpStatueMazeCompatibilityTitle => 'Совместимость';
+
+  @override
+  String get moduleHelpStatueMazeCompatibilityBody =>
+      '«Лабиринт зомби» совместим со многими модулями. Обычно уровень завершается только после выполнения в том числе условия победы этого мини-режима. Однако некоторые модули, например «Таймер», могут завершить уровень раньше. Учитывайте это при их совместном использовании.';
+
+  @override
+  String get autosaveZombossAction =>
+      'Автоматически сохранять изменения при выходе из редактора своих действий меха Зомбосса';
+
+  @override
+  String get autosavePortal =>
+      'Автоматически сохранять изменения при выходе из редактора своего портала';
+
+  @override
+  String get autosaveResilienceShield =>
+      'Автоматически сохранять изменения при выходе из редактора своего щита стойкости';
+
+  @override
+  String get autosavePreviewImage =>
+      'Автоматически сохранять изображение при выходе из генератора превью';
+
+  @override
+  String get autosaveExit => 'Выход';
+
+  @override
+  String get automaticallySaved => 'Сохранено автоматически';
+
+  @override
+  String automaticallySavedTo(String path) {
+    return 'Автоматически сохранено в: $path';
+  }
 }

@@ -173,6 +173,52 @@ class LevelParser {
     return isPirateLawn(parsed.levelDef, levelFile);
   }
 
+  static const _lostcityBackgroundGroup =
+      'DelayLoad_Background_LostCity_Compressed';
+  static const _lostcityBackgroundPrefix = 'IMAGE_BACKGROUNDS_LOSTCITY';
+
+  /// Checks the selected appearance, independently of the stage's mechanics.
+  static bool usesLostCityBackground(
+    LevelDefinitionData? levelDef,
+    PvzLevelFile levelFile,
+  ) => _usesStageBackground(
+    levelDef,
+    levelFile,
+    imagePrefixes: const {_lostcityBackgroundPrefix},
+    resourceGroup: _lostcityBackgroundGroup,
+  );
+
+  static bool usesDeepSeaBackground(
+    LevelDefinitionData? levelDef,
+    PvzLevelFile levelFile,
+  ) => _usesStageBackground(
+    levelDef,
+    levelFile,
+    imagePrefixes: const {
+      'IMAGE_BACKGROUNDS_DEEPSEA',
+      'IMAGE_BACKGROUNDS_DEEPSEALAND',
+    },
+    resourceGroup: 'DelayLoad_Background_Deepsea',
+  );
+
+  static bool _usesStageBackground(
+    LevelDefinitionData? levelDef,
+    PvzLevelFile levelFile, {
+    required Set<String> imagePrefixes,
+    required String resourceGroup,
+  }) {
+    final objdata = resolveStageObjdata(levelDef, levelFile);
+    if (objdata == null) return false;
+    final prefix = objdata['BackgroundImagePrefix'];
+    // A previous background's resource group can remain after a manual edit.
+    // Prefer the selected image and never infer appearance from loaded assets,
+    // the stage alias, its class, or BelongsToWorld.
+    if (prefix is String && prefix.isNotEmpty) {
+      return imagePrefixes.contains(prefix);
+    }
+    return objdata['BackgroundResourceGroup'] == resourceGroup;
+  }
+
   /// Returns true if the stage uses the roof lawn implementation.
   static bool isRoofLawn(
     LevelDefinitionData? levelDef,
@@ -277,7 +323,6 @@ class LevelParser {
       case 'SpawnZombiesFishWaveActionProps':
         return isDeepSeaLawn(levelDef, levelFile);
       case 'TideWaveWaveActionProps':
-      case 'TidalChangeWaveActionProps':
         return showsTideWaveEvents(levelDef, levelFile);
       default:
         return true;

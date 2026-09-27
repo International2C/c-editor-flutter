@@ -3,11 +3,13 @@ import 'package:c_editor/widgets/editor_components.dart' show EditorOptionTile;
 
 import 'preview_document.dart';
 import 'preview_picker_scroll_area.dart';
+import 'preview_picker_session.dart';
 
 /// Keeps every figure reachable on short landscape displays.
 Future<(PreviewShapeKind, bool)?> showPreviewFiguresPicker({
   required BuildContext context,
   required String Function(String key, [String? fallback]) t,
+  PreviewPickerSession? session,
 }) => showModalBottomSheet<(PreviewShapeKind, bool)>(
   context: context,
   isScrollControlled: true,
@@ -18,6 +20,7 @@ Future<(PreviewShapeKind, bool)?> showPreviewFiguresPicker({
   builder: (ctx) => SafeArea(
     top: false,
     child: PreviewPickerScrollArea(
+      session: session,
       scrollbarKey: const ValueKey('previewFiguresScrollbar'),
       builder: (controller) => SingleChildScrollView(
         key: const ValueKey('previewFiguresScroll'),
@@ -66,12 +69,14 @@ Future<String?> showPreviewModuleInfoPicker({
   required Iterable<String> classes,
   required String Function(BuildContext context, String objClass) titleForClass,
   required String Function(String key, [String? fallback]) t,
+  PreviewPickerSession? session,
 }) => showDialog<String>(
   context: context,
   builder: (_) => _PreviewModuleInfoPickerDialog(
     classes: classes.toList(),
     titleForClass: titleForClass,
     t: t,
+    session: session,
   ),
 );
 
@@ -80,11 +85,13 @@ class _PreviewModuleInfoPickerDialog extends StatefulWidget {
     required this.classes,
     required this.titleForClass,
     required this.t,
+    this.session,
   });
 
   final List<String> classes;
   final String Function(BuildContext context, String objClass) titleForClass;
   final String Function(String key, [String? fallback]) t;
+  final PreviewPickerSession? session;
 
   @override
   State<_PreviewModuleInfoPickerDialog> createState() =>
@@ -93,13 +100,20 @@ class _PreviewModuleInfoPickerDialog extends StatefulWidget {
 
 class _PreviewModuleInfoPickerDialogState
     extends State<_PreviewModuleInfoPickerDialog> {
-  var _query = '';
+  late final _session = widget.session ?? PreviewPickerSession();
+  late final _searchController = TextEditingController(text: _session.query);
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext ctx) {
     final filtered = widget.classes.where((objClass) {
-      if (_query.isEmpty) return true;
-      final normalizedQuery = _query.toLowerCase();
+      if (_session.query.isEmpty) return true;
+      final normalizedQuery = _session.query.toLowerCase();
       return objClass.toLowerCase().contains(normalizedQuery) ||
           widget
               .titleForClass(ctx, objClass)
@@ -112,6 +126,7 @@ class _PreviewModuleInfoPickerDialogState
       content: SizedBox(
         width: double.maxFinite,
         child: PreviewPickerScrollArea(
+          session: _session,
           scrollbarKey: const ValueKey('previewModuleInfoScrollbar'),
           builder: (controller) => SingleChildScrollView(
             key: const ValueKey('previewModuleInfoScroll'),
@@ -129,6 +144,7 @@ class _PreviewModuleInfoPickerDialogState
                 ),
                 TextField(
                   key: const ValueKey('previewModuleInfoSearch'),
+                  controller: _searchController,
                   textAlignVertical: TextAlignVertical.center,
                   decoration: InputDecoration(
                     isDense: true,
@@ -143,7 +159,7 @@ class _PreviewModuleInfoPickerDialogState
                     ),
                     hintText: widget.t('previewGenModuleInfoSearch', 'Search'),
                   ),
-                  onChanged: (value) => setState(() => _query = value),
+                  onChanged: (value) => setState(() => _session.query = value),
                 ),
                 const SizedBox(height: 8),
                 for (final objClass in filtered)

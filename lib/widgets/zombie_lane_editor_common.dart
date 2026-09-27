@@ -14,6 +14,7 @@ Widget buildZombieLaneCard({
     levelDisplay: item.levelDisplay,
     isElite: item.isElite,
     isCustom: item.isCustom,
+    isMissingCustomZombie: item.isMissingCustomZombie,
     size: zombieLaneCardSize,
     onTap: onTap,
   );

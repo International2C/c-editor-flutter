@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:c_editor/bundled_plugins/preview_img_cplugin/lib/src/preview/preview_pickers.dart';
+import 'package:c_editor/bundled_plugins/preview_img_cplugin/lib/src/preview/preview_picker_session.dart';
 import 'package:c_editor/bundled_plugins/preview_img_cplugin/lib/src/preview/stage_banner_resolver.dart';
 import 'package:c_editor/data/repository/custom_stage_preset_repository.dart';
 import 'package:c_editor/data/repository/stage_repository.dart';
@@ -149,77 +150,90 @@ void main() {
     expect(selected, '__custom__');
   });
 
-  testWidgets('landscape background picker scrolls to its custom entry', (
-    tester,
-  ) async {
-    tester.view.devicePixelRatio = 1;
-    tester.view.physicalSize = const Size(900, 300);
-    addTearDown(tester.view.reset);
-    await tester.runAsync(() async {
-      await Future.wait([
-        StageRepository.init(),
-        CustomStagePresetRepository.init(),
-        ResourceNames.ensureLoaded(),
-      ]);
-    });
-    String? selected;
-    await tester.pumpWidget(
-      MaterialApp(
-        theme: ThemeData(platform: TargetPlatform.android),
-        builder: (context, child) => MediaQuery(
-          data: MediaQuery.of(
-            context,
-          ).copyWith(textScaler: TextScaler.linear(1.5)),
-          child: child!,
-        ),
-        home: Builder(
-          builder: (context) => Scaffold(
-            body: TextButton(
-              onPressed: () async {
-                selected = await showPreviewBannerPicker(
-                  context: context,
-                  banners: StageBannerResolver.forTest(
-                    stages: {
-                      for (var i = 0; i < 20; i++)
-                        'TestStage$i': 'TestBackground$i',
-                    },
-                  ),
-                  t: (key, [fallback]) => fallback ?? key,
-                );
-              },
-              child: const Text('Open'),
+  testWidgets(
+    'landscape background picker remembers its position after selection',
+    (tester) async {
+      tester.view.devicePixelRatio = 1;
+      tester.view.physicalSize = const Size(900, 300);
+      addTearDown(tester.view.reset);
+      await tester.runAsync(() async {
+        await Future.wait([
+          StageRepository.init(),
+          CustomStagePresetRepository.init(),
+          ResourceNames.ensureLoaded(),
+        ]);
+      });
+      String? selected;
+      final session = PreviewPickerSession();
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: ThemeData(platform: TargetPlatform.android),
+          builder: (context, child) => MediaQuery(
+            data: MediaQuery.of(
+              context,
+            ).copyWith(textScaler: TextScaler.linear(1.5)),
+            child: child!,
+          ),
+          home: Builder(
+            builder: (context) => Scaffold(
+              body: TextButton(
+                onPressed: () async {
+                  selected = await showPreviewBannerPicker(
+                    context: context,
+                    session: session,
+                    banners: StageBannerResolver.forTest(
+                      stages: {
+                        for (var i = 0; i < 20; i++)
+                          'TestStage$i': 'TestBackground$i',
+                      },
+                    ),
+                    t: (key, [fallback]) => fallback ?? key,
+                  );
+                },
+                child: const Text('Open'),
+              ),
             ),
           ),
         ),
-      ),
-    );
-    await tester.tap(find.text('Open'));
-    await tester.pumpAndSettle();
-    final custom = find.byKey(const ValueKey('preview-banner-custom'));
-    final controller = tester
-        .widget<ListView>(
-          find.byKey(const ValueKey('previewBannerPickerScroll')),
-        )
-        .controller!;
-    await dragPreviewVerticalScrollbar(
-      tester,
-      const ValueKey('previewBannerPickerScrollbar'),
-      distance: 80,
-    );
-    expect(controller.offset, greaterThan(100));
-    expect(selected, isNull);
-    final scrollable = find
-        .descendant(
-          of: find.byType(AlertDialog),
-          matching: find.byType(Scrollable),
-        )
-        .first;
-    await tester.scrollUntilVisible(custom, 140, scrollable: scrollable);
-    await tester.pumpAndSettle();
-    expect(custom.hitTestable(), findsOneWidget);
-    await tester.tap(custom);
-    await tester.pumpAndSettle();
-    expect(selected, '__custom__');
-    expect(tester.takeException(), isNull);
-  });
+      );
+      await tester.tap(find.text('Open'));
+      await tester.pumpAndSettle();
+      final custom = find.byKey(const ValueKey('preview-banner-custom'));
+      final controller = tester
+          .widget<ListView>(
+            find.byKey(const ValueKey('previewBannerPickerScroll')),
+          )
+          .controller!;
+      await dragPreviewVerticalScrollbar(
+        tester,
+        const ValueKey('previewBannerPickerScrollbar'),
+        distance: 80,
+      );
+      expect(controller.offset, greaterThan(100));
+      expect(selected, isNull);
+      final scrollable = find
+          .descendant(
+            of: find.byType(AlertDialog),
+            matching: find.byType(Scrollable),
+          )
+          .first;
+      await tester.scrollUntilVisible(custom, 140, scrollable: scrollable);
+      await tester.pumpAndSettle();
+      expect(custom.hitTestable(), findsOneWidget);
+      final savedOffset = controller.offset;
+      await tester.tap(custom);
+      await tester.pumpAndSettle();
+      expect(selected, '__custom__');
+      await tester.tap(find.text('Open'));
+      await tester.pumpAndSettle();
+      final restoredController = tester
+          .widget<ListView>(
+            find.byKey(const ValueKey('previewBannerPickerScroll')),
+          )
+          .controller!;
+      expect(restoredController.offset, closeTo(savedOffset, 1));
+      expect(custom.hitTestable(), findsOneWidget);
+      expect(tester.takeException(), isNull);
+    },
+  );
 }

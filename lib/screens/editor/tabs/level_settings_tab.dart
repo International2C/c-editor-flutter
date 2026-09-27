@@ -1,44 +1,24 @@
 import 'package:flutter/material.dart';
-import 'package:c_editor/data/registry/conflict_registry.dart';
-import 'package:c_editor/data/level_parser.dart';
+import 'package:c_editor/data/registry/issue_registry.dart';
 import 'package:c_editor/data/module_instance_display_name.dart';
 import 'package:c_editor/widgets/editor_components.dart';
 import 'package:c_editor/data/registry/module_registry.dart';
 import 'package:c_editor/data/pvz_models.dart';
-import 'package:c_editor/data/repository/plant_repository.dart';
 import 'package:c_editor/data/repository/reference_repository.dart';
 import 'package:c_editor/data/rtid_parser.dart';
 import 'package:c_editor/l10n/app_localizations.dart';
-import 'package:c_editor/l10n/resource_names.dart';
 import 'package:c_editor/widgets/asset_image.dart';
-
-bool _shouldRecommendTunnelDefendModule(
-  LevelDefinitionData levelDef,
-  bool hasTunnelDefendModule,
-) {
-  final stageInfo = RtidParser.parse(levelDef.stageModule);
-  final alias = stageInfo?.alias ?? '';
-  if (alias != 'UnchartedMausoleumStage' &&
-      alias != 'UnchartedMausoleum2Stage') {
-    return false;
-  }
-  return !hasTunnelDefendModule;
-}
 
 bool _isExpeditionTilesModule({
   required String alias,
   required String objClass,
   required dynamic objData,
 }) {
-  if (objClass != 'TunnelDefendModuleProperties') return false;
-  if (alias == 'SouDaCheTunnelDefendDefault' ||
-      alias.startsWith('SoudacheTunnelDefendStage')) {
-    return true;
-  }
-  if (objData is Map) {
-    return (objData['BrickMapIndex'] as num?)?.toInt() == 3;
-  }
-  return false;
+  return isExpeditionTilesModule(
+    alias: alias,
+    objClass: objClass,
+    objData: objData,
+  );
 }
 
 class ModuleUIInfo {
@@ -85,11 +65,7 @@ class LevelSettingsTab extends StatefulWidget {
     super.key,
     required this.levelDef,
     required this.objectMap,
-    required this.missingModules,
-    this.missingModuleWarnings,
-    this.showGlacierModuleCompatibilityWarning = false,
-    this.showGlacierModuleUnderwaterWarning = false,
-    this.showIceAgePlantPuzzleWarning = false,
+    this.issues,
     required this.onEditBasicInfo,
     required this.onEditModule,
     required this.onRemoveModule,
@@ -99,13 +75,10 @@ class LevelSettingsTab extends StatefulWidget {
 
   final LevelDefinitionData? levelDef;
   final Map<String, PvzObject> objectMap;
-  final List<ModuleMetadata> missingModules;
 
-  /// Module objClass -> list of plant IDs that need this module but it's missing (parallel plants warning).
-  final Map<String, List<String>>? missingModuleWarnings;
-  final bool showGlacierModuleCompatibilityWarning;
-  final bool showGlacierModuleUnderwaterWarning;
-  final bool showIceAgePlantPuzzleWarning;
+  /// Conflicts, missing modules, and advisories from [LevelIssueRegistry].
+  /// When null, they are computed from [levelDef] + [objectMap].
+  final List<LevelIssue>? issues;
   final VoidCallback onEditBasicInfo;
   final ValueChanged<String> onEditModule;
   final ValueChanged<String> onRemoveModule;
@@ -137,25 +110,6 @@ class _LevelSettingsTabState extends State<LevelSettingsTab> {
     return (metadata.routeId != 'Unknown' &&
             metadata.routeId != 'UnknownDetail') ||
         _tabEditorModuleClasses.contains(objClass);
-  }
-
-  /// Returns localized plant name for display; falls back to a readable form of id if no translation.
-  static String _plantDisplayName(
-    BuildContext context,
-    PlantRepository repo,
-    String plantId,
-  ) {
-    final key = repo.getName(plantId);
-    final localized = ResourceNames.lookup(context, key);
-    if (localized != key) return localized;
-    return plantId
-        .split('_')
-        .map(
-          (s) => s.isEmpty
-              ? ''
-              : s[0].toUpperCase() + s.substring(1).toLowerCase(),
-        )
-        .join(' ');
   }
 
   @override
@@ -260,38 +214,13 @@ class _LevelSettingsTabState extends State<LevelSettingsTab> {
     final coreModules = currentModulesList.where((m) => m.isCore).toList();
     final miscModules = currentModulesList.where((m) => !m.isCore).toList();
 
-    final existingObjClasses = currentModulesList
-        .map((m) => m.objClass)
-        .toSet();
-    final showCowboyWithoutConveyorWarning =
-        existingObjClasses.contains('CowboyMinigameProperties') &&
-        !existingObjClasses.contains('ConveyorSeedBankProperties');
-    final activeConflicts = ConflictRegistry.getActiveConflicts(
-      context,
-      existingObjClasses,
-    );
-    final hasTunnelDefendModule = currentModulesList.any(
-      (m) =>
-          m.objClass == 'TunnelDefendModuleProperties' && !m.isExpeditionTiles,
-    );
-    final showTunnelDefendRecommendation = _shouldRecommendTunnelDefendModule(
-      levelDef,
-      hasTunnelDefendModule,
-    );
-    final hasExpeditionTilesModule = currentModulesList.any(
-      (m) => m.isExpeditionTiles,
-    );
-    final showExpeditionTilesRecommendation =
-        LevelParser.isSouDaCheLawn(levelDef, _levelFileFromObjectMap()) &&
-        !hasExpeditionTilesModule;
-    final showExpeditionTilesMismatchWarning =
-        hasExpeditionTilesModule &&
-        LevelParser.isUnderwaterWorldSixRowLawn(
-          levelDef,
-          _levelFileFromObjectMap(),
+    final levelIssues =
+        widget.issues ??
+        LevelIssueRegistry.forLevel(
+          context,
+          _levelFileWithDefinition(),
+          editorOnly: true,
         );
-    final showTunnelExpeditionCompatibilityWarning =
-        hasTunnelDefendModule && hasExpeditionTilesModule;
 
     return Stack(
       children: [
@@ -394,137 +323,24 @@ class _LevelSettingsTabState extends State<LevelSettingsTab> {
             ),
             const SizedBox(height: 16),
 
-            // Conflicts
-            ...activeConflicts.map(
-              (pair) => Card(
-                color: Theme.of(context).colorScheme.errorContainer,
-                margin: const EdgeInsets.only(bottom: 12),
-                child: Padding(
-                  padding: const EdgeInsets.all(16),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        children: [
-                          Icon(
-                            Icons.error,
-                            color: Theme.of(
-                              context,
-                            ).colorScheme.onErrorContainer,
-                          ),
-                          const SizedBox(width: 8),
-                          Expanded(
-                            child: Text(
-                              pair.first,
-                              maxLines: 2,
-                              overflow: TextOverflow.ellipsis,
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: Theme.of(
-                                  context,
-                                ).colorScheme.onErrorContainer,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 8),
-                      Text(
-                        pair.second,
-                        style: TextStyle(
-                          color: Theme.of(context).colorScheme.onErrorContainer,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-
-            if (showCowboyWithoutConveyorWarning) ...[
+            // Conflicts, missing modules, and advisories
+            for (final issue in levelIssues) ...[
               const SizedBox(height: 12),
-              EditorWarningBanner(
-                key: const ValueKey('cowboyMinigameConveyorWarning'),
-                title:
-                    l10n?.cowboyMinigameDependencyWarningTitle ??
-                    'Required module missing',
-                message:
-                    l10n?.cowboyMinigameConveyorWarning ??
-                    'The Not OK Corral module must be used with the Conveyor '
-                        'Belt module, or the level will crash.',
-              ),
-            ],
-
-            // Missing module for parallel plants (same style as conflicts)
-            if (widget.missingModuleWarnings != null &&
-                widget.missingModuleWarnings!.isNotEmpty)
-              ...widget.missingModuleWarnings!.entries.map((e) {
-                final meta = ModuleRegistry.getMetadata(e.key);
-                final moduleName = meta.getTitle(context);
-                final repo = PlantRepository();
-                final plantList = e.value
-                    .map((id) => _plantDisplayName(context, repo, id))
-                    .join(', ');
-                final message = AppLocalizations.of(
-                  context,
-                )!.missingModuleForPlantsWarning(moduleName, plantList);
-                return Card(
-                  color: Theme.of(context).colorScheme.errorContainer,
-                  margin: const EdgeInsets.only(bottom: 12),
-                  child: Padding(
-                    padding: const EdgeInsets.all(16),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          children: [
-                            Icon(
-                              Icons.error,
-                              color: Theme.of(
-                                context,
-                              ).colorScheme.onErrorContainer,
-                            ),
-                            const SizedBox(width: 8),
-                            Expanded(
-                              child: Text(
-                                l10n?.missingPlantModuleWarningTitle ??
-                                    'Missing module for parallel plants',
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  color: Theme.of(
-                                    context,
-                                  ).colorScheme.onErrorContainer,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 8),
-                        Text(
-                          message,
-                          style: TextStyle(
-                            color: Theme.of(
-                              context,
-                            ).colorScheme.onErrorContainer,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                );
-              }),
-
-            // Missing Essentials
-            if (widget.missingModules.isNotEmpty)
-              EditorWarningBanner(
-                title: l10n?.missingModules ?? 'Missing modules',
-                message:
-                    l10n?.missingModulesRecommended ??
-                    'The level might not function correctly. Recommended to add:',
-                children: widget.missingModules
-                    .map(
-                      (meta) => Text(
-                        '• ${meta.getTitle(context)}',
+              if (issue.isError)
+                _ErrorBanner(
+                  key: ValueKey(issue.id),
+                  title: issue.title,
+                  message: issue.message,
+                )
+              else
+                EditorWarningBanner(
+                  key: ValueKey(issue.id),
+                  title: issue.title,
+                  message: issue.message,
+                  children: [
+                    for (final bullet in issue.bulletPoints)
+                      Text(
+                        '• $bullet',
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                           color: editorWarningBannerForeground(
@@ -532,90 +348,8 @@ class _LevelSettingsTabState extends State<LevelSettingsTab> {
                           ),
                         ),
                       ),
-                    )
-                    .toList(),
-              ),
-
-            if (widget.showGlacierModuleCompatibilityWarning) ...[
-              const SizedBox(height: 12),
-              EditorWarningBanner(
-                title:
-                    l10n?.glacierModuleCompatibilityWarningTitle ??
-                    'Ice Chunk Module requirements',
-                message:
-                    l10n?.glacierModuleCompatibilityWarning ??
-                    'This module only works with the Zomboss Battle module '
-                        'and an Ice Age Zomboss Mech (zombossmech_iceage). '
-                        'Add or fix those settings so glacier blocks can spawn zombies.',
-              ),
-            ],
-
-            if (widget.showGlacierModuleUnderwaterWarning) ...[
-              const SizedBox(height: 12),
-              EditorWarningBanner(
-                title:
-                    l10n?.glacierModuleUnderwaterWarningTitle ??
-                    'Underwater World appearance incompatibility',
-                message:
-                    l10n?.glacierModuleUnderwaterWarning ??
-                    'Avoid using the Frostbite Caves Zomboss and the Ice Chunk Module on an Underwater World lawn. This combination can harm the level appearance and may cause crashes.',
-              ),
-            ],
-
-            if (widget.showIceAgePlantPuzzleWarning) ...[
-              const SizedBox(height: 12),
-              EditorWarningBanner(
-                key: const ValueKey('iceAgePlantPuzzleWarning'),
-                title:
-                    l10n?.iceAgePlantPuzzleVariationWarningTitle ??
-                    'Beplanted does not need Ice Chunks',
-                message:
-                    l10n?.iceAgePlantPuzzleVariationWarning ??
-                    'The Beplanted variation was designed specifically for the Frostbite Caves Beplanted minigame. Its abilities do not require the Ice Chunk Module.',
-              ),
-            ],
-
-            if (showTunnelDefendRecommendation) ...[
-              const SizedBox(height: 12),
-              EditorWarningBanner(
-                title:
-                    l10n?.recommendedTunnelDefendTitle ??
-                    'Tunnel pathways strongly recommended',
-                message:
-                    l10n?.recommendedTunnelDefendBody ??
-                    'The tiles in Underground Palace Secret Realm lawns must be placed through the "Underground Palace Pathways" module. If this module is not added, the lawns may appear overly empty in-game.',
-              ),
-            ],
-            if (showExpeditionTilesRecommendation) ...[
-              const SizedBox(height: 12),
-              EditorWarningBanner(
-                title:
-                    l10n?.recommendedExpeditionTilesTitle ??
-                    'Works with the "Expedition Tiles" module',
-                message:
-                    l10n?.recommendedExpeditionTilesBody ??
-                    'Add the "Expedition Tiles" module to work around the lawn\'s missing tiles and create an experience that more closely matches Expedition Gate.',
-              ),
-            ],
-            if (showTunnelExpeditionCompatibilityWarning) ...[
-              const SizedBox(height: 12),
-              EditorWarningBanner(
-                title:
-                    l10n?.tunnelExpeditionCompatibilityWarningTitle ??
-                    'Use Underground Palace Pathways with Expedition Tiles carefully',
-                message:
-                    l10n?.tunnelExpeditionCompatibilityWarningBody ??
-                    'Using the "Underground Palace Pathways" module together with the "Expedition Tiles" module can cause tile textures to overlap and may affect the level\'s overall appearance. If you must use both, be extremely careful.',
-              ),
-            ],
-            if (showExpeditionTilesMismatchWarning) ...[
-              const SizedBox(height: 12),
-              _ErrorBanner(
-                title: l10n?.stageMismatch ?? 'Lawn Type Mismatch',
-                message:
-                    l10n?.expeditionTilesUnderwaterMismatchWarning ??
-                    'The current lawn uses an Underwater World appearance, which is incompatible with the Expedition Tiles module and will cause the level to crash.',
-              ),
+                  ],
+                ),
             ],
           ],
         ),
@@ -647,8 +381,22 @@ class _LevelSettingsTabState extends State<LevelSettingsTab> {
     );
   }
 
-  PvzLevelFile _levelFileFromObjectMap() {
-    return PvzLevelFile(objects: widget.objectMap.values.toList());
+  PvzLevelFile _levelFileWithDefinition() {
+    final objects = <PvzObject>[
+      ...widget.objectMap.values,
+    ];
+    if (widget.levelDef != null &&
+        !objects.any((o) => o.objClass == 'LevelDefinition')) {
+      objects.insert(
+        0,
+        PvzObject(
+          aliases: const ['LevelDefinition'],
+          objClass: 'LevelDefinition',
+          objData: widget.levelDef!.toJson(),
+        ),
+      );
+    }
+    return PvzLevelFile(objects: objects);
   }
 
   static String _moduleReorderHint(
@@ -668,7 +416,7 @@ class _LevelSettingsTabState extends State<LevelSettingsTab> {
 }
 
 class _ErrorBanner extends StatelessWidget {
-  const _ErrorBanner({required this.title, required this.message});
+  const _ErrorBanner({super.key, required this.title, required this.message});
 
   final String title;
   final String message;
@@ -749,7 +497,7 @@ class _ReorderableModuleList extends StatelessWidget {
           physics: const NeverScrollableScrollPhysics(),
           buildDefaultDragHandles: false,
           itemCount: modules.length,
-          onReorder: onReorder,
+          onReorderItem: onReorder,
           itemBuilder: (context, index) {
             final item = modules[index];
             return _ReorderableModuleTile(

@@ -1,3 +1,4 @@
+import 'package:c_editor/data/gladiator_row_utils.dart';
 import 'package:collection/collection.dart';
 import 'package:c_editor/data/grid_override_module_utils.dart';
 import 'package:c_editor/data/level_parser.dart';
@@ -96,6 +97,7 @@ LevelPreviewGridStyle resolveGridStyle(
     case GridPreviewModuleKind.energyGrid:
     case GridPreviewModuleKind.lunarMineVein:
     case GridPreviewModuleKind.radiationMeteor:
+    case GridPreviewModuleKind.gladiatorRow:
     case GridPreviewModuleKind.piratePlank:
     case GridPreviewModuleKind.fogSystem:
     case GridPreviewModuleKind.roofProperties:
@@ -155,6 +157,7 @@ LevelPreviewGridStyle resolveGridStyle(
       break;
 
     case GridPreviewModuleKind.protectPlants:
+    case GridPreviewModuleKind.seeingStars:
       gridBg = greenBg;
       borderColor = greenBorder;
       cellBorderColor = greenCellBorder;
@@ -227,6 +230,7 @@ enum GridPreviewModuleKind {
   energyGrid,
   lunarMineVein,
   radiationMeteor,
+  gladiatorRow,
   bronzeStatue,
   powerTile,
   fogSystem,
@@ -247,6 +251,7 @@ enum GridPreviewModuleKind {
   zombossMech,
   zomboss,
   protectPlants,
+  seeingStars,
   protectItems,
   flowers,
   empty,
@@ -294,6 +299,12 @@ bool levelHasPrePlacedGridPreview(PvzLevelFile levelFile) {
   if (levelHasModule(levelFile, 'EnergyGridProperties')) return true;
   if (levelHasModule(levelFile, 'LunarMineVeinModuleProperties')) return true;
   if (levelHasModule(levelFile, 'RadiationMeteorModuleProperties')) return true;
+  final gladiator = readGladiatorRowModuleData(levelFile);
+  if (gladiator != null &&
+      gladiator.usesTrophyMode &&
+      gladiator.encounters.isNotEmpty) {
+    return true;
+  }
   if (levelHasModule(levelFile, 'VaseBreakerPresetProperties')) return true;
   if (levelHasModule(levelFile, 'VaseBreakerArcadeModuleProperties'))
     return true;
@@ -312,6 +323,7 @@ bool levelHasPrePlacedGridPreview(PvzLevelFile levelFile) {
   if (levelHasModule(levelFile, 'ProtectTheGridItemChallengeProperties'))
     return true;
   if (levelHasModule(levelFile, 'StarChallengeModuleProperties')) return true;
+  if (levelHasModule(levelFile, 'PVZ1SeeingStarsModuleProperties')) return true;
 
   return false;
 }
@@ -588,6 +600,14 @@ List<GridPreviewCategoryOption> collectGridPreviewCategories(
       ),
     );
   }
+  if (levelHasModule(levelFile, 'PVZ1SeeingStarsModuleProperties')) {
+    categories.add(
+      GridPreviewCategoryOption(
+        kind: GridPreviewModuleKind.seeingStars,
+        label: l10n.moduleTitle_PVZ1SeeingStarsModuleProperties,
+      ),
+    );
+  }
   if (levelHasModule(levelFile, 'ProtectTheGridItemChallengeProperties')) {
     categories.add(
       GridPreviewCategoryOption(
@@ -695,6 +715,21 @@ List<GridPreviewCategoryOption> collectGridPreviewCategories(
             waves.length,
           ),
           wave: wave,
+        ),
+      );
+    }
+  }
+
+  final gladiatorData = readGladiatorRowModuleData(levelFile);
+  if (gladiatorData != null && gladiatorData.usesTrophyMode) {
+    for (var index = 0; index < gladiatorData.encounters.length; index++) {
+      final encounter = gladiatorData.encounters[index];
+      categories.add(
+        GridPreviewCategoryOption(
+          kind: GridPreviewModuleKind.gladiatorRow,
+          label:
+              '${l10n.groupN(index + 1)} · ${l10n.customZombieWaveItem(encounter.wave + 1)}',
+          index: index,
         ),
       );
     }
@@ -1042,6 +1077,17 @@ PVZ1CopycatsModulePropertiesData? readCopycatsModuleData(
       : null;
 }
 
+PVZ1SeeingStarsModulePropertiesData? readSeeingStarsModuleData(
+  PvzLevelFile levelFile,
+) {
+  final obj = findModuleObject(levelFile, 'PVZ1SeeingStarsModuleProperties');
+  return obj != null
+      ? PVZ1SeeingStarsModulePropertiesData.fromJson(
+          Map<String, dynamic>.from(obj.objData as Map),
+        )
+      : null;
+}
+
 DropShipPropertiesData? readDropShipData(PvzLevelFile levelFile) {
   final obj = findModuleObject(levelFile, 'DropShipProperties');
   return obj != null
@@ -1191,6 +1237,7 @@ String? findLawnMowerAlias(LevelDefinitionData def) {
     'SteamMowers',
     'RenaiMowers',
     'HeianMowers',
+    'RomanMowers2',
     'MoonMowers',
     'FairyTaleMowers',
     'ZCorpMowers',

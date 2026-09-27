@@ -1,14 +1,13 @@
+import 'package:c_editor/widgets/autosave.dart';
 import 'dart:async';
 import 'dart:convert';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:c_editor/widgets/app_message.dart';
+import 'package:c_editor/widgets/autosave_settings_dialog.dart';
 import 'package:c_editor/widgets/editor_components.dart';
 import 'package:c_editor/data/level_module_order_utils.dart';
 import 'package:c_editor/data/cowboy_minigame_utils.dart';
-import 'package:c_editor/data/moon_grapple_save_validation.dart';
-import 'package:c_editor/data/glacier_module_presets.dart';
 import 'package:c_editor/data/zomboss_eighties_speaker_presets.dart';
 import 'package:c_editor/data/level_parser.dart';
 import 'package:c_editor/data/module_open_hint.dart';
@@ -19,7 +18,6 @@ import 'package:c_editor/data/registry/module_registry.dart';
 import 'package:c_editor/data/models/custom_stage_preset.dart';
 import 'package:c_editor/data/pvz_models.dart';
 import 'package:c_editor/data/repository/custom_stage_preset_repository.dart';
-import 'package:c_editor/data/repository/level_repository.dart';
 import 'package:c_editor/data/repository/reference_repository.dart';
 import 'package:c_editor/data/rtid_parser.dart';
 import 'package:c_editor/l10n/app_localizations.dart';
@@ -27,7 +25,6 @@ import 'package:c_editor/plugin_api/c_plugin_host.dart';
 import 'package:c_editor/plugins/plugin_ui_host.dart';
 import 'package:c_editor/screens/level_overview/level_overview.dart';
 import 'package:c_editor/escape_override.dart';
-import 'package:c_editor/data/repository/plant_repository.dart';
 import 'package:c_editor/data/repository/zombie_properties_repository.dart';
 import 'package:c_editor/data/repository/fish_properties_repository.dart';
 import 'package:c_editor/screens/editor/basic_info_screen.dart';
@@ -38,6 +35,9 @@ import 'package:c_editor/screens/editor/others/unknown_module_screen.dart';
 import 'package:c_editor/screens/editor/modules/star_challenge_screen.dart';
 import 'package:c_editor/screens/editor/modules/max_sun_module_screen.dart';
 import 'package:c_editor/screens/editor/modules/moon_expert_module_screen.dart';
+import 'package:c_editor/screens/editor/modules/statue_maze_module_screen.dart';
+import 'package:c_editor/screens/editor/modules/camel_minigame_screen.dart';
+import 'package:c_editor/screens/editor/modules/oak_train_screen.dart';
 import 'package:c_editor/screens/editor/modules/rift_theme_module_screen.dart';
 import 'package:c_editor/screens/editor/modules/bowling_minigame_screen.dart';
 import 'package:c_editor/screens/editor/modules/death_hole_module_screen.dart';
@@ -50,11 +50,11 @@ import 'package:c_editor/screens/editor/modules/conveyor_seedbank_properties_scr
 import 'package:c_editor/screens/editor/modules/seed_bank_properties_screen.dart';
 import 'package:c_editor/screens/editor/modules/sun_dropper_properties_screen.dart';
 import 'package:c_editor/screens/editor/modules/moon_life_support_system_screen.dart';
-import 'package:c_editor/screens/editor/modules/moon_grapple_module_screen.dart';
 import 'package:c_editor/screens/editor/modules/lunar_terminal_module_screen.dart';
 import 'package:c_editor/screens/editor/modules/level_powerup_module_screen.dart';
 import 'package:c_editor/screens/editor/modules/lunar_mine_vein_module_screen.dart';
 import 'package:c_editor/screens/editor/modules/radiation_meteor_module_screen.dart';
+import 'package:c_editor/screens/editor/modules/gladiator_row_module_screen.dart';
 import 'package:c_editor/screens/editor/modules/witch_module_properties_screen.dart';
 import 'package:c_editor/data/final_stage_time_limited_module_utils.dart';
 import 'package:c_editor/screens/editor/modules/starting_plantfood_module_screen.dart';
@@ -99,6 +99,8 @@ import 'package:c_editor/screens/editor/modules/tunnel_defend_module_screen.dart
 import 'package:c_editor/screens/editor/modules/gulliver_tunnel_module_screen.dart';
 import 'package:c_editor/screens/editor/modules/zombie_rush_module_screen.dart';
 import 'package:c_editor/screens/editor/modules/pvz1_copycats_module_screen.dart';
+import 'package:c_editor/screens/editor/modules/pvz1_seeing_stars_module_screen.dart';
+import 'package:c_editor/data/registry/issue_registry.dart';
 import 'package:c_editor/screens/editor/modules/pvz1_passage_module_screen.dart';
 import 'package:c_editor/screens/editor/tabs/izombie_tab.dart';
 import 'package:c_editor/screens/editor/tabs/level_settings_tab.dart';
@@ -138,7 +140,10 @@ import 'package:c_editor/screens/editor/events/tidal_change_event_screen.dart';
 import 'package:c_editor/screens/editor/events/zombie_potion_event_screen.dart';
 import 'package:c_editor/screens/editor/events/shell_event_screen.dart';
 import 'package:c_editor/screens/editor/events/pumpkin_house_event_screen.dart';
+import 'package:c_editor/screens/editor/events/eagle_standard_event_screen.dart';
+import 'package:c_editor/screens/editor/events/zombie_tent_wave_event_screen.dart';
 import 'package:c_editor/screens/editor/events/rocket_landing_event_screen.dart';
+import 'package:c_editor/screens/editor/events/gravity_generator_event_screen.dart';
 import 'package:c_editor/screens/editor/events/jittered_event_screen.dart';
 import 'package:c_editor/screens/editor/events/ground_spawn_event_screen.dart';
 import 'package:c_editor/data/pvz_alias_utils.dart';
@@ -221,6 +226,20 @@ class _EditorScreenState extends State<EditorScreen> {
       return false;
     }
     if (context.read<EditorCubit>().state.hasChanges) {
+      if (context.read<SettingsCubit>().state.autosave) {
+        try {
+          await _save(automatic: true);
+          return !_ec.state.hasChanges;
+        } catch (_) {
+          if (mounted) {
+            AppMessage.show(
+              context,
+              AppLocalizations.of(context)?.saveFail ?? 'Save failed',
+            );
+          }
+          return false;
+        }
+      }
       return await _confirmLeave();
     }
     return true;
@@ -229,284 +248,6 @@ class _EditorScreenState extends State<EditorScreen> {
   Future<void> _leaveEditorIfAllowed() async {
     final leave = await _onEditorBackRequested();
     if (leave && mounted) widget.onBack();
-  }
-
-  static const _internalTagToModule = <String, String>{
-    '_internal_copycats': 'PVZ1CopycatsModuleProperties',
-  };
-
-  Set<String> _levelModuleObjClasses() {
-    if (_ec.state.levelFile == null || _ec.state.parsedData == null) return {};
-    final levelDef = _ec.state.parsedData!.levelDef;
-    if (levelDef == null) return {};
-    final objectMap = _ec.state.parsedData!.objectMap;
-    final set = <String>{};
-    for (final rtid in levelDef.modules) {
-      final info = RtidParser.parse(rtid);
-      if (info == null) continue;
-      if (info.source == 'CurrentLevel') {
-        final obj = objectMap[info.alias];
-        if (obj != null) set.add(obj.objClass);
-      } else if (info.source == 'LevelModules') {
-        set.add(info.alias);
-      }
-    }
-    return set;
-  }
-
-  void _collectPlantIdsFromDynamic(dynamic data, Set<String> out) {
-    if (data is Map) {
-      for (final entry in data.entries) {
-        final k = entry.key as String;
-        final v = entry.value;
-        if (k == 'PresetPlantList' ||
-            k == 'PlantWhiteList' ||
-            k == 'PlantBlackList') {
-          if (v is List) {
-            for (final e in v) {
-              if (e is String && e.isNotEmpty) out.add(e);
-            }
-          }
-        } else if (k == 'PlantMap' && v is Map) {
-          for (final key in v.keys) {
-            if (key is String && key.isNotEmpty) out.add(key);
-          }
-        } else if (k == 'InitialPlantList' && v is List) {
-          for (final e in v) {
-            if (e is Map) {
-              final pt = e['PlantType'];
-              if (pt is String && pt.isNotEmpty) out.add(pt);
-            }
-          }
-        } else if ((k == 'InitialPlantPlacements' || k == 'Placements') &&
-            v is List) {
-          for (final e in v) {
-            if (e is Map) {
-              final tn = e['TypeName'];
-              if (tn is String && tn.isNotEmpty) out.add(tn);
-            }
-          }
-        } else if (k == 'Plants' && v is List) {
-          for (final e in v) {
-            if (e is Map) {
-              final pt = e['PlantType'];
-              if (pt is String && pt.isNotEmpty) out.add(pt);
-              final pts = e['PlantTypes'];
-              if (pts is List) {
-                for (final p in pts) {
-                  if (p is String && p.isNotEmpty) out.add(p);
-                }
-              }
-            }
-          }
-        } else if (k == 'Vases' && v is List) {
-          for (final e in v) {
-            if (e is Map) {
-              final ptn = e['PlantTypeName'];
-              if (ptn is String && ptn.isNotEmpty) out.add(ptn);
-            }
-          }
-        } else if (k == 'SeedRains' && v is List) {
-          for (final e in v) {
-            if (e is Map) {
-              final ptn = e['PlantTypeName'];
-              if (ptn is String && ptn.isNotEmpty) out.add(ptn);
-            }
-          }
-        } else if (k == 'SpawnPlantName') {
-          if (v is List) {
-            for (final p in v) {
-              if (p is String && p.isNotEmpty) out.add(p);
-            }
-          } else if (v is String && v.isNotEmpty) {
-            out.add(v);
-          }
-        } else if (k == 'PlantTypeName' && v is String && v.isNotEmpty) {
-          out.add(v);
-        }
-        _collectPlantIdsFromDynamic(v, out);
-      }
-    } else if (data is List) {
-      for (final e in data) {
-        _collectPlantIdsFromDynamic(e, out);
-      }
-    }
-  }
-
-  Set<String> _collectPlantIdsInLevel() {
-    if (_ec.state.levelFile == null) return {};
-    final out = <String>{};
-    for (final obj in _ec.state.levelFile!.objects) {
-      final data = obj.objData;
-      if (data is Map<String, dynamic>) {
-        _collectPlantIdsFromDynamic(data, out);
-      }
-    }
-    return out;
-  }
-
-  /// Returns map: module objClass -> list of plant IDs that need this module but it's missing.
-  Map<String, List<String>> _getMissingModuleWarnings() {
-    if (_ec.state.levelFile == null || _ec.state.parsedData == null) return {};
-    final levelModules = _levelModuleObjClasses();
-    final plantIds = _collectPlantIdsInLevel();
-    final repo = PlantRepository();
-    final warnings = <String, Set<String>>{};
-    for (final plantId in plantIds) {
-      final info = repo.getPlantInfoById(plantId);
-      if (info == null) continue;
-      for (final entry in _internalTagToModule.entries) {
-        if (!info.hasInternalTag(entry.key)) continue;
-        final moduleClass = entry.value;
-        if (levelModules.contains(moduleClass)) continue;
-        warnings.putIfAbsent(moduleClass, () => {}).add(plantId);
-      }
-    }
-    return warnings.map((k, v) => MapEntry(k, v.toList()..sort()));
-  }
-
-  List<ModuleMetadata> _calculateMissingModules() {
-    if (_ec.state.levelFile == null || _ec.state.parsedData == null) {
-      return const [];
-    }
-    final existingClasses = <String>{
-      ..._ec.state.levelFile!.objects.map((o) => o.objClass),
-      ...?_ec.state.parsedData!.levelDef?.modules.map((rtid) {
-        final info = RtidParser.parse(rtid);
-        if (info == null) return '';
-        if (info.source == 'CurrentLevel') {
-          return _ec.state.parsedData!.objectMap[info.alias]?.objClass ?? '';
-        }
-        return ReferenceRepository.instance.getObjClass(info.alias) ?? '';
-      }),
-    }.where((e) => e.isNotEmpty).toSet();
-
-    final isVaseBreaker =
-        existingClasses.contains('VaseBreakerPresetProperties') ||
-        existingClasses.contains('VaseBreakerArcadeModuleProperties') ||
-        existingClasses.contains('VaseBreakerFlowModuleProperties');
-    final isZombossMechBattle =
-        existingClasses.contains('ZombossBattleModuleProperties') ||
-        existingClasses.contains('ZombossBattleIntroProperties');
-    final isZombossBattle = existingClasses.contains(
-      'ZombossLastStandMinigameProperties',
-    );
-    final isLastStand = existingClasses.contains('LastStandMinigameProperties');
-    final isCowboyMinigame = existingClasses.contains(
-      'CowboyMinigameProperties',
-    );
-    final isSingleHanded = existingClasses.contains('SingleHandedProperties');
-    final isSingleHandedTutorial = existingClasses.contains(
-      'IntroSingleHandedProperties',
-    );
-    final isEvilDave = existingClasses.contains('EvilDaveProperties');
-
-    final missingList = <String>[];
-    if (!existingClasses.contains('CustomLevelModuleProperties')) {
-      missingList.add('CustomLevelModuleProperties');
-    }
-    if (!existingClasses.contains('ZombiesAteYourBrainsProperties')) {
-      if (!isEvilDave) missingList.add('ZombiesAteYourBrainsProperties');
-    }
-    if (!existingClasses.contains('ZombiesDeadWinConProperties') &&
-        !existingClasses.contains('BronzeDeadWinConProperties')) {
-      if (!isEvilDave && !isZombossMechBattle && !isZombossBattle) {
-        missingList.add('ZombiesDeadWinConProperties');
-      }
-    }
-    if (!existingClasses.contains('StandardLevelIntroProperties')) {
-      if (!isVaseBreaker &&
-          !isLastStand &&
-          !isCowboyMinigame &&
-          !isSingleHanded &&
-          !isSingleHandedTutorial &&
-          !isZombossMechBattle &&
-          !isZombossBattle) {
-        missingList.add('StandardLevelIntroProperties');
-      }
-    }
-    if (isVaseBreaker) {
-      if (!existingClasses.contains('VaseBreakerPresetProperties')) {
-        missingList.add('VaseBreakerPresetProperties');
-      }
-      if (!existingClasses.contains('VaseBreakerArcadeModuleProperties')) {
-        missingList.add('VaseBreakerArcadeModuleProperties');
-      }
-      if (!existingClasses.contains('VaseBreakerFlowModuleProperties')) {
-        missingList.add('VaseBreakerFlowModuleProperties');
-      }
-    }
-    if (isEvilDave) {
-      if (!existingClasses.contains('InitialPlantEntryProperties')) {
-        missingList.add('InitialPlantEntryProperties');
-      }
-      if (!existingClasses.contains('SeedBankProperties')) {
-        missingList.add('SeedBankProperties');
-      }
-    }
-    if (isZombossMechBattle) {
-      if (!existingClasses.contains('ZombossBattleModuleProperties')) {
-        missingList.add('ZombossBattleModuleProperties');
-      }
-      if (!existingClasses.contains('ZombossBattleIntroProperties')) {
-        missingList.add('ZombossBattleIntroProperties');
-      }
-    }
-    if (isZombossBattle) {
-      if (!existingClasses.contains('ZombossLastStandMinigameProperties')) {
-        missingList.add('ZombossLastStandMinigameProperties');
-      }
-    }
-    if (isLastStand) {
-      if (!existingClasses.contains('SeedBankProperties')) {
-        missingList.add('SeedBankProperties');
-      }
-    }
-    final metas = missingList
-        .map((cls) => ModuleRegistry.getMetadata(cls))
-        .where((m) {
-          return m.titleKey != ModuleRegistry.defaultMetadataKey;
-        })
-        .toList();
-    return metas;
-  }
-
-  bool _showGlacierModuleCompatibilityWarning() {
-    final file = _ec.state.levelFile;
-    if (file == null) return false;
-    return GlacierModulePropertiesData.shouldShowCompatibilityWarning(
-      levelFile: file,
-      moduleObjClasses: _levelModuleObjClasses(),
-    );
-  }
-
-  bool _showGlacierModuleUnderwaterWarning() {
-    final file = _ec.state.levelFile;
-    if (file == null) return false;
-    final hasGlacierModule =
-        _levelModuleObjClasses().contains('GlacierModuleProperties') ||
-        file.objects.any((o) => o.objClass == 'GlacierModuleProperties');
-    return hasGlacierModule && LevelParser.isDeepSeaLawnFromFile(file);
-  }
-
-  bool _showIceAgePlantPuzzleWarning() {
-    final file = _ec.state.levelFile;
-    if (file == null) return false;
-    final hasGlacierModule =
-        _levelModuleObjClasses().contains('GlacierModuleProperties') ||
-        file.objects.any((o) => o.objClass == 'GlacierModuleProperties');
-    if (!hasGlacierModule) return false;
-
-    final battle =
-        file.objects.firstWhereOrNull(
-          (o) => o.objClass == 'ZombossBattleModuleProperties',
-        ) ??
-        _ec.state.parsedData?.objectMap.values.firstWhereOrNull(
-          (o) => o.objClass == 'ZombossBattleModuleProperties',
-        );
-    if (battle?.objData is! Map) return false;
-    final variation = (battle!.objData as Map)['ZombossMechType'] as String?;
-    return GlacierModulePresets.isPlantPuzzleVariation(variation);
   }
 
   void _openGlacierModuleSettings() {
@@ -555,6 +296,10 @@ class _EditorScreenState extends State<EditorScreen> {
                 builder: (_) => ZombieSelectionScreen(
                   stateBucketId: _selectionStateBucketId,
                   editorCubit: _ec,
+                  levelFile: _ec.state.levelFile,
+                  onAddModule: (objClass) {
+                    _addModule(ModuleRegistry.getMetadata(objClass));
+                  },
                   multiSelect: false,
                   onZombieSelected: (id) {
                     Navigator.pop(context);
@@ -645,17 +390,14 @@ class _EditorScreenState extends State<EditorScreen> {
     );
   }
 
-  Future<bool> _save() async {
-    final levelFile = _ec.state.levelFile;
-    if (levelFile == null) return false;
-    if (!moonGrappleHasEnoughRounds(levelFile)) {
-      await _showMoonGrappleSaveBlockedDialog();
-      return false;
-    }
+  Future<void> _save({bool automatic = false}) async {
+    if (_ec.state.levelFile == null) return;
     final hadChanges = _ec.state.hasChanges;
     await _ec.save();
-    if (!mounted) return true;
-    if (hadChanges) {
+    if (!mounted) return;
+    if (hadChanges && automatic) {
+      showAutosavedMessage(context);
+    } else if (hadChanges) {
       final l10n = AppLocalizations.of(context);
       AppMessage.show(
         context,
@@ -663,30 +405,6 @@ class _EditorScreenState extends State<EditorScreen> {
         icon: Icons.check_circle,
       );
     }
-    return true;
-  }
-
-  Future<void> _showMoonGrappleSaveBlockedDialog() async {
-    if (!mounted) return;
-    final l10n = AppLocalizations.of(context);
-    await showDialog<void>(
-      context: context,
-      builder: (ctx) => AlertDialog(
-        title: Text(
-          l10n?.moonGrappleSaveBlockedTitle ?? 'Cannot save Moon Grapple level',
-        ),
-        content: Text(
-          l10n?.moonGrappleSaveBlockedMessage ??
-              'Moon Grapple levels must contain at least 3 rounds before they can be saved.',
-        ),
-        actions: [
-          FilledButton(
-            onPressed: () => Navigator.pop(ctx),
-            child: Text(l10n?.confirm ?? 'OK'),
-          ),
-        ],
-      ),
-    );
   }
 
   void _markDirty() {
@@ -715,8 +433,8 @@ class _EditorScreenState extends State<EditorScreen> {
           ),
           FilledButton(
             onPressed: () async {
-              final saved = await _save();
-              if (saved && ctx.mounted) Navigator.pop(ctx, true);
+              await _save();
+              if (ctx.mounted) Navigator.pop(ctx, true);
             },
             child: Text(l10n?.confirm ?? 'Save'),
           ),
@@ -1320,6 +1038,10 @@ class _EditorScreenState extends State<EditorScreen> {
                   builder: (_) => ZombieSelectionScreen(
                     stateBucketId: _selectionStateBucketId,
                     editorCubit: _ec,
+                    levelFile: _ec.state.levelFile,
+                    onAddModule: (objClass) {
+                      _addModule(ModuleRegistry.getMetadata(objClass));
+                    },
                     multiSelect: false,
                     onZombieSelected: (id) {
                       Navigator.pop(context);
@@ -1356,6 +1078,10 @@ class _EditorScreenState extends State<EditorScreen> {
                   builder: (_) => ZombieSelectionScreen(
                     stateBucketId: _selectionStateBucketId,
                     editorCubit: _ec,
+                    levelFile: _ec.state.levelFile,
+                    onAddModule: (objClass) {
+                      _addModule(ModuleRegistry.getMetadata(objClass));
+                    },
                     multiSelect: false,
                     onZombieSelected: (id) {
                       Navigator.pop(context);
@@ -1394,6 +1120,10 @@ class _EditorScreenState extends State<EditorScreen> {
                   builder: (_) => ZombieSelectionScreen(
                     stateBucketId: _selectionStateBucketId,
                     editorCubit: _ec,
+                    levelFile: _ec.state.levelFile,
+                    onAddModule: (objClass) {
+                      _addModule(ModuleRegistry.getMetadata(objClass));
+                    },
                     multiSelect: false,
                     onZombieSelected: (id) {
                       Navigator.pop(context);
@@ -1430,6 +1160,10 @@ class _EditorScreenState extends State<EditorScreen> {
                   builder: (_) => ZombieSelectionScreen(
                     stateBucketId: _selectionStateBucketId,
                     editorCubit: _ec,
+                    levelFile: _ec.state.levelFile,
+                    onAddModule: (objClass) {
+                      _addModule(ModuleRegistry.getMetadata(objClass));
+                    },
                     multiSelect: false,
                     onZombieSelected: (id) {
                       Navigator.pop(context);
@@ -1525,6 +1259,10 @@ class _EditorScreenState extends State<EditorScreen> {
                   builder: (_) => ZombieSelectionScreen(
                     stateBucketId: _selectionStateBucketId,
                     editorCubit: _ec,
+                    levelFile: _ec.state.levelFile,
+                    onAddModule: (objClass) {
+                      _addModule(ModuleRegistry.getMetadata(objClass));
+                    },
                     multiSelect: false,
                     onZombieSelected: (id) {
                       Navigator.pop(context);
@@ -1619,6 +1357,10 @@ class _EditorScreenState extends State<EditorScreen> {
                   builder: (_) => ZombieSelectionScreen(
                     stateBucketId: _selectionStateBucketId,
                     editorCubit: _ec,
+                    levelFile: _ec.state.levelFile,
+                    onAddModule: (objClass) {
+                      _addModule(ModuleRegistry.getMetadata(objClass));
+                    },
                     multiSelect: false,
                     onZombieSelected: (id) {
                       Navigator.pop(context);
@@ -1678,6 +1420,10 @@ class _EditorScreenState extends State<EditorScreen> {
                   builder: (_) => ZombieSelectionScreen(
                     stateBucketId: _selectionStateBucketId,
                     editorCubit: _ec,
+                    levelFile: _ec.state.levelFile,
+                    onAddModule: (objClass) {
+                      _addModule(ModuleRegistry.getMetadata(objClass));
+                    },
                     multiSelect: false,
                     onZombieSelected: (id) {
                       Navigator.pop(context);
@@ -1737,6 +1483,10 @@ class _EditorScreenState extends State<EditorScreen> {
                   builder: (_) => ZombieSelectionScreen(
                     stateBucketId: _selectionStateBucketId,
                     editorCubit: _ec,
+                    levelFile: _ec.state.levelFile,
+                    onAddModule: (objClass) {
+                      _addModule(ModuleRegistry.getMetadata(objClass));
+                    },
                     multiSelect: false,
                     onZombieSelected: (id) {
                       Navigator.pop(context);
@@ -1823,6 +1573,10 @@ class _EditorScreenState extends State<EditorScreen> {
                   builder: (_) => ZombieSelectionScreen(
                     stateBucketId: _selectionStateBucketId,
                     editorCubit: _ec,
+                    levelFile: _ec.state.levelFile,
+                    onAddModule: (objClass) {
+                      _addModule(ModuleRegistry.getMetadata(objClass));
+                    },
                     multiSelect: false,
                     onZombieSelected: (id) {
                       Navigator.pop(context);
@@ -1861,6 +1615,10 @@ class _EditorScreenState extends State<EditorScreen> {
                   builder: (_) => ZombieSelectionScreen(
                     stateBucketId: _selectionStateBucketId,
                     editorCubit: _ec,
+                    levelFile: _ec.state.levelFile,
+                    onAddModule: (objClass) {
+                      _addModule(ModuleRegistry.getMetadata(objClass));
+                    },
                     multiSelect: false,
                     onZombieSelected: (id) {
                       Navigator.pop(context);
@@ -2009,6 +1767,10 @@ class _EditorScreenState extends State<EditorScreen> {
                   builder: (_) => ZombieSelectionScreen(
                     stateBucketId: _selectionStateBucketId,
                     editorCubit: _ec,
+                    levelFile: _ec.state.levelFile,
+                    onAddModule: (objClass) {
+                      _addModule(ModuleRegistry.getMetadata(objClass));
+                    },
                     multiSelect: false,
                     onZombieSelected: (id) {
                       Navigator.pop(context);
@@ -2076,6 +1838,21 @@ class _EditorScreenState extends State<EditorScreen> {
       return;
     }
 
+    if (objClass == 'SpawnEagleFlagsWaveActionProps') {
+      await Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => EagleStandardEventScreen(
+            rtid: rtid,
+            levelFile: _ec.state.levelFile!,
+            onChanged: _markDirty,
+            onBack: () => Navigator.pop(context),
+          ),
+        ),
+      );
+      return;
+    }
+
     if (objClass == 'PumpkinHouseActionProps') {
       await Navigator.push(
         context,
@@ -2085,6 +1862,39 @@ class _EditorScreenState extends State<EditorScreen> {
             levelFile: _ec.state.levelFile!,
             onChanged: _markDirty,
             onBack: () => Navigator.pop(context),
+          ),
+        ),
+      );
+      return;
+    }
+
+    if (objClass == 'WaveActionZombieTentProps') {
+      await Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => ZombieTentWaveEventScreen(
+            rtid: rtid,
+            levelFile: _ec.state.levelFile!,
+            onChanged: _markDirty,
+            onBack: () => Navigator.pop(context),
+            onRequestZombieSelection: (onSelected) {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => ZombieSelectionScreen(
+                    stateBucketId: _selectionStateBucketId,
+                    editorCubit: _ec,
+                    multiSelect: false,
+                    onZombieSelected: (id) {
+                      Navigator.pop(context);
+                      onSelected(id);
+                    },
+                    onMultiZombieSelected: (_) {},
+                    onBack: () => Navigator.pop(context),
+                  ),
+                ),
+              );
+            },
           ),
         ),
       );
@@ -2142,6 +1952,21 @@ class _EditorScreenState extends State<EditorScreen> {
         context,
         MaterialPageRoute(
           builder: (context) => ModernPortalsEventScreen(
+            rtid: rtid,
+            levelFile: _ec.state.levelFile!,
+            onChanged: _markDirty,
+            onBack: () => Navigator.pop(context),
+          ),
+        ),
+      );
+      return;
+    }
+
+    if (objClass == 'GravityGeneratorWaveActionProps') {
+      await Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => GravityGeneratorEventScreen(
             rtid: rtid,
             levelFile: _ec.state.levelFile!,
             onChanged: _markDirty,
@@ -2287,6 +2112,10 @@ class _EditorScreenState extends State<EditorScreen> {
         builder: (_) => ZombieSelectionScreen(
           stateBucketId: _selectionStateBucketId,
           editorCubit: _ec,
+          levelFile: _ec.state.levelFile,
+          onAddModule: (objClass) {
+            _addModule(ModuleRegistry.getMetadata(objClass));
+          },
           multiSelect: false,
           onZombieSelected: (id) {
             Navigator.pop(context);
@@ -2682,7 +2511,50 @@ class _EditorScreenState extends State<EditorScreen> {
       objClass =
           ReferenceRepository.instance.getObjClass(info.alias) ?? 'Unknown';
     }
+
     // Check if we have a specific screen for this module
+    if (objClass == 'StatueMazeModuleProperties') {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => StatueMazeModuleScreen(
+            rtid: rtid,
+            levelFile: _ec.state.levelFile!,
+            onChanged: _markDirty,
+            onBack: () => Navigator.pop(context),
+          ),
+        ),
+      );
+      return;
+    }
+    if (objClass == 'CamelMinigameProperties') {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => CamelMinigameScreen(
+            rtid: rtid,
+            levelFile: _ec.state.levelFile!,
+            onChanged: _markDirty,
+            onBack: () => Navigator.pop(context),
+          ),
+        ),
+      );
+      return;
+    }
+    if (objClass == 'OakTrainProperties') {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => OakTrainScreen(
+            rtid: rtid,
+            levelFile: _ec.state.levelFile!,
+            onChanged: _markDirty,
+            onBack: () => Navigator.pop(context),
+          ),
+        ),
+      );
+      return;
+    }
     if (objClass == 'StarChallengeModuleProperties') {
       Navigator.push(
         context,
@@ -2776,6 +2648,10 @@ class _EditorScreenState extends State<EditorScreen> {
                   builder: (_) => ZombieSelectionScreen(
                     stateBucketId: _selectionStateBucketId,
                     editorCubit: _ec,
+                    levelFile: _ec.state.levelFile,
+                    onAddModule: (objClass) {
+                      _addModule(ModuleRegistry.getMetadata(objClass));
+                    },
                     multiSelect: true,
                     onZombieSelected: (_) {},
                     onMultiZombieSelected: (ids) {
@@ -2809,6 +2685,10 @@ class _EditorScreenState extends State<EditorScreen> {
                   builder: (_) => ZombieSelectionScreen(
                     stateBucketId: _selectionStateBucketId,
                     editorCubit: _ec,
+                    levelFile: _ec.state.levelFile,
+                    onAddModule: (objClass) {
+                      _addModule(ModuleRegistry.getMetadata(objClass));
+                    },
                     multiSelect: false,
                     onZombieSelected: (id) {
                       Navigator.pop(context);
@@ -2910,6 +2790,22 @@ class _EditorScreenState extends State<EditorScreen> {
             onChanged: _markDirty,
             onBack: () => Navigator.pop(context),
             editorCubit: _ec,
+            onAddModule: (objClass) =>
+                _addModule(ModuleRegistry.getMetadata(objClass)),
+          ),
+        ),
+      );
+      return;
+    }
+    if (objClass == 'PVZ1SeeingStarsModuleProperties') {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => PVZ1SeeingStarsModuleScreen(
+            rtid: rtid,
+            levelFile: _ec.state.levelFile!,
+            onChanged: _markDirty,
+            onBack: () => Navigator.pop(context),
             onAddModule: (objClass) =>
                 _addModule(ModuleRegistry.getMetadata(objClass)),
           ),
@@ -3032,28 +2928,6 @@ class _EditorScreenState extends State<EditorScreen> {
       }
 
       openLifeSupport(rtid);
-      return;
-    }
-    if (objClass == 'MoonGrappleModuleProperties' &&
-        _ec.state.parsedData?.levelDef != null) {
-      final referenceData = ReferenceRepository.instance
-          .objectForAlias(info.alias)
-          ?.objData;
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => MoonGrappleModuleScreen(
-            rtid: rtid,
-            levelFile: _ec.state.levelFile!,
-            levelDef: _ec.state.parsedData!.levelDef!,
-            referenceData: referenceData is Map
-                ? Map<String, dynamic>.from(referenceData)
-                : null,
-            onChanged: _markDirty,
-            onBack: () => Navigator.pop(context),
-          ),
-        ),
-      );
       return;
     }
     if (objClass == 'WitchModuleProperties' &&
@@ -3274,6 +3148,10 @@ class _EditorScreenState extends State<EditorScreen> {
                   builder: (_) => ZombieSelectionScreen(
                     stateBucketId: _selectionStateBucketId,
                     editorCubit: _ec,
+                    levelFile: _ec.state.levelFile,
+                    onAddModule: (objClass) {
+                      _addModule(ModuleRegistry.getMetadata(objClass));
+                    },
                     multiSelect: true,
                     onZombieSelected: (_) {},
                     onMultiZombieSelected: (ids) {
@@ -3486,6 +3364,10 @@ class _EditorScreenState extends State<EditorScreen> {
                   builder: (_) => ZombieSelectionScreen(
                     stateBucketId: _selectionStateBucketId,
                     editorCubit: _ec,
+                    levelFile: _ec.state.levelFile,
+                    onAddModule: (objClass) {
+                      _addModule(ModuleRegistry.getMetadata(objClass));
+                    },
                     multiSelect: false,
                     onZombieSelected: (id) {
                       Navigator.pop(context);
@@ -3631,6 +3513,22 @@ class _EditorScreenState extends State<EditorScreen> {
             levelFile: _ec.state.levelFile!,
             onChanged: _markDirty,
             onBack: () => Navigator.pop(context),
+          ),
+        ),
+      );
+      return;
+    }
+    if (info.source == 'CurrentLevel' &&
+        objClass == 'GladiatorRowModuleProperties') {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => GladiatorRowModuleScreen(
+            rtid: rtid,
+            levelFile: _ec.state.levelFile!,
+            onChanged: _markDirty,
+            onBack: () => Navigator.pop(context),
+            initialWave: hint?.gladiatorWave,
           ),
         ),
       );
@@ -3921,9 +3819,8 @@ class _EditorScreenState extends State<EditorScreen> {
                     onPressed: _ec.state.levelFile != null
                         ? () async {
                             final hadChanges = _ec.state.hasChanges;
-                            final saved = await _save();
+                            await _save();
                             if (!mounted) return;
-                            if (!saved) return;
                             if (hadChanges) {
                               // Let the banner start its fade-in before the route covers the frame.
                               await Future<void>.delayed(
@@ -3944,16 +3841,6 @@ class _EditorScreenState extends State<EditorScreen> {
                                     levelFile: _ec.state.levelFile!,
                                     onBack: () => Navigator.pop(context),
                                     onSaved: () => _ec.onJsonViewerSaved(),
-                                    saveLevel: (filePath, levelFile) async {
-                                      if (!moonGrappleHasEnoughRounds(levelFile)) {
-                                        await _showMoonGrappleSaveBlockedDialog();
-                                        return;
-                                      }
-                                      await LevelRepository.saveAndExport(
-                                        filePath,
-                                        levelFile,
-                                      );
-                                    },
                                   ),
                                 ),
                               );
@@ -3967,7 +3854,7 @@ class _EditorScreenState extends State<EditorScreen> {
                     return IconButton(
                       icon: const Icon(Icons.save),
                       tooltip: l10n?.tooltipSave ?? 'Save',
-                      onPressed: _ec.state.hasChanges ? () => _save() : null,
+                      onPressed: _ec.state.hasChanges ? _save : null,
                     );
                   },
                 ),
@@ -4014,6 +3901,17 @@ class _EditorScreenState extends State<EditorScreen> {
                       ),
                     ),
                     PopupMenuItem(
+                      value: 'autosave',
+                      child: EditorPopupMenuTile(
+                        leading: const Icon(Icons.save_outlined),
+                        title: Text(
+                          settings.hasAutosave
+                              ? (l10n?.autosaveOn ?? 'Autosave: on')
+                              : (l10n?.autosaveOff ?? 'Autosave: off'),
+                        ),
+                      ),
+                    ),
+                    PopupMenuItem(
                       value: 'level_overview',
                       enabled: _ec.state.levelFile != null,
                       child: EditorPopupMenuTile(
@@ -4031,9 +3929,8 @@ class _EditorScreenState extends State<EditorScreen> {
                   onSelected: (value) async {
                     if (value == 'json') {
                       final hadChanges = _ec.state.hasChanges;
-                      final saved = await _save();
+                      await _save();
                       if (!mounted) return;
-                      if (!saved) return;
                       if (hadChanges) {
                         await Future<void>.delayed(
                           const Duration(milliseconds: 32),
@@ -4051,16 +3948,6 @@ class _EditorScreenState extends State<EditorScreen> {
                               levelFile: _ec.state.levelFile!,
                               onBack: () => Navigator.pop(context),
                               onSaved: () => _ec.onJsonViewerSaved(),
-                              saveLevel: (filePath, levelFile) async {
-                                if (!moonGrappleHasEnoughRounds(levelFile)) {
-                                  await _showMoonGrappleSaveBlockedDialog();
-                                  return;
-                                }
-                                await LevelRepository.saveAndExport(
-                                  filePath,
-                                  levelFile,
-                                );
-                              },
                             ),
                           ),
                         );
@@ -4071,6 +3958,8 @@ class _EditorScreenState extends State<EditorScreen> {
                       _showUiScaleDialog(context);
                     } else if (value == 'theme') {
                       context.read<SettingsCubit>().cycleTheme();
+                    } else if (value == 'autosave') {
+                      showAutosaveSettingsDialog(context);
                     } else if (value == 'level_overview') {
                       await openLevelOverviewFromOpenSession(context);
                     } else {
@@ -4218,16 +4107,12 @@ class _EditorScreenState extends State<EditorScreen> {
                                                 _ec.state.parsedData!.levelDef,
                                             objectMap:
                                                 _ec.state.parsedData!.objectMap,
-                                            missingModules:
-                                                _calculateMissingModules(),
-                                            missingModuleWarnings:
-                                                _getMissingModuleWarnings(),
-                                            showGlacierModuleCompatibilityWarning:
-                                                _showGlacierModuleCompatibilityWarning(),
-                                            showGlacierModuleUnderwaterWarning:
-                                                _showGlacierModuleUnderwaterWarning(),
-                                            showIceAgePlantPuzzleWarning:
-                                                _showIceAgePlantPuzzleWarning(),
+                                            issues: LevelIssueRegistry.forLevel(
+                                              context,
+                                              _ec.state.levelFile!,
+                                              parsed: _ec.state.parsedData,
+                                              editorOnly: true,
+                                            ),
                                             onEditBasicInfo:
                                                 _handleEditBasicInfo,
                                             onEditModule: _handleEditModule,
@@ -4466,7 +4351,6 @@ class _CustomStageAliasPromptDialogState
 
     return EscapeClosesModal(
       child: Dialog(
-        constraints: const BoxConstraints(minWidth: 0),
         child: SizedBox(
           width: dialogW,
           child: Padding(

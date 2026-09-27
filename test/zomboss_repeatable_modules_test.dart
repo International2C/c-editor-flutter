@@ -250,7 +250,6 @@ void main() {
         body: LevelSettingsTab(
           levelDef: levelDef,
           objectMap: objectMap,
-          missingModules: const [],
           onEditBasicInfo: () {},
           onEditModule: (_) {},
           onRemoveModule: (_) {},

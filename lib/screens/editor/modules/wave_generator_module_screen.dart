@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:c_editor/widgets/camel_minigame_conflicts.dart';
 import 'package:c_editor/data/pvz_models.dart';
+import 'package:c_editor/data/registry/issue_registry.dart';
 import 'package:c_editor/data/rtid_parser.dart';
 import 'package:c_editor/data/repository/zombie_repository.dart';
 import 'package:c_editor/data/wave_generator_level_utils.dart';
@@ -212,6 +214,10 @@ class _WaveGeneratorModuleScreenState extends State<WaveGeneratorModuleScreen> {
         waveSpendingPoints: _data.waveSpendingPoints,
         waveSpendingPointIncrement: _data.waveSpendingPointIncrement,
         waves: _data.waves,
+        isRiseFromGroundMode: _data.isRiseFromGroundMode,
+        ignoreFlagCarriers: _data.ignoreFlagCarriers,
+        spawnColStart: _data.spawnColStart,
+        spawnColEnd: _data.spawnColEnd,
       );
       _sync();
     });
@@ -227,6 +233,10 @@ class _WaveGeneratorModuleScreenState extends State<WaveGeneratorModuleScreen> {
       waveSpendingPoints: _data.waveSpendingPoints,
       waveSpendingPointIncrement: _data.waveSpendingPointIncrement,
       waves: _data.waves,
+      isRiseFromGroundMode: _data.isRiseFromGroundMode,
+      ignoreFlagCarriers: _data.ignoreFlagCarriers,
+      spawnColStart: _data.spawnColStart,
+      spawnColEnd: _data.spawnColEnd,
     );
     _sync();
   }
@@ -301,6 +311,12 @@ class _WaveGeneratorModuleScreenState extends State<WaveGeneratorModuleScreen> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
     final theme = Theme.of(context);
+    final compatibilityWarnings =
+        LevelIssueRegistry.forLevel(context, widget.levelFile).where(
+          (issue) =>
+              issue.id == 'seeingStarsCompatibilityWarning' ||
+              issue.id == 'gladiatorWaveGeneratorCompatibilityWarning',
+        );
     final sectionTitleColor = theme.brightness == Brightness.dark
         ? pvzPurpleDark
         : pvzPurpleLight;
@@ -365,7 +381,7 @@ class _WaveGeneratorModuleScreenState extends State<WaveGeneratorModuleScreen> {
                       'Incompatibilities',
                   body:
                       l10n?.waveGeneratorModuleHelpIncompatBody ??
-                      'May be incompatible with some modules and cause the level to crash. Use with caution.',
+                      'Wave Generator may be incompatible with modules such as Seeing Stars and cause the level to crash. Use with caution.',
                 ),
               ],
             ),
@@ -386,6 +402,19 @@ class _WaveGeneratorModuleScreenState extends State<WaveGeneratorModuleScreen> {
               accentColor: sectionTitleColor,
             ),
             const SizedBox(height: 16),
+            for (final warning in compatibilityWarnings) ...[
+              EditorWarningBanner(
+                key: ValueKey(warning.id),
+                margin: EdgeInsets.zero,
+                title: warning.title,
+                message: warning.message,
+              ),
+              const SizedBox(height: 16),
+            ],
+            CamelMinigameConflicts(
+              levelFile: widget.levelFile,
+              onlyIds: const {'camelMinigameNonTouchZombies'},
+            ),
             Card(
               child: Padding(
                 padding: const EdgeInsets.all(16),
@@ -473,6 +502,33 @@ class _WaveGeneratorModuleScreenState extends State<WaveGeneratorModuleScreen> {
                         ),
                       ),
                     ],
+                    const SizedBox(height: 16),
+                    SwitchListTile(
+                      title: Text(
+                        l10n?.waveGeneratorRiseFromGround ??
+                            'Rise from ground mode',
+                      ),
+                      subtitle: Text(
+                        l10n?.waveGeneratorRiseFromGroundHint ??
+                            'IsRiseFromGroundMode',
+                        style: theme.textTheme.bodySmall,
+                      ),
+                      value: _data.isRiseFromGroundMode,
+                      onChanged: (v) {
+                        _data.isRiseFromGroundMode = v;
+                        if (v) {
+                          _data.spawnColStart = 2;
+                          _data.spawnColEnd = 2;
+                        }
+                        _sync();
+                      },
+                      contentPadding: EdgeInsets.zero,
+                    ),
+                    if (_data.isRiseFromGroundMode)
+                      EditorWarningBanner(
+                        title: l10n!.waveGeneratorRiseFromGroundWarningTitle,
+                        message: l10n.waveGeneratorRiseFromGroundWarning,
+                      ),
                     const SizedBox(height: 8),
                     Text(
                       l10n?.waveGeneratorWaveCountSummary(_data.waves.length) ??

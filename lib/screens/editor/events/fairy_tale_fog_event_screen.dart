@@ -42,9 +42,9 @@ class _FairyTaleFogEventScreenState extends State<FairyTaleFogEventScreen> {
   int get _gridRows => _isDeepSeaLawn ? 6 : 5;
 
   static const _fogOptions = [
-    ('fairy_tale_fog_lvl1', 'Level 1'),
-    ('fairy_tale_fog_lvl2', 'Level 2'),
-    ('fairy_tale_fog_lvl3', 'Level 3'),
+    ('fairy_tale_fog_lvl1', 1),
+    ('fairy_tale_fog_lvl2', 2),
+    ('fairy_tale_fog_lvl3', 3),
   ];
 
   @override
@@ -162,14 +162,14 @@ class _FairyTaleFogEventScreenState extends State<FairyTaleFogEventScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Fog parameters',
+                        l10n?.mistParameters ?? 'Fog parameters',
                         style: theme.textTheme.titleMedium?.copyWith(
                           fontWeight: FontWeight.bold,
                         ),
                       ),
                       const SizedBox(height: 16),
                       EditorResponsiveInputField(
-                        label: 'Fog type (FogType)',
+                        label: l10n?.fairyFogType ?? 'Fog type (FogType)',
                         decoration: const InputDecoration(
                           border: OutlineInputBorder(),
                         ),
@@ -185,7 +185,10 @@ class _FairyTaleFogEventScreenState extends State<FairyTaleFogEventScreen> {
                                   .map(
                                     (e) => DropdownMenuItem(
                                       value: e.$1,
-                                      child: Text(e.$2),
+                                      child: Text(
+                                        l10n?.fairyFogLevel(e.$2) ??
+                                            'Level ${e.$2}',
+                                      ),
                                     ),
                                   )
                                   .toList(),
@@ -203,7 +206,9 @@ class _FairyTaleFogEventScreenState extends State<FairyTaleFogEventScreen> {
                       ),
                       const SizedBox(height: 12),
                       EditorResponsiveInputField(
-                        label: 'Moving time (MovingTime)',
+                        label:
+                            l10n?.fairyFogMovingTime ??
+                            'Moving time (MovingTime; seconds)',
                         builder: (context, decoration) => TextFormField(
                           initialValue: _data.movingTime.toString(),
                           decoration: decoration,
@@ -225,7 +230,7 @@ class _FairyTaleFogEventScreenState extends State<FairyTaleFogEventScreen> {
                       ),
                       const SizedBox(height: 12),
                       Text(
-                        'Range (Range)',
+                        l10n?.range ?? 'Range',
                         style: theme.textTheme.titleSmall?.copyWith(
                           fontWeight: FontWeight.bold,
                         ),
@@ -235,7 +240,9 @@ class _FairyTaleFogEventScreenState extends State<FairyTaleFogEventScreen> {
                         children: [
                           Expanded(
                             child: EditorResponsiveInputField(
-                              label: 'mX',
+                              label:
+                                  l10n?.fairyFogRangeX ??
+                                  'Starting column (mX; 0-based)',
                               decoration: const InputDecoration(
                                 border: OutlineInputBorder(),
                               ),
@@ -265,7 +272,9 @@ class _FairyTaleFogEventScreenState extends State<FairyTaleFogEventScreen> {
                           const SizedBox(width: 8),
                           Expanded(
                             child: EditorResponsiveInputField(
-                              label: 'mY',
+                              label:
+                                  l10n?.fairyFogRangeY ??
+                                  'Starting row (mY; 0-based)',
                               decoration: const InputDecoration(
                                 border: OutlineInputBorder(),
                               ),
@@ -299,7 +308,9 @@ class _FairyTaleFogEventScreenState extends State<FairyTaleFogEventScreen> {
                         children: [
                           Expanded(
                             child: EditorResponsiveInputField(
-                              label: 'mWidth',
+                              label:
+                                  l10n?.fairyFogRangeWidth ??
+                                  'Width (mWidth; tiles)',
                               decoration: const InputDecoration(
                                 border: OutlineInputBorder(),
                               ),
@@ -329,7 +340,9 @@ class _FairyTaleFogEventScreenState extends State<FairyTaleFogEventScreen> {
                           const SizedBox(width: 8),
                           Expanded(
                             child: EditorResponsiveInputField(
-                              label: 'mHeight',
+                              label:
+                                  l10n?.fairyFogRangeHeight ??
+                                  'Height (mHeight; tiles)',
                               decoration: const InputDecoration(
                                 border: OutlineInputBorder(),
                               ),
@@ -370,7 +383,7 @@ class _FairyTaleFogEventScreenState extends State<FairyTaleFogEventScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Fog preview',
+                        l10n?.fogPreview ?? 'Fog preview',
                         style: theme.textTheme.titleMedium?.copyWith(
                           fontWeight: FontWeight.bold,
                         ),

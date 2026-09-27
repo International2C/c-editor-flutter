@@ -29,6 +29,19 @@ abstract final class CustomZombieLevelUtils {
     return info?.source == _currentLevel;
   }
 
+  /// Unknown built-in types or missing icons are not broken custom references.
+  static bool isMissingCustomZombie(PvzLevelFile levelFile, String typeOrRtid) {
+    final info = RtidParser.parse(typeOrRtid);
+    if (info == null || (info.source != _currentLevel && info.source != '.')) {
+      return false;
+    }
+    return !levelFile.objects.any(
+      (object) =>
+          object.objClass == 'ZombieType' &&
+          object.aliases?.contains(info.alias) == true,
+    );
+  }
+
   static String defaultRtid(String baseType) {
     final aliases = ZombieRepository().buildZombieAliases(baseType);
     return RtidParser.build(aliases, 'ZombieTypes');

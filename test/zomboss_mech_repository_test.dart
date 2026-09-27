@@ -30,28 +30,28 @@ void main() {
 
   test('mech groups follow world priority order', () async {
     await ZombossMechRepository.init();
+    expect(ZombossMechRepository.allZombossMechs.map((e) => e.id).toList(), [
+      'ZombieZombossMech_Egypt',
+      'ZombieZombossMech_Pirate',
+      'ZombieZombossMech_Cowboy',
+      'ZombieZombossMech_Future',
+      'ZombieZombossMech_Dark',
+      'ZombieZombossMech_Beach',
+      'ZombieZombossMech_IceAge',
+      'ZombieZombossMech_SkyCity',
+      'ZombieZombossMech_LostCity',
+      'ZombieZombossMech_Eighties',
+      'ZombieZombossMech_Dino',
+      'ZombieZombossMech_Steam',
+      'ZombieZombossMech_Renai',
+      'ZombieZombossMech_Hydra',
+      'ZombieZombossMech_RomanHotRodicus',
+      'ZombieZombossMech_PVZ1_Robot',
+    ]);
     expect(
-      ZombossMechRepository.allZombossMechs.map((e) => e.id).toList(),
-      [
+      ZombossMechRepository.getBase(
         'ZombieZombossMech_Egypt',
-        'ZombieZombossMech_Pirate',
-        'ZombieZombossMech_Cowboy',
-        'ZombieZombossMech_Future',
-        'ZombieZombossMech_Dark',
-        'ZombieZombossMech_Beach',
-        'ZombieZombossMech_IceAge',
-        'ZombieZombossMech_SkyCity',
-        'ZombieZombossMech_LostCity',
-        'ZombieZombossMech_Eighties',
-        'ZombieZombossMech_Dino',
-        'ZombieZombossMech_Steam',
-        'ZombieZombossMech_Renai',
-        'ZombieZombossMech_Hydra',
-        'ZombieZombossMech_PVZ1_Robot',
-      ],
-    );
-    expect(
-      ZombossMechRepository.getBase('ZombieZombossMech_Egypt')!.variations.take(5),
+      )!.variations.take(5),
       [
         'zombossmech_egypt',
         'zombossmech_modern_egypt',
@@ -67,7 +67,9 @@ void main() {
       isFalse,
     );
     expect(
-      ZombossMechRepository.getBase('ZombieZombossMech_Egypt')!.editableInstance,
+      ZombossMechRepository.getBase(
+        'ZombieZombossMech_Egypt',
+      )!.editableInstance,
       'zombossmech_egypt_memo',
     );
     expect(

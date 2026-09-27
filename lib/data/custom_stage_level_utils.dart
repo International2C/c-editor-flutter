@@ -7,7 +7,10 @@ import 'package:c_editor/data/rtid_parser.dart';
 abstract final class CustomStageLevelUtils {
   static const currentLevel = 'CurrentLevel';
   static const defaultBuiltinStageRtid = 'RTID(TutorialStage@LevelModules)';
-  static const _preferredLawnAppearanceStageAliases = {'KongfuBossStage'};
+  static const _preferredLawnAppearanceStageAliases = {
+    'KongfuBossStage',
+    'UnchartedRomaStage',
+  };
 
   static const ambientAudioOptions = [
     'Amb_Tutorial_Garden_BG_LP',

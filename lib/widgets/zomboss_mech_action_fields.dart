@@ -342,8 +342,11 @@ class ZombossMechActionFieldsEditor extends StatelessWidget {
     String label,
   ) {
     final l10n = AppLocalizations.of(context);
-    final raw = data[field.name] ?? field.defaultValue ?? '';
+    final isSpawnJump = field.name == 'SpawnJumpAction';
+    final raw =
+        data[field.name] ?? (isSpawnJump ? null : field.defaultValue) ?? '';
     final rtid = raw.toString();
+    final isBuiltInSpawnJump = rtid == zombossSpawnJumpActionRtid;
     var tag = 'movement';
     Widget? leading;
     final catalog = this.catalog;
@@ -364,6 +367,8 @@ class ZombossMechActionFieldsEditor extends StatelessWidget {
       );
     }
     final picker = onPickJumpAction;
+    final canPick =
+        editable && (isSpawnJump ? !isBuiltInSpawnJump : picker != null);
     return Padding(
       padding: padding,
       child: Column(
@@ -373,26 +378,54 @@ class ZombossMechActionFieldsEditor extends StatelessWidget {
           const SizedBox(height: 8),
           ZombossMechActionRow(
             key: ValueKey('zomboss-jump-field-${field.name}'),
-            label: rtid.isEmpty
+            label: isBuiltInSpawnJump
+                ? l10n?.zombossMechSummonJump ?? 'Summon jump'
+                : rtid.isEmpty
                 ? '—'
                 : ZombossMechActionUtils.displayLabel(rtid),
             tag: tag,
             mutedLabel: rtid.isEmpty,
             leading: leading,
             showRemoveButton: false,
-            trailing: editable && picker != null
+            trailing: canPick
                 ? IconButton(
                     visualDensity: VisualDensity.compact,
                     icon: const Icon(Icons.swap_horiz, size: 22),
                     tooltip: l10n?.zombossMechSelectAction ?? 'Select action',
                     onPressed: () async {
-                      final next = await picker(rtid);
+                      final next = isSpawnJump
+                          ? await _pickSpawnJumpAction(context)
+                          : await picker!(rtid);
                       if (next == null || next.isEmpty) return;
+                      if (!context.mounted) return;
                       data[field.name] = next;
                       onChanged();
                     },
                   )
                 : null,
+          ),
+        ],
+      ),
+    );
+  }
+
+  Future<String?> _pickSpawnJumpAction(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    return showDialog<String>(
+      context: context,
+      builder: (dialogContext) => AlertDialog(
+        scrollable: true,
+        title: Text(l10n?.zombossMechSelectAction ?? 'Select action'),
+        content: EditorOptionTile(
+          selected: false,
+          title: Text(l10n?.zombossMechSummonJump ?? 'Summon jump'),
+          subtitle: const Text(zombossSpawnJumpActionRtid),
+          onTap: () => Navigator.pop(dialogContext, zombossSpawnJumpActionRtid),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(dialogContext),
+            child: Text(l10n?.cancel ?? 'Cancel'),
           ),
         ],
       ),

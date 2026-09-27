@@ -1,0 +1,24 @@
+{
+  "aliases": [
+    "EagleFlagWave10"
+  ],
+  "objclass": "SpawnEagleFlagsWaveActionProps",
+  "objdata": {
+    "Flags": [
+      {
+        "Location": {
+          "mX": 7,
+          "mY": 0
+        },
+        "Type": "roman_eagle_flag"
+      },
+      {
+        "Location": {
+          "mX": 7,
+          "mY": 4
+        },
+        "Type": "roman_eagle_flag"
+      }
+    ]
+  }
+}

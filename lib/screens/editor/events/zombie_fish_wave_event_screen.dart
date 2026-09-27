@@ -1,3 +1,4 @@
+import 'package:c_editor/widgets/oak_train_warnings.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:c_editor/data/custom_zombie_level_utils.dart';
@@ -274,6 +275,7 @@ class _ZombieFishWaveEventScreenState extends State<ZombieFishWaveEventScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
+              OakTrainWarnings(levelFile: widget.levelFile, event: _moduleObj),
               EditorAliasInputField(
                 alias: _alias,
                 levelFile: widget.levelFile,
@@ -306,6 +308,11 @@ class _ZombieFishWaveEventScreenState extends State<ZombieFishWaveEventScreen> {
                     levelDisplay: isElite ? 'E' : '${z.level ?? 1}',
                     isElite: isElite,
                     isCustom: _isCustomZombie(z),
+                    isMissingCustomZombie:
+                        CustomZombieLevelUtils.isMissingCustomZombie(
+                          widget.levelFile,
+                          z.type,
+                        ),
                   );
                 }).toList(),
                 onTap: (index) =>

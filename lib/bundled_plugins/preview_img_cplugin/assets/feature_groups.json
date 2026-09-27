@@ -107,6 +107,12 @@
       "objClasses": ["PVZ1CopycatsModuleProperties"]
     },
     {
+      "id": "seeing_stars",
+      "nameKey": "previewFeature_seeing_stars",
+      "titleObjClass": "PVZ1SeeingStarsModuleProperties",
+      "objClasses": ["PVZ1SeeingStarsModuleProperties"]
+    },
+    {
       "id": "inflation",
       "nameKey": "previewFeature_inflation",
       "titleObjClass": "IncreasedCostModuleProperties",

@@ -1,3 +1,4 @@
+import 'package:c_editor/data/oak_archery_preview.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:c_editor/data/grid_override_module_utils.dart';
@@ -15,6 +16,7 @@ import 'package:c_editor/widgets/initial_kongfu_grid_items_card.dart';
 import 'package:c_editor/widgets/wave_generator_expectation_dialog.dart';
 import 'package:c_editor/widgets/wave_generator_zombie_tile.dart';
 import 'package:c_editor/widgets/wave_module_preview_dialogs.dart';
+import 'package:c_editor/widgets/wave_number_label.dart';
 
 /// Waves tab for levels using [WaveGeneratorProperties] (embedded wave data).
 class WaveGeneratorTab extends StatefulWidget {
@@ -517,6 +519,7 @@ class _WaveGeneratorTabState extends State<WaveGeneratorTab> {
               return Padding(
                 padding: const EdgeInsets.only(bottom: 8),
                 child: _WaveRowCard(
+                  generator: data,
                   waveIndex: waveIndex,
                   isFlagWave: isFlagWave,
                   wave: wave,
@@ -552,6 +555,7 @@ class _WaveGeneratorTabState extends State<WaveGeneratorTab> {
 
 class _WaveRowCard extends StatelessWidget {
   const _WaveRowCard({
+    required this.generator,
     required this.waveIndex,
     required this.isFlagWave,
     required this.wave,
@@ -567,6 +571,7 @@ class _WaveRowCard extends StatelessWidget {
     required this.l10n,
   });
 
+  final WaveGeneratorPropertiesData generator;
   final int waveIndex;
   final bool isFlagWave;
   final WaveGeneratorWaveData wave;
@@ -595,7 +600,15 @@ class _WaveRowCard extends StatelessWidget {
         final veryCompactWidth = constraints.maxWidth < 420;
         final isDesktop = isDesktopPlatformView && !compactWidth;
         final cardPadding = isDesktop ? 14.0 : 10.0;
-        final waveNumberWidth = isDesktop ? 52.0 : 28.0;
+        final waveNumber = WaveNumberLabel(
+          waveNumber: waveIndex,
+          isFlagWave: isFlagWave,
+          fontSize: isDesktop ? 18 : 16,
+          flagSize: isDesktop ? 14 : 12,
+        );
+        final waveNumberWidth = waveNumber
+            .minimumSize(context, minWidth: isDesktop ? 52 : 28)
+            .width;
         final actionColumnWidth = isDesktop
             ? 220.0
             : (constraints.maxWidth * (veryCompactWidth ? 0.26 : 0.24))
@@ -618,29 +631,7 @@ class _WaveRowCard extends StatelessWidget {
                       alignment: Alignment.topCenter,
                       child: Padding(
                         padding: const EdgeInsets.only(top: 4),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              '$waveIndex',
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: isDesktop ? 18 : 16,
-                                color: theme.colorScheme.primary,
-                              ),
-                            ),
-                            if (isFlagWave)
-                              Padding(
-                                padding: const EdgeInsets.only(left: 2),
-                                child: Icon(
-                                  Icons.flag,
-                                  size: isDesktop ? 14 : 12,
-                                  color: theme.colorScheme.error,
-                                ),
-                              ),
-                          ],
-                        ),
+                        child: waveNumber,
                       ),
                     ),
                   ),
@@ -660,12 +651,13 @@ class _WaveRowCard extends StatelessWidget {
                                     waveState.addedToPool.length,
                                   ) ??
                                   'Pool additions: ${waveState.addedToPool.length}',
+                            if (wave.waveSpawnTime != null && l10n != null)
+                              waveSpawnDelaySummary(l10n!, generator, wave),
                             if (wave.waitUntilAllZombiesDie == true)
                               l10n?.waveGeneratorWaitStatus ??
                                   'Waits for previous wave',
                           ].join(' · '),
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
+
                           style: theme.textTheme.bodySmall?.copyWith(
                             color: theme.colorScheme.onSurfaceVariant,
                           ),
@@ -690,7 +682,16 @@ class _WaveRowCard extends StatelessWidget {
                                   localizedName: zombieDisplayName(z.type),
                                   codename: zombieCodename(z.type),
                                   iconPath: zombieIcon(z.type),
-                                  rowLabel: waveGeneratorRowDisplay(z.row),
+                                  rowLabel: generator.isRiseFromGroundMode
+                                      ? (int.tryParse(z.riseGridY ?? '') == null
+                                            ? '?'
+                                            : '${int.parse(z.riseGridY!) + 1}')
+                                      : waveGeneratorRowDisplay(z.row),
+                                  positionTooltip:
+                                      generator.isRiseFromGroundMode &&
+                                          l10n != null
+                                      ? waveSpawnPositionSummary(l10n!, z)
+                                      : null,
                                 ),
                             ],
                           ),

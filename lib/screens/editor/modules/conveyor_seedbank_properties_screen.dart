@@ -596,7 +596,7 @@ class _PlantRow extends StatelessWidget {
                         runSpacing: 2,
                         children: [
                           Text(
-                            'Weight: ${plant.weight}',
+                            '${l10n?.weight ?? 'Weight'}: ${plant.weight}',
                             style: theme.textTheme.bodySmall?.copyWith(
                               color: theme.colorScheme.onSurfaceVariant,
                             ),
@@ -705,8 +705,10 @@ class _PlantDetailDialogState extends State<_PlantDetailDialog> {
     final inset = media.size.width < 600
         ? const EdgeInsets.symmetric(horizontal: 16, vertical: 16)
         : const EdgeInsets.symmetric(horizontal: 40, vertical: 24);
-    final dialogWidth =
-        (media.size.width - inset.horizontal).clamp(280.0, 480.0);
+    final dialogWidth = (media.size.width - inset.horizontal).clamp(
+      280.0,
+      480.0,
+    );
     const dialogPadding = EdgeInsets.fromLTRB(24, 20, 24, 12);
     const actionsGap = 12.0;
     const estimatedActionsHeight = 52.0;

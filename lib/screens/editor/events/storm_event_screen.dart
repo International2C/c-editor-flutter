@@ -527,6 +527,11 @@ class _StormEventScreenState extends State<StormEventScreen> {
                         : (z.level == null ? '0' : '${z.level}'),
                     isElite: isElite,
                     isCustom: _isCustomZombie(z),
+                    isMissingCustomZombie:
+                        CustomZombieLevelUtils.isMissingCustomZombie(
+                          widget.levelFile,
+                          z.type,
+                        ),
                   );
                 }).toList(),
                 onTap: _showZombieEditSheet,

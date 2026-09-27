@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:c_editor/data/gladiator_row_utils.dart';
+import 'package:c_editor/widgets/gladiator_row_preview.dart';
 import 'package:c_editor/data/grid_override_module_utils.dart';
 import 'package:c_editor/data/level_parser.dart';
+import 'package:c_editor/data/lunar_mine_vein_type_catalog.dart';
 import 'package:c_editor/data/module_open_hint.dart';
 import 'package:c_editor/data/pvz_models.dart';
 import 'package:c_editor/data/moon_wave_preview_utils.dart';
@@ -34,6 +37,26 @@ List<Widget> _previewDialogActions(
   ];
 }
 
+Future<void> showSeeingStarsWavePreviewDialog(
+  BuildContext context, {
+  required int waveIndex,
+  VoidCallback? onOpenModuleSettings,
+}) {
+  final l10n = AppLocalizations.of(context)!;
+  return showEditorPreviewDialog<void>(
+    context: context,
+    title: Text(
+      '${l10n.waveLabel} $waveIndex - ${l10n.pvz1SeeingStarsModuleTitle}',
+    ),
+    content: Text(l10n.seeingStarsCycleWaveInfo(waveIndex)),
+    actions: _previewDialogActions(
+      context,
+      l10n: l10n,
+      onOpenModuleSettings: onOpenModuleSettings,
+    ),
+  );
+}
+
 Future<void> showDropShipWavePreviewDialog(
   BuildContext context, {
   required PvzLevelFile levelFile,
@@ -61,8 +84,7 @@ Future<void> showDropShipWavePreviewDialog(
           ),
           const SizedBox(height: 8),
           Text(
-            l10n?.airDropShipModuleAreaDropPreviewLabel ??
-                'Area drop preview:',
+            l10n?.airDropShipModuleAreaDropPreviewLabel ?? 'Area drop preview:',
             style: const TextStyle(fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 8),
@@ -159,7 +181,7 @@ Future<void> showRenaiWavePreviewDialog(
   if (isEmpty) {
     children.add(
       Text(
-        'Empty (roller/tiles only)',
+        l10n?.renaiWavePreviewEmpty ?? 'Empty (roller/tiles only)',
         style: Theme.of(context).textTheme.bodyMedium,
       ),
     );
@@ -260,10 +282,12 @@ Future<void> showLunarMineVeinWavePreviewDialog(
   final l10n = AppLocalizations.of(context);
   final placements = lunarMineVeinEmergingPlacementsForWave(data, waveIndex);
   final (gridRows, gridCols) = LevelParser.getGridDimensionsFromFile(levelFile);
-  const asset = 'assets/images/griditems/lunar_mine_ore.webp';
-  final cells = placements
-      .map((placement) => '${placement.gridX},${placement.gridY}')
-      .toSet();
+  final cellAssets = {
+    for (final placement in placements)
+      '${placement.gridX},${placement.gridY}': lunarMineVeinOreIconAsset(
+        placement.typeName,
+      ),
+  };
 
   return showEditorPreviewDialog<void>(
     context: context,
@@ -285,8 +309,7 @@ Future<void> showLunarMineVeinWavePreviewDialog(
         GridOverridePreviewGrid(
           gridRows: gridRows,
           gridCols: gridCols,
-          cellImageAt: (col, row) =>
-              cells.contains('$col,$row') ? asset : null,
+          cellImageAt: (col, row) => cellAssets['$col,$row'],
           cellImageScaleAt: (_, _) => 0.92,
         ),
       ],
@@ -332,10 +355,56 @@ Future<void> showRadiationMeteorWavePreviewDialog(
         GridOverridePreviewGrid(
           gridRows: gridRows,
           gridCols: gridCols,
-          cellImageAt: (col, row) =>
-              cells.contains('$col,$row') ? asset : null,
+          cellImageAt: (col, row) => cells.contains('$col,$row') ? asset : null,
           cellImageScaleAt: (_, _) => 0.92,
         ),
+      ],
+    ),
+    actions: _previewDialogActions(
+      context,
+      l10n: l10n,
+      onOpenModuleSettings: onOpenModuleSettings,
+    ),
+  );
+}
+
+Future<void> showGladiatorRowWavePreviewDialog(
+  BuildContext context, {
+  required PvzLevelFile levelFile,
+  required int waveIndex,
+  required GladiatorRowModulePropertiesData data,
+  VoidCallback? onOpenModuleSettings,
+}) {
+  final l10n = AppLocalizations.of(context)!;
+  final encounters = gladiatorEncountersForWave(data, waveIndex);
+  final (rows, cols) = LevelParser.getGridDimensionsFromFile(levelFile);
+  return showEditorPreviewDialog<void>(
+    context: context,
+    title: Text(
+      '${l10n.waveLabel} $waveIndex - ${l10n.moduleTitle_GladiatorRowModuleProperties}',
+    ),
+    content: Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        if (!data.usesTrophyMode)
+          Text(l10n.gladiatorLegacyModeWarning)
+        else ...[
+          Text(l10n.gladiatorPreviewTitle),
+          for (final encounter in encounters) ...[
+            const SizedBox(height: 12),
+            Text(
+              'R${encounter.row + 1} · ${l10n.gladiatorArenaDuration}: ${data.option('ArenaDuration')}',
+            ),
+            const SizedBox(height: 8),
+            GladiatorRowPreview(
+              encounter: encounter,
+              levelFile: levelFile,
+              rows: rows,
+              cols: cols,
+            ),
+          ],
+        ],
       ],
     ),
     actions: _previewDialogActions(

@@ -100,7 +100,7 @@ class UniversalIcon extends StatelessWidget {
       return _IconWrapper(
         id: clean,
         tooltip: ResourceNames.lookup(context, 'tool_plantfood'),
-        asset: 'assets/images/others/plantfood.png',
+        asset: 'assets/images/others/plantfood.webp',
         size: size,
         isGrid: isGrid,
         fallbackIcon: Icons.build,

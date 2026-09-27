@@ -147,7 +147,7 @@ void main() {
     tester,
   ) async {
     final data = <String, dynamic>{
-      'SpawnJumpAction': 'RTID(ZombossSpawnJump@ZombieActions)',
+      'FireJumpAction': 'RTID(ZombossRetreatJump@ZombieActions)',
       'BoneProjectileType': 'RTID(SomeBone@ZombieActions)',
     };
     var picked = false;
@@ -157,14 +157,14 @@ void main() {
           mechId: 'ZombieZombossMech_Egypt',
           objclass: 'ZombossDropZombieActionDefinition',
           fields: const [
-            ZombossMechFieldSpec(name: 'SpawnJumpAction', type: 'rtid'),
+            ZombossMechFieldSpec(name: 'FireJumpAction', type: 'rtid'),
             ZombossMechFieldSpec(name: 'BoneProjectileType', type: 'rtid'),
           ],
           data: data,
           onPickJumpAction: (current) async {
             picked = true;
-            expect(current, 'RTID(ZombossSpawnJump@ZombieActions)');
-            return 'RTID(ZombossRetreatJump@ZombieActions)';
+            expect(current, 'RTID(ZombossRetreatJump@ZombieActions)');
+            return 'RTID(ZombossSteamJump@ZombieActions)';
           },
           onChanged: () {},
         ),
@@ -172,14 +172,14 @@ void main() {
     );
 
     expect(find.byType(ZombossMechActionRow), findsOneWidget);
-    expect(find.text('ZombossSpawnJump@ZombieActions'), findsOneWidget);
+    expect(find.text('ZombossRetreatJump@ZombieActions'), findsOneWidget);
     expect(find.byType(TextFormField), findsOneWidget);
     expect(find.textContaining('BoneProjectileType'), findsOneWidget);
 
     await tester.tap(find.byIcon(Icons.swap_horiz));
     await tester.pumpAndSettle();
     expect(picked, isTrue);
-    expect(data['SpawnJumpAction'], 'RTID(ZombossRetreatJump@ZombieActions)');
+    expect(data['FireJumpAction'], 'RTID(ZombossSteamJump@ZombieActions)');
   });
 
   testWidgets('long zombie weight labels move above the input', (tester) async {

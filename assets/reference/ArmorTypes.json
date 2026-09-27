@@ -1,1247 +1,1247 @@
 {
-    "#comment": "Make new armor types here!",
-    "version": 1,
-    "objects": [
-        {
-            "objclass": "ArmorPropertySheetUtils",
-            "aliases": [
-                "ArmorPropertySheetUtilsTemplate"
-            ],
-            "objdata": {
-                "ToggleLayers": {
-                    "all": [
-                        "zombie_armor_cone_norm",
-                        "zombie_armor_cone_damage_01",
-                        "zombie_armor_cone_damage_02",
-                        "zombie_armor_bucket_norm",
-                        "zombie_armor_bucket_damage_01",
-                        "zombie_armor_bucket_damage_02",
-                        "zombie_armor_brick_norm",
-                        "zombie_armor_brick_damage_01",
-                        "zombie_armor_brick_damage_02"
-                    ],
-                    "ZombieAnimRig_EgyptBasic": [
-                        "zombie_armor_cone_damage_01",
-                        "zombie_armor_cone_damage_02",
-                        "zombie_armor_cone_norm",
-                        "zombie_armor_bucket_damage_01",
-                        "zombie_armor_bucket_damage_02",
-                        "zombie_armor_bucket_norm"
-                    ],
-                    "ZombieAnimRig_CowboyBasic": [
-                        "cowboy_hat",
-                        "zombie_armor_cone_norm",
-                        "zombie_armor_cone_damage_01",
-                        "zombie_armor_cone_damage_02",
-                        "zombie_armor_bucket_norm",
-                        "zombie_armor_bucket_damage_01",
-                        "zombie_armor_bucket_damage_02"
-                    ],
-                    "ZombieAnimRig_PirateBasic": [
-                        "zombie_armor_cone_norm",
-                        "zombie_armor_cone_damage_01",
-                        "zombie_armor_cone_damage_02",
-                        "zombie_armor_bucket_norm",
-                        "zombie_armor_bucket_damage_01",
-                        "zombie_armor_bucket_damage_02"
-                    ],
-                    "ZombieAnimRig_Sarcophagus": [
-                        "zombie_egypt_sarcophagus_norm",
-                        "zombie_egypt_sarcophagus_damage1",
-                        "zombie_egypt_sarcophagus_damage2"
-                    ],
-                    "ZombieAnimRig_Camel": [
-                        "zombie_camel_board_tail_etching_norm",
-                        "zombie_camel_board_tail_etching_damage_01",
-                        "zombie_camel_board_tail_etching_damage_02",
-                        "zombie_camel_board_hump_etching_norm",
-                        "zombie_camel_board_hump_etching_damage_01",
-                        "zombie_camel_board_hump_etching_damage_02",
-                        "zombie_camel_board_head_etching_norm",
-                        "zombie_camel_board_head_etching_damage_01",
-                        "zombie_camel_board_head_etching_damage_02",
-                        "zombie_camel_board_stone",
-                        "zombie_camel_board_stone_damage_01",
-                        "zombie_camel_board_stone_damage_02"
-                    ],
-                    "ZombieAnimRig_Poncho": [
-                        "zombie_poncho_armor1_norm",
-                        "zombie_poncho_armor1_damage1",
-                        "zombie_poncho_armor1_damage2",
-                        "poncho"
-                    ],
-                    "ZombieAnimRig_DarkBasic": [
-                        "zombie_shoulder_armor_norm",
-                        "zombie_shoulder_armor_damage_01",
-                        "zombie_shoulder_armor_damage_02",
-                        "zombie_armor_crown_norm",
-                        "zombie_armor_crown_damage_01",
-                        "zombie_armor_crown_damage_02"
-                    ],
-                    "ZombieAnimRig_DarkImp": [
-                        "zombie_shoulder_armor_norm",
-                        "zombie_shoulder_armor_damage_01",
-                        "zombie_shoulder_armor_damage_02",
-                        "zombie_armor_crown_norm",
-                        "zombie_armor_crown_damage_01",
-                        "zombie_armor_crown_damage_02"
-                    ],
-                    "ZombieAnimRig_BeachSurfer": [
-                        "surf_board2_damage1",
-                        "surf_board2_damage2",
-                        "surf_board2_damage3",
-                        "surf_board2_damage4",
-                        "surf_board2_damage5",
-                        "surf_board1_damage1",
-                        "surf_board1_damage2",
-                        "surf_board1_damage3",
-                        "surf_board1_damage4",
-                        "surf_board1_damage5"
-                    ],
-                    "ZombieAnimRig_IceAgeBasic": [
-                        "zombie_armor_iceblock_norm",
-                        "zombie_armor_iceblock_damage1",
-                        "zombie_armor_iceblock_damage2"
-                    ],
-                    "ZombieAnimRig_DinoBasic": [
-                        "zombie_armor_skull_norm",
-                        "zombie_armor_skull_damage_01",
-                        "zombie_armor_skull_damage_02"
-                    ],
-                    "ZombieAnimRig_TutorialSpring": [
-                        "bunny_ears"
-                    ],
-                    "ZombieAnimRig_RomanBasic": [
-                        "zombie_roman_helmet_norm",
-                        "zombie_roman_helmet_damage_01",
-                        "zombie_roman_helmet_damage_02",
-                        "zombie_armor_brick_damage_03",
-                        "zombie_armor_brick_damage_04",
-                        "zombie_armor_brick_damage_05"
-                    ]
-                }
-            }
-        },
-        {
-            "objclass": "ArmorPropertySheet",
-            "#comment": "Template! Copy + Paste me!",
-            "aliases": [
-                "ArmorPropertySheetTemplate"
-            ],
-            "objdata": {
-                "ArmorType": "Unknown",
-                "ClassName": "Armor",
-                "BaseHealth": 0.0,
-                "ArmorFlags": [
-                    "none"
-                ],
-                "#comment": "none, body, helm, metallic, invincible, damageable, droppable, absorboverflow, passdamage (armor will not absorb damage)",
-                "ArmorLayers": [],
-                "ArmorLayerHealth": [],
-                "ParticleLayerOverride": [
-                    ""
-                ],
-                "ImpactSoundEvent": "",
-                "DropSoundEvent": ""
-            }
-        },
-        {
-            "objclass": "ArmorPropertySheet",
-            "aliases": [
-                "ConeDefault"
-            ],
-            "objdata": {
-                "ArmorType": "Cone",
-                "BaseHealth": 370.0,
-                "ArmorFlags": [
-                    "damageable",
-                    "droppable",
-                    "helm"
-                ],
-                "ArmorLayers": [
-                    "zombie_armor_cone_norm",
-                    "zombie_armor_cone_damage_01",
-                    "zombie_armor_cone_damage_02"
-                ],
-                "ArmorLayerHealth": [
-                    260.0,
-                    130.0
-                ],
-                "ImpactSoundEvent": "Play_impact_plastic"
-            }
-        },
-        {
-            "objclass": "ArmorPropertySheet",
-            "aliases": [
-                "BucketDefault"
-            ],
-            "objdata": {
-                "ArmorType": "Bucket",
-                "BaseHealth": 1100.0,
-                "ArmorFlags": [
-                    "metallic",
-                    "damageable",
-                    "droppable",
-                    "helm"
-                ],
-                "ArmorLayers": [
-                    "zombie_armor_bucket_norm",
-                    "zombie_armor_bucket_damage_01",
-                    "zombie_armor_bucket_damage_02"
-                ],
-                "ArmorLayerHealth": [
-                    700.0,
-                    350.0
-                ],
-                "ImpactSoundEvent": "Play_impact_shieldhit"
-            }
-        },
-        {
-            "objclass": "ArmorPropertySheet",
-            "aliases": [
-                "HelmetDefault"
-            ],
-            "objdata": {
-                "ArmorType": "Crown",
-                "BaseHealth": 1950.0,
-                "ArmorFlags": [
-                    "damageable",
-                    "droppable",
-                    "metallic",
-                    "helm"
-                ],
-                "ArmorLayers": [
-                    "zombie_roman_helmet_norm",
-                    "zombie_roman_helmet_damage_01",
-                    "zombie_roman_helmet_damage_02"
-                ],
-                "ArmorLayerHealth": [
-                    1299,
-                    649
-                ],
-                "ImpactSoundEvent": "Play_impact_shieldhit",
-                "DropSoundEvent": ""
-            }
-        },
-        {
-            "objclass": "ArmorPropertySheet",
-            "aliases": [
-                "BrickDefault"
-            ],
-            "objdata": {
-                "ArmorType": "Brick",
-                "BaseHealth": 2200.0,
-                "ArmorFlags": [
-                    "damageable",
-                    "droppable",
-                    "helm"
-                ],
-                "ArmorLayers": [
-                    "zombie_armor_brick_norm",
-                    "zombie_armor_brick_damage_01",
-                    "zombie_armor_brick_damage_02"
-                ],
-                "ArmorLayerHealth": [
-                    1450.0,
-                    700.0
-                ],
-                "ParticleLayerOverride": [
-                    "zombie_armor_brick_damage_02",
-                    "zombie_armor_brick_damage_02",
-                    "zombie_armor_brick_damage_02"
-                ]
-            }
-        },
-        {
-            "objclass": "ArmorPropertySheet",
-            "aliases": [
-                "ComplexBrickDefault"
-            ],
-            "objdata": {
-                "ArmorType": "ComplexBrick",
-                "BaseHealth": 2200.0,
-                "ArmorFlags": [
-                    "damageable",
-                    "droppable",
-                    "helm"
-                ],
-                "ArmorLayers": [
-                    "zombie_armor_brick_norm",
-                    "zombie_armor_brick_damage_01",
-                    "zombie_armor_brick_damage_02",
-                    "zombie_armor_brick_damage_03",
-                    "zombie_armor_brick_damage_04",
-                    "zombie_armor_brick_damage_05"
-                ],
-                "ArmorLayerHealth": [
-                    0.833,
-                    0.666,
-                    0.5,
-                    0.333,
-                    0.166
-                ],
-                "ParticleLayerOverride": [
-                    "zombie_armor_brick_damage_02",
-                    "zombie_armor_brick_damage_02",
-                    "zombie_armor_brick_damage_02",
-                    "zombie_armor_brick_damage_02",
-                    "zombie_armor_brick_damage_02"
-                ]
-            }
-        },
-        {
-            "objclass": "ArmorPropertySheet",
-            "aliases": [
-                "CowboyHatDefault"
-            ],
-            "objdata": {
-                "ArmorType": "CowboyHat",
-                "BaseHealth": 100.0,
-                "ArmorFlags": [
-                    "droppable",
-                    "passdamage",
-                    "helm"
-                ],
-                "ArmorLayers": [
-                    "cowboy_hat"
-                ],
-                "ArmorLayerHealth": [
-                    100.0
-                ],
-                "ParticleLayerOverride": [
-                    "particle_hat"
-                ]
-            }
-        },
-        {
-            "objclass": "ArmorPropertySheet",
-            "aliases": [
-                "SarcophagusDefault"
-            ],
-            "objdata": {
-                "ArmorType": "Sarcophagus",
-                "BaseHealth": 1200.0,
-                "ArmorFlags": [
-                    "damageable",
-                    "absorboverflow",
-                    "body"
-                ],
-                "ArmorLayers": [
-                    "zombie_egypt_sarcophagus_norm",
-                    "zombie_egypt_sarcophagus_damage1",
-                    "zombie_egypt_sarcophagus_damage2"
-                ],
-                "ArmorLayerHealth": [
-                    800.0,
-                    400.0
-                ],
-                "ImpactSoundEvent": "Play_Zomb_Egypt_Pharaoh_Impact_Hit",
-                "DropSoundEvent": "Play_Zomb_Egypt_Pharaoh_Impact_Break"
-            }
-        },
-        {
-            "objclass": "ArmorPropertySheet",
-            "aliases": [
-                "CamelSignBlankDefault"
-            ],
-            "objdata": {
-                "ArmorType": "CamelSign",
-                "BaseHealth": 250.0,
-                "ArmorFlags": [
-                    "damageable"
-                ],
-                "ArmorLayers": [
-                    "zombie_camel_board_stone",
-                    "zombie_camel_board_stone_damage_01",
-                    "zombie_camel_board_stone_damage_02"
-                ],
-                "ArmorLayerHealth": [
-                    249.0,
-                    125.0
-                ],
-                "ImpactSoundEvent": "Play_CamelPanel_Hit",
-                "DropSoundEvent": "Play_CamelPanel_Break"
-            }
-        },
-        {
-            "objclass": "ArmorPropertySheet",
-            "aliases": [
-                "CamelSignHeadDefault"
-            ],
-            "objdata": {
-                "ArmorType": "CamelSign",
-                "BaseHealth": 250.0,
-                "ArmorFlags": [
-                    "damageable"
-                ],
-                "ArmorLayers": [
-                    "zombie_camel_board_head_etching_norm",
-                    "zombie_camel_board_head_etching_damage_01",
-                    "zombie_camel_board_head_etching_damage_02"
-                ],
-                "ArmorLayerHealth": [
-                    249.0,
-                    125.0
-                ],
-                "ImpactSoundEvent": "Play_CamelPanel_Hit",
-                "DropSoundEvent": "Play_CamelPanel_Break"
-            }
-        },
-        {
-            "objclass": "ArmorPropertySheet",
-            "aliases": [
-                "CamelSignMiddleDefault"
-            ],
-            "objdata": {
-                "ArmorType": "CamelSign",
-                "BaseHealth": 250.0,
-                "ArmorFlags": [
-                    "damageable"
-                ],
-                "ArmorLayers": [
-                    "zombie_camel_board_hump_etching_norm",
-                    "zombie_camel_board_hump_etching_damage_01",
-                    "zombie_camel_board_hump_etching_damage_02"
-                ],
-                "ArmorLayerHealth": [
-                    249.0,
-                    125.0
-                ],
-                "ImpactSoundEvent": "Play_CamelPanel_Hit",
-                "DropSoundEvent": "Play_CamelPanel_Break"
-            }
-        },
-        {
-            "objclass": "ArmorPropertySheet",
-            "aliases": [
-                "CamelSignTailDefault"
-            ],
-            "objdata": {
-                "ArmorType": "CamelSign",
-                "BaseHealth": 250.0,
-                "ArmorFlags": [
-                    "damageable"
-                ],
-                "ArmorLayers": [
-                    "zombie_camel_board_tail_etching_norm",
-                    "zombie_camel_board_tail_etching_damage_01",
-                    "zombie_camel_board_tail_etching_damage_02"
-                ],
-                "ArmorLayerHealth": [
-                    249.0,
-                    125.0
-                ],
-                "ImpactSoundEvent": "Play_CamelPanel_Hit",
-                "DropSoundEvent": "Play_CamelPanel_Break"
-            }
-        },
-        {
-            "objclass": "ArmorPropertySheet",
-            "aliases": [
-                "PonchoDefault"
-            ],
-            "objdata": {
-                "ArmorType": "Poncho",
-                "BaseHealth": 60.0,
-                "ArmorFlags": [
-                    "droppable",
-                    "body"
-                ],
-                "ArmorLayers": [
-                    "poncho"
-                ],
-                "ArmorLayerHealth": [],
-                "ParticleLayerOverride": [
-                    "particle_poncho"
-                ],
-                "ImpactSoundEvent": "Play_PonchoZombie_ImpactPoncho",
-                "DropSoundEvent": ""
-            }
-        },
-        {
-            "objclass": "ArmorPropertySheet",
-            "aliases": [
-                "PonchoPlateDefault"
-            ],
-            "objdata": {
-                "ArmorType": "PonchoPlate",
-                "BaseHealth": 1100.0,
-                "ArmorFlags": [
-                    "damageable",
-                    "droppable",
-                    "metallic",
-                    "body"
-                ],
-                "ArmorLayers": [
-                    "zombie_poncho_armor1_norm",
-                    "zombie_poncho_armor1_damage1",
-                    "zombie_poncho_armor1_damage2"
-                ],
-                "ArmorLayerHealth": [
-                    734.0,
-                    367.0
-                ],
-                "ParticleLayerOverride": [
-                    "particle_plate",
-                    "zombie_poncho_armor1_damage1",
-                    "zombie_poncho_armor1_damage2"
-                ],
-                "ImpactSoundEvent": "Play_Zomb_WildWest_Poncho_Impact_Metal",
-                "DropSoundEvent": ""
-            }
-        },
-        {
-            "objclass": "ArmorPropertySheet",
-            "aliases": [
-                "CrownDefault"
-            ],
-            "objdata": {
-                "ArmorType": "Crown",
-                "BaseHealth": 1600.0,
-                "ArmorFlags": [
-                    "damageable",
-                    "droppable",
-                    "metallic",
-                    "helm"
-                ],
-                "ArmorLayers": [
-                    "zombie_armor_crown_norm",
-                    "zombie_armor_crown_damage_01",
-                    "zombie_armor_crown_damage_02"
-                ],
-                "ArmorLayerHealth": [
-                    1067.0,
-                    534.0
-                ],
-                "ImpactSoundEvent": "",
-                "DropSoundEvent": ""
-            }
-        },
-        {
-            "objclass": "ArmorPropertySheet",
-            "aliases": [
-                "IceblockDefault"
-            ],
-            "objdata": {
-                "ArmorType": "Iceblock",
-                "BaseHealth": 1600.0,
-                "ArmorFlags": [
-                    "damageable",
-                    "droppable",
-                    "helm"
-                ],
-                "ArmorLayers": [
-                    "zombie_armor_iceblock_norm",
-                    "zombie_armor_iceblock_damage1",
-                    "zombie_armor_iceblock_damage2"
-                ],
-                "ArmorLayerHealth": [
-                    1067.0,
-                    534.0
-                ],
-                "ImpactSoundEvent": "",
-                "DropSoundEvent": ""
-            }
-        },
-        {
-            "objclass": "ArmorPropertySheet",
-            "aliases": [
-                "ShoulderArmorDefault"
-            ],
-            "objdata": {
-                "ArmorType": "ShoulderArmor",
-                "BaseHealth": 1600.0,
-                "ArmorFlags": [
-                    "damageable",
-                    "passdamage"
-                ],
-                "ArmorLayers": [
-                    "zombie_shoulder_armor_norm",
-                    "zombie_shoulder_armor_damage_01",
-                    "zombie_shoulder_armor_damage_02"
-                ],
-                "ArmorLayerHealth": [
-                    1067.0,
-                    534.0
-                ],
-                "ImpactSoundEvent": "",
-                "DropSoundEvent": ""
-            }
-        },
-        {
-            "objclass": "ArmorPropertySheet",
-            "aliases": [
-                "SkullDefault"
-            ],
-            "objdata": {
-                "ArmorType": "Skull",
-                "BaseHealth": 1800.0,
-                "ArmorFlags": [
-                    "damageable",
-                    "droppable",
-                    "helm"
-                ],
-                "ArmorLayers": [
-                    "zombie_armor_skull_norm",
-                    "zombie_armor_skull_damage_01",
-                    "zombie_armor_skull_damage_02"
-                ],
-                "ArmorLayerHealth": [
-                    1067.0,
-                    534.0
-                ],
-                "ImpactSoundEvent": "",
-                "DropSoundEvent": ""
-            }
-        },
-        {
-            "objclass": "ArmorPropertySheet",
-            "aliases": [
-                "BalloonDefault"
-            ],
-            "objdata": {
-                "ArmorType": "Ballon",
-                "BaseHealth": 650.0,
-                "ArmorFlags": [],
-                "ArmorLayers": [],
-                "ArmorLayerHealth": [],
-                "ImpactSoundEvent": "",
-                "DropSoundEvent": ""
-            }
-        },
-        {
-            "objclass": "ArmorPropertySheet",
-            "aliases": [
-                "SurfboardDefault"
-            ],
-            "objdata": {
-                "ArmorType": "Surfboard",
-                "BaseHealth": 700.0,
-                "ArmorFlags": [
-                    "damageable"
-                ],
-                "ArmorLayers": [
-                    "surf_board2_damage1",
-                    "surf_board2_damage2",
-                    "surf_board2_damage3",
-                    "surf_board2_damage4",
-                    "surf_board2_damage5"
-                ],
-                "ArmorLayerHealth": [
-                    560.0,
-                    420.0,
-                    280.0,
-                    140.0
-                ],
-                "ImpactSoundEvent": "Play_SurferZombie_ImpactBoard",
-                "DropSoundEvent": ""
-            }
-        },
-        {
-            "objclass": "ArmorPropertySheet",
-            "aliases": [
-                "SurfboardSurfingDefault"
-            ],
-            "objdata": {
-                "ArmorType": "SurfboardSurfing",
-                "BaseHealth": 700.0,
-                "ArmorFlags": [
-                    "damageable",
-                    "passdamage"
-                ],
-                "ArmorLayers": [
-                    "surf_board1_damage1",
-                    "surf_board1_damage2",
-                    "surf_board1_damage3",
-                    "surf_board1_damage4",
-                    "surf_board1_damage5"
-                ],
-                "ArmorLayerHealth": [
-                    560.0,
-                    420.0,
-                    280.0,
-                    140.0
-                ],
-                "ImpactSoundEvent": "",
-                "DropSoundEvent": ""
-            }
-        },
-        {
-            "objclass": "ArmorPropertySheet",
-            "aliases": [
-                "ShovelDefault"
-            ],
-            "objdata": {
-                "ArmorType": "Shovel",
-                "BaseHealth": 1.0,
-                "ArmorFlags": [
-                    "invincible",
-                    "droppable"
-                ],
-                "ArmorLayers": [
-                    "particle_shovel"
-                ],
-                "ArmorLayerHealth": [],
-                "ImpactSoundEvent": "",
-                "DropSoundEvent": ""
-            }
-        },
-        {
-            "objclass": "ArmorPropertySheet",
-            "aliases": [
-                "BasicConeDefault"
-            ],
-            "objdata": {
-                "ArmorType": "BasicCone",
-                "BaseHealth": 1000.0,
-                "ArmorFlags": [
-                    "passdamage",
-                    "helm",
-                    "invincible"
-                ],
-                "ArmorLayers": [
-                    "zombie_armor_cone_norm"
-                ],
-                "ArmorLayerHealth": [],
-                "ImpactSoundEvent": "Play_impact_plastic"
-            }
-        },
-        {
-            "objclass": "ArmorPropertySheet",
-            "aliases": [
-                "BasicBucketDefault"
-            ],
-            "objdata": {
-                "ArmorType": "BasicBucket",
-                "BaseHealth": 1000.0,
-                "ArmorFlags": [
-                    "passdamage",
-                    "helm",
-                    "invincible",
-                    "metallic"
-                ],
-                "ArmorLayers": [
-                    "zombie_armor_bucket_norm"
-                ],
-                "ArmorLayerHealth": [],
-                "ImpactSoundEvent": "Play_impact_shieldhit"
-            }
-        },
-        {
-            "objclass": "ArmorPropertySheet",
-            "aliases": [
-                "GargantuarClockworkDefault"
-            ],
-            "objdata": {
-                "ClassName": "NutcrackerGargantuarArmor",
-                "ArmorType": "GargantuarClockwork",
-                "BaseHealth": 4800.0,
-                "ArmorFlags": [
-                    "damageable",
-                    "droppable",
-                    "metallic"
-                ],
-                "ParticleLayerOverride": [
-                    "Gargantuar_Upper_spring_particles"
-                ],
-                "ArmorLayers": [
-                    "Gargantuar_Upper_spring_fast",
-                    "Gargantuar_Upper_spring_slow"
-                ],
-                "ArmorLayerHealth": [],
-                "ImpactSoundEvent": "Play_impact_shieldhit",
-                "DropSoundEvent": ""
-            }
-        },
-        {
-            "objclass": "ArmorPropertySheet",
-            "aliases": [
-                "GargantuarClockworkWhiteDefault"
-            ],
-            "objdata": {
-                "ClassName": "NutcrackerGargantuarArmor",
-                "ArmorType": "GargantuarClockwork",
-                "BaseHealth": 14400.0,
-                "ArmorFlags": [
-                    "damageable",
-                    "droppable",
-                    "metallic"
-                ],
-                "ParticleLayerOverride": [
-                    "Gargantuar_Upper_spring_particles"
-                ],
-                "ArmorLayers": [
-                    "Gargantuar_Upper_spring_fast",
-                    "Gargantuar_Upper_spring_slow"
-                ],
-                "ArmorLayerHealth": [],
-                "ImpactSoundEvent": "Play_impact_shieldhit",
-                "DropSoundEvent": ""
-            }
-        },
-        {
-            "objclass": "NewspaperArmorPropertySheet",
-            "aliases": [
-                "NewspaperDefault"
-            ],
-            "objdata": {
-                "ClassName": "NewspaperArmor",
-                "ArmorType": "Newspaper",
-                "BaseHealth": 800.0,
-                "ArmorFlags": [
-                    "damageable"
-                ],
-                "ArmorLayers": [
-                    "_zombie_newspaper",
-                    "_zombie_newspaper_dmg1",
-                    "_zombie_newspaper_dmg2"
-                ],
-                "ArmorLayerHealth": [
-                    466.0,
-                    233.0
-                ],
-                "FireLayer": "_zombie_newspaper_flame",
-                "ImpactSoundEvent": "Play_Zomb_Modern_Newspaper_Paper_Impact",
-                "DropSoundEvent": ""
-            }
-        },
-        {
-            "objclass": "NewspaperArmorPropertySheet",
-            "aliases": [
-                "VeteranNewspaperDefault"
-            ],
-            "objdata": {
-                "ClassName": "NewspaperArmor",
-                "ArmorType": "Newspaper",
-                "BaseHealth": 1800.0,
-                "ArmorFlags": [
-                    "damageable"
-                ],
-                "ArmorLayers": [
-                    "_zombie_newspaper",
-                    "_zombie_newspaper_dmg1",
-                    "_zombie_newspaper_dmg2"
-                ],
-                "ArmorLayerHealth": [
-                    1200.0,
-                    600.0
-                ],
-                "FireLayer": "_zombie_newspaper_flame",
-                "ImpactSoundEvent": "Play_Zomb_Modern_Newspaper_Paper_Impact",
-                "DropSoundEvent": ""
-            }
-        },
-        {
-            "objclass": "ArmorPropertySheet",
-            "aliases": [
-                "BunnyEarsDefault"
-            ],
-            "objdata": {
-                "ArmorType": "BunnyEars",
-                "BaseHealth": 100.0,
-                "ArmorFlags": [
-                    "droppable",
-                    "passdamage",
-                    "helm"
-                ],
-                "ArmorLayers": [
-                    "bunny_ears"
-                ],
-                "ArmorLayerHealth": [
-                    100.0
-                ],
-                "ParticleLayerOverride": [
-                    "bunny_ears"
-                ]
-            }
-        },
-        {
-            "objclass": "NewspaperArmorPropertySheet",
-            "aliases": [
-                "ExplosionProofArmor"
-            ],
-            "objdata": {
-                "ClassName": "NewspaperArmor",
-                "ArmorType": "Newspaper",
-                "BaseHealth": 1100.0,
-                "ArmorFlags": [
-                    "damageable"
-                ],
-                "ArmorLayers": [
-                    "_zombie_newspaper",
-                    "_zombie_newspaper_dmg1",
-                    "_zombie_newspaper_dmg2"
-                ],
-                "ArmorLayerHealth": [
-                    1200.0,
-                    600.0
-                ],
-                "FireLayer": "_zombie_newspaper_flame",
-                "ImpactSoundEvent": "Play_Zomb_Modern_Newspaper_Paper_Impact",
-                "DropSoundEvent": ""
-            }
-        },
-        {
-            "objclass": "ArmorPropertySheet",
-            "aliases": [
-                "QinJingkeMap"
-            ],
-            "objdata": {
-                "ArmorType": "QinJingkeMap",
-                "BaseHealth": 600.0,
-                "ArmorFlags": [
-                    "damageable"
-                ],
-                "ArmorLayers": [
-                    "juanju02",
-                    "juanju02_poshun"
-                ],
-                "ArmorLayerHealth": [
-                    300.0
-                ],
-                "DropSoundEvent": ""
-            }
-        },
-        {
-            "objclass": "ArmorPropertySheet",
-            "aliases": [
-                "QinJingkeDagger"
-            ],
-            "objdata": {
-                "ArmorType": "QinJingkeDagger",
-                "BaseHealth": 1000.0,
-                "ArmorFlags": [
-                    "passdamage",
-                    "invincible",
-                    "droppable",
-                    "metallic"
-                ],
-                "ArmorLayers": [
-                    "dao"
-                ],
-                "ArmorLayerHealth": [],
-                "DropSoundEvent": ""
-            }
-        },
-        {
-            "objclass": "CoalCartDefaultPropertySheet",
-            "aliases": [
-                "CoalCartDefault"
-            ],
-            "objdata": {
-                "ClassName": "CoalCartDefault",
-                "ArmorType": "CoalCart",
-                "BaseHealth": 1000.0,
-                "ArmorFlags": [
-                    "damageable"
-                ],
-                "ArmorLayers": [
-                    "_zombie_coal_cart",
-                    "_zombie_coal_cart_dmg1"
-                ],
-                "ArmorLayerHealth": [
-                    400.0
-                ],
-                "ImpactSoundEvent": "Play_impact_shieldhit",
-                "DropSoundEvent": "",
-                "AshSoundEvent": ""
-            }
-        },
-        {
-            "objclass": "ArmorPropertySheet",
-            "aliases": [
-                "RomanGargantuarHelm"
-            ],
-            "objdata": {
-                "ArmorType": "RomanGargantuarHelm",
-                "BaseHealth": 1800.0,
-                "ArmorFlags": [
-                    "damageable",
-                    "droppable",
-                    "helm"
-                ],
-                "ArmorLayers": [],
-                "ArmorLayerHealth": [],
-                "ImpactSoundEvent": "Play_impact_shieldhit"
-            }
-        },
-        {
-            "objclass": "ArmorPropertySheet",
-            "aliases": [
-                "RomanShieldMain"
-            ],
-            "objdata": {
-                "ArmorType": "RomanShieldMain",
-                "BaseHealth": 850.0,
-                "ArmorFlags": [
-                    "damageable"
-                ],
-                "ArmorLayers": [
-                    "zombie_camel_board_stone",
-                    "zombie_camel_board_stone_damage_01",
-                    "zombie_camel_board_stone_damage_02"
-                ],
-                "ArmorLayerHealth": [
-                    849,
-                    425
-                ],
-                "ImpactSoundEvent": "Play_impact_shieldhit",
-                "DropSoundEvent": "Play_Zomb_Roman_Shield_Break"
-            }
-        },
-        {
-            "objclass": "ArmorPropertySheet",
-            "aliases": [
-                "RomanShieldTop"
-            ],
-            "objdata": {
-                "ArmorType": "RomanShieldTop",
-                "BaseHealth": 300.0,
-                "ArmorFlags": [
-                    "damageable"
-                ],
-                "ArmorLayers": [
-                    "roman_shieldtop_damage1",
-                    "roman_shieldtop_damage2",
-                    "roman_shieldtop_damage3"
-                ],
-                "ArmorLayerHealth": [
-                    299,
-                    150
-                ],
-                "ImpactSoundEvent": "Play_impact_shieldhit",
-                "DropSoundEvent": "Play_Zomb_Roman_Shield_Break"
-            }
-        },
-        {
-            "objclass": "NewspaperArmorPropertySheet",
-            "aliases": [
-                "NewspaperMemoDefault"
-            ],
-            "objdata": {
-                "ClassName": "NewspaperArmor",
-                "ArmorType": "Newspaper",
-                "BaseHealth": 150.0,
-                "ArmorFlags": [
-                    "damageable"
-                ],
-                "ArmorLayers": [
-                    "_zombie_newspaper",
-                    "_zombie_newspaper_dmg1",
-                    "_zombie_newspaper_dmg2"
-                ],
-                "ArmorLayerHealth": [
-                    100.0,
-                    50.0
-                ],
-                "FireLayer": "_zombie_newspaper_flame",
-                "ImpactSoundEvent": "Play_Zomb_Modern_Newspaper_Paper_Impact",
-                "DropSoundEvent": ""
-            }
-        },
-        {
-            "objclass": "ArmorPropertySheet",
-            "aliases": [
-                "ZCorpConeDefault"
-            ],
-            "objdata": {
-                "ArmorType": "Cone",
-                "BaseHealth": 370.0,
-                "ArmorFlags": [
-                    "damageable",
-                    "droppable",
-                    "helm"
-                ],
-                "ArmorLayers": [
-                    "zombie_armor_cone_norm",
-                    "zombie_armor_cone_damage_01",
-                    "zombie_armor_cone_damage_02"
-                ],
-                "ArmorLayerHealth": [
-                    246,
-                    123
-                ],
-                "ImpactSoundEvent": "Play_impact_plastic"
-            }
-        },
-        {
-            "objclass": "ArmorPropertySheet",
-            "aliases": [
-                "ZCorpBucketDefault"
-            ],
-            "objdata": {
-                "ArmorType": "Bucket",
-                "BaseHealth": 1100.0,
-                "ArmorFlags": [
-                    "metallic",
-                    "damageable",
-                    "droppable",
-                    "helm"
-                ],
-                "ArmorLayers": [
-                    "zombie_armor_bucket_norm",
-                    "zombie_armor_bucket_damage_01",
-                    "zombie_armor_bucket_damage_02"
-                ],
-                "ArmorLayerHealth": [
-                    732,
-                    366
-                ],
-                "ImpactSoundEvent": "Play_impact_shieldhit"
-            }
-        },
-        {
-            "objclass": "NewspaperArmorPropertySheet",
-            "aliases": [
-                "LaptopDefault"
-            ],
-            "objdata": {
-                "ClassName": "NewspaperArmor",
-                "ArmorType": "Laptop",
-                "BaseHealth": 600.0,
-                "ArmorFlags": [
-                    "damageable",
-                    "visibleondestroy"
-                ],
-                "ArmorLayers": [
-                    "zombie_laptop_norm",
-                    "zombie_laptop_dmg1",
-                    "zombie_laptop_dmg2"
-                ],
-                "ArmorLayerHealth": [
-                    400,
-                    200
-                ],
-                "FireLayer": "",
-                "ImpactSoundEvent": "Play_Zomb_Modern_Newspaper_Paper_Impact",
-                "DropSoundEvent": ""
-            }
-        },
-        {
-            "objclass": "ArmorPropertySheet",
-            "aliases": [
-                "NutCrackerBody"
-            ],
-            "objdata": {
-                "ArmorType": "NutCrackerBody",
-                "BaseHealth": 2178,
-                "ArmorFlags": [
-                    "damageable",
-                    "body"
-                ],
-                "ArmorLayers": [
-                    "zombie_armor_norm",
-                    "zombie_armor_damage_01",
-                    "zombie_armor_damage_02"
-                ],
-                "ArmorLayerHealth": [
-                    1450,
-                    725
-                ],
-                "ParticleLayerOverride": [],
-                "ImpactSoundEvent": "",
-                "DropSoundEvent": ""
-            }
-        },
-        {
-            "objclass": "ArmorPropertySheet",
-            "aliases": [
-                "NutCrackerArm"
-            ],
-            "objdata": {
-                "ArmorType": "NutCrackerArm",
-                "BaseHealth": 11.0,
-                "ArmorFlags": [
-                    "droppable",
-                    "damageable",
-                    "body"
-                ],
-                "ArmorLayers": [
-                    "hand_armor"
-                ],
-                "ArmorLayerHealth": [],
-                "ParticleLayerOverride": [
-                    "particle_hand_armor"
-                ],
-                "ImpactSoundEvent": "",
-                "DropSoundEvent": ""
-            }
-        },
-        {
-            "objclass": "ArmorPropertySheet",
-            "aliases": [
-                "NutCrackerWindUpKey"
-            ],
-            "objdata": {
-                "ArmorType": "NutCrackerWindUpKey",
-                "BaseHealth": 11.0,
-                "ArmorFlags": [
-                    "metallic",
-                    "damageable",
-                    "droppable",
-                    "body"
-                ],
-                "ArmorLayers": [
-                    "key"
-                ],
-                "ArmorLayerHealth": [],
-                "ParticleLayerOverride": [
-                    "particle_key"
-                ],
-                "ImpactSoundEvent": "",
-                "DropSoundEvent": ""
-            }
-        },
-        {
-            "objclass": "ArmorPropertySheet",
-            "aliases": [
-                "Pogo"
-            ],
-            "objdata": {
-                "ArmorType": "Pogo",
-                "BaseHealth": 1000.0,
-                "ArmorFlags": [
-                    "passdamage",
-                    "invincible",
-                    "droppable",
-                    "metallic"
-                ],
-                "ArmorLayers": [
-                    "pogo"
-                ],
-                "ArmorLayerHealth": [],
-                "DropSoundEvent": ""
-            }
-        },
-        {
-            "objclass": "ZombieEnergyShieldArmorProps",
-            "aliases": [
-                "CosmicEnergyShield"
-            ],
-            "objdata": {
-                "ClassName": "ZombieEnergyShieldArmor",
-                "ArmorType": "CosmicEnergyShield",
-                "BaseHealth": 0.0,
-                "ArmorFlags": [
-                    "damageable"
-                ],
-                "ArmorLayers": [],
-                "ArmorLayerHealth": [],
-                "ParticleLayerOverride": [],
-                "ImpactSoundEvent": "",
-                "DropSoundEvent": "",
-                "NormalEffectPAM": "POPANIM_EFFECTS_ZOMBIE_MOON_SHIP5000_SHIELD",
-                "ShieldOnAnim": "shield_on_02",
-                "ShieldLoopAnim": "shield_loop_02",
-                "ShieldDamageAnim": "shield_hit_02",
-                "ShieldEndAnim": "shield_end_02",
-                "EffectOffset": {
-                    "x": 7.0,
-                    "y": 0.0,
-                    "z": 20.0
-                },
-                "EffectRenderLayerOffset": 1
-            }
+  "#comment": "Make new armor types here!",
+  "version": 1,
+  "objects": [
+    {
+      "objclass": "ArmorPropertySheetUtils",
+      "aliases": [
+        "ArmorPropertySheetUtilsTemplate"
+      ],
+      "objdata": {
+        "ToggleLayers": {
+          "all": [
+            "zombie_armor_cone_norm",
+            "zombie_armor_cone_damage_01",
+            "zombie_armor_cone_damage_02",
+            "zombie_armor_bucket_norm",
+            "zombie_armor_bucket_damage_01",
+            "zombie_armor_bucket_damage_02",
+            "zombie_armor_brick_norm",
+            "zombie_armor_brick_damage_01",
+            "zombie_armor_brick_damage_02"
+          ],
+          "ZombieAnimRig_EgyptBasic": [
+            "zombie_armor_cone_damage_01",
+            "zombie_armor_cone_damage_02",
+            "zombie_armor_cone_norm",
+            "zombie_armor_bucket_damage_01",
+            "zombie_armor_bucket_damage_02",
+            "zombie_armor_bucket_norm"
+          ],
+          "ZombieAnimRig_CowboyBasic": [
+            "cowboy_hat",
+            "zombie_armor_cone_norm",
+            "zombie_armor_cone_damage_01",
+            "zombie_armor_cone_damage_02",
+            "zombie_armor_bucket_norm",
+            "zombie_armor_bucket_damage_01",
+            "zombie_armor_bucket_damage_02"
+          ],
+          "ZombieAnimRig_PirateBasic": [
+            "zombie_armor_cone_norm",
+            "zombie_armor_cone_damage_01",
+            "zombie_armor_cone_damage_02",
+            "zombie_armor_bucket_norm",
+            "zombie_armor_bucket_damage_01",
+            "zombie_armor_bucket_damage_02"
+          ],
+          "ZombieAnimRig_Sarcophagus": [
+            "zombie_egypt_sarcophagus_norm",
+            "zombie_egypt_sarcophagus_damage1",
+            "zombie_egypt_sarcophagus_damage2"
+          ],
+          "ZombieAnimRig_Camel": [
+            "zombie_camel_board_tail_etching_norm",
+            "zombie_camel_board_tail_etching_damage_01",
+            "zombie_camel_board_tail_etching_damage_02",
+            "zombie_camel_board_hump_etching_norm",
+            "zombie_camel_board_hump_etching_damage_01",
+            "zombie_camel_board_hump_etching_damage_02",
+            "zombie_camel_board_head_etching_norm",
+            "zombie_camel_board_head_etching_damage_01",
+            "zombie_camel_board_head_etching_damage_02",
+            "zombie_camel_board_stone",
+            "zombie_camel_board_stone_damage_01",
+            "zombie_camel_board_stone_damage_02"
+          ],
+          "ZombieAnimRig_Poncho": [
+            "zombie_poncho_armor1_norm",
+            "zombie_poncho_armor1_damage1",
+            "zombie_poncho_armor1_damage2",
+            "poncho"
+          ],
+          "ZombieAnimRig_DarkBasic": [
+            "zombie_shoulder_armor_norm",
+            "zombie_shoulder_armor_damage_01",
+            "zombie_shoulder_armor_damage_02",
+            "zombie_armor_crown_norm",
+            "zombie_armor_crown_damage_01",
+            "zombie_armor_crown_damage_02"
+          ],
+          "ZombieAnimRig_DarkImp": [
+            "zombie_shoulder_armor_norm",
+            "zombie_shoulder_armor_damage_01",
+            "zombie_shoulder_armor_damage_02",
+            "zombie_armor_crown_norm",
+            "zombie_armor_crown_damage_01",
+            "zombie_armor_crown_damage_02"
+          ],
+          "ZombieAnimRig_BeachSurfer": [
+            "surf_board2_damage1",
+            "surf_board2_damage2",
+            "surf_board2_damage3",
+            "surf_board2_damage4",
+            "surf_board2_damage5",
+            "surf_board1_damage1",
+            "surf_board1_damage2",
+            "surf_board1_damage3",
+            "surf_board1_damage4",
+            "surf_board1_damage5"
+          ],
+          "ZombieAnimRig_IceAgeBasic": [
+            "zombie_armor_iceblock_norm",
+            "zombie_armor_iceblock_damage1",
+            "zombie_armor_iceblock_damage2"
+          ],
+          "ZombieAnimRig_DinoBasic": [
+            "zombie_armor_skull_norm",
+            "zombie_armor_skull_damage_01",
+            "zombie_armor_skull_damage_02"
+          ],
+          "ZombieAnimRig_TutorialSpring": [
+            "bunny_ears"
+          ],
+          "ZombieAnimRig_RomanBasic": [
+            "zombie_roman_helmet_norm",
+            "zombie_roman_helmet_damage_01",
+            "zombie_roman_helmet_damage_02",
+            "zombie_armor_brick_damage_03",
+            "zombie_armor_brick_damage_04",
+            "zombie_armor_brick_damage_05"
+          ]
         }
-    ]
+      }
+    },
+    {
+      "objclass": "ArmorPropertySheet",
+      "#comment": "Template! Copy + Paste me!",
+      "aliases": [
+        "ArmorPropertySheetTemplate"
+      ],
+      "objdata": {
+        "ArmorType": "Unknown",
+        "ClassName": "Armor",
+        "BaseHealth": 0.0,
+        "ArmorFlags": [
+          "none"
+        ],
+        "#comment": "none, body, helm, metallic, invincible, damageable, droppable, absorboverflow, passdamage (armor will not absorb damage)",
+        "ArmorLayers": [],
+        "ArmorLayerHealth": [],
+        "ParticleLayerOverride": [
+          ""
+        ],
+        "ImpactSoundEvent": "",
+        "DropSoundEvent": ""
+      }
+    },
+    {
+      "objclass": "ArmorPropertySheet",
+      "aliases": [
+        "ConeDefault"
+      ],
+      "objdata": {
+        "ArmorType": "Cone",
+        "BaseHealth": 370.0,
+        "ArmorFlags": [
+          "damageable",
+          "droppable",
+          "helm"
+        ],
+        "ArmorLayers": [
+          "zombie_armor_cone_norm",
+          "zombie_armor_cone_damage_01",
+          "zombie_armor_cone_damage_02"
+        ],
+        "ArmorLayerHealth": [
+          260.0,
+          130.0
+        ],
+        "ImpactSoundEvent": "Play_impact_plastic"
+      }
+    },
+    {
+      "objclass": "ArmorPropertySheet",
+      "aliases": [
+        "BucketDefault"
+      ],
+      "objdata": {
+        "ArmorType": "Bucket",
+        "BaseHealth": 1100.0,
+        "ArmorFlags": [
+          "metallic",
+          "damageable",
+          "droppable",
+          "helm"
+        ],
+        "ArmorLayers": [
+          "zombie_armor_bucket_norm",
+          "zombie_armor_bucket_damage_01",
+          "zombie_armor_bucket_damage_02"
+        ],
+        "ArmorLayerHealth": [
+          700.0,
+          350.0
+        ],
+        "ImpactSoundEvent": "Play_impact_shieldhit"
+      }
+    },
+    {
+      "objclass": "ArmorPropertySheet",
+      "aliases": [
+        "HelmetDefault"
+      ],
+      "objdata": {
+        "ArmorType": "Crown",
+        "BaseHealth": 1950.0,
+        "ArmorFlags": [
+          "damageable",
+          "droppable",
+          "metallic",
+          "helm"
+        ],
+        "ArmorLayers": [
+          "zombie_roman_helmet_norm",
+          "zombie_roman_helmet_damage_01",
+          "zombie_roman_helmet_damage_02"
+        ],
+        "ArmorLayerHealth": [
+          1299,
+          649
+        ],
+        "ImpactSoundEvent": "Play_impact_shieldhit",
+        "DropSoundEvent": ""
+      }
+    },
+    {
+      "objclass": "ArmorPropertySheet",
+      "aliases": [
+        "BrickDefault"
+      ],
+      "objdata": {
+        "ArmorType": "Brick",
+        "BaseHealth": 2200.0,
+        "ArmorFlags": [
+          "damageable",
+          "droppable",
+          "helm"
+        ],
+        "ArmorLayers": [
+          "zombie_armor_brick_norm",
+          "zombie_armor_brick_damage_01",
+          "zombie_armor_brick_damage_02"
+        ],
+        "ArmorLayerHealth": [
+          1450.0,
+          700.0
+        ],
+        "ParticleLayerOverride": [
+          "zombie_armor_brick_damage_02",
+          "zombie_armor_brick_damage_02",
+          "zombie_armor_brick_damage_02"
+        ]
+      }
+    },
+    {
+      "objclass": "ArmorPropertySheet",
+      "aliases": [
+        "ComplexBrickDefault"
+      ],
+      "objdata": {
+        "ArmorType": "ComplexBrick",
+        "BaseHealth": 2200.0,
+        "ArmorFlags": [
+          "damageable",
+          "droppable",
+          "helm"
+        ],
+        "ArmorLayers": [
+          "zombie_armor_brick_norm",
+          "zombie_armor_brick_damage_01",
+          "zombie_armor_brick_damage_02",
+          "zombie_armor_brick_damage_03",
+          "zombie_armor_brick_damage_04",
+          "zombie_armor_brick_damage_05"
+        ],
+        "ArmorLayerHealth": [
+          0.83299999999999996,
+          0.66600000000000004,
+          0.5,
+          0.33300000000000002,
+          0.16600000000000001
+        ],
+        "ParticleLayerOverride": [
+          "zombie_armor_brick_damage_02",
+          "zombie_armor_brick_damage_02",
+          "zombie_armor_brick_damage_02",
+          "zombie_armor_brick_damage_02",
+          "zombie_armor_brick_damage_02"
+        ]
+      }
+    },
+    {
+      "objclass": "ArmorPropertySheet",
+      "aliases": [
+        "CowboyHatDefault"
+      ],
+      "objdata": {
+        "ArmorType": "CowboyHat",
+        "BaseHealth": 100.0,
+        "ArmorFlags": [
+          "droppable",
+          "passdamage",
+          "helm"
+        ],
+        "ArmorLayers": [
+          "cowboy_hat"
+        ],
+        "ArmorLayerHealth": [
+          100.0
+        ],
+        "ParticleLayerOverride": [
+          "particle_hat"
+        ]
+      }
+    },
+    {
+      "objclass": "ArmorPropertySheet",
+      "aliases": [
+        "SarcophagusDefault"
+      ],
+      "objdata": {
+        "ArmorType": "Sarcophagus",
+        "BaseHealth": 1200.0,
+        "ArmorFlags": [
+          "damageable",
+          "absorboverflow",
+          "body"
+        ],
+        "ArmorLayers": [
+          "zombie_egypt_sarcophagus_norm",
+          "zombie_egypt_sarcophagus_damage1",
+          "zombie_egypt_sarcophagus_damage2"
+        ],
+        "ArmorLayerHealth": [
+          800.0,
+          400.0
+        ],
+        "ImpactSoundEvent": "Play_Zomb_Egypt_Pharaoh_Impact_Hit",
+        "DropSoundEvent": "Play_Zomb_Egypt_Pharaoh_Impact_Break"
+      }
+    },
+    {
+      "objclass": "ArmorPropertySheet",
+      "aliases": [
+        "CamelSignBlankDefault"
+      ],
+      "objdata": {
+        "ArmorType": "CamelSign",
+        "BaseHealth": 250.0,
+        "ArmorFlags": [
+          "damageable"
+        ],
+        "ArmorLayers": [
+          "zombie_camel_board_stone",
+          "zombie_camel_board_stone_damage_01",
+          "zombie_camel_board_stone_damage_02"
+        ],
+        "ArmorLayerHealth": [
+          249.0,
+          125.0
+        ],
+        "ImpactSoundEvent": "Play_CamelPanel_Hit",
+        "DropSoundEvent": "Play_CamelPanel_Break"
+      }
+    },
+    {
+      "objclass": "ArmorPropertySheet",
+      "aliases": [
+        "CamelSignHeadDefault"
+      ],
+      "objdata": {
+        "ArmorType": "CamelSign",
+        "BaseHealth": 250.0,
+        "ArmorFlags": [
+          "damageable"
+        ],
+        "ArmorLayers": [
+          "zombie_camel_board_head_etching_norm",
+          "zombie_camel_board_head_etching_damage_01",
+          "zombie_camel_board_head_etching_damage_02"
+        ],
+        "ArmorLayerHealth": [
+          249.0,
+          125.0
+        ],
+        "ImpactSoundEvent": "Play_CamelPanel_Hit",
+        "DropSoundEvent": "Play_CamelPanel_Break"
+      }
+    },
+    {
+      "objclass": "ArmorPropertySheet",
+      "aliases": [
+        "CamelSignMiddleDefault"
+      ],
+      "objdata": {
+        "ArmorType": "CamelSign",
+        "BaseHealth": 250.0,
+        "ArmorFlags": [
+          "damageable"
+        ],
+        "ArmorLayers": [
+          "zombie_camel_board_hump_etching_norm",
+          "zombie_camel_board_hump_etching_damage_01",
+          "zombie_camel_board_hump_etching_damage_02"
+        ],
+        "ArmorLayerHealth": [
+          249.0,
+          125.0
+        ],
+        "ImpactSoundEvent": "Play_CamelPanel_Hit",
+        "DropSoundEvent": "Play_CamelPanel_Break"
+      }
+    },
+    {
+      "objclass": "ArmorPropertySheet",
+      "aliases": [
+        "CamelSignTailDefault"
+      ],
+      "objdata": {
+        "ArmorType": "CamelSign",
+        "BaseHealth": 250.0,
+        "ArmorFlags": [
+          "damageable"
+        ],
+        "ArmorLayers": [
+          "zombie_camel_board_tail_etching_norm",
+          "zombie_camel_board_tail_etching_damage_01",
+          "zombie_camel_board_tail_etching_damage_02"
+        ],
+        "ArmorLayerHealth": [
+          249.0,
+          125.0
+        ],
+        "ImpactSoundEvent": "Play_CamelPanel_Hit",
+        "DropSoundEvent": "Play_CamelPanel_Break"
+      }
+    },
+    {
+      "objclass": "ArmorPropertySheet",
+      "aliases": [
+        "PonchoDefault"
+      ],
+      "objdata": {
+        "ArmorType": "Poncho",
+        "BaseHealth": 60.0,
+        "ArmorFlags": [
+          "droppable",
+          "body"
+        ],
+        "ArmorLayers": [
+          "poncho"
+        ],
+        "ArmorLayerHealth": [],
+        "ParticleLayerOverride": [
+          "particle_poncho"
+        ],
+        "ImpactSoundEvent": "Play_PonchoZombie_ImpactPoncho",
+        "DropSoundEvent": ""
+      }
+    },
+    {
+      "objclass": "ArmorPropertySheet",
+      "aliases": [
+        "PonchoPlateDefault"
+      ],
+      "objdata": {
+        "ArmorType": "PonchoPlate",
+        "BaseHealth": 1100.0,
+        "ArmorFlags": [
+          "damageable",
+          "droppable",
+          "metallic",
+          "body"
+        ],
+        "ArmorLayers": [
+          "zombie_poncho_armor1_norm",
+          "zombie_poncho_armor1_damage1",
+          "zombie_poncho_armor1_damage2"
+        ],
+        "ArmorLayerHealth": [
+          734.0,
+          367.0
+        ],
+        "ParticleLayerOverride": [
+          "particle_plate",
+          "zombie_poncho_armor1_damage1",
+          "zombie_poncho_armor1_damage2"
+        ],
+        "ImpactSoundEvent": "Play_Zomb_WildWest_Poncho_Impact_Metal",
+        "DropSoundEvent": ""
+      }
+    },
+    {
+      "objclass": "ArmorPropertySheet",
+      "aliases": [
+        "CrownDefault"
+      ],
+      "objdata": {
+        "ArmorType": "Crown",
+        "BaseHealth": 1600.0,
+        "ArmorFlags": [
+          "damageable",
+          "droppable",
+          "metallic",
+          "helm"
+        ],
+        "ArmorLayers": [
+          "zombie_armor_crown_norm",
+          "zombie_armor_crown_damage_01",
+          "zombie_armor_crown_damage_02"
+        ],
+        "ArmorLayerHealth": [
+          1067.0,
+          534.0
+        ],
+        "ImpactSoundEvent": "",
+        "DropSoundEvent": ""
+      }
+    },
+    {
+      "objclass": "ArmorPropertySheet",
+      "aliases": [
+        "IceblockDefault"
+      ],
+      "objdata": {
+        "ArmorType": "Iceblock",
+        "BaseHealth": 1600.0,
+        "ArmorFlags": [
+          "damageable",
+          "droppable",
+          "helm"
+        ],
+        "ArmorLayers": [
+          "zombie_armor_iceblock_norm",
+          "zombie_armor_iceblock_damage1",
+          "zombie_armor_iceblock_damage2"
+        ],
+        "ArmorLayerHealth": [
+          1067.0,
+          534.0
+        ],
+        "ImpactSoundEvent": "",
+        "DropSoundEvent": ""
+      }
+    },
+    {
+      "objclass": "ArmorPropertySheet",
+      "aliases": [
+        "ShoulderArmorDefault"
+      ],
+      "objdata": {
+        "ArmorType": "ShoulderArmor",
+        "BaseHealth": 1600.0,
+        "ArmorFlags": [
+          "damageable",
+          "passdamage"
+        ],
+        "ArmorLayers": [
+          "zombie_shoulder_armor_norm",
+          "zombie_shoulder_armor_damage_01",
+          "zombie_shoulder_armor_damage_02"
+        ],
+        "ArmorLayerHealth": [
+          1067.0,
+          534.0
+        ],
+        "ImpactSoundEvent": "",
+        "DropSoundEvent": ""
+      }
+    },
+    {
+      "objclass": "ArmorPropertySheet",
+      "aliases": [
+        "SkullDefault"
+      ],
+      "objdata": {
+        "ArmorType": "Skull",
+        "BaseHealth": 1800.0,
+        "ArmorFlags": [
+          "damageable",
+          "droppable",
+          "helm"
+        ],
+        "ArmorLayers": [
+          "zombie_armor_skull_norm",
+          "zombie_armor_skull_damage_01",
+          "zombie_armor_skull_damage_02"
+        ],
+        "ArmorLayerHealth": [
+          1067.0,
+          534.0
+        ],
+        "ImpactSoundEvent": "",
+        "DropSoundEvent": ""
+      }
+    },
+    {
+      "objclass": "ArmorPropertySheet",
+      "aliases": [
+        "BalloonDefault"
+      ],
+      "objdata": {
+        "ArmorType": "Ballon",
+        "BaseHealth": 650.0,
+        "ArmorFlags": [],
+        "ArmorLayers": [],
+        "ArmorLayerHealth": [],
+        "ImpactSoundEvent": "",
+        "DropSoundEvent": ""
+      }
+    },
+    {
+      "objclass": "ArmorPropertySheet",
+      "aliases": [
+        "SurfboardDefault"
+      ],
+      "objdata": {
+        "ArmorType": "Surfboard",
+        "BaseHealth": 700.0,
+        "ArmorFlags": [
+          "damageable"
+        ],
+        "ArmorLayers": [
+          "surf_board2_damage1",
+          "surf_board2_damage2",
+          "surf_board2_damage3",
+          "surf_board2_damage4",
+          "surf_board2_damage5"
+        ],
+        "ArmorLayerHealth": [
+          560.0,
+          420.0,
+          280.0,
+          140.0
+        ],
+        "ImpactSoundEvent": "Play_SurferZombie_ImpactBoard",
+        "DropSoundEvent": ""
+      }
+    },
+    {
+      "objclass": "ArmorPropertySheet",
+      "aliases": [
+        "SurfboardSurfingDefault"
+      ],
+      "objdata": {
+        "ArmorType": "SurfboardSurfing",
+        "BaseHealth": 700.0,
+        "ArmorFlags": [
+          "damageable",
+          "passdamage"
+        ],
+        "ArmorLayers": [
+          "surf_board1_damage1",
+          "surf_board1_damage2",
+          "surf_board1_damage3",
+          "surf_board1_damage4",
+          "surf_board1_damage5"
+        ],
+        "ArmorLayerHealth": [
+          560.0,
+          420.0,
+          280.0,
+          140.0
+        ],
+        "ImpactSoundEvent": "",
+        "DropSoundEvent": ""
+      }
+    },
+    {
+      "objclass": "ArmorPropertySheet",
+      "aliases": [
+        "ShovelDefault"
+      ],
+      "objdata": {
+        "ArmorType": "Shovel",
+        "BaseHealth": 1.0,
+        "ArmorFlags": [
+          "invincible",
+          "droppable"
+        ],
+        "ArmorLayers": [
+          "particle_shovel"
+        ],
+        "ArmorLayerHealth": [],
+        "ImpactSoundEvent": "",
+        "DropSoundEvent": ""
+      }
+    },
+    {
+      "objclass": "ArmorPropertySheet",
+      "aliases": [
+        "BasicConeDefault"
+      ],
+      "objdata": {
+        "ArmorType": "BasicCone",
+        "BaseHealth": 1000.0,
+        "ArmorFlags": [
+          "passdamage",
+          "helm",
+          "invincible"
+        ],
+        "ArmorLayers": [
+          "zombie_armor_cone_norm"
+        ],
+        "ArmorLayerHealth": [],
+        "ImpactSoundEvent": "Play_impact_plastic"
+      }
+    },
+    {
+      "objclass": "ArmorPropertySheet",
+      "aliases": [
+        "BasicBucketDefault"
+      ],
+      "objdata": {
+        "ArmorType": "BasicBucket",
+        "BaseHealth": 1000.0,
+        "ArmorFlags": [
+          "passdamage",
+          "helm",
+          "invincible",
+          "metallic"
+        ],
+        "ArmorLayers": [
+          "zombie_armor_bucket_norm"
+        ],
+        "ArmorLayerHealth": [],
+        "ImpactSoundEvent": "Play_impact_shieldhit"
+      }
+    },
+    {
+      "objclass": "ArmorPropertySheet",
+      "aliases": [
+        "GargantuarClockworkDefault"
+      ],
+      "objdata": {
+        "ClassName": "NutcrackerGargantuarArmor",
+        "ArmorType": "GargantuarClockwork",
+        "BaseHealth": 4800.0,
+        "ArmorFlags": [
+          "damageable",
+          "droppable",
+          "metallic"
+        ],
+        "ParticleLayerOverride": [
+          "Gargantuar_Upper_spring_particles"
+        ],
+        "ArmorLayers": [
+          "Gargantuar_Upper_spring_fast",
+          "Gargantuar_Upper_spring_slow"
+        ],
+        "ArmorLayerHealth": [],
+        "ImpactSoundEvent": "Play_impact_shieldhit",
+        "DropSoundEvent": ""
+      }
+    },
+    {
+      "objclass": "ArmorPropertySheet",
+      "aliases": [
+        "GargantuarClockworkWhiteDefault"
+      ],
+      "objdata": {
+        "ClassName": "NutcrackerGargantuarArmor",
+        "ArmorType": "GargantuarClockwork",
+        "BaseHealth": 14400.0,
+        "ArmorFlags": [
+          "damageable",
+          "droppable",
+          "metallic"
+        ],
+        "ParticleLayerOverride": [
+          "Gargantuar_Upper_spring_particles"
+        ],
+        "ArmorLayers": [
+          "Gargantuar_Upper_spring_fast",
+          "Gargantuar_Upper_spring_slow"
+        ],
+        "ArmorLayerHealth": [],
+        "ImpactSoundEvent": "Play_impact_shieldhit",
+        "DropSoundEvent": ""
+      }
+    },
+    {
+      "objclass": "NewspaperArmorPropertySheet",
+      "aliases": [
+        "NewspaperDefault"
+      ],
+      "objdata": {
+        "ClassName": "NewspaperArmor",
+        "ArmorType": "Newspaper",
+        "BaseHealth": 800.0,
+        "ArmorFlags": [
+          "damageable"
+        ],
+        "ArmorLayers": [
+          "_zombie_newspaper",
+          "_zombie_newspaper_dmg1",
+          "_zombie_newspaper_dmg2"
+        ],
+        "ArmorLayerHealth": [
+          466.0,
+          233.0
+        ],
+        "FireLayer": "_zombie_newspaper_flame",
+        "ImpactSoundEvent": "Play_Zomb_Modern_Newspaper_Paper_Impact",
+        "DropSoundEvent": ""
+      }
+    },
+    {
+      "objclass": "NewspaperArmorPropertySheet",
+      "aliases": [
+        "VeteranNewspaperDefault"
+      ],
+      "objdata": {
+        "ClassName": "NewspaperArmor",
+        "ArmorType": "Newspaper",
+        "BaseHealth": 1800.0,
+        "ArmorFlags": [
+          "damageable"
+        ],
+        "ArmorLayers": [
+          "_zombie_newspaper",
+          "_zombie_newspaper_dmg1",
+          "_zombie_newspaper_dmg2"
+        ],
+        "ArmorLayerHealth": [
+          1200.0,
+          600.0
+        ],
+        "FireLayer": "_zombie_newspaper_flame",
+        "ImpactSoundEvent": "Play_Zomb_Modern_Newspaper_Paper_Impact",
+        "DropSoundEvent": ""
+      }
+    },
+    {
+      "objclass": "ArmorPropertySheet",
+      "aliases": [
+        "BunnyEarsDefault"
+      ],
+      "objdata": {
+        "ArmorType": "BunnyEars",
+        "BaseHealth": 100.0,
+        "ArmorFlags": [
+          "droppable",
+          "passdamage",
+          "helm"
+        ],
+        "ArmorLayers": [
+          "bunny_ears"
+        ],
+        "ArmorLayerHealth": [
+          100.0
+        ],
+        "ParticleLayerOverride": [
+          "bunny_ears"
+        ]
+      }
+    },
+    {
+      "objclass": "NewspaperArmorPropertySheet",
+      "aliases": [
+        "ExplosionProofArmor"
+      ],
+      "objdata": {
+        "ClassName": "NewspaperArmor",
+        "ArmorType": "Newspaper",
+        "BaseHealth": 1100.0,
+        "ArmorFlags": [
+          "damageable"
+        ],
+        "ArmorLayers": [
+          "_zombie_newspaper",
+          "_zombie_newspaper_dmg1",
+          "_zombie_newspaper_dmg2"
+        ],
+        "ArmorLayerHealth": [
+          1200.0,
+          600.0
+        ],
+        "FireLayer": "_zombie_newspaper_flame",
+        "ImpactSoundEvent": "Play_Zomb_Modern_Newspaper_Paper_Impact",
+        "DropSoundEvent": ""
+      }
+    },
+    {
+      "objclass": "ArmorPropertySheet",
+      "aliases": [
+        "QinJingkeMap"
+      ],
+      "objdata": {
+        "ArmorType": "QinJingkeMap",
+        "BaseHealth": 600.0,
+        "ArmorFlags": [
+          "damageable"
+        ],
+        "ArmorLayers": [
+          "juanju02",
+          "juanju02_poshun"
+        ],
+        "ArmorLayerHealth": [
+          300.0
+        ],
+        "DropSoundEvent": ""
+      }
+    },
+    {
+      "objclass": "ArmorPropertySheet",
+      "aliases": [
+        "QinJingkeDagger"
+      ],
+      "objdata": {
+        "ArmorType": "QinJingkeDagger",
+        "BaseHealth": 1000.0,
+        "ArmorFlags": [
+          "passdamage",
+          "invincible",
+          "droppable",
+          "metallic"
+        ],
+        "ArmorLayers": [
+          "dao"
+        ],
+        "ArmorLayerHealth": [],
+        "DropSoundEvent": ""
+      }
+    },
+    {
+      "objclass": "CoalCartDefaultPropertySheet",
+      "aliases": [
+        "CoalCartDefault"
+      ],
+      "objdata": {
+        "ClassName": "CoalCartDefault",
+        "ArmorType": "CoalCart",
+        "BaseHealth": 1000.0,
+        "ArmorFlags": [
+          "damageable"
+        ],
+        "ArmorLayers": [
+          "_zombie_coal_cart",
+          "_zombie_coal_cart_dmg1"
+        ],
+        "ArmorLayerHealth": [
+          400.0
+        ],
+        "ImpactSoundEvent": "Play_impact_shieldhit",
+        "DropSoundEvent": "",
+        "AshSoundEvent": ""
+      }
+    },
+    {
+      "objclass": "ArmorPropertySheet",
+      "aliases": [
+        "RomanGargantuarHelm"
+      ],
+      "objdata": {
+        "ArmorType": "RomanGargantuarHelm",
+        "BaseHealth": 1800.0,
+        "ArmorFlags": [
+          "damageable",
+          "droppable",
+          "helm"
+        ],
+        "ArmorLayers": [],
+        "ArmorLayerHealth": [],
+        "ImpactSoundEvent": "Play_impact_shieldhit"
+      }
+    },
+    {
+      "objclass": "ArmorPropertySheet",
+      "aliases": [
+        "RomanShieldMain"
+      ],
+      "objdata": {
+        "ArmorType": "RomanShieldMain",
+        "BaseHealth": 850.0,
+        "ArmorFlags": [
+          "damageable"
+        ],
+        "ArmorLayers": [
+          "zombie_camel_board_stone",
+          "zombie_camel_board_stone_damage_01",
+          "zombie_camel_board_stone_damage_02"
+        ],
+        "ArmorLayerHealth": [
+          849,
+          425
+        ],
+        "ImpactSoundEvent": "Play_impact_shieldhit",
+        "DropSoundEvent": "Play_Zomb_Roman_Shield_Break"
+      }
+    },
+    {
+      "objclass": "ArmorPropertySheet",
+      "aliases": [
+        "RomanShieldTop"
+      ],
+      "objdata": {
+        "ArmorType": "RomanShieldTop",
+        "BaseHealth": 300.0,
+        "ArmorFlags": [
+          "damageable"
+        ],
+        "ArmorLayers": [
+          "roman_shieldtop_damage1",
+          "roman_shieldtop_damage2",
+          "roman_shieldtop_damage3"
+        ],
+        "ArmorLayerHealth": [
+          299,
+          150
+        ],
+        "ImpactSoundEvent": "Play_impact_shieldhit",
+        "DropSoundEvent": "Play_Zomb_Roman_Shield_Break"
+      }
+    },
+    {
+      "objclass": "NewspaperArmorPropertySheet",
+      "aliases": [
+        "NewspaperMemoDefault"
+      ],
+      "objdata": {
+        "ClassName": "NewspaperArmor",
+        "ArmorType": "Newspaper",
+        "BaseHealth": 150.0,
+        "ArmorFlags": [
+          "damageable"
+        ],
+        "ArmorLayers": [
+          "_zombie_newspaper",
+          "_zombie_newspaper_dmg1",
+          "_zombie_newspaper_dmg2"
+        ],
+        "ArmorLayerHealth": [
+          100.0,
+          50.0
+        ],
+        "FireLayer": "_zombie_newspaper_flame",
+        "ImpactSoundEvent": "Play_Zomb_Modern_Newspaper_Paper_Impact",
+        "DropSoundEvent": ""
+      }
+    },
+    {
+      "objclass": "ArmorPropertySheet",
+      "aliases": [
+        "ZCorpConeDefault"
+      ],
+      "objdata": {
+        "ArmorType": "Cone",
+        "BaseHealth": 370.0,
+        "ArmorFlags": [
+          "damageable",
+          "droppable",
+          "helm"
+        ],
+        "ArmorLayers": [
+          "zombie_armor_cone_norm",
+          "zombie_armor_cone_damage_01",
+          "zombie_armor_cone_damage_02"
+        ],
+        "ArmorLayerHealth": [
+          246,
+          123
+        ],
+        "ImpactSoundEvent": "Play_impact_plastic"
+      }
+    },
+    {
+      "objclass": "ArmorPropertySheet",
+      "aliases": [
+        "ZCorpBucketDefault"
+      ],
+      "objdata": {
+        "ArmorType": "Bucket",
+        "BaseHealth": 1100.0,
+        "ArmorFlags": [
+          "metallic",
+          "damageable",
+          "droppable",
+          "helm"
+        ],
+        "ArmorLayers": [
+          "zombie_armor_bucket_norm",
+          "zombie_armor_bucket_damage_01",
+          "zombie_armor_bucket_damage_02"
+        ],
+        "ArmorLayerHealth": [
+          732,
+          366
+        ],
+        "ImpactSoundEvent": "Play_impact_shieldhit"
+      }
+    },
+    {
+      "objclass": "NewspaperArmorPropertySheet",
+      "aliases": [
+        "LaptopDefault"
+      ],
+      "objdata": {
+        "ClassName": "NewspaperArmor",
+        "ArmorType": "Laptop",
+        "BaseHealth": 600.0,
+        "ArmorFlags": [
+          "damageable",
+          "visibleondestroy"
+        ],
+        "ArmorLayers": [
+          "zombie_laptop_norm",
+          "zombie_laptop_dmg1",
+          "zombie_laptop_dmg2"
+        ],
+        "ArmorLayerHealth": [
+          400,
+          200
+        ],
+        "FireLayer": "",
+        "ImpactSoundEvent": "Play_Zomb_Modern_Newspaper_Paper_Impact",
+        "DropSoundEvent": ""
+      }
+    },
+    {
+      "objclass": "ArmorPropertySheet",
+      "aliases": [
+        "NutCrackerBody"
+      ],
+      "objdata": {
+        "ArmorType": "NutCrackerBody",
+        "BaseHealth": 2178,
+        "ArmorFlags": [
+          "damageable",
+          "body"
+        ],
+        "ArmorLayers": [
+          "zombie_armor_norm",
+          "zombie_armor_damage_01",
+          "zombie_armor_damage_02"
+        ],
+        "ArmorLayerHealth": [
+          1450,
+          725
+        ],
+        "ParticleLayerOverride": [],
+        "ImpactSoundEvent": "",
+        "DropSoundEvent": ""
+      }
+    },
+    {
+      "objclass": "ArmorPropertySheet",
+      "aliases": [
+        "NutCrackerArm"
+      ],
+      "objdata": {
+        "ArmorType": "NutCrackerArm",
+        "BaseHealth": 11.0,
+        "ArmorFlags": [
+          "droppable",
+          "damageable",
+          "body"
+        ],
+        "ArmorLayers": [
+          "hand_armor"
+        ],
+        "ArmorLayerHealth": [],
+        "ParticleLayerOverride": [
+          "particle_hand_armor"
+        ],
+        "ImpactSoundEvent": "",
+        "DropSoundEvent": ""
+      }
+    },
+    {
+      "objclass": "ArmorPropertySheet",
+      "aliases": [
+        "NutCrackerWindUpKey"
+      ],
+      "objdata": {
+        "ArmorType": "NutCrackerWindUpKey",
+        "BaseHealth": 11.0,
+        "ArmorFlags": [
+          "metallic",
+          "damageable",
+          "droppable",
+          "body"
+        ],
+        "ArmorLayers": [
+          "key"
+        ],
+        "ArmorLayerHealth": [],
+        "ParticleLayerOverride": [
+          "particle_key"
+        ],
+        "ImpactSoundEvent": "",
+        "DropSoundEvent": ""
+      }
+    },
+    {
+      "objclass": "ArmorPropertySheet",
+      "aliases": [
+        "Pogo"
+      ],
+      "objdata": {
+        "ArmorType": "Pogo",
+        "BaseHealth": 1000.0,
+        "ArmorFlags": [
+          "passdamage",
+          "invincible",
+          "droppable",
+          "metallic"
+        ],
+        "ArmorLayers": [
+          "pogo"
+        ],
+        "ArmorLayerHealth": [],
+        "DropSoundEvent": ""
+      }
+    },
+    {
+      "objclass": "ZombieEnergyShieldArmorProps",
+      "aliases": [
+        "CosmicEnergyShield"
+      ],
+      "objdata": {
+        "ClassName": "ZombieEnergyShieldArmor",
+        "ArmorType": "CosmicEnergyShield",
+        "BaseHealth": 0.0,
+        "ArmorFlags": [
+          "damageable"
+        ],
+        "ArmorLayers": [],
+        "ArmorLayerHealth": [],
+        "ParticleLayerOverride": [],
+        "ImpactSoundEvent": "",
+        "DropSoundEvent": "",
+        "NormalEffectPAM": "POPANIM_EFFECTS_ZOMBIE_MOON_SHIP5000_SHIELD",
+        "ShieldOnAnim": "shield_on_02",
+        "ShieldLoopAnim": "shield_loop_02",
+        "ShieldDamageAnim": "shield_hit_02",
+        "ShieldEndAnim": "shield_end_02",
+        "EffectOffset": {
+          "x": 7.0,
+          "y": 0.0,
+          "z": 20.0
+        },
+        "EffectRenderLayerOffset": 1
+      }
+    }
+  ]
 }

@@ -2190,12 +2190,16 @@ class EditorPopupMenuTile extends StatelessWidget {
     super.key,
     this.leading,
     required this.title,
+    this.subtitle,
+    this.trailing,
     this.enabled = true,
     this.contentPadding = EdgeInsets.zero,
   });
 
   final Widget? leading;
   final Widget title;
+  final Widget? subtitle;
+  final Widget? trailing;
   final bool enabled;
   final EdgeInsetsGeometry contentPadding;
 
@@ -2206,6 +2210,8 @@ class EditorPopupMenuTile extends StatelessWidget {
       enabled: enabled,
       leading: leading,
       title: title,
+      subtitle: subtitle,
+      trailing: trailing,
       contentPadding: contentPadding,
     ),
   );
@@ -2509,7 +2515,7 @@ class HelpSectionData {
 
 const _kWaveDropConfigTitleIconSize = 32.0;
 const _kPlantDropIconCardSize = 56.0;
-const _kPlantFoodIconPath = 'assets/images/others/plantfood.png';
+const _kPlantFoodIconPath = 'assets/images/others/plantfood.webp';
 const _kPlantDropTagIconPath =
     'assets/images/tags/plants/rarity/Plant_Green.webp';
 
@@ -3030,6 +3036,7 @@ class ZombieIconCard extends StatelessWidget {
     required this.onTap,
     this.size = 56,
     this.showLevelBadge = true,
+    this.isMissingCustomZombie = false,
   });
 
   final String? iconPath;
@@ -3039,10 +3046,15 @@ class ZombieIconCard extends StatelessWidget {
   final VoidCallback onTap;
   final double size;
   final bool showLevelBadge;
+  final bool isMissingCustomZombie;
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final path = iconPath?.trim();
+    final effectivePath = path == null || path.isEmpty
+        ? 'assets/images/others/unknown.webp'
+        : path;
     return Material(
       color: Colors.transparent,
       child: InkWell(
@@ -3064,21 +3076,21 @@ class ZombieIconCard extends StatelessWidget {
             child: Stack(
               fit: StackFit.expand,
               children: [
-                if (iconPath != null && iconPath!.isNotEmpty)
-                  AssetImageWidget(
-                    assetPath: iconPath!,
-                    altCandidates: imageAltCandidates(iconPath!),
-                    width: size,
-                    height: size,
-                    fit: BoxFit.cover,
-                  )
-                else
+                if (isMissingCustomZombie)
                   Center(
                     child: Icon(
                       Icons.warning,
                       size: 24,
                       color: theme.colorScheme.error,
                     ),
+                  )
+                else
+                  AssetImageWidget(
+                    assetPath: effectivePath,
+                    altCandidates: imageAltCandidates(effectivePath),
+                    width: size,
+                    height: size,
+                    fit: BoxFit.cover,
                   ),
                 if (isCustom)
                   Positioned(

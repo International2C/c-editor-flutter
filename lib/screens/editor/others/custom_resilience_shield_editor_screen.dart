@@ -1,3 +1,4 @@
+import 'package:c_editor/widgets/autosave.dart';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
@@ -276,10 +277,13 @@ class _CustomResilienceShieldEditorScreenState
     });
   }
 
-  Future<void> _saveAndExit() async {
+  Future<void> _saveAndExit({bool automatic = false}) async {
     final result = await _saveShield();
 
-    if (result != null && mounted) _exitWithResult(result);
+    if (result != null && mounted) {
+      if (automatic) showAutosavedMessage(context);
+      _exitWithResult(result);
+    }
   }
 
   void _restoreInitialState() {
@@ -299,6 +303,14 @@ class _CustomResilienceShieldEditorScreenState
     if (_exitDialogOpen || !mounted) return;
 
     _exitDialogOpen = true;
+    if (autosaveEnabled(context, AutosaveTarget.resilienceShield)) {
+      try {
+        await _saveAndExit(automatic: true);
+      } finally {
+        _exitDialogOpen = false;
+      }
+      return;
+    }
 
     final l10n = AppLocalizations.of(context);
 

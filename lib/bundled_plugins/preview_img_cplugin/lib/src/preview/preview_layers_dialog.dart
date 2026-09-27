@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 import 'preview_document.dart';
 import 'preview_picker_scroll_area.dart';
+import 'preview_picker_session.dart';
 
 /// Lists the complete render order front-to-back, including the background.
 /// [onReorder] receives a bottom-to-top permutation and should apply it to [doc]
@@ -15,6 +16,7 @@ Future<void> showPreviewLayersDialog({
   required String Function(PreviewLayerOrderEntry entry) entryTitle,
   required ValueChanged<String> onSelected,
   required ValueChanged<List<String>> onReorder,
+  PreviewPickerSession? session,
 }) => showDialog<void>(
   context: context,
   builder: (_) => _PreviewLayersDialog(
@@ -24,6 +26,7 @@ Future<void> showPreviewLayersDialog({
     entryTitle: entryTitle,
     onSelected: onSelected,
     onReorder: onReorder,
+    session: session,
   ),
 );
 
@@ -35,6 +38,7 @@ class _PreviewLayersDialog extends StatefulWidget {
     required this.entryTitle,
     required this.onSelected,
     required this.onReorder,
+    this.session,
   });
 
   final PreviewDocument doc;
@@ -43,20 +47,14 @@ class _PreviewLayersDialog extends StatefulWidget {
   final String Function(PreviewLayerOrderEntry entry) entryTitle;
   final ValueChanged<String> onSelected;
   final ValueChanged<List<String>> onReorder;
+  final PreviewPickerSession? session;
 
   @override
   State<_PreviewLayersDialog> createState() => _PreviewLayersDialogState();
 }
 
 class _PreviewLayersDialogState extends State<_PreviewLayersDialog> {
-  final _scrollController = ScrollController();
   late String? _selectedLayerId = widget.selectedLayerId;
-
-  @override
-  void dispose() {
-    _scrollController.dispose();
-    super.dispose();
-  }
 
   String _typeName(PreviewLayerOrderEntry entry) => widget.t(
     'previewGenLayerType_${entry.isBackground ? 'background' : entry.layer!.kind.name}',
@@ -103,7 +101,7 @@ class _PreviewLayersDialogState extends State<_PreviewLayersDialog> {
               Flexible(
                 child: PreviewPickerScrollArea(
                   scrollbarKey: const ValueKey('previewLayersScrollbar'),
-                  controller: _scrollController,
+                  session: widget.session,
                   builder: (controller) => ReorderableListView.builder(
                     key: const ValueKey('previewLayersList'),
                     scrollController: controller,

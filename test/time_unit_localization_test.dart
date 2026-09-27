@@ -16,7 +16,6 @@ List<String> _secondBasedLabels(AppLocalizations l10n) => [
   l10n.ztPerkPropDamageTakenInterval,
   l10n.timePerGrid,
   l10n.operationTimePerGrid,
-  l10n.initialDropDelay,
   l10n.firstDropDelay,
   l10n.initialDropInterval,
   l10n.maxDropInterval,

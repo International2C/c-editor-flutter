@@ -1,9 +1,16 @@
+import 'package:c_editor/data/oak_archery_preview.dart';
+import 'package:c_editor/data/wave_generator_level_utils.dart';
+import 'package:c_editor/data/zombie_display_utils.dart';
+import 'package:c_editor/widgets/oak_train_warnings.dart';
+import 'package:c_editor/data/gladiator_row_utils.dart';
+import 'package:c_editor/widgets/gladiator_row_preview.dart';
 import 'dart:math' as math;
 
 import 'package:c_editor/widgets/editor_components.dart'
     show HorizontalTagScroller, isDesktopPlatform;
 import 'package:c_editor/data/zombie_conditions.dart';
 import 'package:flutter/material.dart';
+import 'package:c_editor/data/lunar_mine_vein_type_catalog.dart';
 import 'package:c_editor/data/pvz_models.dart';
 import 'package:c_editor/data/level_parser.dart';
 import 'package:c_editor/data/rtid_parser.dart';
@@ -149,6 +156,7 @@ class _LevelOverviewDialogState extends State<LevelOverviewDialog> {
   bool _copycatBlackListExpanded = false;
   bool _copycatWhiteListExpanded = false;
   bool _seedRainExpanded = false;
+  bool _seeingStarsPlantsExpanded = false;
 
   bool _encounterZombiesExpanded = false;
   bool _encounterGridItemsExpanded = false;
@@ -234,6 +242,8 @@ class _LevelOverviewDialogState extends State<LevelOverviewDialog> {
           _prePlacedTabIndex = 3;
         } else if (cats.any((c) => c.kind == GridPreviewModuleKind.zomboss)) {
           _prePlacedTabIndex = 4;
+        } else if (cats.every((c) => _isChallengeKind(c.kind))) {
+          _prePlacedTabIndex = 5;
         } else {
           _prePlacedTabIndex = 2;
         }
@@ -265,6 +275,8 @@ class _LevelOverviewDialogState extends State<LevelOverviewDialog> {
         return l10n.moduleTitle_LunarMineVeinModuleProperties;
       case GridPreviewModuleKind.radiationMeteor:
         return l10n.moduleTitle_RadiationMeteorModuleProperties;
+      case GridPreviewModuleKind.gladiatorRow:
+        return l10n.moduleTitle_GladiatorRowModuleProperties;
       case GridPreviewModuleKind.bronzeStatue:
         return l10n.moduleTitle_BronzeProperties;
       case GridPreviewModuleKind.powerTile:
@@ -301,6 +313,8 @@ class _LevelOverviewDialogState extends State<LevelOverviewDialog> {
         return l10n.moduleTitle_DropShipProperties;
       case GridPreviewModuleKind.protectPlants:
         return l10n.moduleTitle_ProtectThePlantChallengeProperties;
+      case GridPreviewModuleKind.seeingStars:
+        return l10n.moduleTitle_PVZ1SeeingStarsModuleProperties;
       case GridPreviewModuleKind.protectItems:
         return l10n.moduleTitle_ProtectTheGridItemChallengeProperties;
       case GridPreviewModuleKind.flowers:
@@ -324,6 +338,13 @@ class _LevelOverviewDialogState extends State<LevelOverviewDialog> {
     return id;
   }
 
+  bool _isChallengeKind(GridPreviewModuleKind kind) {
+    return kind == GridPreviewModuleKind.protectPlants ||
+        kind == GridPreviewModuleKind.protectItems ||
+        kind == GridPreviewModuleKind.flowers ||
+        kind == GridPreviewModuleKind.seeingStars;
+  }
+
   int _parseCoord(dynamic val) {
     if (val == null) return 0;
     if (val is num) return val.toInt();
@@ -341,7 +362,6 @@ class _LevelOverviewDialogState extends State<LevelOverviewDialog> {
       // Prefer Dialog over AlertDialog: AlertDialog wraps content in
       // IntrinsicWidth + Flexible, which can end up with size MISSING.
       return const Dialog(
-        constraints: BoxConstraints(minWidth: 0),
         child: SizedBox(
           width: 120,
           height: 120,
@@ -352,17 +372,14 @@ class _LevelOverviewDialogState extends State<LevelOverviewDialog> {
 
     if (levelDef == null) {
       return Dialog(
-        constraints: const BoxConstraints(minWidth: 0, maxWidth: 400),
+        constraints: const BoxConstraints(maxWidth: 400),
         child: Padding(
           padding: const EdgeInsets.fromLTRB(24, 20, 24, 12),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Text(
-                widget.fileName,
-                style: theme.textTheme.titleLarge,
-              ),
+              Text(widget.fileName, style: theme.textTheme.titleLarge),
               const SizedBox(height: 12),
               Text(l10n.noLevelDefinitionHint),
               const SizedBox(height: 16),
@@ -385,6 +402,9 @@ class _LevelOverviewDialogState extends State<LevelOverviewDialog> {
           _buildSeedBankCard(context, theme, l10n),
           _buildConveyorCard(context, theme, l10n),
           _buildCopycatCard(context, theme, l10n),
+          _buildSeeingStarsCard(context, theme, l10n),
+          _buildOakArcheryCard(theme, l10n),
+          _buildWaveGeneratorCard(theme, l10n),
           _buildSingleHandedCard(context, theme, l10n),
           _buildSeedRainCard(context, theme, l10n),
           _buildHeianWindCard(context, theme, l10n),
@@ -425,11 +445,12 @@ class _LevelOverviewDialogState extends State<LevelOverviewDialog> {
         );
         // Keep a non-zero tight height so Expanded children always get a size
         // (loose/zero maxHeight under UI scale / keyboard can break hit-testing).
-        final contentMaxHeight = (usableHeight - verticalInset * 2)
-            .clamp(1.0, math.max(1.0, usableHeight * 0.9));
+        final contentMaxHeight = (usableHeight - verticalInset * 2).clamp(
+          1.0,
+          math.max(1.0, usableHeight * 0.9),
+        );
         return Dialog(
           backgroundColor: theme.colorScheme.surface,
-          constraints: const BoxConstraints(minWidth: 0),
           insetPadding: EdgeInsets.symmetric(
             horizontal: horizontalInset,
             vertical: verticalInset,
@@ -1758,9 +1779,7 @@ class _LevelOverviewDialogState extends State<LevelOverviewDialog> {
                 c.kind != GridPreviewModuleKind.plants &&
                 c.kind != GridPreviewModuleKind.zombossMech &&
                 c.kind != GridPreviewModuleKind.zomboss &&
-                c.kind != GridPreviewModuleKind.protectPlants &&
-                c.kind != GridPreviewModuleKind.protectItems &&
-                c.kind != GridPreviewModuleKind.flowers,
+                !_isChallengeKind(c.kind),
           )
           .toList();
     } else if (activeTabIndex == 3) {
@@ -1773,12 +1792,7 @@ class _LevelOverviewDialogState extends State<LevelOverviewDialog> {
           .toList();
     } else if (activeTabIndex == 5) {
       gridCategories = allGridCategories
-          .where(
-            (c) =>
-                c.kind == GridPreviewModuleKind.protectPlants ||
-                c.kind == GridPreviewModuleKind.protectItems ||
-                c.kind == GridPreviewModuleKind.flowers,
-          )
+          .where((c) => _isChallengeKind(c.kind))
           .toList();
     } else {
       gridCategories = allGridCategories
@@ -2037,8 +2051,7 @@ class _LevelOverviewDialogState extends State<LevelOverviewDialog> {
           c.kind != GridPreviewModuleKind.dropShip &&
           c.kind != GridPreviewModuleKind.zombossMech &&
           c.kind != GridPreviewModuleKind.zomboss &&
-          c.kind != GridPreviewModuleKind.protectPlants &&
-          c.kind != GridPreviewModuleKind.protectItems,
+          !_isChallengeKind(c.kind),
     );
     final hasZomboss = allCategories.any(
       (c) => c.kind == GridPreviewModuleKind.zombossMech,
@@ -2046,12 +2059,7 @@ class _LevelOverviewDialogState extends State<LevelOverviewDialog> {
     final hasBoss = allCategories.any(
       (c) => c.kind == GridPreviewModuleKind.zomboss,
     );
-    final hasChallenges = allCategories.any(
-      (c) =>
-          c.kind == GridPreviewModuleKind.protectPlants ||
-          c.kind == GridPreviewModuleKind.protectItems ||
-          c.kind == GridPreviewModuleKind.flowers,
-    );
+    final hasChallenges = allCategories.any((c) => _isChallengeKind(c.kind));
 
     final theme = Theme.of(context);
 
@@ -2326,8 +2334,7 @@ class _LevelOverviewDialogState extends State<LevelOverviewDialog> {
             selectedKind == GridPreviewModuleKind.dropShip
         ? const Color(0xFF42A5F5)
         : (selectedKind == GridPreviewModuleKind.plants ||
-                  selectedKind == GridPreviewModuleKind.protectPlants ||
-                  selectedKind == GridPreviewModuleKind.protectItems
+                  _isChallengeKind(selectedKind)
               ? const Color(0xFF2E7D32)
               : const Color(0xFFFFA726));
 
@@ -2894,6 +2901,38 @@ class _LevelOverviewDialogState extends State<LevelOverviewDialog> {
     );
   }
 
+  Widget _buildSeeingStarsGrid(
+    int rows,
+    int cols,
+    LevelPreviewGridStyle style,
+  ) {
+    final sData = readSeeingStarsModuleData(widget.levelFile);
+    if (sData == null) {
+      return _buildCompositeLawnGrid(
+        rows: rows,
+        cols: cols,
+        style: style,
+        cellBuilder: (col, row) => null,
+      );
+    }
+
+    final data = <String, List<String>>{};
+    for (final p in sData.matchPlants) {
+      final key = '${p.gridX},${p.gridY}';
+      data[key] ??= [];
+      data[key]!.add(_cleanId(p.matchTypeName));
+    }
+
+    return _buildCompositeLawnGrid(
+      rows: rows,
+      cols: cols,
+      style: style,
+      moduleData: data,
+      activeTabIndex: 0,
+      cellBuilder: (col, row) => null,
+    );
+  }
+
   Widget _buildProtectItemsGrid(
     int rows,
     int cols,
@@ -3135,6 +3174,8 @@ class _LevelOverviewDialogState extends State<LevelOverviewDialog> {
           style,
           category?.wave ?? 1,
         );
+      case GridPreviewModuleKind.gladiatorRow:
+        return _buildGladiatorGrid(rows, cols, style, category?.index ?? 0);
       case GridPreviewModuleKind.bronzeStatue:
         return _buildBronzeStatueGrid(rows, cols, style);
       case GridPreviewModuleKind.powerTile:
@@ -3159,6 +3200,8 @@ class _LevelOverviewDialogState extends State<LevelOverviewDialog> {
         return _buildGulliverGrid(rows, cols, style);
       case GridPreviewModuleKind.protectPlants:
         return _buildProtectPlantsGrid(rows, cols, style);
+      case GridPreviewModuleKind.seeingStars:
+        return _buildSeeingStarsGrid(rows, cols, style);
       case GridPreviewModuleKind.protectItems:
         return _buildProtectItemsGrid(rows, cols, style);
       case GridPreviewModuleKind.flowers:
@@ -3449,6 +3492,71 @@ class _LevelOverviewDialogState extends State<LevelOverviewDialog> {
     );
   }
 
+  Widget _buildOakArcheryCard(ThemeData theme, AppLocalizations l10n) {
+    final obj = findModuleObject(widget.levelFile, 'OakTrainProperties');
+    if (obj?.objData is! Map) return const SizedBox.shrink();
+    final data = OakTrainPropertiesData.fromJson(
+      Map<String, dynamic>.from(obj!.objData as Map),
+    );
+    return Card(
+      child: _OverviewCardPadding(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            _buildSectionTitle(l10n.moduleTitle_OakTrainProperties, theme),
+            const SizedBox(height: 12),
+            OakTrainWarnings(levelFile: widget.levelFile),
+            for (final field in oakArcheryFields(data, l10n))
+              Padding(
+                padding: const EdgeInsets.only(bottom: 8),
+                child: Row(
+                  children: [
+                    Image.asset(
+                      'assets/images/${field.icon}',
+                      width: 36,
+                      height: 36,
+                      fit: BoxFit.contain,
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(child: Text('${field.label}: ${field.value}')),
+                  ],
+                ),
+              ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildWaveGeneratorCard(ThemeData theme, AppLocalizations l10n) {
+    final data = WaveGeneratorLevelUtils.readData(widget.levelFile);
+    if (data == null) return const SizedBox.shrink();
+    return Card(
+      child: _OverviewCardPadding(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            _buildSectionTitle(l10n.moduleTitle_WaveGeneratorProperties, theme),
+            const SizedBox(height: 12),
+            for (final line in waveGeneratorPreviewLines(
+              data,
+              l10n,
+              (id) => ZombieDisplayUtils.localizedName(
+                context,
+                typeOrRtid: id,
+                levelFile: widget.levelFile,
+              ),
+            ))
+              Padding(
+                padding: const EdgeInsets.only(bottom: 6),
+                child: Text(line),
+              ),
+          ],
+        ),
+      ),
+    );
+  }
+
   Widget _buildEncounterCard(
     BuildContext context,
     ThemeData theme,
@@ -3656,6 +3764,99 @@ class _LevelOverviewDialogState extends State<LevelOverviewDialog> {
                   theme: theme,
                 ),
               ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildSeeingStarsCard(
+    BuildContext context,
+    ThemeData theme,
+    AppLocalizations l10n,
+  ) {
+    final data = readSeeingStarsModuleData(widget.levelFile);
+    if (data == null) return const SizedBox.shrink();
+    final (rows, cols) = getGridDimensions(widget.levelFile);
+
+    const accent = Color(0xFFD5A021);
+    final plantIds = data.matchPlants
+        .map((p) => _cleanId(p.matchTypeName))
+        .where((id) => id.isNotEmpty)
+        .toList();
+    final settlement =
+        data.settlementDuration == data.settlementDuration.roundToDouble()
+        ? data.settlementDuration.toInt().toString()
+        : data.settlementDuration.toString();
+
+    return Container(
+      key: const ValueKey('overviewSeeingStarsCard'),
+      decoration: BoxDecoration(
+        color: theme.colorScheme.onSurface.withValues(alpha: 0.05),
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(
+          color: theme.colorScheme.onSurface.withValues(alpha: 0.1),
+        ),
+      ),
+      child: _OverviewCardPadding(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(bottom: 16),
+              child: Wrap(
+                crossAxisAlignment: WrapCrossAlignment.center,
+                spacing: 8,
+                children: [
+                  const Icon(Icons.star, size: 20, color: accent),
+                  _buildSectionTitle(
+                    l10n.moduleTitle_PVZ1SeeingStarsModuleProperties,
+                    theme,
+                    color: accent,
+                  ),
+                ],
+              ),
+            ),
+            Wrap(
+              spacing: 12,
+              runSpacing: 10,
+              children: [
+                _buildInfoChip(
+                  icon: Icons.loop,
+                  label:
+                      '${l10n.seeingStarsCycleWaveLabel}: ${data.cycleIndex}',
+                  color: accent,
+                  theme: theme,
+                ),
+                _buildInfoChip(
+                  icon: Icons.timer_outlined,
+                  label: '${l10n.seeingStarsSettlementLabel}: ${settlement}s',
+                  color: accent,
+                  theme: theme,
+                ),
+              ],
+            ),
+            if (plantIds.isNotEmpty) ...[
+              const SizedBox(height: 16),
+              _buildPlantListSection(
+                l10n.seeingStarsMatchPlants,
+                plantIds,
+                _seeingStarsPlantsExpanded,
+                onToggle: () => setState(
+                  () =>
+                      _seeingStarsPlantsExpanded = !_seeingStarsPlantsExpanded,
+                ),
+              ),
+            ],
+            const SizedBox(height: 16),
+            KeyedSubtree(
+              key: const ValueKey('overviewSeeingStarsGrid'),
+              child: _buildSeeingStarsGrid(
+                rows,
+                cols,
+                resolveGridStyle(context, GridPreviewModuleKind.seeingStars),
+              ),
             ),
           ],
         ),
@@ -4768,21 +4969,25 @@ class _LevelOverviewDialogState extends State<LevelOverviewDialog> {
     showDialog(
       context: context,
       builder: (dialogContext) {
-        final maxW = math.min(500.0, MediaQuery.sizeOf(dialogContext).width - 48);
+        final maxW = math.min(
+          500.0,
+          MediaQuery.sizeOf(dialogContext).width - 48,
+        );
         final maxH = MediaQuery.sizeOf(dialogContext).height * 0.75;
         // Avoid AlertDialog: its IntrinsicWidth + Flexible layout can leave
         // ConstrainedBoxes with size MISSING under the app UI scaler.
         return EscapeClosesModal(
           child: Dialog(
             backgroundColor: theme.colorScheme.surface,
-            constraints: const BoxConstraints(minWidth: 0),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(16),
             ),
             child: SizedBox(
               width: maxW.clamp(1.0, 500.0),
               child: ConstrainedBox(
-                constraints: BoxConstraints(maxHeight: maxH.clamp(1.0, double.infinity)),
+                constraints: BoxConstraints(
+                  maxHeight: maxH.clamp(1.0, double.infinity),
+                ),
                 child: SingleChildScrollView(
                   padding: const EdgeInsets.fromLTRB(24, 20, 24, 12),
                   child: Column(
@@ -5760,7 +5965,7 @@ class _LevelOverviewDialogState extends State<LevelOverviewDialog> {
                           flex: 4,
                           child: AssetImageWidget(
                             assetPath:
-                                'assets/images/others/Pirate_Seas_Planks.png',
+                                'assets/images/others/Pirate_Seas_Planks.webp',
                             fit: BoxFit.fill,
                           ),
                         )
@@ -6039,16 +6244,18 @@ class _LevelOverviewDialogState extends State<LevelOverviewDialog> {
     int wave,
   ) {
     // Emerging veins on this wave use the ore (active) art.
-    const asset = 'assets/images/griditems/lunar_mine_ore.webp';
     final placements =
         readLunarMineVeinModuleData(
           widget.levelFile,
         )?.placements.where((placement) => placement.emergenceWave == wave) ??
         const <LunarMineVeinPlacementData>[];
-    final cells = placements
-        .map((placement) => '${placement.gridX},${placement.gridY}')
-        .toSet();
-    return _buildMoonGridItemPreview(rows, cols, style, asset, cells);
+    final cellAssets = {
+      for (final placement in placements)
+        '${placement.gridX},${placement.gridY}': lunarMineVeinOreIconAsset(
+          placement.typeName,
+        ),
+    };
+    return _buildMoonGridItemPreview(rows, cols, style, cellAssets);
   }
 
   Widget _buildRadiationMeteorGrid(
@@ -6063,25 +6270,82 @@ class _LevelOverviewDialogState extends State<LevelOverviewDialog> {
           widget.levelFile,
         )?.spawnSchedule.where((spawn) => spawn.wave == wave) ??
         const <RadiationMeteorSpawnData>[];
-    final cells = placements
-        .map((spawn) => '${spawn.gridX},${spawn.gridY}')
-        .toSet();
-    return _buildMoonGridItemPreview(rows, cols, style, asset, cells);
+    final cellAssets = {
+      for (final spawn in placements) '${spawn.gridX},${spawn.gridY}': asset,
+    };
+    return _buildMoonGridItemPreview(rows, cols, style, cellAssets);
+  }
+
+  Widget _buildGladiatorGrid(
+    int rows,
+    int cols,
+    LevelPreviewGridStyle style,
+    int index,
+  ) {
+    final data = readGladiatorRowModuleData(widget.levelFile);
+    final encounter = data?.encounters.elementAtOrNull(index);
+    return _buildCompositeLawnGrid(
+      rows: rows,
+      cols: cols,
+      style: style,
+      cellBuilder: (col, row) {
+        if (encounter == null || data?.usesTrophyMode != true) return null;
+        final active = row == encounter.row && col >= 2 && col <= 6;
+        final trophy = active && col == 4;
+        final spawns = encounter.spawns
+            .where((s) => row == encounter.row && col == s.gridX && s.count > 0)
+            .toList();
+        if (!active && spawns.isEmpty) return null;
+        return ColoredBox(
+          key: ValueKey('overview-gladiator-cell-$col-$row'),
+          color: active
+              ? (trophy ? Colors.green : Colors.red).withValues(alpha: 0.45)
+              : Colors.transparent,
+          child: Stack(
+            fit: StackFit.expand,
+            children: [
+              if (trophy)
+                const Padding(
+                  padding: EdgeInsets.all(3),
+                  child: FittedBox(
+                    child: Icon(Icons.emoji_events, color: Colors.white),
+                  ),
+                ),
+              if (spawns.isNotEmpty)
+                Padding(
+                  padding: const EdgeInsets.all(2),
+                  child: Row(
+                    children: [
+                      for (final spawn in spawns)
+                        Expanded(
+                          child: GladiatorZombieIcon(
+                            type: spawn.zombieType,
+                            levelFile: widget.levelFile,
+                          ),
+                        ),
+                    ],
+                  ),
+                ),
+            ],
+          ),
+        );
+      },
+    );
   }
 
   Widget _buildMoonGridItemPreview(
     int rows,
     int cols,
     LevelPreviewGridStyle style,
-    String asset,
-    Set<String> cells,
+    Map<String, String> cellAssets,
   ) {
     return _buildCompositeLawnGrid(
       rows: rows,
       cols: cols,
       style: style,
       cellBuilder: (col, row) {
-        if (!cells.contains('$col,$row')) return null;
+        final asset = cellAssets['$col,$row'];
+        if (asset == null) return null;
         return LayoutBuilder(
           builder: (context, constraints) {
             final width = constraints.maxWidth * 0.92;
@@ -6125,7 +6389,7 @@ class _LevelOverviewDialogState extends State<LevelOverviewDialog> {
       for (final placement in lunarMineData.placements) {
         final key = '${placement.gridX},${placement.gridY}';
         result[key] ??= [];
-        result[key]!.add('lunar_mine_vein');
+        result[key]!.add(placement.typeName);
       }
     }
     return result;

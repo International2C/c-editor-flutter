@@ -13,6 +13,7 @@ class WaveGeneratorWaveData extends PvzModel {
     this.wavePointOverride,
     this.colNumPlantIsDragged,
     this.waitUntilAllZombiesDie,
+    this.waveSpawnTime,
   });
 
   bool disableRandomSpawns;
@@ -26,6 +27,7 @@ class WaveGeneratorWaveData extends PvzModel {
   /// Built-in black hole event column count for this wave.
   int? colNumPlantIsDragged;
   bool? waitUntilAllZombiesDie;
+  num? waveSpawnTime;
 
   factory WaveGeneratorWaveData.fromJson(Map<String, dynamic> json) {
     return WaveGeneratorWaveData(
@@ -54,6 +56,7 @@ class WaveGeneratorWaveData extends PvzModel {
       wavePointOverride: json['WavePointOverride'] as bool?,
       colNumPlantIsDragged: json['ColNumPlantIsDragged'] as int?,
       waitUntilAllZombiesDie: json['WaitUntilAllZombiesDie'] as bool?,
+      waveSpawnTime: json['WaveSpawnTime'] as num?,
     );
   }
 
@@ -82,6 +85,7 @@ class WaveGeneratorWaveData extends PvzModel {
     if (waitUntilAllZombiesDie != null) {
       data['WaitUntilAllZombiesDie'] = waitUntilAllZombiesDie;
     }
+    if (waveSpawnTime != null) data['WaveSpawnTime'] = waveSpawnTime;
     return data;
   }
 }

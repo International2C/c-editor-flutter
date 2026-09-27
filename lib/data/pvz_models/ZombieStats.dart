@@ -9,6 +9,26 @@ class ZombieStats {
     this.sizeType = '',
   });
 
+  /// Read only statistics, independently of optional geometry or behavior data.
+  factory ZombieStats.fromPropertySheet(String id, Map<String, dynamic> json) {
+    num number(String key) {
+      final value = json[key];
+      return value is num && value.isFinite ? value : 0;
+    }
+
+    return ZombieStats(
+      id: id,
+      hp: number('Hitpoints').toDouble(),
+      cost: number('WavePointCost').toInt(),
+      weight: number('Weight').toInt(),
+      speed: number('Speed').toDouble(),
+      eatDPS: number('EatDPS').toDouble(),
+      sizeType: json['SizeType'] is String
+          ? json['SizeType'] as String
+          : 'unknown',
+    );
+  }
+
   String id;
   double hp;
   int cost;

@@ -13,6 +13,7 @@ class ZombieLaneIconData {
     required this.levelDisplay,
     required this.isElite,
     required this.isCustom,
+    required this.isMissingCustomZombie,
   });
 
   /// Stable object identity (e.g. the backing spawn model instance).
@@ -23,6 +24,7 @@ class ZombieLaneIconData {
   final String levelDisplay;
   final bool isElite;
   final bool isCustom;
+  final bool isMissingCustomZombie;
 }
 
 /// Payload for zombie lane drag-and-drop.

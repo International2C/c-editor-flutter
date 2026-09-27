@@ -11,6 +11,7 @@ import 'preview_sticker_catalog.dart';
 import 'preview_sticker_picker_session.dart';
 import 'preview_document.dart';
 import 'preview_picker_scroll_area.dart';
+import 'preview_picker_session.dart';
 
 export 'preview_sticker_picker_session.dart';
 
@@ -111,6 +112,7 @@ Future<String?> showPreviewBannerPicker({
   required StageBannerResolver banners,
   required String Function(String key, [String? fallback]) t,
   String? currentStem,
+  PreviewPickerSession? session,
 }) async {
   await Future.wait([
     StageRepository.init(),
@@ -133,6 +135,7 @@ Future<String?> showPreviewBannerPicker({
           width: 520,
           height: 620,
           child: PreviewPickerScrollArea(
+            session: session,
             scrollbarKey: const ValueKey('previewBannerPickerScrollbar'),
             builder: (controller) => ListView.builder(
               key: const ValueKey('previewBannerPickerScroll'),

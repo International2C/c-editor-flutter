@@ -5,6 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../level_library_startup_cache.dart';
 import '../pvz_models.dart';
 import 'level_repository_base.dart';
+import 'web/web_import_source.dart';
 import 'web/web_transfer_progress.dart';
 import 'level_repository_web.dart'
     if (dart.library.io) 'level_repository_native.dart'
@@ -13,6 +14,7 @@ import 'level_repository_web.dart'
 export '../pvz_models.dart' show PvzLevelFile;
 export 'level_repository_base.dart'
     show FileItem, LevelRepositoryBase, WebFolderImport, LibraryItem;
+export 'web/web_import_source.dart' show WebImportSource;
 
 class LevelRepository {
   static final LevelRepositoryBase _impl = impl.createLevelRepository();
@@ -186,7 +188,8 @@ class LevelRepository {
   static Future<void> ensureWebStorageReady() =>
       _impl.ensureWebStorageReady();
 
-  static void releaseWebFolderImport() => _impl.releaseWebFolderImport();
+  static void releaseWebImport(WebImportSource source) =>
+      _impl.releaseWebImport(source);
 
   static Future<String?> getWebLibraryDisplayName() =>
       _impl.getWebLibraryDisplayName();
@@ -197,27 +200,20 @@ class LevelRepository {
   static bool get isWebFolderImportSupported =>
       _impl.isWebFolderImportSupported;
 
-  static Future<int> importWebFilesBatched(
-    List<({String storageKey, Uint8List bytes})> files, {
-    WebTransferProgress? onProgress,
-    bool Function()? isCancelled,
-  }) =>
-      _impl.importWebFilesBatched(
-        files,
-        onProgress: onProgress,
-        isCancelled: isCancelled,
-      );
+  static Future<List<String>?> pickWebFilesForImport(List<String> extensions) =>
+      _impl.pickWebFilesForImport(extensions);
 
-  static Future<int> importWebFolderPathsBatched(
+  static Future<int> importWebPickedBatched(
     List<({String storageKey, String relativePath})> entries, {
+    WebImportSource source = WebImportSource.folder,
     WebTransferProgress? onProgress,
     bool Function()? isCancelled,
-  }) =>
-      _impl.importWebFolderPathsBatched(
-        entries,
-        onProgress: onProgress,
-        isCancelled: isCancelled,
-      );
+  }) => _impl.importWebPickedBatched(
+    entries,
+    source: source,
+    onProgress: onProgress,
+    isCancelled: isCancelled,
+  );
 
   static Future<bool> createLevelFromTemplate(
     String currentDirPath,

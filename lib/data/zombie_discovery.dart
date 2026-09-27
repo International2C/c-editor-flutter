@@ -1,3 +1,4 @@
+import 'package:c_editor/data/gladiator_row_utils.dart';
 import 'package:c_editor/data/level_parser.dart';
 import 'package:c_editor/data/pvz_models.dart';
 import 'package:c_editor/screens/common/level_preview_grid_helpers.dart';
@@ -140,6 +141,18 @@ class ZombieDiscovery {
       }
     }
 
+    final gladiator = readGladiatorRowModuleData(levelFile);
+    if (gladiator != null) {
+      for (final encounter in gladiator.encounters) {
+        for (final spawn in encounter.spawns) {
+          if (spawn.count > 0) addZombie(spawn.zombieType);
+        }
+      }
+      for (final entry in gladiator.punishmentPool) {
+        if (entry.weight > 0) addZombie(entry.zombieType);
+      }
+    }
+
     if (levelHasModule(levelFile, 'DropShipProperties')) {
       addZombie(skyCityImp);
     }
@@ -222,9 +235,11 @@ class ZombieDiscovery {
       'ModifyConveyorWaveActionProps',
       'ZombiePotionActionProps',
       'PumpkinHouseActionProps',
+      'SpawnEagleFlagsWaveActionProps',
       'ThunderWaveActionProps',
       'ZombieAtlantisShellActionProps',
       'SpawnRocketLandingWaveActionProps',
+      'GravityGeneratorWaveActionProps',
     };
 
     if (skippedClasses.contains(obj.objClass)) {
@@ -237,6 +252,17 @@ class ZombieDiscovery {
 
     final data = obj.objData;
     if (data is! Map) return;
+
+    if (obj.objClass == 'BungeeWaveActionProps') {
+      final bungee = BungeeWaveActionData.normalizeJson(
+        Map<String, dynamic>.from(data),
+      );
+      final name = bungee['zombieName'];
+      if (name is String && name.isNotEmpty) {
+        _addZombie(name, out, customZombieAliases);
+      }
+      return;
+    }
 
     _scanForZombies(data, out, customZombieAliases);
   }

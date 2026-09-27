@@ -89,8 +89,18 @@ void main() {
       expect(veins.placements, hasLength(2));
       expect(veins.placements.first.emergenceWave, 4);
       expect(veins.toJson()['VeinPlacements'], [
-        {'GridX': 4, 'GridY': 2, 'EmergenceWave': 4},
-        {'GridX': 6, 'GridY': 3, 'EmergenceWave': 12},
+        {
+          'TypeName': 'lunar_mine_vein',
+          'GridX': 4,
+          'GridY': 2,
+          'EmergenceWave': 4,
+        },
+        {
+          'TypeName': 'lunar_mine_vein',
+          'GridX': 6,
+          'GridY': 3,
+          'EmergenceWave': 12,
+        },
       ]);
     });
 

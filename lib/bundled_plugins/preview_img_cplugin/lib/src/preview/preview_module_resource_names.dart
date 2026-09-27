@@ -19,6 +19,8 @@ enum PreviewModuleResourceKind {
   tool,
   collectable,
   creature,
+  zombieCondition,
+  plantCondition,
 }
 
 typedef PreviewModuleResourceName =
@@ -56,6 +58,8 @@ String previewModuleResourceName(
     PreviewModuleResourceKind.gridItem => 'griditem_',
     PreviewModuleResourceKind.tool => 'tool_',
     PreviewModuleResourceKind.creature => 'creature_',
+    PreviewModuleResourceKind.zombieCondition => 'zombieCondition_',
+    PreviewModuleResourceKind.plantCondition => 'plantCondition_',
     PreviewModuleResourceKind.collectable => '',
   };
   final localClass = switch (kind) {
@@ -133,6 +137,12 @@ String previewModuleResourceName(
 
   String? name;
   switch (kind) {
+    case PreviewModuleResourceKind.zombieCondition:
+      name = translated(['zombieCondition_$id']);
+      break;
+    case PreviewModuleResourceKind.plantCondition:
+      name = translated(['plantCondition_$id', 'zombieCondition_$id']);
+      break;
     case PreviewModuleResourceKind.plant:
       // Conveyor belts and seed rain may store tool packets as PlantType.
       name = id.startsWith('tool_')

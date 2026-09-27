@@ -1,3 +1,5 @@
+import 'package:c_editor/data/pvz_models/BungeeWaveActionData.dart';
+
 /// One row in `PvzLevelFile.objects` (`aliases`, `objclass`, `objdata`).
 class PvzObject {
   PvzObject({this.aliases, required this.objClass, required this.objData});
@@ -24,7 +26,12 @@ class PvzObject {
           .where((alias) => !isEditorMetadataAlias(alias))
           .toList(),
     'objclass': objClass,
-    'objdata': objData,
+    // Also migrate unedited imported events in every level export format.
+    'objdata': objClass == 'BungeeWaveActionProps' && objData is Map
+        ? BungeeWaveActionData.normalizeJson(
+            Map<String, dynamic>.from(objData as Map),
+          )
+        : objData,
   };
 
   /// Legacy editor-only aliases must never enter a playable level JSON.

@@ -55,6 +55,7 @@ class _LawnMowerPropertiesScreenState extends State<LawnMowerPropertiesScreen> {
     'RunningSubwayMowers',
     'MausoleumMowers',
     'QinGhostMowers',
+    'RomanMowers2',
   ];
 
   static final _targetAliases = _mowerAliases.toSet();

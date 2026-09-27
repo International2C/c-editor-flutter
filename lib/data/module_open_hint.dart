@@ -3,6 +3,7 @@ class ModuleOpenHint {
   const ModuleOpenHint({
     this.gridOverrideModuleWave,
     this.dropShipWave,
+    this.gladiatorWave,
     this.heianWindWaveNumber,
   });
 
@@ -11,6 +12,9 @@ class ModuleOpenHint {
 
   /// 0-based wave in [DropShipPropertiesData].
   final int? dropShipWave;
+
+  /// Zero-based encounter wave in GladiatorRowModuleProperties.
+  final int? gladiatorWave;
 
   /// 0-based wave number in [HeianWindModulePropertiesData].
   final int? heianWindWaveNumber;
