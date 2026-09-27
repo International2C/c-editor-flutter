@@ -168,8 +168,8 @@ class LevelRepositoryWebImpl extends LevelRepositoryBase {
   }
 
   @override
-  void releaseWebFolderImport() {
-    _fsa.releaseFolderImport();
+  void releaseWebImport(WebImportSource source) {
+    _fsa.releaseImport(source);
   }
 
   @override
@@ -190,7 +190,7 @@ class LevelRepositoryWebImpl extends LevelRepositoryBase {
     // Pick while the user-gesture is still active; bytes load during import.
     final picked = await _fsa.pickFolderForImport();
     if (picked == null) {
-      _fsa.releaseFolderImport();
+      _fsa.releaseImport(WebImportSource.folder);
       return null;
     }
 
@@ -199,8 +199,18 @@ class LevelRepositoryWebImpl extends LevelRepositoryBase {
   }
 
   @override
-  Future<int> importWebFolderPathsBatched(
+  Future<List<String>?> pickWebFilesForImport(List<String> extensions) {
+    // Deliberately *not* the `file_picker` package: its web implementation
+    // detaches the <input type="file"> in the same task as `click()` and infers
+    // cancellation from window focus, which loses the selection outright on
+    // Android Chrome (the picker runs as a separate activity there).
+    return _fsa.pickFilesForImport(extensions);
+  }
+
+  @override
+  Future<int> importWebPickedBatched(
     List<({String storageKey, String relativePath})> entries, {
+    WebImportSource source = WebImportSource.folder,
     WebTransferProgress? onProgress,
     bool Function()? isCancelled,
   }) async {
@@ -216,7 +226,7 @@ class LevelRepositoryWebImpl extends LevelRepositoryBase {
           break;
         }
         final entry = entries[i];
-        final bytes = await _fsa.readFolderImportEntry(entry.relativePath);
+        final bytes = await _fsa.readImportEntry(source, entry.relativePath);
         if (bytes != null) {
           await _putFile(entry.storageKey, bytes);
           imported++;
@@ -227,7 +237,7 @@ class LevelRepositoryWebImpl extends LevelRepositoryBase {
         }
       }
     } finally {
-      _fsa.releaseFolderImport();
+      _fsa.releaseImport(source);
     }
     return imported;
   }
@@ -781,33 +791,6 @@ class LevelRepositoryWebImpl extends LevelRepositoryBase {
       allowedExtensions: [ext.isEmpty ? 'json' : ext],
       bytes: content,
     );
-  }
-
-  @override
-  Future<int> importWebFilesBatched(
-    List<({String storageKey, Uint8List bytes})> files, {
-    WebTransferProgress? onProgress,
-    bool Function()? isCancelled,
-  }) async {
-    if (files.isEmpty) {
-      return 0;
-    }
-    await _ensureReady();
-    const batchSize = 8;
-    var imported = 0;
-    for (var i = 0; i < files.length; i++) {
-      if (isCancelled?.call() == true) {
-        break;
-      }
-      final file = files[i];
-      await _putFile(file.storageKey, file.bytes);
-      imported++;
-      onProgress?.call(i + 1, files.length, null);
-      if (i % batchSize == batchSize - 1) {
-        await yieldToUi();
-      }
-    }
-    return imported;
   }
 
   @override

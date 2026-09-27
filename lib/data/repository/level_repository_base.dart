@@ -8,6 +8,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../pvz_models.dart';
 import '../level_library_startup_cache.dart';
+import 'web/web_import_source.dart';
 import 'web/web_transfer_progress.dart';
 
 /// One folder picked for web import (recursive level files, relative paths).
@@ -177,32 +178,22 @@ abstract class LevelRepositoryBase {
     WebTransferProgress? onProgress,
   }) async {}
   Future<void> ensureWebStorageReady() async {}
-  void releaseWebFolderImport() {}
+  void releaseWebImport(WebImportSource source) {}
   Future<String?> getWebLibraryDisplayName() async => null;
   bool get isWebFolderImportSupported => false;
   Future<WebFolderImport?> pickWebFolderForImport() async => null;
-  Future<int> importWebFilesBatched(
-    List<({String storageKey, Uint8List bytes})> files, {
-    WebTransferProgress? onProgress,
-    bool Function()? isCancelled,
-  }) async {
-    var imported = 0;
-    for (var i = 0; i < files.length; i++) {
-      if (isCancelled?.call() == true) {
-        break;
-      }
-      await prepareInternalCacheFromBytes(
-        files[i].storageKey,
-        files[i].bytes,
-      );
-      imported++;
-      onProgress?.call(i + 1, files.length, null);
-    }
-    return imported;
-  }
 
-  Future<int> importWebFolderPathsBatched(
+  /// Opens the browser file chooser for a flat (non-folder) level import.
+  ///
+  /// Returns the accepted file names, an empty list when the chooser opened but
+  /// nothing usable was selected, or `null` when the user dismissed it. The
+  /// bytes stay in the browser and are read back via [importWebPickedBatched].
+  Future<List<String>?> pickWebFilesForImport(List<String> extensions) async =>
+      null;
+
+  Future<int> importWebPickedBatched(
     List<({String storageKey, String relativePath})> entries, {
+    WebImportSource source = WebImportSource.folder,
     WebTransferProgress? onProgress,
     bool Function()? isCancelled,
   }) async {

@@ -6988,14 +6988,14 @@ class AppLocalizationsRu extends AppLocalizations {
   String get pvz1CopycatsAddZombie => 'Добавить зомби в белый список';
 
   @override
-  String get moduleTitle_PVZ1SeeingStarsModuleProperties => 'Звёздный узор';
+  String get moduleTitle_PVZ1SeeingStarsModuleProperties => 'Увидеть звёзды';
 
   @override
   String get moduleDesc_PVZ1SeeingStarsModuleProperties =>
-      'Настройка целевых растений и цикла волн мини-игры «Звёздный узор»';
+      'Настройка целевых растений и цикла волн мини-игры «Увидеть звёзды»';
 
   @override
-  String get pvz1SeeingStarsModuleTitle => 'Звёздный узор';
+  String get pvz1SeeingStarsModuleTitle => 'Увидеть звёзды';
 
   @override
   String get pvz1SeeingStarsSectionParams => 'Параметры';
@@ -7025,7 +7025,7 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get pvz1SeeingStarsHelpOverview =>
-      'Настраивает мини-игру Аллеи воспоминаний «Звёздный узор». Название происходит от уровня первой игры, где нужно было высадить карамболы в форме звезды. Следуйте подсказкам на газоне и посадите соответствующие растения в указанных клетках, чтобы победить. Тем временем заданные волны зомби повторяются и мешают расстановке растений.';
+      'Настраивает мини-игру Аллеи воспоминаний «Увидеть звёзды». Название происходит от уровня первой игры, где нужно было высадить карамболы в форме звезды. Следуйте подсказкам на газоне и посадите соответствующие растения в указанных клетках, чтобы победить. Тем временем заданные волны зомби повторяются и мешают расстановке растений.';
 
   @override
   String get pvz1SeeingStarsHelpFieldsTitle => 'Описание полей';
@@ -7043,7 +7043,7 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get seeingStarsWinConWarning =>
-      '«Звёздный узор» завершает уровень, когда узор собран. Не используйте его вместе с «Полной зачисткой», «Разгромом Бронзы», «Таймером», «Лабиринтом зомби» и другими модулями со своими условиями завершения уровня: они могут переопределить его условие победы или нарушить его работу.';
+      '«Увидеть звёзды» завершает уровень, когда узор собран. Не используйте его вместе с «Полной зачисткой», «Разгромом Бронзы», «Таймером», «Лабиринтом зомби» и другими модулями со своими условиями завершения уровня: они могут переопределить его условие победы или нарушить его работу.';
 
   @override
   String get seeingStarsCycleWaveLabel =>
@@ -7062,7 +7062,7 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get seeingStarsCompatibilityWarning =>
-      '«Звёздный узор» несовместим с генератором волн и приведёт к сбою уровня. Используйте с осторожностью.';
+      '«Увидеть звёзды» несовместим с генератором волн и приведёт к сбою уровня. Используйте с осторожностью.';
 
   @override
   String get seeingStarsCycleWaveBadge => 'Цикл волн';
@@ -9832,7 +9832,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get camelShowTutorial => 'Показывать обучающий диалог (ShowTutorial)';
 
   @override
-  String get moduleTitle_OakTrainProperties => 'Стрельба Пня Лучника';
+  String get moduleTitle_OakTrainProperties => 'Стрельбище Пня Лучника';
 
   @override
   String get moduleDesc_OakTrainProperties =>
@@ -9866,7 +9866,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get oakTrainBossScore => 'Очки за босса-Гаргантюа (BossScore)';
 
   @override
-  String get oakTrainHealNum => 'Здоровье от зелёной сферы (HealNum)';
+  String get oakTrainHealNum => 'Здоровье от зелья исцеления (HealNum)';
 
   @override
   String get oakTrainArrowPowerNum =>
