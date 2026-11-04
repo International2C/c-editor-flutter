@@ -1246,7 +1246,7 @@
   "frozenPlantPlacementHelpOverviewTitle": "简要介绍",
   "frozenPlantPlacementHelpOverviewBody": "此模块用于在关卡开始前配置植物布局，与预置植物布局类似，但结构不同且支持特殊状态。",
   "frozenPlantPlacementHelpConditionTitle": "特殊状态",
-  "frozenPlantPlacementHelpConditionBody": "可以为植物设置特殊状态，例如冰封 (icecubed，常见于冰河世界关卡) 或暗影强化 (shadowboosted)。",
+  "frozenPlantPlacementHelpConditionBody": "可以为植物设置特殊状态：冰块冻住 (icecubed)、冰减速 (chill)、暗影状态 (shadowboosted)、守卫菇加成状态 (shroomboosted)。",
   "frozenPlantPlacementHelpLastStandTitle": "复活之战模式",
   "frozenPlantPlacementHelpLastStandBody": "开启复活之战模式后，初始植物将于开始游戏后被销毁。注意中文版没有销毁植物的火焰效果。",
   "save": "保存",

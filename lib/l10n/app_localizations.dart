@@ -5599,7 +5599,7 @@ abstract class AppLocalizations {
   /// No description provided for @frozenPlantPlacementHelpConditionBody.
   ///
   /// In en, this message translates to:
-  /// **'Plants can be set to a special state such as frozen (icecubed), commonly used in Frostbite Caves levels, or shadow boosted (shadowboosted).'**
+  /// **'Plants can be set to a special state: frozen (icecubed), chilled (chill), shadow boosted (shadowboosted), or shroom boosted (shroomboosted).'**
   String get frozenPlantPlacementHelpConditionBody;
 
   /// No description provided for @frozenPlantPlacementHelpLastStandTitle.

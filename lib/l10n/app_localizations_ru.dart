@@ -3166,7 +3166,7 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get frozenPlantPlacementHelpConditionBody =>
-      'Растениям можно задать особое состояние: заморозка (icecubed), часто на уровнях Ледникового периода, или теневое усиление (shadowboosted).';
+      'Растениям можно задать особое состояние: заморозка (icecubed), охлаждение (chill), теневое усиление (shadowboosted) или усиление грибом-стражем (shroomboosted).';
 
   @override
   String get frozenPlantPlacementHelpLastStandTitle =>

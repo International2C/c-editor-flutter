@@ -1091,7 +1091,7 @@
   "frozenPlantPlacementHelpOverviewTitle": "Overview",
   "frozenPlantPlacementHelpOverviewBody": "This module configures plant layout before the level starts. Similar to preset plant layout but with a different structure and special state support.",
   "frozenPlantPlacementHelpConditionTitle": "Special State",
-  "frozenPlantPlacementHelpConditionBody": "Plants can be set to a special state such as frozen (icecubed), commonly used in Frostbite Caves levels, or shadow boosted (shadowboosted).",
+  "frozenPlantPlacementHelpConditionBody": "Plants can be set to a special state: frozen (icecubed), chilled (chill), shadow boosted (shadowboosted), or shroom boosted (shroomboosted).",
   "frozenPlantPlacementHelpLastStandTitle": "Intensive Battle Mode",
   "frozenPlantPlacementHelpLastStandBody": "When Intensive Battle mode is enabled, initial plants will be incinerated after the game starts. Note that Chinese version does not have the burn animation.",
   "save": "Save",

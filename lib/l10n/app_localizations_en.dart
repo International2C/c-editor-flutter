@@ -3154,7 +3154,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get frozenPlantPlacementHelpConditionBody =>
-      'Plants can be set to a special state such as frozen (icecubed), commonly used in Frostbite Caves levels, or shadow boosted (shadowboosted).';
+      'Plants can be set to a special state: frozen (icecubed), chilled (chill), shadow boosted (shadowboosted), or shroom boosted (shroomboosted).';
 
   @override
   String get frozenPlantPlacementHelpLastStandTitle => 'Intensive Battle Mode';

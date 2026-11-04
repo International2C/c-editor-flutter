@@ -1308,7 +1308,7 @@
   "frozenPlantPlacementHelpOverviewTitle": "Обзор",
   "frozenPlantPlacementHelpOverviewBody": "Этот модуль настраивает раскладку растений до начала уровня. Похож на предустановленную раскладку, но с другой структурой и поддержкой особых состояний.",
   "frozenPlantPlacementHelpConditionTitle": "Особое состояние",
-  "frozenPlantPlacementHelpConditionBody": "Растениям можно задать особое состояние: заморозка (icecubed), часто на уровнях Ледникового периода, или теневое усиление (shadowboosted).",
+  "frozenPlantPlacementHelpConditionBody": "Растениям можно задать особое состояние: заморозка (icecubed), охлаждение (chill), теневое усиление (shadowboosted) или усиление грибом-стражем (shroomboosted).",
   "frozenPlantPlacementHelpLastStandTitle": "Режим 'Последний выживший'",
   "frozenPlantPlacementHelpLastStandBody": "При включении Последнего Выжившего начальные растения будут уничтожены после старта игры. Примечание: в китайской версии не отображается эффект огня при уничтожении растений.",
   "save": "Сохранить",

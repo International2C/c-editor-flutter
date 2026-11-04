@@ -10,8 +10,7 @@ ROOT = Path(__file__).resolve().parents[1]
 CONDITIONS_PATH = ROOT / "conditions.txt"
 RESOURCE_DIR = ROOT / "assets/l10n"
 
-PLANT_CONDITION_IDS = ("icecubed",)
-
+PLANT_CONDITION_IDS = ("icecubed", "chill", "shadowboosted", "shroomboosted")
 CONDITION_EN: dict[str, str] = {
     "chill": "Chill (slow)",
     "freeze": "Frozen",
@@ -51,6 +50,8 @@ CONDITION_EN: dict[str, str] = {
     "zombossstun": "Zomboss stun",
     "haunted": "Haunted (Ghost Pepper VFX)",
     "icecubed": "Ice cubed",
+    "shadowboosted": "Shadow boosted",
+    "shroomboosted": "Shroom boosted",
     "present_boxed": "Gift boxed",
     "sapped": "Sap slow",
     "unsuspendable": "Unknown",
@@ -123,6 +124,8 @@ CONDITION_RU: dict[str, str] = {
     "zombossstun": "Оглушение Zomboss",
     "haunted": "Преследование (Ghost Pepper VFX)",
     "icecubed": "Заморожен в льду",
+    "shadowboosted": "Теневое усиление",
+    "shroomboosted": "Усиление грибом-стражем",
     "present_boxed": "Упакован в подарок",
     "sapped": "Замедление смолой",
     "unsuspendable": "Неизвестно",

@@ -3012,7 +3012,7 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get frozenPlantPlacementHelpConditionBody =>
-      '可以为植物设置特殊状态，例如冰封 (icecubed，常见于冰河世界关卡) 或暗影强化 (shadowboosted)。';
+      '可以为植物设置特殊状态：冰块冻住 (icecubed)、冰减速 (chill)、暗影状态 (shadowboosted)、守卫菇加成状态 (shroomboosted)。';
 
   @override
   String get frozenPlantPlacementHelpLastStandTitle => '复活之战模式';
