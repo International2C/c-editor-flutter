@@ -413,7 +413,7 @@
         {
           "key": "NARRATIVE_GAMESTART_INTRO_1",
           "kind": "speech",
-          "text": "Plants can now become even more powerful. You can upgrade them up to three times!",
+          "text": "Plants can now become even more powerful.\\nYou can upgrade them up to three times!",
           "speaker": "Crazy Dave",
           "npc": "crazydaveicon"
         },
@@ -6308,7 +6308,7 @@
         {
           "key": "NARRATIVE_FUTURE_INTRO_ZOMBOSS_BASIC_1",
           "kind": "speech",
-          "text": "Hmph, my latest Level 4 Basic Zombie is finally here. With your limited intellect, you'd never think to upgrade your plants to Level 4 to deal with it!",
+          "text": "Hmph, my latest ^00FF00Level 4 Basic Zombie^oldclr is finally here. With your limited intellect, you'd never think to ^00FF00upgrade your plants to Level 4^oldclr to deal with it!",
           "speaker": "Dr. Zomboss",
           "npc": "zombossicon"
         },
@@ -6340,7 +6340,7 @@
         {
           "key": "NARRATIVE_FUTURE_INTRO_ZOMBOSS_TOUCH_1",
           "kind": "speech",
-          "text": "Hmph, my latest Level 4 Explorer Zombie is finally here. With your limited intellect, you'd never think to upgrade your plants to Level 4 to deal with it!",
+          "text": "Hmph, my latest ^00FF00Level 4 Explorer Zombie^oldclr is finally here. With your limited intellect, you'd never think to ^00FF00upgrade your plants to Level 4^oldclr to deal with it!",
           "speaker": "Dr. Zomboss",
           "npc": "zombossicon"
         },
@@ -13385,7 +13385,7 @@
         {
           "key": "NARRATIVE_POOYAN_CHOOSED_1",
           "kind": "speech",
-          "text": "Ha! You've chosen the bravest plant squad and mastered the art of piloting the aircraft!",
+          "text": "Ha! You've chosen the bravest plant squad\\nand mastered the art of piloting the aircraft!",
           "speaker": "Crazy Dave",
           "emotion": "excited",
           "npc": "crazydaveicon"
@@ -13393,7 +13393,7 @@
         {
           "key": "NARRATIVE_POOYAN_CHOOSED_2",
           "kind": "speech",
-          "text": "Once you earn enough points, your plants will automatically level up!",
+          "text": "Once you earn enough points,\\nyour plants will automatically level up!",
           "speaker": "Crazy Dave",
           "npc": "crazydaveicon"
         },
@@ -13433,7 +13433,7 @@
         {
           "key": "NARRATIVE_POOYAN_ZOMBIE_GARGANTUAR_1",
           "kind": "speech",
-          "text": "Time for a close encounter with a Gargantuar! Just one touch and... I almost let that slip. Anyway, enjoy yourselves! Ha ha!",
+          "text": "^FF0000Time for a close encounter with a Gargantuar!\\nJust one touch and... I almost let that slip.\\nAnyway, enjoy yourselves! Ha ha!^oldclr",
           "speaker": "Dr. Zomboss",
           "npc": "zombossicon"
         },
@@ -13550,7 +13550,7 @@
         {
           "key": "NARRATIVE_BOX_SHOVELED_INTRO_1",
           "kind": "speech",
-          "text": "Hey! You've mastered the art of wielding a shovel like a sledgehammer!",
+          "text": "Hey!\\nYou've mastered the art of wielding a shovel like a sledgehammer!",
           "speaker": "Crazy Dave",
           "npc": "crazydaveicon"
         },
@@ -13656,7 +13656,7 @@
         {
           "key": "NARRATIVE_BOX_PLANTED_INTRO_4",
           "kind": "speech",
-          "text": "Then plant your defenses and fortify the lawn against the zombie horde!",
+          "text": "Then plant your defenses\\nand fortify the lawn against the zombie horde!",
           "speaker": "Crazy Dave",
           "npc": "crazydaveicon"
         },
@@ -23963,7 +23963,7 @@
         {
           "key": "NARRATIVE_SUNBANK_TUTORIAL_3",
           "kind": "speech",
-          "text": "Neighbor, take it! Don't ask why—you know what I mean!",
+          "text": "Neighbor, take it! Don't ask why—\\nyou know what I mean!",
           "speaker": "Crazy Dave",
           "npc": "crazydave"
         },
@@ -29613,7 +29613,7 @@
         {
           "key": "NARRATIVE_ZOMBIE_INTRO_ELIMINATE_MISSIONFINISH_1",
           "kind": "speech",
-          "text": "^FF0000Don't think you've defeated me so easily. I'll be back!^oldclr",
+          "text": "^FF0000Don't think you've defeated me so easily.\\nI'll be back!^oldclr",
           "speaker": "Dr. Zomboss",
           "npc": "zombossicon"
         },
@@ -33295,7 +33295,7 @@
         {
           "key": "NARRATIVE_GENE_ENHANCEMENT_FIRST_1",
           "kind": "speech",
-          "text": "Come see my latest and \"craziest\" gene technology—it can take a plant's combat power to the next level! Just like eating a taco, it makes plants unbelievably strong!",
+          "text": "Come see my latest and \"craziest\" gene technology—it can take a plant's combat power to the next level!\\nJust like eating a taco, it makes plants unbelievably strong!",
           "speaker": "Researcher Crazy Dave",
           "emotion": "excited",
           "npc": "researchercrazydave"

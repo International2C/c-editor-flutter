@@ -26,6 +26,7 @@ class LevelEscalationRuntime {
     this.hasValidEscalationProps = false,
     this.hasValidWaveManagerProps = false,
     this.hasCompetingWaveManagerProps = false,
+    this.waveManagerPointSpawningEnabled = false,
   });
 
   final LevelEscalationModuleOrder order;
@@ -36,6 +37,7 @@ class LevelEscalationRuntime {
   final String? waveManagerWaveManagerProps;
   final bool hasValidEscalationProps;
   final bool hasValidWaveManagerProps;
+  final bool waveManagerPointSpawningEnabled;
 
   /// True only when both modules hold different, valid wave configurations.
   final bool hasCompetingWaveManagerProps;
@@ -101,11 +103,11 @@ class LevelEscalationRuntime {
       if (object.objClass == 'WaveManagerModuleProperties' &&
           (waveManagerAlias == null || parsed.alias == waveManagerAlias)) {
         waveManagerIndex = index;
-        if (object.objData is Map) {
-          waveManagerData = WaveManagerModuleData.fromJson(
-            Map<String, dynamic>.from(object.objData as Map),
-          );
-        }
+        waveManagerData = object.objData is Map
+            ? WaveManagerModuleData.fromJson(
+                Map<String, dynamic>.from(object.objData as Map),
+              )
+            : null;
       }
     }
 
@@ -139,6 +141,8 @@ class LevelEscalationRuntime {
       hasValidEscalationProps: validEscalationProps,
       hasValidWaveManagerProps: validWaveManagerProps,
       hasCompetingWaveManagerProps: competing,
+      waveManagerPointSpawningEnabled:
+          waveManagerData?.dynamicZombies.isNotEmpty ?? false,
     );
   }
 

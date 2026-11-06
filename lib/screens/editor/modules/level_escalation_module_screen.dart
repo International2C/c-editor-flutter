@@ -17,6 +17,7 @@ import 'package:c_editor/widgets/asset_image.dart'
 import 'package:c_editor/widgets/editor_components.dart';
 import 'package:c_editor/widgets/editor_object_alias.dart';
 import 'package:c_editor/widgets/wave_flag_strip.dart';
+import 'package:c_editor/widgets/wave_point_expectation_row.dart';
 import 'package:c_editor/widgets/zombie_count_estimate_text.dart';
 
 /// Level escalation module editor (LevelEscalationModuleProperties).
@@ -557,121 +558,17 @@ class _LevelEscalationModuleScreenState
                                   itemCount: cachedItems.length,
                                   itemBuilder: (_, i) {
                                     final e = cachedItems[i];
-                                    final info = ZombieRepository()
-                                        .getZombieById(e.key);
-                                    final nameKey =
-                                        info?.name ??
-                                        ZombieRepository().getName(e.key);
-                                    final displayName = ResourceNames.lookup(
-                                      ctx,
-                                      nameKey,
-                                    );
-                                    final iconPath = info?.iconAssetPath;
                                     return Padding(
                                       padding: const EdgeInsets.symmetric(
                                         vertical: 4,
                                       ),
-                                      child: Row(
-                                        children: [
-                                          ClipRRect(
-                                            borderRadius: BorderRadius.circular(
-                                              8,
-                                            ),
-                                            child: SizedBox(
-                                              width: 32,
-                                              height: 32,
-                                              child: iconPath != null
-                                                  ? AssetImageWidget(
-                                                      assetPath: iconPath,
-                                                      altCandidates:
-                                                          imageAltCandidates(
-                                                            iconPath,
-                                                          ),
-                                                      width: 32,
-                                                      height: 32,
-                                                      fit: BoxFit.cover,
-                                                    )
-                                                  : ColoredBox(
-                                                      color: theme
-                                                          .colorScheme
-                                                          .surfaceContainerHighest,
-                                                      child: Center(
-                                                        child: Text(
-                                                          displayName.isNotEmpty
-                                                              ? displayName[0]
-                                                                    .toUpperCase()
-                                                              : '?',
-                                                          style:
-                                                              const TextStyle(
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold,
-                                                                fontSize: 13,
-                                                              ),
-                                                        ),
-                                                      ),
-                                                    ),
-                                            ),
-                                          ),
-                                          const SizedBox(width: 10),
-                                          Expanded(
-                                            child: Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                Text(
-                                                  displayName.isNotEmpty
-                                                      ? displayName
-                                                      : e.key,
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
-                                                  style: theme
-                                                      .textTheme
-                                                      .bodyMedium
-                                                      ?.copyWith(
-                                                        fontWeight:
-                                                            FontWeight.w500,
-                                                      ),
-                                                ),
-                                                Text(
-                                                  e.key,
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
-                                                  style: theme
-                                                      .textTheme
-                                                      .bodySmall
-                                                      ?.copyWith(
-                                                        color: theme
-                                                            .colorScheme
-                                                            .onSurfaceVariant,
-                                                      ),
-                                                ),
-                                                Text(
-                                                  l10n?.zombiePointCost(
-                                                        ZombiePropertiesRepository.getStats(
-                                                          e.key,
-                                                        ).cost,
-                                                      ) ??
-                                                      'Point cost: '
-                                                          '${ZombiePropertiesRepository.getStats(e.key).cost}',
-                                                  style:
-                                                      theme.textTheme.bodySmall,
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                          const SizedBox(width: 8),
-                                          Text(
-                                            l10n?.pointSpawnExpectedCount(
-                                                  e.value.toStringAsFixed(2),
-                                                ) ??
-                                                e.value.toStringAsFixed(2),
-                                            key: ValueKey(
-                                              'levelEscalationExpectationCount-${e.key}',
-                                            ),
-                                            style: theme.textTheme.bodyMedium,
-                                          ),
-                                        ],
+                                      child: WavePointExpectationRow(
+                                        typeName: e.key,
+                                        expectedCount: e.value,
+                                        countKey: ValueKey(
+                                          'levelEscalationExpectationCount-${e.key}',
+                                        ),
+                                        iconSize: 32,
                                       ),
                                     );
                                   },
@@ -842,16 +739,24 @@ class _LevelEscalationModuleScreenState
               const SizedBox(height: 8),
               EditorWarningBanner(
                 margin: EdgeInsets.zero,
-                message:
-                    runtime.order == LevelEscalationModuleOrder.afterWaveManager
-                    ? (l10n?.levelEscalationAfterWaveManagerWarning ??
-                          'Both modules use different wave configurations. '
-                              'Escalation Spawning runs later, so its processed '
-                              'configuration is previewed.')
-                    : (l10n?.levelEscalationBeforeWaveManagerWarning ??
-                          'Both modules use different wave configurations. '
-                              'Wave Manager runs later and may replace the '
-                              'escalated result with its own configuration.'),
+                message: switch (runtime.order) {
+                  LevelEscalationModuleOrder.afterWaveManager =>
+                    l10n?.levelEscalationAfterWaveManagerWarning ??
+                        'Both modules use different wave configurations. '
+                            'Escalation Spawning runs later, so its processed '
+                            'configuration is previewed.',
+                  LevelEscalationModuleOrder.beforeWaveManager
+                      when runtime.waveManagerPointSpawningEnabled =>
+                    l10n?.levelEscalationOverriddenByPointSpawning ??
+                        'Wave Manager loads its own wave container after '
+                            'Escalation Spawning, so point spawning takes over. '
+                            'To use Escalation Spawning, move it after Wave Manager.',
+                  _ =>
+                    l10n?.levelEscalationBeforeWaveManagerWarning ??
+                        'Both modules use different wave configurations. '
+                            'Wave Manager runs later and may replace the '
+                            'escalated result with its own configuration.',
+                },
               ),
             ],
             const SizedBox(height: 16),
@@ -910,8 +815,9 @@ class _LevelEscalationModuleScreenState
                               padding: const EdgeInsets.only(top: 4),
                               child: Text(
                                 l10n?.noWaveManagerPropsFound ??
-                                    'No wave configuration '
-                                        '(WaveManagerProperties) object was found.',
+                                    'No wave container (WaveManagerProperties) '
+                                        'object was found. Escalation Spawning '
+                                        'cannot run.',
                                 style: TextStyle(
                                   color: theme.colorScheme.onError,
                                   fontSize: 12,
@@ -925,19 +831,6 @@ class _LevelEscalationModuleScreenState
                                 l10n?.levelEscalationWaveManagerRunnerMissing ??
                                     'The linked wave configuration exists, but '
                                         'the Wave Manager runner module is missing.',
-                                style: theme.textTheme.bodySmall?.copyWith(
-                                  color: theme.colorScheme.onError,
-                                ),
-                              ),
-                            ),
-                          if (!hasLinkedProps && fallbackPropsObj == null)
-                            Padding(
-                              padding: const EdgeInsets.only(top: 8),
-                              child: Text(
-                                l10n?.levelEscalationAddWaveTimelineHint ??
-                                    'Creates an empty wave configuration and '
-                                        'adds a runner-only Wave Manager module '
-                                        'when needed.',
                                 style: theme.textTheme.bodySmall?.copyWith(
                                   color: theme.colorScheme.onError,
                                 ),
@@ -1014,8 +907,10 @@ class _LevelEscalationModuleScreenState
                         ),
                         onPressed: _addWaveTimeline,
                         child: Text(
-                          l10n?.levelEscalationAddWaveTimeline ??
-                              'Add wave timeline',
+                          actualWaveMgrAlias == null
+                              ? (l10n?.addWaveContainer ?? 'Add wave container')
+                              : (l10n?.levelEscalationAddWaveTimeline ??
+                                    'Add wave timeline'),
                           maxLines: 2,
                           softWrap: true,
                           textAlign: TextAlign.center,
@@ -1258,19 +1153,6 @@ class _LevelEscalationModuleScreenState
               ),
             ),
             const SizedBox(height: 8),
-            if (_data.zombiePool.isEmpty)
-              Card(
-                color: contentCardColor,
-                child: Padding(
-                  padding: const EdgeInsets.all(16),
-                  child: Text(
-                    l10n?.emptyList ?? 'The list is empty',
-                    style: theme.textTheme.bodyMedium?.copyWith(
-                      color: theme.colorScheme.onSurfaceVariant,
-                    ),
-                  ),
-                ),
-              ),
             ..._data.zombiePool.asMap().entries.map((entry) {
               final idx = entry.key;
               final rtid = entry.value;

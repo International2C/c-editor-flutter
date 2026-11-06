@@ -1987,7 +1987,7 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get waveManagerGlobalParams => 'Wave Manager Parameters';
+  String get waveManagerGlobalParams => 'Wave Container Global Parameters';
 
   @override
   String get waveContainerAliasSection => 'Wave container alias';
@@ -2041,6 +2041,17 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get flagInterval => 'Flag interval';
+
+  @override
+  String waveManagerFlagIntervalOverridden(int interval) {
+    String _temp0 = intl.Intl.pluralLogic(
+      interval,
+      locale: localeName,
+      other: '$interval waves',
+      one: '1 wave',
+    );
+    return 'Escalation Spawning overrides this setting with Waves per flag at runtime. The effective flag interval is $_temp0.';
+  }
 
   @override
   String get waveManagerHelpTitle => 'Wave Event Container';
@@ -3064,7 +3075,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get levelEscalationModuleHelpRuntimeBody =>
-      'Add wave timeline reuses the wave container already linked to Escalation Spawning, or another container already in the level. It creates an empty wave container only when none can be reused, then links the resulting container to Escalation Spawning. If the level module list (LevelDefinition.Modules) contains no enabled Wave Manager module to run waves, a runner-only module with no independent wave container is added; an existing enabled runner is not rewritten.\nNormally Escalation Spawning references and supplies the wave container used at runtime, while Wave Manager only runs it. If Wave Manager has no independent wave container, or both modules reference the same container, module order does not overwrite the escalated result. Only different valid wave containers can initialize the same runtime wave manager (WaveManager) more than once; if that happens, the contents applied later replace the earlier result.';
+      'Add wave container reuses the wave container already linked to Escalation Spawning, or another container already in the level. It creates an empty wave container only when none can be reused, then links the resulting container to Escalation Spawning. If the level module list (LevelDefinition.Modules) contains no enabled Wave Manager module to run waves, a runner-only module with no independent wave container is added; an existing enabled runner is not rewritten.\nNormally Escalation Spawning references and supplies the wave container used at runtime, while Wave Manager only runs it. If Wave Manager has no independent wave container, or both modules reference the same container, module order does not overwrite the escalated result. Only different valid wave containers can initialize the same runtime wave manager (WaveManager) more than once; if that happens, the contents applied later replace the earlier result.';
 
   @override
   String get levelEscalationModuleHelpWaveLayout => 'Waves and flags';
@@ -3124,6 +3135,10 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get levelEscalationBeforeWaveManagerWarning =>
       'Escalation Spawning and Wave Manager reference different valid wave containers, and Wave Manager appears later. It may initialize the same runtime wave manager (WaveManager) again with its own container and replace the escalated result, so the timeline previews Wave Manager\'s wave container.';
+
+  @override
+  String get levelEscalationOverriddenByPointSpawning =>
+      'Wave Manager loads its own wave container after Escalation Spawning, so Point-Based Spawning takes over. To use Escalation Spawning, move it after Wave Manager in the module list.';
 
   @override
   String levelEscalationWavePlantfood(int count) {
@@ -6650,6 +6665,10 @@ class AppLocalizationsEn extends AppLocalizations {
       'Disabled (event-based spawning only)';
 
   @override
+  String get waveManagerPointsOverriddenByEscalation =>
+      'Because Escalation Spawning supplies the wave container, it overrides Point-Based Spawning. To use Point-Based Spawning, remove the Escalation Spawning module.';
+
+  @override
   String get pointSettings => 'Point settings';
 
   @override
@@ -6691,15 +6710,18 @@ class AppLocalizationsEn extends AppLocalizations {
       'Applies to all instances of the plant used in the level, including endangered plants and packet drops.';
 
   @override
-  String get noWaveManagerPropsFound =>
+  String get waveManagerContainerMissing =>
       'No wave container (WaveManagerProperties) object was found.';
 
   @override
-  String get levelEscalationAddWaveTimeline => 'Add wave timeline';
+  String get noWaveManagerPropsFound =>
+      'Escalation Spawning requires a wave container (WaveManagerProperties) object to work. None was found.';
 
   @override
-  String get levelEscalationAddWaveTimelineHint =>
-      'Reuses an existing wave container and links it to Escalation Spawning, or creates an empty one when none can be reused. If the level module list (LevelDefinition.Modules) has no enabled Wave Manager runner, a runner-only module with no independent wave container is added too.';
+  String get addWaveContainer => 'Add wave container';
+
+  @override
+  String get levelEscalationAddWaveTimeline => 'Add wave timeline';
 
   @override
   String get levelEscalationWaveManagerRunnerMissing =>

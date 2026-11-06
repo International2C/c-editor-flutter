@@ -597,6 +597,7 @@ class _InitialPlantEditDialogState extends State<_InitialPlantEditDialog> {
     );
     final name = ResourceNames.lookup(context, nameKey);
     return AlertDialog(
+      scrollable: true,
       title: Text(l10n?.editAlias(name) ?? 'Edit $name'),
       content: Column(
         mainAxisSize: MainAxisSize.min,

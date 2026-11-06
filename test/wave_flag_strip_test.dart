@@ -38,6 +38,9 @@ Finder _segment(int endWave) =>
 
 Finder _flag(int wave) => find.byKey(ValueKey('waveFlagStripFlag-$wave'));
 
+Finder _flagArt(int wave) =>
+    find.descendant(of: _flag(wave), matching: find.byType(CustomPaint));
+
 Finder _label(int wave) => find.byKey(ValueKey('waveFlagStripLabel-$wave'));
 
 void main() {
@@ -48,17 +51,49 @@ void main() {
     await tester.pumpAndSettle();
 
     final track = find.byKey(const ValueKey('waveFlagStripTrack'));
+    final ticks = find.byKey(const ValueKey('waveFlagStripTicks'));
+    final trackBounds = tester.getRect(track);
+    final tickBounds = tester.getRect(ticks);
+    final majorX = tester.getCenter(_label(12)).dx - tickBounds.left;
+    final minorX =
+        majorX +
+        (tester.getCenter(_label(1)).dx - tester.getCenter(_label(12)).dx) / 11;
     final decoration = tester.widget<DecoratedBox>(track).decoration;
     expect((decoration as BoxDecoration).color, _sectionColor);
+    expect(tickBounds.bottom, closeTo(trackBounds.top, 0.01));
+    expect(tester.getRect(_label(1)).top, greaterThan(trackBounds.bottom));
     expect(
-      find.byKey(const ValueKey('waveFlagStripTicks')),
-      paints..line(color: _sectionColor),
+      ticks,
+      paints
+        ..line(
+          color: _sectionColor,
+          p1: Offset(majorX, 0),
+          p2: Offset(majorX, 12),
+        )
+        ..line(
+          color: _sectionColor,
+          p1: Offset(minorX, 5),
+          p2: Offset(minorX, 12),
+        ),
     );
     expect(tester.getSize(track).width, greaterThan(240));
     expect(
       tester.getCenter(track).dx,
       closeTo(tester.getCenter(find.byType(Scaffold)).dx, 0.5),
     );
+    for (final wave in [5, 10, 12]) {
+      final flag = tester.getRect(_flagArt(wave));
+      final tickX = tester.getCenter(_label(wave)).dx;
+      expect(flag.center.dx, closeTo(tickX, 0.01));
+      expect(flag.bottom, closeTo(trackBounds.top, 0.01));
+      expect(
+        _flagArt(wave),
+        paints..line(
+          p1: Offset(flag.width / 2, flag.height / 8),
+          p2: Offset(flag.width / 2, flag.height),
+        ),
+      );
+    }
 
     final mouse = await tester.createGesture(kind: PointerDeviceKind.mouse);
     await mouse.addPointer(location: Offset.zero);
@@ -87,9 +122,28 @@ void main() {
     );
     await tester.pumpAndSettle();
 
-    await tester.longPress(_segment(5));
-    await tester.pumpAndSettle();
-    expect(find.text('第1波 – 第5波\n共5波'), findsOneWidget);
+    final track = tester.getRect(
+      find.byKey(const ValueKey('waveFlagStripTrack')),
+    );
+    final wave5X = tester.getCenter(_label(5)).dx;
+    final wave10X = tester.getCenter(_label(10)).dx;
+    final trackY = track.center.dy;
+    final positions = [
+      (Offset(track.left + 1, trackY), '第11波 – 第12波\n共2波'),
+      (Offset(wave10X - 1, trackY), '第11波 – 第12波\n共2波'),
+      (Offset(wave10X + 1, trackY), '第6波 – 第10波\n共5波'),
+      (Offset(wave5X - 1, trackY), '第6波 – 第10波\n共5波'),
+      (Offset(wave5X + 1, trackY), '第1波 – 第5波\n共5波'),
+      (Offset(track.right - 1, trackY), '第1波 – 第5波\n共5波'),
+      (Offset((wave5X + track.right) / 2, trackY - 14), '第1波 – 第5波\n共5波'),
+    ];
+    for (final (position, message) in positions) {
+      await tester.longPressAt(position);
+      await tester.pumpAndSettle();
+      expect(find.text(message), findsOneWidget);
+      await tester.pump(const Duration(seconds: 3));
+      await tester.pumpAndSettle();
+    }
 
     final flagTarget = tester.getRect(_flag(12));
     expect(flagTarget.width, greaterThanOrEqualTo(44));
@@ -153,7 +207,7 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.text('第1波'), findsOneWidget);
-    expect(find.byIcon(Icons.flag), findsOneWidget);
+    expect(_flagArt(1), findsOneWidget);
     expect(
       tester.getCenter(_label(1)).dx,
       closeTo(tester.getCenter(_flag(1)).dx, 0.5),

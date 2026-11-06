@@ -781,15 +781,6 @@
     "icon": "zombie_future_protector.webp"
   },
   {
-    "id": "wave_airbubble",
-    "name": "zombie_wave_airbubble",
-    "tags": [
-      "Memory",
-      "Chinese"
-    ],
-    "icon": "zombie_children_airbubble.webp"
-  },
-  {
     "id": "wave_elecshieldgenerator",
     "name": "zombie_wave_elecshieldgenerator",
     "tags": [
@@ -7040,6 +7031,16 @@
     "id": "children_airbubble",
     "name": "zombie_children_airbubble",
     "tags": [
+      "Festival1",
+      "Chinese"
+    ],
+    "icon": "zombie_children_airbubble.webp"
+  },
+  {
+    "id": "wave_airbubble",
+    "name": "zombie_wave_airbubble",
+    "tags": [
+      "Memory",
       "Festival1",
       "Chinese"
     ],

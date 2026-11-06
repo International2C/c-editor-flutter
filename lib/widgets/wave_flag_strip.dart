@@ -3,6 +3,10 @@ import 'dart:math' as math;
 import 'package:c_editor/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 
+const _minimumTooltipTargetSize = 44.0;
+const _majorTickHeight = 12.0;
+const _minorTickHeight = 7.0;
+
 /// A wave ruler, following the game's right-to-left wave order.
 ///
 /// Every wave has a tick. The first, final and flag waves have longer ticks
@@ -76,7 +80,7 @@ class _WaveFlagStripState extends State<WaveFlagStrip> {
       painter.dispose();
     }
     final labelHeight = labelSizes.map((s) => s.height).reduce(math.max);
-    final flagTargetSize = math.max(44.0, widget.flagSize);
+    final flagTargetSize = math.max(_minimumTooltipTargetSize, widget.flagSize);
     final inset = math.max(
       flagTargetSize / 2,
       labelSizes.map((s) => s.width).reduce(math.max) / 2,
@@ -114,6 +118,17 @@ class _WaveFlagStripState extends State<WaveFlagStrip> {
           final waveSpacing = count == 1 ? 0.0 : trackWidth / (count - 1);
           final finalWaveX = count == 1 ? contentWidth / 2 : inset;
           double waveX(int wave) => finalWaveX + (count - wave) * waveSpacing;
+          final trackInset = math.max(0.0, inset - widget.stripHeight / 2);
+          final segmentTargetHeight = math.max(
+            _minimumTooltipTargetSize,
+            widget.stripHeight,
+          );
+          final segmentTop =
+              flagTargetSize + (widget.stripHeight - segmentTargetHeight) / 2;
+
+          // A flag at wave 1 still needs a tappable part of the track.
+          double segmentBoundary(int wave) =>
+              wave == 1 ? waveX(1) - waveSpacing / 2 : waveX(wave);
 
           Widget tooltip(String message, Widget child) => Tooltip(
             message: message,
@@ -129,12 +144,10 @@ class _WaveFlagStripState extends State<WaveFlagStrip> {
                 ? waveLabel(first)
                 : '${waveLabel(first)} – ${waveLabel(last)}';
             return Positioned(
-              left: last == count ? 0 : (waveX(last) + waveX(last + 1)) / 2,
-              right: first == 1
-                  ? 0
-                  : contentWidth - (waveX(first) + waveX(first - 1)) / 2,
-              top: flagTargetSize,
-              height: widget.stripHeight + 8,
+              left: last == count ? 0 : segmentBoundary(last),
+              right: first == 1 ? 0 : contentWidth - segmentBoundary(first - 1),
+              top: segmentTop,
+              height: segmentTargetHeight,
               child: tooltip(
                 '$label\n${waveCountLabel(last - first + 1)}',
                 ColoredBox(
@@ -151,8 +164,8 @@ class _WaveFlagStripState extends State<WaveFlagStrip> {
             child: Stack(
               children: [
                 Positioned(
-                  left: inset,
-                  right: inset,
+                  left: trackInset,
+                  right: trackInset,
                   top: flagTargetSize,
                   height: widget.stripHeight,
                   child: DecoratedBox(
@@ -166,10 +179,10 @@ class _WaveFlagStripState extends State<WaveFlagStrip> {
                   ),
                 ),
                 Positioned(
-                  top: flagTargetSize + widget.stripHeight,
+                  top: flagTargetSize - _majorTickHeight,
                   left: 0,
                   right: 0,
-                  height: 6,
+                  height: _majorTickHeight,
                   child: CustomPaint(
                     key: const ValueKey('waveFlagStripTicks'),
                     painter: _WaveTicksPainter(
@@ -182,6 +195,7 @@ class _WaveFlagStripState extends State<WaveFlagStrip> {
                   ),
                 ),
                 for (var i = 0; i < segmentEnds.length; i++) segment(i),
+                // The flagpole covers its tick down to the track.
                 for (final wave in flags)
                   Positioned(
                     left: waveX(wave) - flagTargetSize / 2,
@@ -195,10 +209,9 @@ class _WaveFlagStripState extends State<WaveFlagStrip> {
                         color: Colors.transparent,
                         child: Align(
                           alignment: Alignment.bottomCenter,
-                          child: Icon(
-                            Icons.flag,
-                            size: widget.flagSize,
-                            color: const Color(0xFFD32F2F),
+                          child: CustomPaint(
+                            size: Size(flagTargetSize, widget.flagSize),
+                            painter: const _WaveFlagPainter(),
                           ),
                         ),
                       ),
@@ -251,6 +264,40 @@ class _WaveFlagStripState extends State<WaveFlagStrip> {
   }
 }
 
+class _WaveFlagPainter extends CustomPainter {
+  const _WaveFlagPainter();
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final poleX = size.width / 2;
+    final top = size.height / 8;
+    final bannerWidth = math.min(poleX, size.height * 0.7);
+    final foldX = poleX + bannerWidth * 0.6;
+    final foldSize = size.height / 12;
+    final bottom = size.height * 0.6;
+    final paint = Paint()
+      ..color = const Color(0xFFD32F2F)
+      ..strokeWidth = size.height / 10;
+    canvas.drawLine(Offset(poleX, top), Offset(poleX, size.height), paint);
+    canvas.drawPath(
+      Path()
+        ..moveTo(poleX, top)
+        ..lineTo(foldX, top)
+        ..lineTo(foldX + foldSize, top + foldSize)
+        ..lineTo(poleX + bannerWidth, top + foldSize)
+        ..lineTo(poleX + bannerWidth, bottom + foldSize)
+        ..lineTo(foldX, bottom + foldSize)
+        ..lineTo(foldX - foldSize, bottom)
+        ..lineTo(poleX, bottom)
+        ..close(),
+      paint,
+    );
+  }
+
+  @override
+  bool shouldRepaint(_WaveFlagPainter oldDelegate) => false;
+}
+
 class _WaveTicksPainter extends CustomPainter {
   const _WaveTicksPainter({
     required this.color,
@@ -273,8 +320,12 @@ class _WaveTicksPainter extends CustomPainter {
       ..strokeWidth = 1;
     for (var wave = waveCount; wave >= 1; wave--) {
       final x = finalWaveX + (waveCount - wave) * waveSpacing;
-      final height = markedWaves.contains(wave) ? size.height : size.height / 2;
-      canvas.drawLine(Offset(x, 0), Offset(x, height), paint);
+      final height = markedWaves.contains(wave) ? size.height : _minorTickHeight;
+      canvas.drawLine(
+        Offset(x, size.height - height),
+        Offset(x, size.height),
+        paint,
+      );
     }
   }
 

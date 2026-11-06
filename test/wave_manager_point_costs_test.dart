@@ -1,4 +1,5 @@
 import 'package:c_editor/data/level_parser.dart';
+import 'package:c_editor/data/module_open_hint.dart';
 import 'package:c_editor/data/pvz_models.dart';
 import 'package:c_editor/data/repository/zombie_properties_repository.dart';
 import 'package:c_editor/data/repository/zombie_repository.dart';
@@ -6,6 +7,7 @@ import 'package:c_editor/l10n/app_localizations.dart';
 import 'package:c_editor/l10n/resource_names.dart';
 import 'package:c_editor/screens/editor/modules/wave_manager_module_screen.dart';
 import 'package:c_editor/screens/editor/tabs/wave_timeline_tab.dart';
+import 'package:c_editor/widgets/persistent_scrollbar_scroll_behavior.dart';
 import 'package:c_editor/widgets/wave_flag_strip.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -43,12 +45,59 @@ PvzLevelFile _level() => PvzLevelFile(
   ],
 );
 
-Widget _app(Locale locale, Widget child) => MaterialApp(
+Widget _app(Locale locale, Widget child, {double textScale = 1}) => MaterialApp(
   locale: locale,
+  scrollBehavior: const PersistentScrollbarScrollBehavior(),
   localizationsDelegates: AppLocalizations.localizationsDelegates,
   supportedLocales: AppLocalizations.supportedLocales,
+  builder: (context, child) => MediaQuery(
+    data: MediaQuery.of(
+      context,
+    ).copyWith(textScaler: TextScaler.linear(textScale)),
+    child: child!,
+  ),
   home: Scaffold(body: child),
 );
+
+Future<void> _openPointExpectation(
+  WidgetTester tester,
+  Locale locale, {
+  double textScale = 1,
+  OpenModuleCallback? onOpenModule,
+}) async {
+  final level = _level();
+  await tester.pumpWidget(
+    _app(
+      locale,
+      WaveTimelineTab(
+        levelFile: level,
+        parsed: LevelParser.parseLevel(level),
+        onChanged: () {},
+        onEditEvent: (_, _) async {},
+        onAddEvent: (_) {},
+        onEditWaveManagerSettings: () {},
+        onOpenModule: onOpenModule,
+      ),
+      textScale: textScale,
+    ),
+  );
+  await tester.pumpAndSettle();
+  final points = find.byKey(const ValueKey('waveTimelineExpectation-4-0'));
+  await tester.scrollUntilVisible(
+    points,
+    250,
+    scrollable: find
+        .descendant(
+          of: find.byType(WaveTimelineTab),
+          matching: find.byType(Scrollable),
+        )
+        .first,
+  );
+  await tester.pumpAndSettle();
+  expect(points.hitTestable(), findsOneWidget);
+  await tester.tap(points);
+  await tester.pumpAndSettle();
+}
 
 void main() {
   setUpAll(() async {
@@ -137,26 +186,8 @@ void main() {
       tester.view.devicePixelRatio = 1;
       tester.view.physicalSize = const Size(900, 1000);
       addTearDown(tester.view.reset);
-      final level = _level();
       final l10n = lookupAppLocalizations(locale);
-      await tester.pumpWidget(
-        _app(
-          locale,
-          WaveTimelineTab(
-            levelFile: level,
-            parsed: LevelParser.parseLevel(level),
-            onChanged: () {},
-            onEditEvent: (_, _) async {},
-            onAddEvent: (_) {},
-            onEditWaveManagerSettings: () {},
-          ),
-        ),
-      );
-      await tester.pumpAndSettle();
-      final points = find.byKey(const ValueKey('waveTimelineExpectation-4-0'));
-      await tester.ensureVisible(points);
-      await tester.tap(points);
-      await tester.pumpAndSettle();
+      await _openPointExpectation(tester, locale);
 
       expect(
         find.text('${l10n.customZombieWaveItem(4)} ${l10n.expectation}'),
@@ -178,6 +209,10 @@ void main() {
           ValueKey('wavePointExpectationCount-${entry.key}'),
         );
         expect(expectedCount, findsOneWidget);
+        expect(
+          tester.getRect(expectedCount).left,
+          greaterThan(tester.getRect(cost).right),
+        );
         if (language == 'zh') {
           expect(tester.widget<Text>(expectedCount).data, endsWith('只'));
         }
@@ -185,4 +220,82 @@ void main() {
       expect(tester.takeException(), isNull);
     });
   }
+
+  testWidgets('narrow point expectation stacks counts below readable costs', (
+    tester,
+  ) async {
+    tester.view.devicePixelRatio = 1;
+    tester.view.physicalSize = const Size(320, 1000);
+    addTearDown(tester.view.reset);
+    const locale = Locale('zh');
+    final l10n = lookupAppLocalizations(locale);
+    await _openPointExpectation(tester, locale, textScale: 1.3);
+
+    final cost = find.text(l10n.zombiePointCost(200));
+    final codename = find.text('tutorial_armor1');
+    final count = find.byKey(
+      const ValueKey('wavePointExpectationCount-tutorial_armor1'),
+    );
+    expect(
+      tester.widget<Text>(codename).overflow,
+      isNot(TextOverflow.ellipsis),
+    );
+    expect(tester.getRect(count).left, closeTo(tester.getRect(cost).left, 1));
+    expect(tester.getRect(count).top, greaterThan(tester.getRect(cost).bottom));
+    expect(tester.getSize(cost).width, greaterThan(100));
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('short point preview keeps both actions below its scroll area', (
+    tester,
+  ) async {
+    tester.view.devicePixelRatio = 1;
+    tester.view.physicalSize = const Size(360, 760);
+    addTearDown(tester.view.reset);
+    const locale = Locale('ru');
+    final l10n = lookupAppLocalizations(locale);
+    String? openedModule;
+    await _openPointExpectation(
+      tester,
+      locale,
+      textScale: 1.4,
+      onOpenModule: (rtid, {hint}) => openedModule = rtid,
+    );
+    tester.view.physicalSize = const Size(360, 350);
+    await tester.pumpAndSettle();
+
+    final dialog = find.byType(AlertDialog);
+    final list = find.descendant(of: dialog, matching: find.byType(ListView));
+    final settings = find.widgetWithText(FilledButton, l10n.openModuleSettings);
+    final close = find.widgetWithText(TextButton, l10n.close);
+    expect(tester.takeException(), isNull);
+    expect(
+      find.descendant(of: list, matching: find.byType(Scrollbar)),
+      findsOneWidget,
+    );
+    final listBounds = tester.getRect(list);
+    final settingsBounds = tester.getRect(settings);
+    final closeBounds = tester.getRect(close);
+    expect(listBounds.bottom, lessThanOrEqualTo(settingsBounds.top));
+    expect(listBounds.bottom, lessThanOrEqualTo(closeBounds.top));
+
+    final scrollable = find.descendant(
+      of: list,
+      matching: find.byType(Scrollable),
+    );
+    final lastRow = find.byKey(
+      const ValueKey('wavePointExpectationCount-tutorial_armor2'),
+    );
+    await tester.scrollUntilVisible(lastRow, 70, scrollable: scrollable);
+    await tester.pumpAndSettle();
+    expect(listBounds.contains(tester.getCenter(lastRow)), isTrue);
+    expect(tester.getRect(settings), settingsBounds);
+    expect(tester.getRect(close), closeBounds);
+    expect(close.hitTestable(), findsOneWidget);
+    await tester.tap(settings);
+    await tester.pumpAndSettle();
+    expect(openedModule, 'RTID(NewWaves@CurrentLevel)');
+    expect(dialog, findsNothing);
+    expect(tester.takeException(), isNull);
+  });
 }

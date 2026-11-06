@@ -115,6 +115,7 @@ class _JitterOffsetsPresetsScreenState
           }
 
           return AlertDialog(
+            scrollable: true,
             title: Text(l10n?.jitterOffsetsRenameTitle ?? 'Rename Preset'),
             content: ConstrainedBox(
               constraints: const BoxConstraints(maxWidth: 440),

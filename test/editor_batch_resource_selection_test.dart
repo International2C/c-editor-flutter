@@ -19,6 +19,7 @@ import 'package:c_editor/screens/editor/tabs/wave_timeline_tab.dart';
 import 'package:c_editor/screens/editor_screen.dart';
 import 'package:c_editor/screens/select/plant_selection_screen.dart';
 import 'package:c_editor/screens/select/zombie_selection_screen.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -160,6 +161,70 @@ void main() {
       ZombiePropertiesRepository.init(),
       ResourceNames.ensureLoaded(),
     ]);
+  });
+
+  testWidgets('dragging a module past the last row keeps it at the end', (
+    tester,
+  ) async {
+    const conveyorRtid = 'RTID(Conveyor@CurrentLevel)';
+    const managerRtid = 'RTID(NewWaves@CurrentLevel)';
+    const escalationRtid = 'RTID(LevelEscalation@CurrentLevel)';
+    const parameterRtid = 'RTID(LevelScoring@CurrentLevel)';
+    final level = _level();
+    final definition = _object(level, 'LevelDefinition').objData as Map;
+    definition['Modules'] = [
+      conveyorRtid,
+      managerRtid,
+      escalationRtid,
+      parameterRtid,
+    ];
+    level.objects.addAll([
+      PvzObject(
+        aliases: const ['LevelEscalation'],
+        objClass: 'LevelEscalationModuleProperties',
+        objData: LevelEscalationModuleData(
+          waveManagerProps: 'RTID(Waves@CurrentLevel)',
+        ).toJson(),
+      ),
+      PvzObject(
+        aliases: const ['LevelScoring'],
+        objClass: 'LevelScoringModuleProperties',
+        objData: <String, dynamic>{},
+      ),
+    ]);
+    final editor = await _pumpEditor(tester, level);
+    final manager = find.byKey(const ValueKey(managerRtid));
+    final escalation = find.byKey(const ValueKey(escalationRtid));
+    final handle = find.descendant(
+      of: manager,
+      matching: find.byType(ReorderableDragStartListener),
+    );
+    final start = tester.getCenter(handle);
+    final distance = tester.getBottomLeft(escalation).dy + 20 - start.dy;
+    final drag = await tester.startGesture(
+      start,
+      kind: PointerDeviceKind.mouse,
+    );
+    for (var step = 1; step <= 12; step++) {
+      await drag.moveTo(start + Offset(0, distance * step / 12));
+      await tester.pump(const Duration(milliseconds: 16));
+    }
+    await drag.up();
+    await tester.pumpAndSettle();
+
+    const expected = [conveyorRtid, escalationRtid, managerRtid, parameterRtid];
+    expect(definition['Modules'], expected);
+    expect(editor.state.parsedData!.levelDef!.modules, expected);
+    expect(editor.state.hasChanges, isTrue);
+    expect(
+      tester.getTopLeft(manager).dy,
+      greaterThan(tester.getTopLeft(escalation).dy),
+    );
+    expect(
+      level.objects.indexOf(_object(level, 'NewWaves')),
+      greaterThan(level.objects.indexOf(_object(level, 'LevelEscalation'))),
+    );
+    expect(tester.takeException(), isNull);
   });
 
   testWidgets(

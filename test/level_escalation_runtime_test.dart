@@ -4,7 +4,9 @@ import 'package:c_editor/data/plant_food_discovery.dart';
 import 'package:c_editor/data/pvz_models.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:c_editor/l10n/app_localizations.dart';
+import 'package:c_editor/screens/editor/modules/wave_manager_settings_screen.dart';
 import 'package:c_editor/screens/editor/tabs/wave_timeline_tab.dart';
+import 'package:c_editor/widgets/wave_flag_strip.dart';
 import 'package:c_editor/widgets/wave_number_label.dart';
 import 'package:flutter/material.dart';
 
@@ -12,6 +14,7 @@ void main() {
   PvzLevelFile buildLevel({
     bool escalationAfterManager = false,
     bool managerHasIndependentProps = false,
+    int escalationContainerWaveCount = 2,
   }) {
     const escalationRtid = 'RTID(Escalation@CurrentLevel)';
     const managerModuleRtid = 'RTID(ManagerModule@CurrentLevel)';
@@ -39,9 +42,12 @@ void main() {
           aliases: const ['EscalationWaves'],
           objClass: 'WaveManagerProperties',
           objData: WaveManagerData(
-            waveCount: 2,
+            waveCount: escalationContainerWaveCount,
             flagWaveInterval: 10,
-            waves: [<String>[], <String>[]],
+            waves: List.generate(
+              escalationContainerWaveCount,
+              (_) => <String>[],
+            ),
           ).toJson(),
         ),
         PvzObject(
@@ -228,6 +234,73 @@ void main() {
     );
     await tester.pumpAndSettle();
     expect(wave(12), findsOneWidget);
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('container settings show the runtime flag interval override', (
+    tester,
+  ) async {
+    const locale = Locale('zh');
+    final l10n = lookupAppLocalizations(locale);
+    Future<void> pumpSettings(PvzLevelFile level, {String? alias}) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          locale: locale,
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+          home: WaveManagerSettingsScreen(
+            key: ValueKey(level),
+            levelFile: level,
+            waveManagerAlias:
+                alias ?? LevelParser.parseLevel(level).waveManagerAlias,
+            hasConveyor: false,
+            onChanged: () {},
+            onBack: () {},
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+    }
+
+    final level = buildLevel();
+    await pumpSettings(level);
+    final field = find.byType(TextField).first;
+    final hint = find.text(l10n.waveManagerFlagIntervalOverridden(4));
+    WaveFlagStrip ruler() => tester.widget(find.byType(WaveFlagStrip));
+    expect(tester.widget<TextField>(field).controller!.text, '10');
+    expect(
+      tester.getTopLeft(hint).dy,
+      greaterThan(tester.getBottomLeft(field).dy),
+    );
+    expect(ruler().waveCount, 12);
+    expect(ruler().isFlagWave(4), isTrue);
+    expect(ruler().isFlagWave(10), isFalse);
+
+    await tester.enterText(field, '6');
+    await tester.pumpAndSettle();
+    expect(LevelParser.parseLevel(level).waveManager!.flagWaveInterval, 6);
+    expect(hint, findsOneWidget);
+    expect(ruler().isFlagWave(4), isTrue);
+    expect(ruler().isFlagWave(6), isFalse);
+
+    await pumpSettings(buildLevel(escalationContainerWaveCount: 13));
+    expect(ruler().waveCount, 13);
+    expect(ruler().isFlagWave(12), isTrue);
+    expect(ruler().isFlagWave(13), isFalse);
+
+    await pumpSettings(buildLevel(managerHasIndependentProps: true));
+    expect(hint, findsNothing);
+    expect(ruler().waveCount, 2);
+
+    await pumpSettings(
+      buildLevel(
+        escalationAfterManager: true,
+        managerHasIndependentProps: true,
+      ),
+      alias: 'ManagerWaves',
+    );
+    expect(hint, findsNothing);
+    expect(ruler().waveCount, 2);
     expect(tester.takeException(), isNull);
   });
 }

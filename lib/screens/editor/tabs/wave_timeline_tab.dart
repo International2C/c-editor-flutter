@@ -20,10 +20,8 @@ import 'package:c_editor/data/rtid_parser.dart';
 import 'package:c_editor/data/wave_point_analysis.dart';
 import 'package:c_editor/data/zombie_count_simulation.dart';
 import 'package:c_editor/l10n/app_localizations.dart';
-import 'package:c_editor/l10n/resource_names.dart';
 import 'package:c_editor/escape_override.dart';
 import 'package:c_editor/data/repository/zombie_repository.dart';
-import 'package:c_editor/data/repository/zombie_properties_repository.dart';
 import 'package:c_editor/data/repository/fish_type_repository.dart';
 import 'package:c_editor/theme/app_theme.dart';
 import 'package:c_editor/screens/select/event_selection_screen.dart';
@@ -47,6 +45,7 @@ import 'package:c_editor/screens/common/level_preview_grid_helpers.dart'
     show readSeeingStarsModuleData;
 import 'package:c_editor/widgets/wave_module_preview_dialogs.dart';
 import 'package:c_editor/widgets/wave_number_label.dart';
+import 'package:c_editor/widgets/wave_point_expectation_row.dart';
 import 'package:c_editor/widgets/zombie_lane_drag_widgets.dart'
     show zombieDragLongPressDelay, zombieDropSlotWidth;
 
@@ -96,16 +95,11 @@ double _expectationDialogIconSize(BuildContext context) {
   return compact ? 36 : 40;
 }
 
-Size _expectationDialogListSize(BuildContext context) {
-  final isDesktop = isDesktopPlatform(context);
+double _expectationDialogWidth(BuildContext context) {
+  if (isDesktopPlatform(context)) return 420;
   final screenWidth = MediaQuery.sizeOf(context).width;
-  if (isDesktop) {
-    return Size(420, compactWidth(screenWidth) ? 300 : 360);
-  }
-  return Size((screenWidth - 96).clamp(280, 360), 280);
+  return (screenWidth - 96).clamp(280, 360);
 }
-
-bool compactWidth(double screenWidth) => screenWidth < 500;
 
 double _requiredIconButtonWidth(BuildContext context, String label) {
   final theme = Theme.of(context);
@@ -708,7 +702,9 @@ class _WaveTimelineTabState extends State<WaveTimelineTab> {
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       child: ListTile(
         leading: const Icon(Icons.tune),
-        title: Text(l10n?.waveManagerGlobalParams ?? 'Wave manager parameters'),
+        title: Text(
+          l10n?.waveManagerGlobalParams ?? 'Global wave container parameters',
+        ),
         subtitle: Text(
           l10n?.waveManagerGlobalSummary(
                 interval,
@@ -2898,6 +2894,7 @@ class _WaveTimelineTabState extends State<WaveTimelineTab> {
       barrierDismissible: false,
       builder: (ctx) => StatefulBuilder(
         builder: (ctx, setDialogState) => AlertDialog(
+          scrollable: true,
           title: Text(
             (l10n?.deleteWave != null && l10n?.waveLabel != null)
                 ? '${l10n?.deleteWave} ${l10n?.waveLabel} $waveIndex?'
@@ -3792,188 +3789,120 @@ class _WaveTimelineTabState extends State<WaveTimelineTab> {
     showDialog<void>(
       context: context,
       builder: (ctx) {
-        final scrollController = ScrollController();
         final iconSize = _expectationDialogIconSize(ctx);
-        final listSize = _expectationDialogListSize(ctx);
-        return AlertDialog(
-          title: Text(
-            '${l10n?.customZombieWaveItem(waveIndex) ?? "Wave $waveIndex"} ${l10n?.expectation ?? "Expectation"}',
-          ),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text('${l10n?.pointsLabel ?? "Points"}: $points'),
-              if (usesEscalation &&
-                  escalation.fixedPlantFoodAtWave(waveIndex) > 0) ...[
-                const SizedBox(height: 8),
-                Text(
-                  l10n?.levelEscalationWavePlantfood(
-                        escalation.fixedPlantFoodAtWave(waveIndex),
-                      ) ??
-                      'Plant Food fixed to this wave: '
-                          '${escalation.fixedPlantFoodAtWave(waveIndex)}',
+        final theme = Theme.of(ctx);
+        final title =
+            '${l10n?.customZombieWaveItem(waveIndex) ?? "Wave $waveIndex"} ${l10n?.expectation ?? "Expectation"}';
+        final summary = Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              title,
+              style:
+                  DialogTheme.of(ctx).titleTextStyle ??
+                  theme.textTheme.headlineSmall,
+            ),
+            const SizedBox(height: 16),
+            Text('${l10n?.pointsLabel ?? "Points"}: $points'),
+            if (usesEscalation &&
+                escalation.fixedPlantFoodAtWave(waveIndex) > 0) ...[
+              const SizedBox(height: 8),
+              Text(
+                l10n?.levelEscalationWavePlantfood(
+                      escalation.fixedPlantFoodAtWave(waveIndex),
+                    ) ??
+                    'Plant Food fixed to this wave: '
+                        '${escalation.fixedPlantFoodAtWave(waveIndex)}',
+              ),
+            ],
+            if (usesEscalation && escalation.randomPlantFoodCount > 0) ...[
+              const SizedBox(height: 4),
+              Text(
+                l10n?.levelEscalationRandomPlantfood(
+                      escalation.randomPlantFoodCount,
+                      escalationData.totalWaves,
+                    ) ??
+                    '${escalation.randomPlantFoodCount} additional Plant '
+                        'Food item(s) are randomly assigned to waves '
+                        '1–${escalationData.totalWaves}.',
+                style: theme.textTheme.bodySmall?.copyWith(
+                  color: theme.colorScheme.onSurfaceVariant,
                 ),
-              ],
-              if (usesEscalation && escalation.randomPlantFoodCount > 0) ...[
-                const SizedBox(height: 4),
-                Text(
-                  l10n?.levelEscalationRandomPlantfood(
-                        escalation.randomPlantFoodCount,
-                        escalationData.totalWaves,
-                      ) ??
-                      '${escalation.randomPlantFoodCount} additional Plant '
-                          'Food item(s) are randomly assigned to waves '
-                          '1–${escalationData.totalWaves}.',
-                  style: Theme.of(ctx).textTheme.bodySmall?.copyWith(
-                    color: Theme.of(ctx).colorScheme.onSurfaceVariant,
-                  ),
+              ),
+            ],
+            if (waveEstimate != null) ...[
+              const SizedBox(height: 8),
+              Text(
+                zombieCountEstimateText(
+                  l10n,
+                  waveEstimate,
+                  scope: ZombieCountEstimateScope.wave,
                 ),
-              ],
-              if (waveEstimate != null) ...[
-                const SizedBox(height: 8),
+              ),
+              if (totalEstimate != null &&
+                  (totalEstimate.average > 0 || totalEstimate.maximum > 0))
                 Text(
                   zombieCountEstimateText(
                     l10n,
-                    waveEstimate,
-                    scope: ZombieCountEstimateScope.wave,
-                  ),
-                ),
-                if (totalEstimate != null &&
-                    (totalEstimate.average > 0 || totalEstimate.maximum > 0))
-                  Text(
-                    zombieCountEstimateText(
-                      l10n,
-                      totalEstimate,
-                      scope: ZombieCountEstimateScope.allWaves,
-                    ),
-                  ),
-              ],
-              const SizedBox(height: 16),
-              if (missingStats.isNotEmpty) ...[
-                Text(
-                  l10n?.waveManagerExpectationMissingData(
-                        missingStats.join(', '),
-                      ) ??
-                      'These zombies lack reliable WavePointCost data and '
-                          'are not counted: ${missingStats.join(', ')}',
-                  style: Theme.of(ctx).textTheme.bodySmall?.copyWith(
-                    color: Theme.of(ctx).colorScheme.error,
-                  ),
-                ),
-                const SizedBox(height: 16),
-              ],
-              if (items.isEmpty)
-                Text(
-                  visiblePool.isEmpty
-                      ? (l10n?.noDynamicZombies ?? 'No dynamic zombies')
-                      : (l10n?.expectationNoAffordableZombies ??
-                            'This wave does not have enough points to select '
-                                'and spawn any zombie from the pool.'),
-                  style: Theme.of(ctx).textTheme.bodySmall,
-                )
-              else
-                SizedBox(
-                  width: listSize.width,
-                  height: listSize.height,
-                  child: Scrollbar(
-                    controller: scrollController,
-                    thumbVisibility: true,
-                    child: ListView.builder(
-                      controller: scrollController,
-                      padding: const EdgeInsets.only(right: 14),
-                      itemCount: items.length,
-                      itemBuilder: (_, i) {
-                        final e = items[i];
-                        final typeName = e.key;
-                        final cost = ZombiePropertiesRepository.getStats(
-                          typeName,
-                        ).cost;
-                        final info = ZombieRepository().getZombieById(typeName);
-                        final nameKey =
-                            info?.name ?? ZombieRepository().getName(typeName);
-                        final displayName = ResourceNames.lookup(ctx, nameKey);
-                        final iconPath =
-                            info?.iconAssetPath ?? _kUnknownIconPath;
-                        return Padding(
-                          padding: EdgeInsets.symmetric(
-                            vertical: isDesktopPlatform(ctx) ? 5 : 4,
-                          ),
-                          child: Row(
-                            children: [
-                              ClipRRect(
-                                borderRadius: BorderRadius.circular(8),
-                                child: ColoredBox(
-                                  color: Theme.of(
-                                    ctx,
-                                  ).colorScheme.surfaceContainerHighest,
-                                  child: SizedBox(
-                                    width: iconSize,
-                                    height: iconSize,
-                                    child: AssetImageWidget(
-                                      assetPath: iconPath,
-                                      altCandidates: imageAltCandidates(
-                                        iconPath,
-                                      ),
-                                      width: iconSize,
-                                      height: iconSize,
-                                      fit: BoxFit.contain,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(width: 10),
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      displayName.isNotEmpty
-                                          ? displayName
-                                          : typeName,
-                                      overflow: TextOverflow.ellipsis,
-                                      style: Theme.of(ctx).textTheme.bodyMedium
-                                          ?.copyWith(
-                                            fontWeight: FontWeight.w500,
-                                          ),
-                                    ),
-                                    Text(
-                                      typeName,
-                                      overflow: TextOverflow.ellipsis,
-                                      style: Theme.of(ctx).textTheme.bodySmall
-                                          ?.copyWith(
-                                            color: Theme.of(
-                                              ctx,
-                                            ).colorScheme.onSurfaceVariant,
-                                          ),
-                                    ),
-                                    Text(
-                                      l10n?.zombiePointCost(cost) ??
-                                          'Point cost: $cost',
-                                      style: Theme.of(ctx).textTheme.bodySmall,
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              const SizedBox(width: 8),
-                              Text(
-                                l10n?.pointSpawnExpectedCount(
-                                      e.value.toStringAsFixed(2),
-                                    ) ??
-                                    e.value.toStringAsFixed(2),
-                                key: ValueKey(
-                                  'wavePointExpectationCount-$typeName',
-                                ),
-                                style: Theme.of(ctx).textTheme.bodyMedium,
-                              ),
-                            ],
-                          ),
-                        );
-                      },
-                    ),
+                    totalEstimate,
+                    scope: ZombieCountEstimateScope.allWaves,
                   ),
                 ),
             ],
+            const SizedBox(height: 16),
+            if (missingStats.isNotEmpty) ...[
+              Text(
+                l10n?.waveManagerExpectationMissingData(
+                      missingStats.join(', '),
+                    ) ??
+                    'These zombies lack reliable WavePointCost data and '
+                        'are not counted: ${missingStats.join(', ')}',
+                style: theme.textTheme.bodySmall?.copyWith(
+                  color: theme.colorScheme.error,
+                ),
+              ),
+              const SizedBox(height: 16),
+            ],
+            if (items.isEmpty)
+              Text(
+                visiblePool.isEmpty
+                    ? (l10n?.noDynamicZombies ?? 'No dynamic zombies')
+                    : (l10n?.expectationNoAffordableZombies ??
+                          'This wave does not have enough points to select '
+                              'and spawn any zombie from the pool.'),
+                style: theme.textTheme.bodySmall,
+              ),
+          ],
+        );
+        return AlertDialog(
+          semanticLabel: title,
+          content: SizedBox(
+            width: _expectationDialogWidth(ctx),
+            child: ListView.builder(
+              primary: false,
+              shrinkWrap: true,
+              padding: EdgeInsets.zero,
+              itemCount: items.length + 1,
+              itemBuilder: (_, i) {
+                if (i == 0) return summary;
+                final entry = items[i - 1];
+                return Padding(
+                  padding: EdgeInsets.symmetric(
+                    vertical: isDesktopPlatform(ctx) ? 5 : 4,
+                  ),
+                  child: WavePointExpectationRow(
+                    typeName: entry.key,
+                    expectedCount: entry.value,
+                    countKey: ValueKey(
+                      'wavePointExpectationCount-${entry.key}',
+                    ),
+                    iconSize: iconSize,
+                    fallbackIconPath: _kUnknownIconPath,
+                  ),
+                );
+              },
+            ),
           ),
           actions: [
             if (widget.onOpenModule != null)

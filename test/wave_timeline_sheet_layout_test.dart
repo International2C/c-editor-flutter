@@ -275,6 +275,58 @@ void main() {
     expect(tester.takeException(), isNull);
   });
 
+  testWidgets('short delete confirmation keeps its buttons reachable', (
+    tester,
+  ) async {
+    const locale = Locale('ru');
+    final l10n = lookupAppLocalizations(locale);
+    await _openSheet(
+      tester,
+      size: const Size(360, 300),
+      eventCount: 2,
+      locale: locale,
+      textScale: 1.8,
+    );
+    final sheetScroll = find.byKey(const ValueKey('waveManageSheetScroll'));
+    await tester.drag(sheetScroll, const Offset(0, -1000));
+    await tester.pumpAndSettle();
+    await tester.tap(find.byKey(const ValueKey('waveManageDeleteWaveButton')));
+    await tester.pumpAndSettle();
+
+    expect(tester.takeException(), isNull);
+    final dialog = find.byType(AlertDialog);
+    final checkbox = find.descendant(
+      of: dialog,
+      matching: find.byType(Checkbox),
+    );
+    final viewport = find.descendant(
+      of: dialog,
+      matching: find.byType(SingleChildScrollView),
+    );
+    final cancel = find.widgetWithText(TextButton, l10n.cancel);
+    final confirm = find.widgetWithText(FilledButton, l10n.delete);
+    expect(cancel.hitTestable(), findsOneWidget);
+    expect(tester.widget<FilledButton>(confirm).onPressed, isNull);
+    final confirmPosition = tester.getRect(confirm);
+    expect(
+      tester.getRect(viewport).bottom,
+      lessThanOrEqualTo(confirmPosition.top),
+    );
+
+    await tester.ensureVisible(checkbox);
+    await tester.pumpAndSettle();
+    await tester.tap(checkbox);
+    await tester.pumpAndSettle();
+    expect(confirm.hitTestable(), findsOneWidget);
+    expect(tester.widget<FilledButton>(confirm).onPressed, isNotNull);
+    expect(tester.getRect(confirm), confirmPosition);
+
+    await tester.tap(cancel);
+    await tester.pumpAndSettle();
+    expect(dialog, findsNothing);
+    expect(tester.takeException(), isNull);
+  });
+
   testWidgets('wide window keeps add and reuse actions on the same row', (
     tester,
   ) async {

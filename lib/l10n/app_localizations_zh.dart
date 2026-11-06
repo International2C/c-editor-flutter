@@ -1934,7 +1934,7 @@ class AppLocalizationsZh extends AppLocalizations {
   }
 
   @override
-  String get waveManagerGlobalParams => '波次管理器全局参数';
+  String get waveManagerGlobalParams => '波次容器全局参数';
 
   @override
   String get waveContainerAliasSection => '波次容器代号';
@@ -1985,6 +1985,11 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get flagInterval => '旗帜间隔 (FlagWaveInterval)';
+
+  @override
+  String waveManagerFlagIntervalOverridden(int interval) {
+    return '递进出怪运行时会以「每旗波数」覆盖此处设置，实际旗帜间隔为 $interval 波。';
+  }
 
   @override
   String get waveManagerHelpTitle => '波次事件容器说明';
@@ -2926,7 +2931,7 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get levelEscalationModuleHelpRuntimeBody =>
-      '「添加波次时间线」会优先复用递进出怪已关联或关卡中现有的波次容器；没有可复用容器时，才会创建空波次容器并关联到递进出怪。若关卡模块列表 (LevelDefinition.Modules) 中缺少负责运行波次的「波次管理器」模块，还会添加一个不持有独立波次容器的运行模块；已有且已启用的运行模块不会被改写。\n通常由递进出怪引用并提供运行所用的波次容器，波次管理器只负责运行。波次管理器没有独立波次容器，或两个模块引用同一容器时，不会发生覆盖，模块顺序也不会使递进出怪失效。只有两个模块分别引用不同且有效的波次容器时，才可能重复初始化同一个实际波次管理器 (WaveManager)；若发生重复初始化，后执行的容器内容会取代先前结果。';
+      '「添加波次容器」会优先复用递进出怪已关联或关卡中现有的波次容器；没有可复用容器时，才会创建空波次容器并关联到递进出怪。若关卡模块列表 (LevelDefinition.Modules) 中缺少负责运行波次的「波次管理器」模块，还会添加一个不持有独立波次容器的运行模块；已有且已启用的运行模块不会被改写。\n通常由递进出怪引用并提供运行所用的波次容器，波次管理器只负责运行。波次管理器没有独立波次容器，或两个模块引用同一容器时，不会发生覆盖，模块顺序也不会使递进出怪失效。只有两个模块分别引用不同且有效的波次容器时，才可能重复初始化同一个实际波次管理器 (WaveManager)；若发生重复初始化，后执行的容器内容会取代先前结果。';
 
   @override
   String get levelEscalationModuleHelpWaveLayout => '波次与旗帜';
@@ -2983,6 +2988,10 @@ class AppLocalizationsZh extends AppLocalizations {
   @override
   String get levelEscalationBeforeWaveManagerWarning =>
       '当前关卡中，「递进出怪」与「波次管理器」分别引用了不同的有效波次容器，且「波次管理器」位于后方。它可能用自己的容器内容再次初始化同一个实际波次管理器 (WaveManager) 并覆盖递进结果，波次时间线将按波次管理器自身的波次容器预览。';
+
+  @override
+  String get levelEscalationOverriddenByPointSpawning =>
+      '「波次管理器」在「递进出怪」之后加载自己的波次容器，因此由「点数出怪」接管。若要使用「递进出怪」，请将该模块移到「波次管理器」之后。';
 
   @override
   String levelEscalationWavePlantfood(int count) {
@@ -6327,6 +6336,10 @@ class AppLocalizationsZh extends AppLocalizations {
   String get pointSpawningDisabledDesc => '未启用 (仅使用波次事件)';
 
   @override
+  String get waveManagerPointsOverriddenByEscalation =>
+      '由于波次容器由「递进出怪」模块提供，「点数出怪」无法生效，并会被「递进出怪」覆盖。若要使用「点数出怪」，建议删除「递进出怪」模块。';
+
+  @override
   String get pointSettings => '点数分配设置';
 
   @override
@@ -6366,14 +6379,18 @@ class AppLocalizationsZh extends AppLocalizations {
   String get globalPlantLevelsScope => '设置的阶级将应用于关卡内玩家使用的该种植物，包括保护植物、卡片掉落等。';
 
   @override
-  String get noWaveManagerPropsFound => '未找到「波次容器 (WaveManagerProperties)」对象。';
+  String get waveManagerContainerMissing =>
+      '未找到「波次容器 (WaveManagerProperties)」对象。';
+
+  @override
+  String get noWaveManagerPropsFound =>
+      '未找到「波次容器 (WaveManagerProperties)」对象，递进出怪模块无法生效';
+
+  @override
+  String get addWaveContainer => '添加波次容器';
 
   @override
   String get levelEscalationAddWaveTimeline => '添加波次时间线';
-
-  @override
-  String get levelEscalationAddWaveTimelineHint =>
-      '优先复用现有波次容器并关联到递进出怪；没有可复用容器时才创建空波次容器。若关卡模块列表 (LevelDefinition.Modules) 中缺少波次管理器运行模块，也会同时添加一个不持有独立波次容器的运行模块。';
 
   @override
   String get levelEscalationWaveManagerRunnerMissing =>
@@ -8908,7 +8925,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get waveGeneratorInitialPool => '初始僵尸池 (AddToZombiePool)';
 
   @override
-  String get waveGeneratorEmptyPool => '初始僵尸池为空。';
+  String get waveGeneratorEmptyPool => '初始僵尸池为空';
 
   @override
   String get waveGeneratorCustomZombieBlocked => '此处不允许添加自定义僵尸';

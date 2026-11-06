@@ -126,7 +126,7 @@ void main() {
     expect(tester.takeException(), isNull);
   });
 
-  testWidgets('runner-only wave manager accepts escalation configuration', (
+  testWidgets('runner-only wave manager warns when point spawning is enabled', (
     tester,
   ) async {
     tester.view.devicePixelRatio = 1;
@@ -176,6 +176,24 @@ void main() {
       find.byKey(const ValueKey('waveManagerPropsFixButton')),
       findsNothing,
     );
+    final l10n = lookupAppLocalizations(const Locale('en'));
+    final warning = find.text(l10n.waveManagerPointsOverriddenByEscalation);
+    final toggle = find.byType(Switch);
+    expect(warning, findsNothing);
+
+    await tester.ensureVisible(toggle);
+    await tester.tap(toggle);
+    await tester.pumpAndSettle();
+    expect(warning, findsOneWidget);
+    expect(find.text(l10n.pointSpawningEnabledDesc), findsNothing);
+    expect(
+      tester.getTopLeft(warning).dy,
+      greaterThan(tester.getBottomLeft(toggle).dy),
+    );
+
+    await tester.tap(toggle);
+    await tester.pumpAndSettle();
+    expect(warning, findsNothing);
     expect(tester.takeException(), isNull);
   });
 }

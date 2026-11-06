@@ -270,6 +270,8 @@ class _WaveManagerModuleScreenState extends State<WaveManagerModuleScreen> {
       widget.levelFile,
       waveManagerAlias: _alias,
     );
+    final pointSpawningOverridden =
+        _pointSpawningEnabled && escalationRuntime.isEffective;
     final ownPropsInfo = RtidParser.parse(_data.waveManagerProps ?? '');
     final ownPropsObj = ownPropsInfo?.source == 'CurrentLevel'
         ? widget.levelFile.objects.firstWhereOrNull(
@@ -350,7 +352,7 @@ class _WaveManagerModuleScreenState extends State<WaveManagerModuleScreen> {
             Padding(
               padding: const EdgeInsets.only(top: 4),
               child: Text(
-                l10n?.noWaveManagerPropsFound ??
+                l10n?.waveManagerContainerMissing ??
                     'No WaveManagerProperties object found.',
                 style: TextStyle(
                   color: theme.colorScheme.onError,
@@ -566,17 +568,19 @@ class _WaveManagerModuleScreenState extends State<WaveManagerModuleScreen> {
                               fontWeight: FontWeight.bold,
                             ),
                           ),
-                          const SizedBox(height: 4),
-                          Text(
-                            _pointSpawningEnabled
-                                ? (l10n?.pointSpawningEnabledDesc ??
-                                      'Enabled (uses extra points for spawning)')
-                                : (l10n?.pointSpawningDisabledDesc ??
-                                      'Disabled (wave events only)'),
-                            style: theme.textTheme.bodySmall?.copyWith(
-                              color: theme.colorScheme.onSurfaceVariant,
+                          if (!pointSpawningOverridden) ...[
+                            const SizedBox(height: 4),
+                            Text(
+                              _pointSpawningEnabled
+                                  ? (l10n?.pointSpawningEnabledDesc ??
+                                        'Enabled (uses extra points for spawning)')
+                                  : (l10n?.pointSpawningDisabledDesc ??
+                                        'Disabled (wave events only)'),
+                              style: theme.textTheme.bodySmall?.copyWith(
+                                color: theme.colorScheme.onSurfaceVariant,
+                              ),
                             ),
-                          ),
+                          ],
                         ],
                       ),
                     ),
@@ -608,6 +612,16 @@ class _WaveManagerModuleScreenState extends State<WaveManagerModuleScreen> {
                 ),
               ),
             ),
+            if (pointSpawningOverridden) ...[
+              const SizedBox(height: 8),
+              EditorWarningBanner(
+                message:
+                    l10n?.waveManagerPointsOverriddenByEscalation ??
+                    'Escalation Spawning supplies the wave container and '
+                        'overrides point spawning. Remove Escalation Spawning '
+                        'to use point spawning.',
+              ),
+            ],
             if (_pointSpawningEnabled) ...[
               const SizedBox(height: 16),
               Text(

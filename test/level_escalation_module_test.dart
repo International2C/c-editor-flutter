@@ -111,6 +111,63 @@ void main() {
       return PvzLevelFile(objects: objects);
     }
 
+    testWidgets('later point spawning with its own container warns on override', (
+      tester,
+    ) async {
+      final l10n = lookupAppLocalizations(const Locale('en'));
+      final level = buildLevel();
+      final manager = level.objects.singleWhere(
+        (object) => object.objClass == 'WaveManagerModuleProperties',
+      );
+      final definition = level.objects.singleWhere(
+        (object) => object.objClass == 'LevelDefinition',
+      );
+      final moduleReferences = List<String>.from(
+        (definition.objData as Map)['Modules'] as List,
+      );
+      final warnings = [
+        l10n.levelEscalationOverriddenByPointSpawning,
+        l10n.levelEscalationAfterWaveManagerWarning,
+        l10n.levelEscalationBeforeWaveManagerWarning,
+      ];
+
+      Future<void> expectWarning(String? expected) async {
+        await tester.pumpWidget(wrap(level));
+        await tester.pumpAndSettle();
+        for (final warning in warnings) {
+          expect(find.text(warning), warning == expected ? findsOneWidget : findsNothing);
+        }
+      }
+
+      manager.objData = WaveManagerModuleData(
+        dynamicZombies: [DynamicZombieGroup()],
+      ).toJson();
+      await expectWarning(null);
+
+      const independentContainer = 'RTID(ManagerWaves@CurrentLevel)';
+      level.objects.add(
+        PvzObject(
+          aliases: const ['ManagerWaves'],
+          objClass: 'WaveManagerProperties',
+          objData: WaveManagerData().toJson(),
+        ),
+      );
+      manager.objData = WaveManagerModuleData(
+        waveManagerProps: independentContainer,
+        dynamicZombies: [DynamicZombieGroup()],
+      ).toJson();
+      await expectWarning(l10n.levelEscalationOverriddenByPointSpawning);
+
+      (definition.objData as Map)['Modules'] = moduleReferences.reversed.toList();
+      await expectWarning(l10n.levelEscalationAfterWaveManagerWarning);
+
+      (definition.objData as Map)['Modules'] = moduleReferences;
+      manager.objData = WaveManagerModuleData(
+        waveManagerProps: independentContainer,
+      ).toJson();
+      await expectWarning(l10n.levelEscalationBeforeWaveManagerWarning);
+    });
+
     testWidgets('editing flag count writes objdata', (tester) async {
       final level = buildLevel();
       await tester.pumpWidget(wrap(level));
@@ -358,7 +415,7 @@ void main() {
       expect(tester.takeException(), isNull);
     });
 
-    testWidgets('add wave timeline creates missing wave manager objects', (
+    testWidgets('add wave container creates missing wave manager objects', (
       tester,
     ) async {
       final module = PvzObject(
@@ -379,7 +436,7 @@ void main() {
       var structureChanged = false;
       await tester.pumpWidget(
         MaterialApp(
-          locale: const Locale('en'),
+          locale: const Locale('zh'),
           localizationsDelegates: AppLocalizations.localizationsDelegates,
           supportedLocales: AppLocalizations.supportedLocales,
           home: LevelEscalationModuleScreen(
@@ -398,6 +455,12 @@ void main() {
         const ValueKey('levelEscalationAddWaveTimelineButton'),
       );
       expect(button, findsOneWidget);
+      expect(find.text('添加波次容器'), findsOneWidget);
+      expect(
+        find.text('未找到「波次容器 (WaveManagerProperties)」对象，递进出怪模块无法生效'),
+        findsOneWidget,
+      );
+      expect(find.textContaining('优先复用'), findsNothing);
       await tester.ensureVisible(button);
       await tester.pumpAndSettle();
       await tester.tap(button);
@@ -458,6 +521,7 @@ void main() {
         const ValueKey('levelEscalationAddWaveTimelineButton'),
       );
       expect(button, findsOneWidget);
+      expect(find.text('Add wave timeline'), findsOneWidget);
       await tester.ensureVisible(button);
       await tester.tap(button);
       await tester.pumpAndSettle();
