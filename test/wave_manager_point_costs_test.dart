@@ -1,3 +1,4 @@
+import 'package:c_editor/data/level_escalation_runtime.dart';
 import 'package:c_editor/data/level_parser.dart';
 import 'package:c_editor/data/module_open_hint.dart';
 import 'package:c_editor/data/pvz_models.dart';
@@ -62,16 +63,17 @@ Widget _app(Locale locale, Widget child, {double textScale = 1}) => MaterialApp(
 Future<void> _openPointExpectation(
   WidgetTester tester,
   Locale locale, {
+  PvzLevelFile? level,
   double textScale = 1,
   OpenModuleCallback? onOpenModule,
 }) async {
-  final level = _level();
+  final file = level ?? _level();
   await tester.pumpWidget(
     _app(
       locale,
       WaveTimelineTab(
-        levelFile: level,
-        parsed: LevelParser.parseLevel(level),
+        levelFile: file,
+        parsed: LevelParser.parseLevel(file),
         onChanged: () {},
         onEditEvent: (_, _) async {},
         onAddEvent: (_) {},
@@ -244,6 +246,60 @@ void main() {
     expect(tester.getRect(count).top, greaterThan(tester.getRect(cost).bottom));
     expect(tester.getSize(cost).width, greaterThan(100));
     expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('escalation point preview opens the active escalation module', (
+    tester,
+  ) async {
+    const locale = Locale('en');
+    final level = _level();
+    level.objects.insertAll(0, [
+      PvzObject(
+        objClass: 'LevelDefinition',
+        objData: LevelDefinitionData(
+          modules: [
+            'RTID(EscalationRef@CurrentLevel)',
+            'RTID(NewWaves@CurrentLevel)',
+          ],
+        ).toJson(),
+      ),
+      PvzObject(
+        aliases: ['UnusedEscalation'],
+        objClass: 'LevelEscalationModuleProperties',
+        objData: LevelEscalationModuleData().toJson(),
+      ),
+      PvzObject(
+        aliases: ['ActiveEscalation', 'EscalationRef'],
+        objClass: 'LevelEscalationModuleProperties',
+        objData: LevelEscalationModuleData(
+          startingPoints: 1000,
+          waveManagerProps: 'RTID(Waves@CurrentLevel)',
+          zombiePool: ['RTID(tutorial_armor2@ZombieTypes)'],
+        ).toJson(),
+      ),
+    ]);
+    String? openedModule;
+    await _openPointExpectation(
+      tester,
+      locale,
+      level: level,
+      onOpenModule: (rtid, {hint}) => openedModule = rtid,
+    );
+    expect(find.text('tutorial_armor2'), findsOneWidget);
+    expect(find.text('tutorial_armor1'), findsNothing);
+
+    final l10n = lookupAppLocalizations(locale);
+    await tester.tap(find.widgetWithText(FilledButton, l10n.openModuleSettings));
+    await tester.pumpAndSettle();
+    expect(openedModule, 'RTID(ActiveEscalation@CurrentLevel)');
+    expect(
+      LevelEscalationRuntime.resolve(
+        level,
+        escalationAlias: 'ActiveEscalation',
+      ).isEffective,
+      isTrue,
+    );
+    expect(find.byType(AlertDialog), findsNothing);
   });
 
   testWidgets('short point preview keeps both actions below its scroll area', (

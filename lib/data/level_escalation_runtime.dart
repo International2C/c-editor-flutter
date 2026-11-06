@@ -20,6 +20,7 @@ class LevelEscalationRuntime {
     required this.order,
     this.data,
     this.escalationIndex,
+    this.escalationModuleRtid,
     this.waveManagerIndex,
     this.escalationWaveManagerProps,
     this.waveManagerWaveManagerProps,
@@ -32,6 +33,7 @@ class LevelEscalationRuntime {
   final LevelEscalationModuleOrder order;
   final LevelEscalationModuleData? data;
   final int? escalationIndex;
+  final String? escalationModuleRtid;
   final int? waveManagerIndex;
   final String? escalationWaveManagerProps;
   final String? waveManagerWaveManagerProps;
@@ -81,6 +83,7 @@ class LevelEscalationRuntime {
     );
 
     int? escalationIndex;
+    String? escalationModuleRtid;
     int? waveManagerIndex;
     LevelEscalationModuleData? escalationData;
     WaveManagerModuleData? waveManagerData;
@@ -92,10 +95,12 @@ class LevelEscalationRuntime {
         (candidate) => candidate.aliases?.contains(parsed.alias) == true,
       );
       if (object == null) continue;
+      final aliases = object.aliases!;
       if (object.objClass == 'LevelEscalationModuleProperties' &&
-          (escalationAlias == null || parsed.alias == escalationAlias) &&
+          (escalationAlias == null || aliases.contains(escalationAlias)) &&
           object.objData is Map) {
         escalationIndex = index;
+        escalationModuleRtid = RtidParser.build(aliases.first, 'CurrentLevel');
         escalationData = LevelEscalationModuleData.fromJson(
           Map<String, dynamic>.from(object.objData as Map),
         );
@@ -135,6 +140,7 @@ class LevelEscalationRuntime {
       order: order,
       data: escalationData,
       escalationIndex: escalationIndex,
+      escalationModuleRtid: escalationModuleRtid,
       waveManagerIndex: waveManagerIndex,
       escalationWaveManagerProps: escalationProps,
       waveManagerWaveManagerProps: waveManagerProps,

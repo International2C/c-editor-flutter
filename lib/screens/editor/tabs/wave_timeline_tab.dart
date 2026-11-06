@@ -1,6 +1,8 @@
 import 'dart:async';
 
 import 'package:c_editor/data/gladiator_row_utils.dart';
+import 'package:c_editor/data/grid_override_module_utils.dart'
+    show moduleRtidForClass;
 import 'package:c_editor/data/jitter_offsets_utils.dart';
 import 'package:c_editor/bloc/settings/settings_cubit.dart';
 import 'dart:convert';
@@ -3629,15 +3631,6 @@ class _WaveTimelineTabState extends State<WaveTimelineTab> {
     });
   }
 
-  String? _getModuleRtid(String objClass) {
-    final obj = widget.levelFile.objects.firstWhereOrNull(
-      (o) => o.objClass == objClass,
-    );
-    final alias = obj?.aliases?.firstOrNull;
-    if (alias == null) return null;
-    return RtidParser.build(alias, 'CurrentLevel');
-  }
-
   RenaiModulePropertiesData? _getRenaiModuleData() {
     final obj = widget.levelFile.objects.firstWhereOrNull(
       (o) => o.objClass == 'RenaiModuleProperties',
@@ -3745,6 +3738,10 @@ class _WaveTimelineTabState extends State<WaveTimelineTab> {
         escalation.isEffective &&
         escalationData != null &&
         waveIndex <= escalationData.totalWaves;
+    final onOpenModule = widget.onOpenModule;
+    final settingsRtid = usesEscalation
+        ? escalation.escalationModuleRtid
+        : moduleRtidForClass(widget.levelFile, 'WaveManagerModuleProperties');
     final analysis = usesEscalation
         ? WavePointAnalysis.analyzePool(escalationData.zombiePool, points)
         : WavePointAnalysis.analyze(
@@ -3905,17 +3902,14 @@ class _WaveTimelineTabState extends State<WaveTimelineTab> {
             ),
           ),
           actions: [
-            if (widget.onOpenModule != null)
+            if (onOpenModule != null && settingsRtid != null)
               FilledButton(
                 style: FilledButton.styleFrom(backgroundColor: Colors.green),
                 onPressed: () {
-                  final rtid = _getModuleRtid('WaveManagerModuleProperties');
-                  if (rtid != null) {
-                    Navigator.pop(ctx);
-                    WidgetsBinding.instance.addPostFrameCallback((_) {
-                      widget.onOpenModule!(rtid);
-                    });
-                  }
+                  Navigator.pop(ctx);
+                  WidgetsBinding.instance.addPostFrameCallback((_) {
+                    onOpenModule(settingsRtid);
+                  });
                 },
                 child: Text(l10n?.openModuleSettings ?? 'Open module settings'),
               ),
