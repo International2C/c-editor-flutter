@@ -6,6 +6,7 @@ import 'package:c_editor/l10n/app_localizations.dart';
 import 'package:c_editor/l10n/resource_names.dart';
 import 'package:c_editor/screens/editor/modules/wave_manager_module_screen.dart';
 import 'package:c_editor/screens/editor/tabs/wave_timeline_tab.dart';
+import 'package:c_editor/widgets/wave_flag_strip.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -59,6 +60,12 @@ void main() {
     ]);
   });
 
+  test('Chinese point-spawn preview uses the expected title and unit', () {
+    final zh = lookupAppLocalizations(const Locale('zh'));
+    expect(zh.expectation, '点数出怪预览');
+    expect(zh.pointSpawnExpectedCount('3.50'), '3.50只');
+  });
+
   for (final language in ['zh', 'en', 'ru']) {
     final locale = Locale(language);
     testWidgets(
@@ -83,6 +90,19 @@ void main() {
           ),
         );
         await tester.pumpAndSettle();
+
+        final ruler = find.byType(WaveFlagStrip);
+        final pointSettings = find.text(l10n.pointSettings);
+        final startingWave = find.text(l10n.startingWave);
+        expect(
+          tester.getRect(pointSettings).bottom,
+          lessThanOrEqualTo(tester.getRect(ruler).top),
+        );
+        expect(
+          tester.getRect(ruler).bottom,
+          lessThan(tester.getRect(startingWave).top),
+        );
+
         for (var i = 0; i < 3; i++) {
           final row = find.byKey(ValueKey('waveManagerZombiePoolDetails-$i'));
           final cost = find.descendant(
@@ -99,6 +119,14 @@ void main() {
             lessThanOrEqualTo(tester.getRect(levelLabel).top),
           );
         }
+
+        final pointSpawningSwitch = find.byType(Switch);
+        await tester.ensureVisible(pointSpawningSwitch);
+        await tester.pumpAndSettle();
+        await tester.tap(pointSpawningSwitch);
+        await tester.pumpAndSettle();
+        expect(pointSettings, findsNothing);
+        expect(ruler, findsNothing);
         expect(tester.takeException(), isNull);
       },
     );
@@ -146,6 +174,13 @@ void main() {
           tester.getRect(cost).top,
           greaterThanOrEqualTo(tester.getRect(codename).bottom),
         );
+        final expectedCount = find.byKey(
+          ValueKey('wavePointExpectationCount-${entry.key}'),
+        );
+        expect(expectedCount, findsOneWidget);
+        if (language == 'zh') {
+          expect(tester.widget<Text>(expectedCount).data, endsWith('只'));
+        }
       }
       expect(tester.takeException(), isNull);
     });

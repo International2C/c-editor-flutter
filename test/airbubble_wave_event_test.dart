@@ -21,13 +21,16 @@ const _officialData = {
 
 void main() {
   test(
-    'registry entry sits right after thunder and matches the order list',
+    'registry entry sits between Eagle Flags and Barrel Crisis',
     () {
       final events = EventRegistry.getAll();
-      final thunder = events.indexWhere(
-        (m) => m.defaultObjClass == 'ThunderWaveActionProps',
+      const eagleFlags = 'SpawnEagleFlagsWaveActionProps';
+      const barrelCrisis = 'BarrelWaveActionProps';
+      final bubbleRain = events.indexWhere(
+        (m) => m.defaultObjClass == _objClass,
       );
-      expect(events[thunder + 1].defaultObjClass, _objClass);
+      expect(events[bubbleRain - 1].defaultObjClass, eagleFlags);
+      expect(events[bubbleRain + 1].defaultObjClass, barrelCrisis);
 
       final meta = EventRegistry.getByObjClass(_objClass)!;
       expect(meta.defaultAlias, 'AirbubbleEvent');
@@ -35,7 +38,11 @@ void main() {
       expect(meta.initialDataFactory(), isA<ZombieAirbubbleActionPropsData>());
       expect(
         ObjectOrderRegistry.getPriority(_objClass),
-        ObjectOrderRegistry.getPriority('ThunderWaveActionProps') + 1,
+        ObjectOrderRegistry.getPriority(eagleFlags) + 1,
+      );
+      expect(
+        ObjectOrderRegistry.getPriority(_objClass),
+        lessThan(ObjectOrderRegistry.getPriority(barrelCrisis)),
       );
     },
   );
@@ -93,7 +100,7 @@ void main() {
     expect(AppLocalizationsZh().airbubbleParameters, isNotEmpty);
   });
 
-  testWidgets('screen edits bubble count and keeps the official keys', (
+  testWidgets('screen edits bubble count and explains the event parameters', (
     tester,
   ) async {
     final level = PvzLevelFile(
@@ -132,6 +139,21 @@ void main() {
     expect(objData['SpeedRangeMin'], 0.5);
     expect(objData['SpeedRangeMax'], 2.5);
     expect(changed, greaterThan(0));
+
+    await tester.tap(find.byIcon(Icons.help_outline));
+    await tester.pumpAndSettle();
+    final dialog = find.byType(AlertDialog);
+    final l10n = AppLocalizationsEn();
+    for (final text in [
+      '• ${l10n.overview}',
+      '• ${l10n.eventHelpAirbubbleWaveFieldsTitle}',
+      l10n.eventHelpAirbubbleWaveFields,
+    ]) {
+      expect(
+        find.descendant(of: dialog, matching: find.text(text)),
+        findsOneWidget,
+      );
+    }
     expect(tester.takeException(), isNull);
   });
 }

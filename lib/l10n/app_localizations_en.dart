@@ -119,6 +119,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get waveNumberLegend => 'Number indicates the wave number';
 
   @override
+  String get waveFlagLabel => 'Flag wave';
+
+  @override
   String get expand => 'Expand';
 
   @override
@@ -1895,18 +1898,18 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get noWaveManagerHint =>
-      'Wave management is enabled, but the entity object (WaveManagerProperties) is missing. Please create an empty wave container.';
+      'Wave management is enabled, but the wave container (WaveManagerProperties) that stores wave data is missing. Please create an empty wave container.';
 
   @override
   String get waveTimelineGuideTitle => 'Operation Guide';
 
   @override
   String get waveTimelineGuideBodyDesktop =>
-      'Left-click a wave: Manage wave events\nLong-press an event: Drag to reorder or move waves\nClick points: View spawn expectations';
+      'Left-click a wave: Manage wave events\nLong-press an event: Drag to reorder or move waves\nClick points: View the point-spawn preview';
 
   @override
   String get waveTimelineGuideBodyMobile =>
-      'Tap a wave: Manage events\nLong-press an event: Drag to reorder or move waves\nTap points: View spawn expectations';
+      'Tap a wave: Manage events\nLong-press an event: Drag to reorder or move waves\nTap points: View the point-spawn preview';
 
   @override
   String get waveDeadLinksTitle => 'Broken References';
@@ -1976,7 +1979,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get moduleTitle_WaveManagerProperties =>
-      'Linked Wave Parameters (WaveManagerProps)';
+      'Wave Container (WaveManagerProperties)';
 
   @override
   String waveManagerPropsCurrent(String value) {
@@ -2040,14 +2043,14 @@ class AppLocalizationsEn extends AppLocalizations {
   String get flagInterval => 'Flag interval';
 
   @override
-  String get waveManagerHelpTitle => 'Wave Manager module';
+  String get waveManagerHelpTitle => 'Wave Event Container';
 
   @override
   String get waveManagerHelpOverviewTitle => 'Overview';
 
   @override
   String get waveManagerHelpOverviewBody =>
-      'The wave event container organizes level events by wave order. Most levels use it to control zombie spawning. This page allows you to adjust its global settings.';
+      'The Wave Container (WaveManagerProperties) stores level events in wave order together with global settings such as the first-wave countdown, health thresholds, and flag interval. It holds the data used to initialize the actual wave manager (WaveManager), not a second runtime wave system. This page edits that container.';
 
   @override
   String get waveManagerHelpFlagTitle => 'Flag interval';
@@ -2198,7 +2201,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get addWave => 'Add wave';
 
   @override
-  String get expectation => 'Expectation';
+  String get expectation => 'Point-spawn preview';
+
+  @override
+  String pointSpawnExpectedCount(String count) {
+    return '$count';
+  }
 
   @override
   String get close => 'Close';
@@ -2424,7 +2432,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get conflictDesc_WaveGeneratorLevelEscalation =>
-      'The Level Escalation module scales zombie levels based on waves from the Wave Manager system, so it cannot be used with the Wave Generator.';
+      'Escalation Spawning depends on the Wave Manager system and cannot be used with the Wave Generator.';
 
   @override
   String conflictDesc_CamelMinigameNonTouchZombies(String zombies) {
@@ -2594,7 +2602,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get moduleDesc_WaveManagerModuleProperties =>
-      'Manages overall wave event configuration for the level';
+      'Runs the level\'s waves and configures runtime features such as point-based spawning';
 
   @override
   String get moduleTitle_WaveGeneratorProperties => 'Wave Generator';
@@ -3013,50 +3021,119 @@ class AppLocalizationsEn extends AppLocalizations {
       'Sun cost increases each time the same plant is planted';
 
   @override
-  String get moduleTitle_LevelEscalationModuleProperties => 'Level Escalation';
+  String get moduleTitle_LevelEscalationModuleProperties =>
+      'Escalation Spawning';
 
   @override
   String get moduleDesc_LevelEscalationModuleProperties =>
-      'Escalates difficulty across flags: points grow with each wave and new zombies join the spawn pool';
+      'Plans random spawning from the first wave and can assign Plant Food to randomly spawned zombies';
 
   @override
-  String get flagCount => 'Flag count';
+  String get flagCount => 'Flag count (FlagCount)';
 
   @override
-  String get wavesPerFlag => 'Waves per flag';
+  String get wavesPerFlag => 'Waves per flag (WavesPerFlag)';
 
   @override
-  String get plantfoodToSpawnCount => 'Plant Food drop count';
+  String get plantfoodToSpawnCount =>
+      'Plant Food count (PlantfoodToSpawnCount)';
 
   @override
-  String levelEscalationTotalWaves(int count) {
-    return 'Total escalation waves: $count';
-  }
+  String get levelEscalationFlagCountShort => 'Flag count (FlagCount)';
 
   @override
-  String get levelEscalationFlagCountShort => 'Flags';
-
-  @override
-  String get levelEscalationFlagIntervalShort => 'Interval';
+  String get levelEscalationFlagIntervalShort =>
+      'Waves per flag (WavesPerFlag)';
 
   @override
   String get expectationNoAffordableZombies =>
-      'None of this wave\'s pool zombies can be bought with its points.';
+      'This wave does not have enough points to select and spawn any zombie from the pool.';
 
   @override
-  String get levelEscalationHelpOverviewBody =>
-      'Adds point-based difficulty escalation to the level. Waves are grouped into flags; each new wave grants more points, and those points are spent to spawn zombies from the pool. Plant Food drops are limited to the configured count.';
+  String get levelEscalationModuleHelpTitle => 'Escalation Spawning module';
 
   @override
-  String get levelEscalationHelpFieldsBody =>
-      'Flag count (FlagCount) is the number of flags in the level, and Waves per flag (WavesPerFlag) is the number of waves in each flag; together they give the total wave count.\nStarting points (StartingPoints) is the initial point pool, and Point increase per wave (PointIncrementPerWave) is how many extra points are granted for every new wave.\nPlant Food drop count (PlantfoodToSpawnCount) limits how many Plant Food drops the module spawns.\nZombie pool (ZombiePool) lists the zombie types the points can spawn, and Wave manager props (WaveManagerProps) links the module to the level\'s WaveManagerProperties object.';
+  String get levelEscalationModuleHelpOverview => 'Overview';
 
   @override
-  String get levelEscalationHelpLevelsTitle => 'Zombie levels';
+  String get levelEscalationModuleHelpOverviewBody =>
+      'Escalation Spawning must be used with the Wave Manager. When the level loads, it uses the linked Wave Container (WaveManagerProperties) as a base, preserves its existing fixed spawns, other wave events, and settings such as the first-wave delay, next-wave health thresholds, and suppression of flag zombies, then generates random spawns from wave 1 according to its own parameters and assigns Plant Food to some randomly spawned zombies. The Wave Manager then runs the result.';
 
   @override
-  String get levelEscalationHelpLevelsBody =>
-      'The module has no per-zombie level setting (ZombieLevel): every zombie from the pool always spawns at level 1.';
+  String get levelEscalationModuleHelpRuntime => 'Wave container and runner';
+
+  @override
+  String get levelEscalationModuleHelpRuntimeBody =>
+      'Add wave timeline reuses the wave container already linked to Escalation Spawning, or another container already in the level. It creates an empty wave container only when none can be reused, then links the resulting container to Escalation Spawning. If the level module list (LevelDefinition.Modules) contains no enabled Wave Manager module to run waves, a runner-only module with no independent wave container is added; an existing enabled runner is not rewritten.\nNormally Escalation Spawning references and supplies the wave container used at runtime, while Wave Manager only runs it. If Wave Manager has no independent wave container, or both modules reference the same container, module order does not overwrite the escalated result. Only different valid wave containers can initialize the same runtime wave manager (WaveManager) more than once; if that happens, the contents applied later replace the earlier result.';
+
+  @override
+  String get levelEscalationModuleHelpWaveLayout => 'Waves and flags';
+
+  @override
+  String get levelEscalationModuleHelpWaveLayoutBody =>
+      'The module generates random spawns for Flag count × Waves per flag, which does not necessarily equal the level\'s final runtime wave count.\nIf the linked wave container contains fewer waves, the game adds the missing waves to the runtime copy and changes its total wave count to that value. If the container already contains the same number or more, the game does not remove extra waves or force its existing total wave count to change, but this module still adds random spawns only within its generated range. The flag interval in the runtime copy is replaced by Waves per flag.\nFor example, with 4 flags and 3 waves per flag, this module adds random spawns to the first 12 waves, and waves 3, 6, 9, and 12 are flag waves. If the container also contains wave 13 and later waves, waves 15, 18, and so on are still treated as flag waves, but receive no random spawns from this module.';
+
+  @override
+  String get levelEscalationModuleHelpSpending => 'Point trajectory';
+
+  @override
+  String get levelEscalationModuleHelpSpendingBody =>
+      'Wave 1 uses Starting points. Each later wave adds Point increase per wave to the previous wave\'s base budget. Flag waves multiply that wave\'s base points by 2.5 and discard the fractional part.\nOn each wave, the game randomly selects and spawns zombies from the pool according to the available points. Unspent points are not carried forward to the next wave.';
+
+  @override
+  String get levelEscalationModuleHelpPlantfood => 'Plant Food allocation';
+
+  @override
+  String get levelEscalationModuleHelpPlantfoodBody =>
+      'Plant Food count is the total amount allocated to randomly spawned zombies across the level. It is separate from starting Plant Food and Plant Food carried by fixed spawn events.\nFrom first to last, the game assigns one Plant Food to the wave before each flag wave. If the count is lower than the flag count, only the first several flag segments receive one. If it is higher, each remaining Plant Food is independently assigned to a random wave in the nominal random-spawn range. Random assignments may repeat or land on a wave that already received Plant Food, so one wave can receive several.\nFor example, with 3 flags, 10 waves per flag, and 5 Plant Food, waves 9, 19, and 29 first receive one each; the remaining 2 are then independently assigned to waves 1–30.\nOnly eligible randomly spawned zombies can carry Plant Food. If a wave has too few eligible zombies, excess Plant Food is lost rather than reassigned to another wave.';
+
+  @override
+  String get levelEscalationModuleHelpPool => 'Zombie pool';
+
+  @override
+  String get levelEscalationModuleHelpPoolBody =>
+      'The entire pool is available from wave 1 and remains available; zombies are not unlocked progressively. Pool zombies always spawn at level 1. Zombies that cost more than the current budget cannot be selected. Do not add elite, Yeti, or custom zombies.';
+
+  @override
+  String get levelEscalationModuleHelpLimits => 'Parameter limits';
+
+  @override
+  String get levelEscalationModuleHelpLimitsBody =>
+      'Flag count and Waves per flag must be positive integers, and Plant Food count must be a non-negative integer.\nWhen Plant Food is allocated, Waves per flag must be at least 2. A value of 1 places each preset Plant Food assignment on an invalid wave, so it cannot appear as intended.';
+
+  @override
+  String get levelEscalationFlagCountInvalid =>
+      'Flag count must be a positive integer.';
+
+  @override
+  String get levelEscalationWavesPerFlagInvalid =>
+      'Waves per flag must be a positive integer.';
+
+  @override
+  String get levelEscalationPlantfoodCountInvalid =>
+      'Plant Food count must be a non-negative integer.';
+
+  @override
+  String get levelEscalationPlantfoodWavesPerFlagInvalid =>
+      'When Plant Food is allocated, Waves per flag must be at least 2. A value of 1 places each preset Plant Food assignment on an invalid wave.';
+
+  @override
+  String get levelEscalationAfterWaveManagerWarning =>
+      'Escalation Spawning and Wave Manager reference different valid wave containers, and Escalation Spawning appears later. The same runtime wave manager (WaveManager) may be initialized again; the timeline previews the container processed by Escalation Spawning.';
+
+  @override
+  String get levelEscalationBeforeWaveManagerWarning =>
+      'Escalation Spawning and Wave Manager reference different valid wave containers, and Wave Manager appears later. It may initialize the same runtime wave manager (WaveManager) again with its own container and replace the escalated result, so the timeline previews Wave Manager\'s wave container.';
+
+  @override
+  String levelEscalationWavePlantfood(int count) {
+    return 'Plant Food fixed to this wave: $count';
+  }
+
+  @override
+  String levelEscalationRandomPlantfood(int count, int waves) {
+    return 'Another $count Plant Food item(s) are independently assigned to waves 1–$waves; repeats are allowed.';
+  }
 
   @override
   String get levelEscalationPredict => 'Point prediction';
@@ -3075,7 +3152,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get pointSpawnOnlyZombiesBlocked =>
-      'This zombie has no WavePointCost data, so the game cannot buy it from a point budget, and it cannot be added to the pool.';
+      'This zombie has no point cost (WavePointCost) data, so the game cannot select and spawn it according to the wave\'s points, and it cannot be added to the point-spawn pool.';
 
   @override
   String get pointSpawnOnlyZombieBlockedTitle =>
@@ -3083,7 +3160,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get pointSpawnOnlyZombieBlockedMessage =>
-      'This zombie has no WavePointCost data (the field the game uses to buy zombies from wave points), so it cannot be used in point auto-spawn.';
+      'This zombie has no point cost (WavePointCost) data. The game needs this field to select and spawn zombies according to the wave\'s points, so this zombie cannot be used in point auto-spawn.';
 
   @override
   String get moduleTitle_DeathHoleModuleProperties => 'Death Craters';
@@ -3137,7 +3214,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get frozenPlantPlacementConditionNull => 'None (null)';
 
   @override
-  String get noConditions => 'No conditions';
+  String get noConditions => 'None';
 
   @override
   String get frozenPlantPlacementHelpTitle => 'Legacy Preset Plants module';
@@ -3154,7 +3231,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get frozenPlantPlacementHelpConditionBody =>
-      'Plants can be set to a special state: frozen (icecubed), chilled (chill), shadow boosted (shadowboosted), or shroom boosted (shroomboosted).';
+      'Plants can be given special states such as Light frost (froststage1), Heavy frost (froststage2), Fully frozen (icecubed), and Shadow boosted (shadowboosted). When entering plant states in manual edit mode, keep in mind that some states may not take effect as expected.';
 
   @override
   String get frozenPlantPlacementHelpLastStandTitle => 'Intensive Battle Mode';
@@ -3585,19 +3662,15 @@ class AppLocalizationsEn extends AppLocalizations {
       'Jetpack or Bass Zombies drop in from above';
 
   @override
-  String get eventTitle_HeianNinjaZombieSpawnerProps => 'Ninjimp Airstrike';
+  String get eventTitle_HeianNinjaZombieSpawnerProps => 'Ninjimp Rain';
 
   @override
   String get eventDesc_HeianNinjaZombieSpawnerProps =>
-      'Ninjimp zombies drop in from above';
+      'Ninjimps drop in from above';
 
   @override
   String get eventHelpHeianNinjaRainBody =>
-      'Ninjimp zombies drop onto the lawn during a wave. Use this for Heian Ninjimp or the two-player (new_pvp) variant. Zombie levels follow the lawn’s level sequence.';
-
-  @override
-  String get eventHelpHeianNinjaRainLogic =>
-      'Zombies drop in batches. Control total count, group size, column range, and timing. A red warning message can appear before the event; leave the zombie type empty to use this event only for the subtitle.';
+      'Ninjimps drop from the top of the screen for a surprise attack, commonly seen in Heian Ages levels. Compared with the standard Imp Drop event, this event gives Ninjimps a smoke bomb visual effect when they land. Zombie levels follow the lawn’s level sequence, with Level 1 used in Creative Courtyard.';
 
   @override
   String get eventTitle_BlackHoleWaveActionProps => 'Black Hole';
@@ -3646,14 +3719,21 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get eventDesc_ZombieAirbubbleActionProps =>
-      'Rains bubbles from the sky: count, health and fall speed';
+      'Bubbles fall from the sky and carry plants away';
 
   @override
   String get eventAirbubble => 'Event: Bubble Rain';
 
   @override
   String get eventHelpAirbubbleWaveBody =>
-      'Adds a wave effect that summons bubbles falling from the sky. Each bubble has its own health, and the fall speed range controls how fast they drop.';
+      'Commonly seen in Memory Lane levels. Colorful soap bubbles fall from the sky and hover above plants. After a while, each bubble encloses a plant and carries it off the lawn. Blover can blow the bubbles away.';
+
+  @override
+  String get eventHelpAirbubbleWaveFieldsTitle => 'Parameter Description';
+
+  @override
+  String get eventHelpAirbubbleWaveFields =>
+      'The bubbles (wave_airbubble) spawned by this event are separate zombie entities with configurable health. They differ from the bubbles produced by Bubble Gun Imp and Bubble Machine Imp. The health setting applies only to the bubbles spawned by this wave event.\nThe minimum and maximum fall speeds define the range from which each bubble\'s speed is randomly chosen as it descends toward its target. After enclosing a plant, the bubble holds it for the usual duration and carries it upward at the usual speed.';
 
   @override
   String get airbubbleParameters => 'Bubble rain parameters';
@@ -4336,6 +4416,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get invalidEventTitle => 'Invalid event';
 
   @override
+  String get unknownEventTitle => 'Unknown event';
+
+  @override
   String get invalidReference => 'Invalid reference';
 
   @override
@@ -4595,7 +4678,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get eventHelpParachuteRainBody =>
-      'Zombies will parachute in from above for a surprise attack. Commonly used for Bug Bot Imp, Lost Pilot Zombie, Bass Zombie, ZCorp Helpdesk, and more. Zombie levels follow the lawn’s level sequence.';
+      'Zombies will parachute in from above for a surprise attack. Commonly used for Bug Bot Imp, Lost Pilot Zombie, Bass Zombie, ZCorp Helpdesk, and more. Zombie levels follow the lawn’s level sequence, with Level 1 used in Creative Courtyard.';
 
   @override
   String get eventHelpParachuteRainLogic =>
@@ -5161,7 +5244,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get zombieFromLeft => 'From left';
 
   @override
-  String get zombieFromRight => 'Appear from the right side of the lawn';
+  String get zombieFromRight =>
+      'When off, zombies spawn from the right side of the lawn by default.';
 
   @override
   String get zombieEntrySideLabel => 'Spawn side (Direction)';
@@ -5953,7 +6037,12 @@ class AppLocalizationsEn extends AppLocalizations {
       'No items. Add plants, zombies, or collectibles.';
 
   @override
-  String get zombieTypeSpiderZombieName => 'Zombie type (SpiderZombieName)';
+  String get zombieTypeSpiderZombieName =>
+      'Airdropped zombie (SpiderZombieName)';
+
+  @override
+  String get airdropZombieReplaceWarning =>
+      'This zombie is outside the editor’s list of available zombies for this module. Switching will permanently overwrite the original zombie\'s codename. Continue?';
 
   @override
   String get noneSelected => 'None selected';
@@ -6564,7 +6653,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get pointSettings => 'Point settings';
 
   @override
-  String get startingWave => 'Starting wave (StartingWave)';
+  String get startingWave => 'Starting wave (StartingWave, counting from 0)';
 
   @override
   String get startingPoints => 'Starting points (StartingPoints)';
@@ -6581,11 +6670,11 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get waveManagerHelpOverview =>
-      'Wave Manager defines the wave event container. Wave editing is only available after adding this module.';
+      'The Wave Manager module owns and runs the actual wave manager (WaveManager); the Wave Container (WaveManagerProperties) only stores the data used to initialize it. Ordinary levels may link the wave container directly from this module. With Escalation Spawning, Escalation Spawning normally references and supplies the wave container while this module only runs it.';
 
   @override
   String get waveManagerHelpPoints =>
-      'Point-based spawning generates additional zombies during valid waves based on point cost.\nNormal waves have a cap of 60,000 points, while flag waves use a 2.5× multiplier.\nWhen points are positive, zombies are selected from the zombie pool. Expected spawn values for each zombie can be viewed in the wave event container.\nWhen points are negative, zombies with equivalent point value are removed from Basic Spawner events.\nDo not include Elite Zombies, Yetis, or custom zombies in the point-based spawning pool.';
+      'Point-based spawning generates additional zombies during valid waves based on point cost.\nNormal waves have a cap of 60,000 points, while flag waves use a 2.5× multiplier.\nWhen points are positive, zombies are selected from the zombie pool. Expected spawn values for each zombie can be viewed in the wave event container.\nWhen points are negative, zombies with equivalent point value are removed from Basic Spawner events.\nThe starting wave is counted from 0. Enter 0 to start spawning on wave 1 or 1 to start on wave 2.\nDo not include Elite Zombies, Yetis, or custom zombies in the point-based spawning pool.';
 
   @override
   String get pointsSection => 'Points';
@@ -6603,10 +6692,23 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get noWaveManagerPropsFound =>
-      'Wave Manager module (WaveManagerProperties) not found.';
+      'No wave container (WaveManagerProperties) object was found.';
 
   @override
   String get levelEscalationAddWaveTimeline => 'Add wave timeline';
+
+  @override
+  String get levelEscalationAddWaveTimelineHint =>
+      'Reuses an existing wave container and links it to Escalation Spawning, or creates an empty one when none can be reused. If the level module list (LevelDefinition.Modules) has no enabled Wave Manager runner, a runner-only module with no independent wave container is added too.';
+
+  @override
+  String get levelEscalationWaveManagerRunnerMissing =>
+      'The linked wave container exists, but the Wave Manager module that runs waves is missing. Select Add wave timeline to add the runner.';
+
+  @override
+  String waveManagerPropsProvidedByEscalation(String value) {
+    return 'The runtime wave container is provided by Escalation Spawning: $value';
+  }
 
   @override
   String get itemsSortedByRow => 'Item(s) in selected tile';
@@ -6616,7 +6718,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get zombieLevelsBody =>
-      'Zombie level and row cannot be set independently within storms. Manually editing zombie levels has no effect; zombie levels follow the lawn’s level sequence by default.';
+      'Zombie level and row cannot be set independently within storms. Manually editing zombie levels has no effect. Zombie levels follow the lawn’s level sequence by default, with Level 1 used in Creative Courtyard.';
 
   @override
   String get batchLevel => 'Batch level';
@@ -9160,7 +9262,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get waveGeneratorModuleHelpSpendingBody =>
-      'Random spawns use the points available to the current wave. The game selects by weight from zombies affordable with the remaining points, deducts the selected cost, and filters the candidates again until none are eligible. Unused points do not carry over to the next wave, and fixed spawns consume none of these points.';
+      'Random spawns use the points available to the current wave. The game selects by weight from zombies whose cost does not exceed the remaining points, deducts the selected cost, and filters the candidates again until none are eligible. Unused points do not carry over to the next wave, and fixed spawns consume none of these points.';
 
   @override
   String get waveGeneratorModuleHelpPointTrajectory => 'Parameters';
@@ -9351,7 +9453,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String waveGeneratorPointTrajectoryWaveValue(int wave, int points) {
-    return 'W$wave · $points pts.';
+    return 'Wave $wave · $points pts.';
   }
 
   @override
@@ -9523,7 +9625,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get waveGeneratorExpectationPoolNote =>
-      'The preview estimates spawn counts by repeatedly simulating random purchases. Results can vary with selection order even when the point budget is unchanged, so it cannot precisely predict the game\'s actual spawns.';
+      'The preview estimates spawn counts by repeatedly simulating weighted selections. Results can vary with selection order even when the point budget is unchanged, so it cannot precisely predict the game\'s actual spawns.';
 
   @override
   String waveGeneratorExpectationTitle(int wave) {
@@ -9557,7 +9659,12 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String waveGeneratorExpectationMissingData(String types) {
-    return 'Random-spawn preview unavailable because these zombies are missing reliable WavePointCost data: $types';
+    return 'These zombies have no resolvable effective spawn cost or weight and are excluded from the random-spawn preview: $types';
+  }
+
+  @override
+  String waveGeneratorExpectationZeroWeight(String types) {
+    return 'These zombies have a random-spawn weight of 0 and will not be selected by the Wave Generator: $types';
   }
 
   @override
@@ -9567,17 +9674,27 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String waveGeneratorExpectationCommonRange(int minimum, int maximum) {
-    return 'Estimated count range: $minimum–$maximum';
+    return 'Common count range: $minimum–$maximum';
   }
 
   @override
   String zombieCountWaveEstimate(String count, int minimum, int maximum) {
-    return 'This wave: about $count zombies (from $minimum to $maximum)';
+    return 'This wave: about $count (common range: $minimum–$maximum)';
+  }
+
+  @override
+  String zombieCountWaveEstimateNoRange(String count) {
+    return 'This wave: about $count';
   }
 
   @override
   String zombieCountTotalEstimate(String count, int minimum, int maximum) {
-    return 'All waves combined: about $count zombies (from $minimum to $maximum)';
+    return 'All waves combined: about $count (common range: $minimum–$maximum)';
+  }
+
+  @override
+  String zombieCountTotalEstimateNoRange(String count) {
+    return 'All waves combined: about $count';
   }
 
   @override

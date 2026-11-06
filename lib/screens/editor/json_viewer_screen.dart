@@ -36,25 +36,19 @@ double? _cachedFontSize;
 
 enum _JsonViewMode { rawText, structured }
 
+TextStyle _matchStyle(
+  TextStyle base,
+  ColorScheme colors, {
+  bool active = false,
+}) => base.copyWith(
+  backgroundColor: active ? colors.primary : colors.primaryContainer,
+  color: active ? colors.onPrimary : colors.onPrimaryContainer,
+);
+
 class _JsonEditController extends TextEditingController {
   List<JsonViewerTextMatch> _searchMatches = const [];
   int _activeMatchIndex = 0;
-  Color _highlightColor = const Color(0xFFFFF59D);
-  Color _highlightTextColor = const Color(0xFF1B1B1B);
-  Color _activeHighlightColor = const Color(0xFFFFC107);
-  Color _activeHighlightTextColor = const Color(0xFF1B1B1B);
-
-  void setHighlightColors({
-    required Color highlightColor,
-    required Color highlightTextColor,
-    required Color activeHighlightColor,
-    required Color activeHighlightTextColor,
-  }) {
-    _highlightColor = highlightColor;
-    _highlightTextColor = highlightTextColor;
-    _activeHighlightColor = activeHighlightColor;
-    _activeHighlightTextColor = activeHighlightTextColor;
-  }
+  String? _matchedText;
 
   void showSearchMatches(
     List<JsonViewerTextMatch> matches,
@@ -62,6 +56,7 @@ class _JsonEditController extends TextEditingController {
   ) {
     _searchMatches = List.unmodifiable(matches);
     _activeMatchIndex = activeMatchIndex;
+    _matchedText = text;
     notifyListeners();
   }
 
@@ -69,6 +64,7 @@ class _JsonEditController extends TextEditingController {
     if (_searchMatches.isEmpty) return;
     _searchMatches = const [];
     _activeMatchIndex = 0;
+    _matchedText = null;
     notifyListeners();
   }
 
@@ -79,7 +75,7 @@ class _JsonEditController extends TextEditingController {
     required bool withComposing,
   }) {
     if (_searchMatches.isEmpty ||
-        text.isEmpty ||
+        _matchedText != text ||
         (withComposing &&
             value.composing.isValid &&
             !value.composing.isCollapsed)) {
@@ -91,6 +87,7 @@ class _JsonEditController extends TextEditingController {
     }
 
     final baseStyle = style ?? const TextStyle();
+    final colors = Theme.of(context).colorScheme;
     final activeMatch =
         _activeMatchIndex >= 0 && _activeMatchIndex < _searchMatches.length
         ? _searchMatches[_activeMatchIndex]
@@ -102,15 +99,8 @@ class _JsonEditController extends TextEditingController {
         segmentStartInLine: 0,
         segmentEndInLine: text.length,
         baseStyle: baseStyle,
-        highlightStyle: baseStyle.copyWith(
-          color: _highlightTextColor,
-          backgroundColor: _highlightColor,
-        ),
-        activeHighlightStyle: baseStyle.copyWith(
-          color: _activeHighlightTextColor,
-          backgroundColor: _activeHighlightColor,
-          fontWeight: FontWeight.w600,
-        ),
+        highlightStyle: _matchStyle(baseStyle, colors),
+        activeHighlightStyle: _matchStyle(baseStyle, colors, active: true),
         lineMatches: _searchMatches,
         activeMatch: activeMatch,
         lineStartOffset: 0,
@@ -325,7 +315,7 @@ class _JsonViewerScreenState extends State<JsonViewerScreen> {
     );
   }
 
-  void _runSearch() {
+  void _runSearch({bool reveal = true, int matchIndex = 0}) {
     final query = _searchController.text;
     if (query.isEmpty) {
       setState(() {
@@ -374,18 +364,25 @@ class _JsonViewerScreenState extends State<JsonViewerScreen> {
       objectIndices.addAll(List.filled(matches.length, null));
     }
 
+    final activeIndex = matches.isEmpty
+        ? 0
+        : matchIndex.clamp(0, matches.length - 1);
     setState(() {
       _matches = matches;
       _matchObjectIndices
         ..clear()
         ..addAll(objectIndices);
-      _currentMatchIndex = 0;
+      _currentMatchIndex = activeIndex;
       _regexError = false;
     });
-    if (matches.isNotEmpty) {
-      _goToMatch(0);
-    } else {
+    if (!_isEditing || matches.isEmpty) {
       _editController.clearSearchMatches();
+    }
+    if (matches.isEmpty) return;
+    if (reveal) {
+      _goToMatch(activeIndex);
+    } else if (_isEditing) {
+      _editController.showSearchMatches(matches, activeIndex);
     }
   }
 
@@ -397,11 +394,7 @@ class _JsonViewerScreenState extends State<JsonViewerScreen> {
 
     if (_isEditing) {
       _editController.showSearchMatches(_matches, safeIndex);
-      _editController.selection = TextSelection(
-        baseOffset: match.start,
-        extentOffset: match.end,
-      );
-      _scrollToLine(match.lineIndex);
+      _revealTextMatch(match, editing: true);
       return;
     }
 
@@ -414,39 +407,69 @@ class _JsonViewerScreenState extends State<JsonViewerScreen> {
       return;
     }
 
+    _revealTextMatch(match, editing: false);
+  }
+
+  final _readTextKey = GlobalKey();
+  final _editTextKey = GlobalKey();
+
+  T? _findRenderDescendant<T extends RenderObject>(RenderObject? object) {
+    if (object is T) return object;
+    T? result;
+    object?.visitChildren((child) {
+      result ??= _findRenderDescendant<T>(child);
+    });
+    return result;
+  }
+
+  void _revealTextMatch(JsonViewerTextMatch match, {required bool editing}) {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!mounted ||
           !_verticalController.hasClients ||
+          _isEditing != editing ||
           _matches.isEmpty ||
-          _currentMatchIndex != safeIndex) {
+          !identical(_matches[_currentMatchIndex], match)) {
         return;
       }
-      RenderParagraph? paragraph;
-      void findParagraph(RenderObject object) {
-        if (object is RenderParagraph) {
-          paragraph = object;
-        } else {
-          object.visitChildren(findParagraph);
-        }
-      }
-
-      final renderObject = _readTextKey.currentContext?.findRenderObject();
-      if (renderObject == null) return;
-      findParagraph(renderObject);
-      final textParagraph = paragraph;
-      if (textParagraph == null) return;
-      final boxes = textParagraph.getBoxesForSelection(
-        TextSelection(baseOffset: match.start, extentOffset: match.end),
+      final selection = TextSelection(
+        baseOffset: match.start,
+        extentOffset: match.end,
       );
-      if (boxes.isEmpty) return;
+      final RenderObject renderText;
+      final Rect matchRect;
+      if (editing) {
+        final editable = _findRenderDescendant<RenderEditable>(
+          _editTextKey.currentContext?.findRenderObject(),
+        );
+        if (editable == null) return;
+        renderText = editable;
+        final boxes = editable.getBoxesForSelection(selection);
+        matchRect = boxes.isEmpty
+            ? editable.getLocalRectForCaret(selection.base)
+            : boxes.first.toRect();
+      } else {
+        final paragraph = _findRenderDescendant<RenderParagraph>(
+          _readTextKey.currentContext?.findRenderObject(),
+        );
+        if (paragraph == null) return;
+        final boxes = paragraph.getBoxesForSelection(selection);
+        if (boxes.isEmpty) return;
+        renderText = paragraph;
+        matchRect = boxes.first.toRect();
+      }
       final position = _verticalController.position;
-      final viewport = RenderAbstractViewport.of(textParagraph);
-      final top = viewport.getOffsetToReveal(textParagraph, 0).offset;
-      final target =
-          (top +
-                  boxes.first.toRect().center.dy -
-                  position.viewportDimension / 2)
-              .clamp(position.minScrollExtent, position.maxScrollExtent);
+      final viewport = RenderAbstractViewport.of(renderText);
+      double offsetAt(double alignment) => viewport
+          .getOffsetToReveal(renderText, alignment, rect: matchRect)
+          .offset;
+      if (editing &&
+          position.pixels >= offsetAt(1) &&
+          position.pixels <= offsetAt(0)) {
+        return;
+      }
+      final target = offsetAt(
+        0.5,
+      ).clamp(position.minScrollExtent, position.maxScrollExtent);
       _verticalController.animateTo(
         target.toDouble(),
         duration: const Duration(milliseconds: 200),
@@ -454,8 +477,6 @@ class _JsonViewerScreenState extends State<JsonViewerScreen> {
       );
     });
   }
-
-  final _readTextKey = GlobalKey();
 
   void _scrollToLine(int lineIndex) {
     if (!_verticalController.hasClients) return;
@@ -571,7 +592,7 @@ class _JsonViewerScreenState extends State<JsonViewerScreen> {
       preferredCaretOffset: match.start + replacement.length,
     );
     _pushHistory(_replaceHistoryKey, replacement, _replaceHistory);
-    _runSearch();
+    _runSearch(matchIndex: _currentMatchIndex);
   }
 
   void _replaceAllMatches() {
@@ -591,7 +612,7 @@ class _JsonViewerScreenState extends State<JsonViewerScreen> {
           : 0,
     );
     _pushHistory(_replaceHistoryKey, replacement, _replaceHistory);
-    _runSearch();
+    _runSearch(reveal: false, matchIndex: _currentMatchIndex);
   }
 
   void _applyReplacementText(String text, {required int preferredCaretOffset}) {
@@ -668,7 +689,7 @@ class _JsonViewerScreenState extends State<JsonViewerScreen> {
       _isEditing = true;
       _syntaxError = null;
     });
-    _runSearch();
+    _runSearch(reveal: false, matchIndex: _currentMatchIndex);
     if (previousScrollOffset != null) {
       _restoreScrollOffsetAfterFrame(previousScrollOffset);
     }
@@ -718,7 +739,7 @@ class _JsonViewerScreenState extends State<JsonViewerScreen> {
       _isEditing = false;
       _syntaxError = null;
     });
-    _editController.clearSearchMatches();
+    _runSearch(reveal: false, matchIndex: _currentMatchIndex);
   }
 
   Future<void> _saveEdit() async {
@@ -791,7 +812,7 @@ class _JsonViewerScreenState extends State<JsonViewerScreen> {
           _syntaxError = null;
           _invalidateRenderedJson();
         });
-        _editController.clearSearchMatches();
+        _runSearch(reveal: false, matchIndex: _currentMatchIndex);
         widget.onSaved?.call();
         final l10n = AppLocalizations.of(context);
         AppMessage.show(
@@ -1085,12 +1106,6 @@ class _JsonViewerScreenState extends State<JsonViewerScreen> {
 
   Widget _buildEditView() {
     final colorScheme = Theme.of(context).colorScheme;
-    _editController.setHighlightColors(
-      highlightColor: colorScheme.tertiaryContainer,
-      highlightTextColor: colorScheme.onTertiaryContainer,
-      activeHighlightColor: colorScheme.primary,
-      activeHighlightTextColor: colorScheme.onPrimary,
-    );
     final baseStyle = TextStyle(
       fontFamily: _codeFontFamily,
       fontSize: _fontSize,
@@ -1110,6 +1125,7 @@ class _JsonViewerScreenState extends State<JsonViewerScreen> {
             const SizedBox(width: 16),
             Expanded(
               child: TextField(
+                key: _editTextKey,
                 readOnly: _savingEdit,
                 controller: _editController,
                 keyboardType: TextInputType.multiline,
@@ -1117,7 +1133,9 @@ class _JsonViewerScreenState extends State<JsonViewerScreen> {
                 maxLines: null,
                 // Avoid browser scroll-into-view padding that can leave a
                 // blank strip under the caret after large pastes on web.
-                scrollPadding: kIsWeb ? EdgeInsets.zero : const EdgeInsets.all(20),
+                scrollPadding: kIsWeb
+                    ? EdgeInsets.zero
+                    : const EdgeInsets.all(20),
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                   fontFamily: _codeFontFamily,
                   fontSize: _fontSize,
@@ -1128,7 +1146,8 @@ class _JsonViewerScreenState extends State<JsonViewerScreen> {
                   isDense: true,
                   contentPadding: EdgeInsets.zero,
                 ),
-                onChanged: (_) => setState(() {}),
+                onChanged: (_) =>
+                    _runSearch(reveal: false, matchIndex: _currentMatchIndex),
               ),
             ),
           ],
@@ -1260,8 +1279,9 @@ class _JsonViewerScreenState extends State<JsonViewerScreen> {
       }
       await LevelRepository.saveAndExport(widget.filePath, widget.levelFile);
       widget.onSaved?.call();
-      setState(() {});
       if (mounted) {
+        _invalidateRenderedJson();
+        _runSearch(reveal: false, matchIndex: _currentMatchIndex);
         final msg =
             l10n?.clearUnusedDone(toRemove.length) ??
             'Removed ${toRemove.length} unused object(s).';
@@ -1296,8 +1316,9 @@ class _JsonViewerScreenState extends State<JsonViewerScreen> {
       widget.levelFile.objects.removeAt(index);
       await LevelRepository.saveAndExport(widget.filePath, widget.levelFile);
       widget.onSaved?.call();
-      setState(() {});
       if (mounted) {
+        _invalidateRenderedJson();
+        _runSearch(reveal: false, matchIndex: _currentMatchIndex);
         AppMessage.show(
           context,
           l10n?.objectDeleted ?? 'Object deleted',
@@ -1335,11 +1356,11 @@ class _JsonViewerScreenState extends State<JsonViewerScreen> {
     final digitCount = '$logicalLineCount'.length;
     final gutterW = _fontSize * (digitCount * 0.65 + 0.8).clamp(2.5, 8.0);
     final contSymbol = l10n?.jsonViewerLineContinuation ?? '↳';
-    final highlightStyle = baseStyle.copyWith(
-      backgroundColor: theme.colorScheme.tertiary.withValues(alpha: 0.35),
-    );
-    final activeHighlightStyle = baseStyle.copyWith(
-      backgroundColor: theme.colorScheme.primary.withValues(alpha: 0.45),
+    final highlightStyle = _matchStyle(baseStyle, theme.colorScheme);
+    final activeHighlightStyle = _matchStyle(
+      baseStyle,
+      theme.colorScheme,
+      active: true,
     );
     final lineStarts = <int>[];
     var runningOffset = 0;
@@ -1795,11 +1816,11 @@ class _HighlightedJsonText extends StatelessWidget {
       return Text(jsonContent, style: baseStyle);
     }
 
-    final highlightStyle = baseStyle.copyWith(
-      backgroundColor: theme.colorScheme.tertiary.withValues(alpha: 0.35),
-    );
-    final activeHighlightStyle = baseStyle.copyWith(
-      backgroundColor: theme.colorScheme.primary.withValues(alpha: 0.45),
+    final highlightStyle = _matchStyle(baseStyle, theme.colorScheme);
+    final activeHighlightStyle = _matchStyle(
+      baseStyle,
+      theme.colorScheme,
+      active: true,
     );
     final lines = jsonContent.split('\n');
     final lineStarts = <int>[];

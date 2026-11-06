@@ -1,5 +1,7 @@
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:c_editor/data/custom_zombie_level_utils.dart';
+import 'package:c_editor/data/level_escalation_runtime.dart';
 import 'package:c_editor/data/pvz_models.dart';
 import 'package:c_editor/data/rtid_parser.dart';
 import 'package:c_editor/data/repository/zombie_properties_repository.dart';
@@ -115,13 +117,15 @@ class _WaveManagerModuleScreenState extends State<WaveManagerModuleScreen> {
   }
 
   void _showYetiZombieBlockedMessage(AppLocalizations? l10n) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(
-          l10n?.yetiZombiesNotAllowed ?? 'Yetis are not allowed here',
-        ),
-      ),
+    _showBlockedMessage(
+      l10n?.yetiZombiesNotAllowed ?? 'Yetis are not allowed here',
     );
+  }
+
+  void _showBlockedMessage(String message) {
+    final messenger = ScaffoldMessenger.of(context);
+    messenger.clearSnackBars();
+    messenger.showSnackBar(SnackBar(content: Text(message)));
   }
 
   DynamicZombieGroup get _firstGroup => _data.dynamicZombies.first;
@@ -146,26 +150,17 @@ class _WaveManagerModuleScreenState extends State<WaveManagerModuleScreen> {
       }
       final isElite = ZombieRepository().isElite(selectedId);
       if (isElite) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(
-              l10n?.eliteZombiesNotAllowed ??
-                  'Elite zombies are not allowed here',
-            ),
-          ),
+        _showBlockedMessage(
+          l10n?.eliteZombiesNotAllowed ?? 'Elite zombies are not allowed here',
         );
         return;
       }
       if (!ZombiePropertiesRepository.canSpawnFromPoints(selectedId)) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(
-              l10n?.pointSpawnOnlyZombiesBlocked ??
-                  'This zombie has no WavePointCost data, so the game '
-                      'cannot buy it from a point budget, and it cannot '
-                      'be added to the pool.',
-            ),
-          ),
+        _showBlockedMessage(
+          l10n?.pointSpawnOnlyZombiesBlocked ??
+              'This zombie has no point cost (WavePointCost) data, so the '
+                  'game cannot select and spawn it according to the wave\'s '
+                  'points, and it cannot be added to the point-spawn pool.',
         );
         return;
       }
@@ -271,32 +266,55 @@ class _WaveManagerModuleScreenState extends State<WaveManagerModuleScreen> {
         ? theme.colorScheme.surfaceContainerHighest
         : theme.colorScheme.surface;
 
-    final propsObj = widget.levelFile.objects.firstWhere(
-      (o) => o.objClass == 'WaveManagerProperties',
-      orElse: () => PvzObject(objClass: '', objData: {}),
+    final escalationRuntime = LevelEscalationRuntime.resolve(
+      widget.levelFile,
+      waveManagerAlias: _alias,
     );
-    final aliases = propsObj.aliases;
-    final actualWaveMgrAlias = aliases != null && aliases.isNotEmpty
-        ? aliases.first
+    final ownPropsInfo = RtidParser.parse(_data.waveManagerProps ?? '');
+    final ownPropsObj = ownPropsInfo?.source == 'CurrentLevel'
+        ? widget.levelFile.objects.firstWhereOrNull(
+            (object) =>
+                object.objClass == 'WaveManagerProperties' &&
+                object.aliases?.contains(ownPropsInfo!.alias) == true,
+          )
         : null;
-
-    final currentPropsAlias = RtidParser.parse(
-      _data.waveManagerProps ?? '',
-    )?.alias;
-    final isPropsValid =
-        actualWaveMgrAlias != null && currentPropsAlias == actualWaveMgrAlias;
-    final waveManagerPropsTitle = _waveManagerPropsTitle(context);
-    final currentWaveManagerPropsText = _currentWaveManagerPropsText(
-      context,
-      _data.waveManagerProps ?? 'null',
+    final escalationPropsInfo = RtidParser.parse(
+      escalationRuntime.escalationWaveManagerProps ?? '',
     );
+    final escalationPropsObj = escalationPropsInfo?.source == 'CurrentLevel'
+        ? widget.levelFile.objects.firstWhereOrNull(
+            (object) =>
+                object.objClass == 'WaveManagerProperties' &&
+                object.aliases?.contains(escalationPropsInfo!.alias) == true,
+          )
+        : null;
+    final configurationProvidedByEscalation =
+        ownPropsObj == null && escalationPropsObj != null;
+    final propsObj = ownPropsObj ?? escalationPropsObj;
+    final fallbackPropsObj = widget.levelFile.objects.firstWhereOrNull(
+      (object) => object.objClass == 'WaveManagerProperties',
+    );
+    final actualWaveMgrAlias =
+        (propsObj ?? fallbackPropsObj)?.aliases?.firstOrNull;
+    final isPropsValid = propsObj != null;
+    final waveManagerPropsTitle = _waveManagerPropsTitle(context);
+    final providedPropsRtid = escalationRuntime.escalationWaveManagerProps;
+    final currentWaveManagerPropsText = configurationProvidedByEscalation
+        ? (l10n?.waveManagerPropsProvidedByEscalation(
+                providedPropsRtid ?? 'null',
+              ) ??
+              'Runtime configuration is provided by Escalation Spawning: '
+                  '${providedPropsRtid ?? 'null'}')
+        : _currentWaveManagerPropsText(
+            context,
+            _data.waveManagerProps ?? 'null',
+          );
     final showPropsFixButton = !isPropsValid && actualWaveMgrAlias != null;
 
-    // Waves of the linked WaveManagerProperties object, used by the flag
-    // strip below the props card.
+    // Read the linked WaveManagerProperties for the wave ruler.
     WaveManagerData? linkedWaveManager;
     try {
-      final objData = propsObj.objData;
+      final objData = propsObj?.objData;
       if (objData is Map) {
         linkedWaveManager = WaveManagerData.fromJson(
           Map<String, dynamic>.from(objData),
@@ -308,7 +326,6 @@ class _WaveManagerModuleScreenState extends State<WaveManagerModuleScreen> {
     final linkedWaves = linkedWaveManager?.waves ?? const <List<String>>[];
     final rawFlagInterval = linkedWaveManager?.flagWaveInterval ?? 0;
     final linkedFlagInterval = rawFlagInterval <= 0 ? 10 : rawFlagInterval;
-
     Widget buildPropsDetails() {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -427,6 +444,23 @@ class _WaveManagerModuleScreenState extends State<WaveManagerModuleScreen> {
               onAliasChanged: _handleAliasChanged,
               onChanged: widget.onChanged,
             ),
+            if (escalationRuntime.hasCompetingWaveManagerProps) ...[
+              const SizedBox(height: 8),
+              EditorWarningBanner(
+                margin: EdgeInsets.zero,
+                message:
+                    escalationRuntime.order ==
+                        LevelEscalationModuleOrder.afterWaveManager
+                    ? (l10n?.levelEscalationAfterWaveManagerWarning ??
+                          'Both modules use different wave configurations. '
+                              'Escalation Spawning runs later, so its processed '
+                              'configuration is previewed.')
+                    : (l10n?.levelEscalationBeforeWaveManagerWarning ??
+                          'Both modules use different wave configurations. '
+                              'Wave Manager runs later and may replace the '
+                              'escalated result with its own configuration.'),
+              ),
+            ],
             const SizedBox(height: 16),
             Card(
               color: isPropsValid ? propsCardColor : theme.colorScheme.error,
@@ -515,18 +549,6 @@ class _WaveManagerModuleScreenState extends State<WaveManagerModuleScreen> {
               ),
             ),
             const SizedBox(height: 16),
-            if (linkedWaves.isNotEmpty) ...[
-              // Small fixed green strip over the level's waves: one equal
-              // (invisible) segment per wave, visible flags on flag waves.
-              // Wave 1 maps to the right edge, the final wave (always a
-              // flag wave) to the left edge.
-              WaveFlagStrip(
-                waveCount: linkedWaves.length,
-                isFlagWave: (w) =>
-                    w % linkedFlagInterval == 0 || w == linkedWaves.length,
-              ),
-              const SizedBox(height: 16),
-            ],
             Card(
               color: contentCardColor,
               child: Padding(
@@ -595,7 +617,16 @@ class _WaveManagerModuleScreenState extends State<WaveManagerModuleScreen> {
                   color: sectionColor,
                 ),
               ),
-              const SizedBox(height: 8),
+              if (linkedWaves.isNotEmpty) ...[
+                WaveFlagStrip(
+                  color: sectionColor,
+                  waveCount: linkedWaves.length,
+                  isFlagWave: (w) =>
+                      w % linkedFlagInterval == 0 || w == linkedWaves.length,
+                ),
+                const SizedBox(height: 24),
+              ] else
+                const SizedBox(height: 8),
               Card(
                 color: contentCardColor,
                 child: Padding(
@@ -606,7 +637,7 @@ class _WaveManagerModuleScreenState extends State<WaveManagerModuleScreen> {
                         controller: _startWaveCtrl,
                         label:
                             l10n?.startingWave ??
-                            'Starting wave (StartingWave)',
+                            'Starting wave (StartingWave, zero-based)',
                         onChanged: (v) {
                           final n = int.tryParse(v);
                           if (n != null) _updateFirstGroup(startingWave: n);

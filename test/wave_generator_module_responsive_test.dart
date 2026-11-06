@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  testWidgets('flag hint wraps and the initial pool has breathing room', (
+  testWidgets('generator settings keep hints and sections readable', (
     tester,
   ) async {
     tester.view.physicalSize = const Size(360, 1000);
@@ -53,6 +53,27 @@ void main() {
       tester.widget<InputDecorator>(flagDecorator).decoration.helperMaxLines,
       4,
     );
+    final riseToggle = find.widgetWithText(
+      SwitchListTile,
+      l10n.waveGeneratorRiseFromGround,
+    );
+    expect(
+      find.descendant(
+        of: riseToggle,
+        matching: find.text(l10n.waveGeneratorRiseFromGroundHint),
+      ),
+      findsOneWidget,
+    );
+    final parameterCard = find.ancestor(
+      of: flagDecorator,
+      matching: find.byType(Card),
+    );
+    final riseCard = find.ancestor(of: riseToggle, matching: find.byType(Card));
+    expect(
+      tester.getTopLeft(riseCard).dy,
+      greaterThan(tester.getBottomLeft(parameterCard).dy),
+    );
+    expect(find.text(l10n.waveGeneratorWaveCountSummary(1)), findsNothing);
 
     await tester.scrollUntilVisible(
       find.byType(WaveGeneratorZombieTile),

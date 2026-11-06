@@ -10,12 +10,14 @@ class WaveManagerSettingsScreen extends StatefulWidget {
   const WaveManagerSettingsScreen({
     super.key,
     required this.levelFile,
+    this.waveManagerAlias,
     required this.hasConveyor,
     required this.onChanged,
     required this.onBack,
   });
 
   final PvzLevelFile levelFile;
+  final String? waveManagerAlias;
   final bool hasConveyor;
   final VoidCallback onChanged;
   final VoidCallback onBack;
@@ -46,7 +48,10 @@ class _WaveManagerSettingsScreenState extends State<WaveManagerSettingsScreen> {
 
   void _loadData() {
     _wmObj = widget.levelFile.objects.firstWhere(
-      (o) => o.objClass == 'WaveManagerProperties',
+      (o) =>
+          o.objClass == 'WaveManagerProperties' &&
+          (widget.waveManagerAlias == null ||
+              o.aliases?.contains(widget.waveManagerAlias) == true),
       orElse: () => PvzObject(
         aliases: ['WaveManager'],
         objClass: 'WaveManagerProperties',
@@ -229,13 +234,9 @@ class _WaveManagerSettingsScreenState extends State<WaveManagerSettingsScreen> {
                 color: themeColor,
               ),
             ),
-            const SizedBox(height: 12),
             if (_wm.waves.isNotEmpty) ...[
-              // Flag strip: one equal (invisible) segment per wave with
-              // visible flags on flag waves; the final wave (always a flag
-              // wave) sits at the left edge. Updates live with the interval
-              // field below.
               WaveFlagStrip(
+                color: themeColor,
                 waveCount: _wm.waves.length,
                 isFlagWave: (w) {
                   final interval = _wm.flagWaveInterval <= 0
@@ -244,8 +245,9 @@ class _WaveManagerSettingsScreenState extends State<WaveManagerSettingsScreen> {
                   return w % interval == 0 || w == _wm.waves.length;
                 },
               ),
+              const SizedBox(height: 24),
+            ] else
               const SizedBox(height: 12),
-            ],
             EditorResponsiveInputField(
               label: l10n?.flagInterval ?? 'Flag interval (FlagWaveInterval)',
               builder: (context, decoration) => TextField(

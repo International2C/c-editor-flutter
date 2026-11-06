@@ -97,6 +97,191 @@ void main() {
     expect(tester.takeException(), isNull);
   });
 
+  testWidgets('JSON search follows text edits without moving the selection', (
+    tester,
+  ) async {
+    SharedPreferences.setMockInitialValues({});
+    final level = PvzLevelFile(
+      objects: [
+        PvzObject(
+          aliases: ['TestObject'],
+          objClass: 'TestClass',
+          objData: {'Padding': 'frost', 'First': 'chill', 'Second': 'chill'},
+        ),
+      ],
+    );
+    await tester.pumpWidget(_jsonViewer(level));
+    await tester.pumpAndSettle();
+    await tester.tap(find.byIcon(Icons.more_vert));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Edit'));
+    await tester.pumpAndSettle();
+
+    final searchField = find.byWidgetPredicate(
+      (widget) =>
+          widget is TextField && widget.decoration?.hintText == 'Search',
+    );
+    final replaceField = find.byWidgetPredicate(
+      (widget) =>
+          widget is TextField && widget.decoration?.hintText == 'Replace',
+    );
+    final editorFinder = find.byWidgetPredicate(
+      (widget) =>
+          widget is TextField &&
+          widget.controller?.text.contains('"Padding"') == true,
+    );
+    final controller = tester.widget<TextField>(editorFinder).controller!;
+
+    void expectSearchHighlights(int activeIndex) {
+      final editor = tester.widget<TextField>(editorFinder);
+      final editorContext = tester.element(editorFinder);
+      final span = controller.buildTextSpan(
+        context: editorContext,
+        style: editor.style,
+        withComposing: true,
+      );
+      final highlights = span.children!
+          .whereType<TextSpan>()
+          .where((child) => child.style?.backgroundColor != null)
+          .toList();
+      expect(highlights.map((child) => child.text), ['chill', 'chill']);
+      final primary = Theme.of(editorContext).colorScheme.primary;
+      expect(highlights[activeIndex].style?.backgroundColor, primary);
+      expect(
+        highlights[1 - activeIndex].style?.backgroundColor,
+        isNot(primary),
+      );
+      for (final highlight in highlights) {
+        expect(highlight.style?.fontWeight, editor.style?.fontWeight);
+      }
+    }
+
+    await tester.enterText(searchField, 'chill');
+    await tester.pumpAndSettle();
+    expectSearchHighlights(0);
+
+    // Shift both offsets to the right, then shift them back part of the way.
+    final inserted = controller.text.replaceFirst('frost', 'prefix frost');
+    await tester.enterText(editorFinder, inserted);
+    await tester.pumpAndSettle();
+    expectSearchHighlights(0);
+    final edited = inserted.replaceFirst('prefix frost', 'p frost');
+    await tester.enterText(editorFinder, edited);
+    await tester.pumpAndSettle();
+    expectSearchHighlights(0);
+
+    final frostStart = edited.indexOf('frost');
+    final selection = TextSelection(
+      baseOffset: frostStart,
+      extentOffset: frostStart + 'frost'.length,
+    );
+    controller.selection = selection;
+    await tester.pump();
+    await tester.tap(find.byTooltip('Next match'));
+    await tester.pumpAndSettle();
+    expect(controller.selection, selection);
+    expectSearchHighlights(1);
+
+    await tester.enterText(replaceField, 'warm');
+    await tester.tap(find.byIcon(Icons.find_replace));
+    await tester.pumpAndSettle();
+    expect(
+      controller.text,
+      edited.replaceFirst('"Second": "chill"', '"Second": "warm"'),
+    );
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('edit-mode search scrolls to matches in wrapped JSON', (
+    tester,
+  ) async {
+    SharedPreferences.setMockInitialValues({});
+    tester.view.physicalSize = const Size(480, 640);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.reset);
+
+    const query = 'wrapped-target';
+    final filler = List.filled(80, 'padding').join(' ');
+    final level = PvzLevelFile(
+      objects: [
+        PvzObject(
+          aliases: ['TestObject'],
+          objClass: 'TestClass',
+          objData: {
+            for (var i = 0; i < 12; i++) 'Before$i': filler,
+            'First': query,
+            for (var i = 0; i < 12; i++) 'Between$i': filler,
+            'Second': query,
+          },
+        ),
+      ],
+    );
+    await tester.pumpWidget(_jsonViewer(level));
+    await tester.pumpAndSettle();
+    await tester.tap(find.byIcon(Icons.more_vert));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Edit'));
+    await tester.pumpAndSettle();
+
+    final editorFinder = find.byWidgetPredicate(
+      (widget) => widget is TextField && widget.maxLines == null,
+    );
+    final editableFinder = find.descendant(
+      of: editorFinder,
+      matching: find.byType(EditableText),
+    );
+    final viewportFinder = find.ancestor(
+      of: editorFinder,
+      matching: find.byType(SingleChildScrollView),
+    );
+    final controller = tester.widget<TextField>(editorFinder).controller!;
+    final first = controller.text.indexOf(query);
+    final second = controller.text.lastIndexOf(query);
+    const selection = TextSelection(baseOffset: 0, extentOffset: 1);
+    controller.selection = selection;
+    await tester.pump();
+
+    Offset matchCenter(int offset) {
+      final render = tester
+          .state<EditableTextState>(editableFinder)
+          .renderEditable;
+      final boxes = render.getBoxesForSelection(
+        TextSelection(baseOffset: offset, extentOffset: offset + query.length),
+      );
+      return render.localToGlobal(boxes.first.toRect().center);
+    }
+
+    expect(
+      matchCenter(first).dy,
+      greaterThan(tester.getRect(viewportFinder).bottom),
+    );
+    final searchField = find.byWidgetPredicate(
+      (widget) =>
+          widget is TextField && widget.decoration?.hintText == 'Search',
+    );
+    await tester.enterText(searchField, query);
+    await tester.pumpAndSettle();
+
+    expect(tester.getRect(viewportFinder).contains(matchCenter(first)), isTrue);
+    expect(
+      matchCenter(second).dy,
+      greaterThan(tester.getRect(viewportFinder).bottom),
+    );
+    expect(controller.selection, selection);
+
+    final next = find.byTooltip('Next match');
+    await tester.ensureVisible(next);
+    await tester.tap(next);
+    await tester.pumpAndSettle();
+
+    expect(
+      tester.getRect(viewportFinder).contains(matchCenter(second)),
+      isTrue,
+    );
+    expect(controller.selection, selection);
+    expect(tester.takeException(), isNull);
+  });
+
   testWidgets('replacing a match does not append a trailing newline', (
     tester,
   ) async {
@@ -264,24 +449,28 @@ void main() {
       of: find.byType(Scrollbar).last,
       matching: find.byType(Row),
     );
-    final gutterHeight = tester.getSize(
-      find.descendant(
-        of: rowFinder,
-        matching: find.byWidgetPredicate(
-          (widget) => widget is SizedBox && widget.child is Column,
-        ),
-      ),
-    ).height;
-    final contentHeight = tester.getSize(
-      find.descendant(
-        of: rowFinder,
-        matching: find.byWidgetPredicate(
-          (widget) =>
-              widget is SizedBox &&
-              (widget.child is Listener || widget.child is SelectionArea),
-        ),
-      ),
-    ).height;
+    final gutterHeight = tester
+        .getSize(
+          find.descendant(
+            of: rowFinder,
+            matching: find.byWidgetPredicate(
+              (widget) => widget is SizedBox && widget.child is Column,
+            ),
+          ),
+        )
+        .height;
+    final contentHeight = tester
+        .getSize(
+          find.descendant(
+            of: rowFinder,
+            matching: find.byWidgetPredicate(
+              (widget) =>
+                  widget is SizedBox &&
+                  (widget.child is Listener || widget.child is SelectionArea),
+            ),
+          ),
+        )
+        .height;
     expect(gutterHeight, closeTo(contentHeight, 1.5));
     expect(tester.takeException(), isNull);
   });

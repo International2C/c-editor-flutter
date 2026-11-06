@@ -1885,8 +1885,12 @@ class _EditorScreenState extends State<EditorScreen> {
     );
     waveEvents.add(newRtid);
 
+    final activeWaveManagerAlias = _ec.state.parsedData?.waveManagerAlias;
     final wmObj = _ec.state.levelFile!.objects.firstWhereOrNull(
-      (o) => o.objClass == 'WaveManagerProperties',
+      (o) =>
+          o.objClass == 'WaveManagerProperties' &&
+          (activeWaveManagerAlias == null ||
+              o.aliases?.contains(activeWaveManagerAlias) == true),
     );
     if (wmObj != null) {
       wmObj.objData = wm.toJson();
@@ -1901,8 +1905,12 @@ class _EditorScreenState extends State<EditorScreen> {
       for (final wave in wm.waves) {
         wave.remove(rtid);
       }
+      final activeWaveManagerAlias = _ec.state.parsedData?.waveManagerAlias;
       final wmObj = _ec.state.levelFile?.objects.firstWhereOrNull(
-        (o) => o.objClass == 'WaveManagerProperties',
+        (o) =>
+            o.objClass == 'WaveManagerProperties' &&
+            (activeWaveManagerAlias == null ||
+                o.aliases?.contains(activeWaveManagerAlias) == true),
       );
       if (wmObj != null) {
         wmObj.objData = wm.toJson();
@@ -1930,6 +1938,7 @@ class _EditorScreenState extends State<EditorScreen> {
       MaterialPageRoute(
         builder: (context) => WaveManagerSettingsScreen(
           levelFile: _ec.state.levelFile!,
+          waveManagerAlias: _ec.state.parsedData?.waveManagerAlias,
           hasConveyor: hasConveyor,
           onChanged: _markDirty,
           onBack: () => Navigator.pop(context),
@@ -2106,9 +2115,16 @@ class _EditorScreenState extends State<EditorScreen> {
       ),
     );
     if (ok == true && mounted) {
-      _ec.state.levelFile!.objects.removeWhere(
-        (o) => o.objClass == 'WaveManagerProperties',
+      final activeAlias = _ec.state.parsedData?.waveManagerAlias;
+      final target = _ec.state.levelFile!.objects.firstWhereOrNull(
+        (object) =>
+            object.objClass == 'WaveManagerProperties' &&
+            (activeAlias == null ||
+                object.aliases?.contains(activeAlias) == true),
       );
+      if (target != null) {
+        _ec.state.levelFile!.objects.remove(target);
+      }
       _markDirty();
     }
   }

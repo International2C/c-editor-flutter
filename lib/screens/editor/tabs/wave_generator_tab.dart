@@ -13,7 +13,6 @@ import 'package:c_editor/widgets/editor_components.dart'
     show EditorFilledButton, isDesktopPlatform;
 import 'package:c_editor/widgets/grid_override_preview_dialog.dart';
 import 'package:c_editor/widgets/initial_kongfu_grid_items_card.dart';
-import 'package:c_editor/widgets/wave_flag_strip.dart';
 import 'package:c_editor/widgets/wave_generator_expectation_dialog.dart';
 import 'package:c_editor/widgets/wave_generator_zombie_tile.dart';
 import 'package:c_editor/widgets/wave_module_preview_dialogs.dart';
@@ -450,22 +449,6 @@ class _WaveGeneratorTabState extends State<WaveGeneratorTab> {
             onOpenModule: widget.onOpenModule,
           ),
           const SizedBox(height: 16),
-          if (data.waves.isNotEmpty) ...[
-            // Small fixed green strip over the generator's waves: one equal
-            // (invisible) segment per wave with visible flags on flag
-            // waves. Wave 1 maps to the right edge, the final wave (always
-            // a flag wave) to the left edge.
-            WaveFlagStrip(
-              waveCount: data.waves.length,
-              isFlagWave: (w) {
-                final interval = data.flagWaveInterval <= 0
-                    ? 10
-                    : data.flagWaveInterval;
-                return w % interval == 0 || w == data.waves.length;
-              },
-            ),
-            const SizedBox(height: 12),
-          ],
           if (data.waves.isEmpty)
             Card(
               child: Padding(

@@ -20706,7 +20706,7 @@
         {
           "key": "NARRATIVE_PVZ1_S30_16_H_INTRO_2",
           "kind": "speech",
-          "text": "Behold—My newly developed Elite Lightning Gun Zombie will crush every plant in its path!",
+          "text": "Behold—My newly developed Elite Lightning Gun Zombie will sweep every plant away!",
           "speaker": "Dr. Zomboss",
           "npc": "zombossicon"
         },
@@ -28238,7 +28238,7 @@
         {
           "key": "NARRATIVE_PLANTTRIAL_ACORN_INFO_1",
           "kind": "speech",
-          "text": "Walrus zombies are found ahead. After they die, they will turn into slopes to help the Ski Zombies rush over.",
+          "text": "Walrus Zombies are found ahead. After they die, they will turn into slopes to help the Ski Zombies rush over.",
           "speaker": "Crazy Dave",
           "npc": "crazydave"
         },
@@ -28572,7 +28572,7 @@
         {
           "key": "NARRATIVE_FIREGOURD_1",
           "kind": "speech",
-          "text": "Look! There's a Gourd! Is there any wine inside?",
+          "text": "Look! There's a gourd! Is there any wine inside?",
           "speaker": "Crazy Dave",
           "npc": "crazydave"
         },
@@ -28688,7 +28688,7 @@
         {
           "key": "NARRATIVE_SEEDRAIN_ACORN_INTRO_1",
           "kind": "speech",
-          "text": "Whirlwind Acorns can restrain walrus zombies.",
+          "text": "Whirlwind Acorns can restrain Walrus Zombies.",
           "speaker": "Crazy Dave",
           "npc": "crazydave"
         },
@@ -28720,7 +28720,7 @@
         {
           "key": "NARRATIVE_SEEDRAIN_DAVE_INTRO_1",
           "kind": "speech",
-          "text": "In this level, you can directly choose cards to plant plants.",
+          "text": "In this level, you can pick up seed packets and use them to plant directly.",
           "speaker": "Crazy Dave",
           "emotion": "playful",
           "npc": "crazydaveicon"
@@ -29021,7 +29021,7 @@
         {
           "key": "NARRATIVE_RESILIENCE1_1",
           "kind": "speech",
-          "text": "Wow, there seems to be a huge zombie.",
+          "text": "Wow, that looks like one formidable zombie.",
           "speaker": "Crazy Dave",
           "npc": "crazydave"
         },
@@ -29053,7 +29053,7 @@
         {
           "key": "NARRATIVE_RESILIENCE2_1",
           "kind": "speech",
-          "text": "Be careful, this is not easy to deal with.",
+          "text": "Be careful. This one won't be easy to deal with.",
           "speaker": "Penny",
           "npc": "winnie"
         },
@@ -29085,7 +29085,7 @@
         {
           "key": "NARRATIVE_RESILIENCE3_1",
           "kind": "speech",
-          "text": "Let me attack with my favorite peashooter.",
+          "text": "Let me attack it with my favorite Peashooter.",
           "speaker": "Crazy Dave",
           "npc": "crazydave"
         },
@@ -29117,7 +29117,7 @@
         {
           "key": "NARRATIVE_RESILIENCE4_1",
           "kind": "speech",
-          "text": "What's going on? I can't move at all. What should I do?",
+          "text": "What's going on? My attacks aren't doing anything! What am I supposed to do?",
           "speaker": "Crazy Dave",
           "npc": "crazydave"
         },
@@ -29149,28 +29149,28 @@
         {
           "key": "NARRATIVE_RESILIENCE5_1",
           "kind": "speech",
-          "text": "Beep beep beep.... The test report is out.",
+          "text": "Beep beep beep... The scan results are in.",
           "speaker": "Penny",
           "npc": "winnie"
         },
         {
           "key": "NARRATIVE_RESILIENCE5_2",
           "kind": "speech",
-          "text": "Reports say this is Dr. Zomboss's latest masterpiece! You need to find a way to break the toughness value to defeat it!",
+          "text": "The report says this is Dr. Zomboss's latest masterpiece! We need to find a way to break its Resilience Shield before we can defeat it!",
           "speaker": "Penny",
           "npc": "winnie"
         },
         {
           "key": "NARRATIVE_RESILIENCE5_3",
           "kind": "speech",
-          "text": "Now the zombies are in a high damage-free state. Only by breaking through the toughness can normal damage be caused to the zombies.",
+          "text": "The zombie currently has extremely high damage reduction. Only after breaking its Resilience Shield can we deal normal damage to it.",
           "speaker": "Penny",
           "npc": "winnie"
         },
         {
           "key": "NARRATIVE_RESILIENCE5_4",
           "kind": "speech",
-          "text": "The yellow bar is the toughness value of the zombie. Do you see the sign next to the toughness value?",
+          "text": "The yellow bar is the zombie's Resilience Shield. See the icon next to it?",
           "speaker": "Penny",
           "npc": "winnie"
         },
@@ -29202,7 +29202,7 @@
         {
           "key": "NARRATIVE_RESILIENCE6_1",
           "kind": "speech",
-          "text": "Then I have to take a closer look.",
+          "text": "Then I'd better take a closer look.",
           "speaker": "Crazy Dave",
           "npc": "crazydave"
         },
@@ -29234,7 +29234,7 @@
         {
           "key": "NARRATIVE_RESILIENCE7_1",
           "kind": "speech",
-          "text": "Using electric energy attribute attacks can reduce the toughness value every time. I have summoned 5 Electric Peashooters for you. Go try it!",
+          "text": "Each Electric-attribute attack can reduce the Resilience Shield. I've summoned 5 Electric Peashooters for you—go give it a try!",
           "speaker": "Penny",
           "npc": "winnie"
         },
@@ -29266,7 +29266,7 @@
         {
           "key": "NARRATIVE_RESILIENCE8_1",
           "kind": "speech",
-          "text": "The zombies are in a weak state, hurry up and deal damage now! Don't let the zombies recover!",
+          "text": "The zombie is weakened! Deal as much damage as you can before it recovers!",
           "speaker": "Penny",
           "npc": "winnie"
         },
@@ -29298,7 +29298,7 @@
         {
           "key": "NARRATIVE_RESILIENCE9_1",
           "kind": "speech",
-          "text": "Phew! It's not easy!",
+          "text": "Phew! That wasn't easy!",
           "speaker": "Crazy Dave",
           "npc": "crazydave"
         },
@@ -29330,14 +29330,14 @@
         {
           "key": "NARRATIVE_RESILIENCE10_1",
           "kind": "speech",
-          "text": "That's it! When encountering tough zombies, use plants with corresponding attributes to break down the toughness value faster!",
+          "text": "That's it! When facing zombies with Resilience Shields, use plants with matching attributes to break their shields faster!",
           "speaker": "Penny",
           "npc": "winnie"
         },
         {
           "key": "NARRATIVE_RESILIENCE10_2",
           "kind": "speech",
-          "text": "According to reports, there are more advanced attribute attacks that can cause more damage to the toughness value. I'll leave this to you to explore!",
+          "text": "According to the report, there are even more advanced attribute attacks that can deal greater damage to Resilience Shields. I'll leave those for you to discover!",
           "speaker": "Penny",
           "npc": "winnie"
         },
@@ -29441,7 +29441,7 @@
         {
           "key": "NARRATIVE_ZOMBOSS_BLADE_1",
           "kind": "speech",
-          "text": "Boss!",
+          "text": "Boss",
           "speaker": "Crazy Dave",
           "npc": "crazydave"
         },
@@ -29453,7 +29453,7 @@
         {
           "key": "NARRATIVE_ZOMBOSS_BLADE_2",
           "kind": "speech",
-          "text": "Boss!",
+          "text": "Boss",
           "speaker": "Penny",
           "npc": "winnie"
         },
@@ -29485,7 +29485,7 @@
         {
           "key": "NARRATIVE_ZOMBIE_INTRO_LEVEL2_1",
           "kind": "speech",
-          "text": "Heh heh! My latest creation, the Super Zombie MK II, has finally taken the field! With your limited intellect, you'd never think to upgrade your plants to Level 2 to deal with it!",
+          "text": "Heh heh! My latest creation, the ^00FF00Super Zombie MK II^oldclr, has finally taken the field! With your limited intellect, you'd never think to ^00FF00upgrade your plants to Level 2^oldclr to deal with it!",
           "speaker": "Dr. Zomboss",
           "npc": "zombossicon"
         },
@@ -29517,7 +29517,7 @@
         {
           "key": "NARRATIVE_ZOMBIE_INTRO_LEVEL3_1",
           "kind": "speech",
-          "text": "Your luck ends here! My latest creation, a Level 3 super zombie, is unbeatable! Unless you upgrade your plants to Level 3... I almost let that slip. Anyway, enjoy yourselves! Ha ha!",
+          "text": "Your luck ends here! My latest creation, a ^00FF00Level 3 super zombie^oldclr, is unbeatable! Unless you ^00FF00upgrade your plants to Level 3^oldclr... I almost let that slip. Anyway, enjoy yourselves! Ha ha!",
           "speaker": "Dr. Zomboss",
           "npc": "zombossicon"
         },
@@ -29549,7 +29549,7 @@
         {
           "key": "NARRATIVE_ZOMBIE_INTRO_LEVEL4_1",
           "kind": "speech",
-          "text": "Dear plants, I have finally created the unprecedented Level 4 zombie. I call it Z-800. You will soon see its power firsthand. If your plants have not reached Level 4, just wait for it to eat your brains!",
+          "text": "Dear plants, I have finally created the unprecedented ^00FF00Level 4 zombie^oldclr. I call it Z-800. You will soon see its power firsthand. If your plants have not reached ^00FF00Level 4^oldclr, just wait for it to eat your brains!",
           "speaker": "Dr. Zomboss",
           "npc": "zombossicon"
         },
@@ -29581,7 +29581,7 @@
         {
           "key": "NARRATIVE_ZOMBIE_INTRO_LEVEL5_1",
           "kind": "speech",
-          "text": "Dear plants, are you ready to tremble? Behold my most perfect creation! Hmm... I have not had time to name it yet, but there is no way you can handle this enhanced Level 5 zombie. Hand over your brains!",
+          "text": "Dear plants, are you ready to tremble? Behold my most perfect creation! Hmm... I have not had time to name it yet, but there is no way you can handle this ^00FF00enhanced Level 5 zombie^oldclr. Hand over your brains!",
           "speaker": "Dr. Zomboss",
           "npc": "zombossicon"
         },
@@ -29613,7 +29613,7 @@
         {
           "key": "NARRATIVE_ZOMBIE_INTRO_ELIMINATE_MISSIONFINISH_1",
           "kind": "speech",
-          "text": "Don't think you've defeated me so easily. I'll be back!",
+          "text": "^FF0000Don't think you've defeated me so easily. I'll be back!^oldclr",
           "speaker": "Dr. Zomboss",
           "npc": "zombossicon"
         },
@@ -29645,7 +29645,7 @@
         {
           "key": "NARRATIVE_ZOMBIE_INTRO_ELIMINATE_FREEZINGWIND_1",
           "kind": "speech",
-          "text": "These little balls are really annoying, look at my Mammoth Ice Breath!",
+          "text": "^FF0000These little balls are really annoying, look at my Mammoth Ice Breath!^oldclr",
           "speaker": "Dr. Zomboss",
           "npc": "zombossicon"
         },
@@ -29677,7 +29677,7 @@
         {
           "key": "NARRATIVE_ZOMBIE_INTRO_ELIMINATE_SPAWNSHIELD_1",
           "kind": "speech",
-          "text": "The newly developed quantum shield is here! How many balls do you think it takes to break it?",
+          "text": "^FF0000The newly developed quantum shield is here! How many balls do you think it takes to break it?^oldclr",
           "speaker": "Dr. Zomboss",
           "npc": "zombossicon"
         },
@@ -29709,7 +29709,7 @@
         {
           "key": "NARRATIVE_ZOMBIE_INTRO_ELIMINATE_STAGE11_1",
           "kind": "speech",
-          "text": "I never expected that my ice and snow fortress could be reborn!",
+          "text": "^FF0000I never expected that my ice and snow fortress could be reborn!^oldclr",
           "speaker": "Dr. Zomboss",
           "npc": "zombossicon"
         },
@@ -29741,7 +29741,7 @@
         {
           "key": "NARRATIVE_ZOMBIE_INTRO_ELIMINATE_STAGE12_1",
           "kind": "speech",
-          "text": "How many times do you think my ice and snow fortress can be reborn?",
+          "text": "^FF0000How many times do you think my ice and snow fortress can be reborn?^oldclr",
           "speaker": "Dr. Zomboss",
           "npc": "zombossicon"
         },
@@ -29773,7 +29773,7 @@
         {
           "key": "NARRATIVE_ZOMBIE_INTRO_ELIMINATE_STAGE21_1",
           "kind": "speech",
-          "text": "You actually broke my ice and snow fortress. Do your family members know that you are so naughty?",
+          "text": "^FF0000You actually broke my ice and snow fortress. Do your family members know that you are so naughty?^oldclr",
           "speaker": "Dr. Zomboss",
           "npc": "zombossicon"
         },
@@ -29805,7 +29805,7 @@
         {
           "key": "NARRATIVE_ZOMBIE_INTRO_ELIMINATE_STAGE22_1",
           "kind": "speech",
-          "text": "This shoddy project looks like I have to find a new contractor!",
+          "text": "^FF0000This shoddy project looks like I have to find a new contractor!^oldclr",
           "speaker": "Dr. Zomboss",
           "npc": "zombossicon"
         },
@@ -29837,7 +29837,7 @@
         {
           "key": "NARRATIVE_ZOMBIE_INTRO_ELIMINATE_STAGE31_1",
           "kind": "speech",
-          "text": "Which company has the best excavator technology? My mammoth of course!",
+          "text": "^FF0000Which company has the best excavator technology? My mammoth of course!^oldclr",
           "speaker": "Dr. Zomboss",
           "npc": "zombossicon"
         },
@@ -29869,7 +29869,7 @@
         {
           "key": "NARRATIVE_ZOMBIE_INTRO_ELIMINATE_STAGE32_1",
           "kind": "speech",
-          "text": "No matter what the ice and snow fortress looks like, the mammoths are cute!",
+          "text": "^FF0000No matter what the ice and snow fortress looks like, the mammoths are cute!^oldclr",
           "speaker": "Dr. Zomboss",
           "npc": "zombossicon"
         },
@@ -29901,7 +29901,7 @@
         {
           "key": "NARRATIVE_ZOMBIE_INTRO_ELIMINATE_STAGE41_1",
           "kind": "speech",
-          "text": "Although the game is easy, passing the level is not easy, but you can do it and cherish it.",
+          "text": "^FF0000Although the game is easy, passing the level is not easy, but you can do it and cherish it.^oldclr",
           "speaker": "Dr. Zomboss",
           "npc": "zombossicon"
         },
@@ -29933,7 +29933,7 @@
         {
           "key": "NARRATIVE_ZOMBIE_INTRO_ELIMINATE_STAGE42_1",
           "kind": "speech",
-          "text": "I just want to be a beautiful man quietly, why are you disturbing me?",
+          "text": "^FF0000I just want to be a beautiful man quietly, why are you disturbing me?^oldclr",
           "speaker": "Dr. Zomboss",
           "npc": "zombossicon"
         },

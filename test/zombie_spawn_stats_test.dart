@@ -45,15 +45,23 @@ void main() {
     expect(stats.sizeType, 'unknown');
   });
 
-  test('absent or invalid statistics remain unavailable', () {
-    final stats = ZombieStats.fromPropertySheet('test', {
-      'WavePointCost': 'unknown',
-      'Weight': double.nan,
-    });
-    expect(stats.cost, 0);
-    expect(stats.weight, 0);
-    expect(ZombieStats.fromPropertySheet('test', {}).cost, 0);
-  });
+  test(
+    'absent spawn statistics use runtime defaults; invalid values do not',
+    () {
+      final stats = ZombieStats.fromPropertySheet('test', {
+        'WavePointCost': 'unknown',
+        'Weight': double.nan,
+      });
+      expect(stats.cost, 0);
+      expect(stats.weight, 0);
+      final defaults = ZombieStats.fromPropertySheet('test', {});
+      expect(defaults.cost, 100);
+      expect(defaults.weight, 4000);
+      final sheetDefaults = ZombiePropertySheetData.fromJson({});
+      expect(sheetDefaults.wavePointCost, 100);
+      expect(sheetDefaults.weight, 4000);
+    },
+  );
 
   test(
     'bundled Balloon Zombie retains its full property template and stats',
@@ -105,12 +113,9 @@ void main() {
     final preview = WaveGeneratorPointAnalysis.calculatePreview(data, 1);
 
     expect(preview.missingDataTypes, ['my_custom']);
-    // The flag carrier has WavePointCost data, so it takes part in the
-    // simulation despite its Weight = 0.
-    expect(
-      preview.entries.map((entry) => entry.id),
-      containsAll(['modern_balloon', 'mummy_flag']),
-    );
+    // Weight = 0 is valid data, but has no probability interval.
+    expect(preview.entries.map((entry) => entry.id), ['modern_balloon']);
+    expect(preview.zeroWeightTypes, ['mummy_flag']);
     expect(
       preview.entries.map((entry) => entry.id),
       isNot(contains('my_custom')),
@@ -130,8 +135,7 @@ void main() {
       ),
       isTrue,
     );
-    // Flag carrier: WavePointCost is known but Weight is 0. The point
-    // purchase ignores Weight, so it is still eligible.
+    // Flag carrier: WavePointCost is known and Weight = 0 is valid data.
     expect(ZombiePropertiesRepository.canSpawnFromPoints('mummy_flag'), isTrue);
     expect(
       ZombiePropertiesRepository.canSpawnFromPoints('pirate_flag'),
@@ -139,7 +143,9 @@ void main() {
     );
     // Custom/unknown zombies have no point cost data.
     expect(ZombiePropertiesRepository.canSpawnFromPoints('my_custom'), isFalse);
-    // Listed zombies whose property sheet lacks WavePointCost data.
-    expect(ZombiePropertiesRepository.canSpawnFromPoints('catapult'), isFalse);
+    // Omitted WavePointCost uses the runtime default of 100.
+    expect(ZombiePropertiesRepository.canSpawnFromPoints('catapult'), isTrue);
+    // This bundled type points to an unresolved property sheet.
+    expect(ZombiePropertiesRepository.canSpawnFromPoints('diver'), isFalse);
   });
 }

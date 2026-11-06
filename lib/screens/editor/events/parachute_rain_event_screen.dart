@@ -63,6 +63,7 @@ class ParachuteRainEventScreen extends StatefulWidget {
 }
 
 class _ParachuteRainEventScreenState extends State<ParachuteRainEventScreen> {
+  final _zombieDropdownKey = GlobalKey<FormFieldState<String>>();
   late PvzObject _moduleObj;
   late ParachuteRainEventData _data;
   late String _alias;
@@ -91,27 +92,22 @@ class _ParachuteRainEventScreenState extends State<ParachuteRainEventScreen> {
       );
       widget.levelFile.objects.add(_moduleObj);
     }
+    final objData = _moduleObj.objData;
     try {
       _data = ParachuteRainEventData.fromJson(
-        Map<String, dynamic>.from(_moduleObj.objData as Map),
+        Map<String, dynamic>.from(objData as Map),
       );
     } catch (_) {
-      _data = ParachuteRainEventData();
-    }
-    // Normalize zombie to allowed list for Parachute/Bass rain (without calling onChanged during build)
-    final allowedIds = _getAllowedZombieIds();
-    if (allowedIds.isNotEmpty && !allowedIds.contains(_data.spiderZombieName)) {
+      final savedZombieName = objData is Map
+          ? objData['SpiderZombieName']
+          : null;
       _data = ParachuteRainEventData(
-        columnStart: _data.columnStart,
-        columnEnd: _data.columnEnd,
-        groupSize: _data.groupSize,
-        spiderCount: _data.spiderCount,
-        spiderZombieName: allowedIds.first,
-        timeBeforeFullSpawn: _data.timeBeforeFullSpawn,
-        timeBetweenGroups: _data.timeBetweenGroups,
-        zombieFallTime: _data.zombieFallTime,
-        waveStartMessage: _data.waveStartMessage,
+        spiderZombieName: savedZombieName is String ? savedZombieName : '',
       );
+    }
+    final allowedIds = _getAllowedZombieIds();
+    if (allowedIds.isNotEmpty && _data.spiderZombieName.isEmpty) {
+      _data.spiderZombieName = allowedIds.first;
       _moduleObj.objData = _data.toJson();
       WidgetsBinding.instance.addPostFrameCallback((_) => widget.onChanged());
     }
@@ -155,8 +151,7 @@ class _ParachuteRainEventScreenState extends State<ParachuteRainEventScreen> {
           IconButton(
             icon: const Icon(Icons.help_outline),
             onPressed: () {
-              final isHeianNinja =
-                  _objClass == 'HeianNinjaZombieSpawnerProps';
+              final isHeianNinja = _objClass == 'HeianNinjaZombieSpawnerProps';
               showEditorHelpDialog(
                 context,
                 isEvent: true,
@@ -174,9 +169,7 @@ class _ParachuteRainEventScreenState extends State<ParachuteRainEventScreen> {
                   ),
                   HelpSectionData(
                     title: l10n?.logic ?? 'Logic',
-                    body: isHeianNinja
-                        ? (l10n?.eventHelpHeianNinjaRainLogic ?? '')
-                        : (l10n?.eventHelpParachuteRainLogic ?? ''),
+                    body: l10n?.eventHelpParachuteRainLogic ?? '',
                   ),
                 ],
               );
@@ -232,12 +225,13 @@ class _ParachuteRainEventScreenState extends State<ParachuteRainEventScreen> {
     AppLocalizations? l10n,
   ) {
     final allowedIds = _getAllowedZombieIds();
-    final useDropdown = allowedIds.isNotEmpty;
+    final currentId = _data.spiderZombieName;
 
-    if (useDropdown) {
-      final currentId = allowedIds.contains(_data.spiderZombieName)
-          ? _data.spiderZombieName
-          : allowedIds.first;
+    if (allowedIds.isNotEmpty) {
+      final isImportedZombie = !allowedIds.contains(currentId);
+      final zombieIds = isImportedZombie
+          ? [currentId, ...allowedIds]
+          : allowedIds;
       return Card(
         child: Padding(
           padding: const EdgeInsets.all(16),
@@ -255,7 +249,7 @@ class _ParachuteRainEventScreenState extends State<ParachuteRainEventScreen> {
                   Expanded(
                     child: Text(
                       l10n?.zombieTypeSpiderZombieName ??
-                          'Zombie type (SpiderZombieName)',
+                          'Airdropped zombie (SpiderZombieName)',
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                       style: theme.textTheme.titleMedium?.copyWith(
@@ -269,6 +263,7 @@ class _ParachuteRainEventScreenState extends State<ParachuteRainEventScreen> {
               ConstrainedBox(
                 constraints: const BoxConstraints(minHeight: 80),
                 child: DropdownButtonFormField<String>(
+                  key: _zombieDropdownKey,
                   initialValue: currentId,
                   decoration: InputDecoration(
                     border: OutlineInputBorder(
@@ -282,7 +277,7 @@ class _ParachuteRainEventScreenState extends State<ParachuteRainEventScreen> {
                   isExpanded: true,
                   iconSize: 48,
                   menuMaxHeight: 520,
-                  items: allowedIds.map((id) {
+                  items: zombieIds.map((id) {
                     return DropdownMenuItem<String>(
                       value: id,
                       child: Padding(
@@ -291,22 +286,39 @@ class _ParachuteRainEventScreenState extends State<ParachuteRainEventScreen> {
                       ),
                     );
                   }).toList(),
-                  selectedItemBuilder: (context) => allowedIds.map((id) {
+                  selectedItemBuilder: (context) => zombieIds.map((id) {
                     return _ZombieDropdownRow(zombieId: id, iconSize: 48);
                   }).toList(),
-                  onChanged: (id) {
-                    if (id == null) return;
-                    _data = ParachuteRainEventData(
-                      columnStart: _data.columnStart,
-                      columnEnd: _data.columnEnd,
-                      groupSize: _data.groupSize,
-                      spiderCount: _data.spiderCount,
-                      spiderZombieName: id,
-                      timeBeforeFullSpawn: _data.timeBeforeFullSpawn,
-                      timeBetweenGroups: _data.timeBetweenGroups,
-                      zombieFallTime: _data.zombieFallTime,
-                      waveStartMessage: _data.waveStartMessage,
-                    );
+                  onChanged: (id) async {
+                    if (id == null || id == currentId) return;
+                    if (isImportedZombie) {
+                      // Keep the saved value selected until the user confirms.
+                      _zombieDropdownKey.currentState?.reset();
+                      final confirmed = await showDialog<bool>(
+                        context: context,
+                        builder: (ctx) => AlertDialog(
+                          title: Text(l10n?.warning ?? 'Warning'),
+                          content: Text(
+                            l10n?.airdropZombieReplaceWarning ??
+                                'This zombie is outside the editor’s list for this module. Switching will overwrite the original ID and it cannot be restored. Continue?',
+                          ),
+                          actions: [
+                            TextButton(
+                              onPressed: () => Navigator.pop(ctx, false),
+                              child: Text(l10n?.cancel ?? 'Cancel'),
+                            ),
+                            FilledButton(
+                              onPressed: () => Navigator.pop(ctx, true),
+                              child: Text(
+                                l10n?.continueAnyway ?? 'Continue anyway',
+                              ),
+                            ),
+                          ],
+                        ),
+                      );
+                      if (!mounted || confirmed != true) return;
+                    }
+                    _data.spiderZombieName = id;
                     _sync();
                   },
                 ),
@@ -317,7 +329,6 @@ class _ParachuteRainEventScreenState extends State<ParachuteRainEventScreen> {
       );
     }
 
-    // Spider rain or unknown: keep full zombie selection button
     final typeName = _data.spiderZombieName.isNotEmpty
         ? ZombiePropertiesRepository.getTypeNameByAlias(_data.spiderZombieName)
         : null;
@@ -348,7 +359,7 @@ class _ParachuteRainEventScreenState extends State<ParachuteRainEventScreen> {
                 Expanded(
                   child: Text(
                     l10n?.zombieTypeSpiderZombieName ??
-                        'Zombie type (SpiderZombieName)',
+                        'Airdropped zombie (SpiderZombieName)',
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                     style: theme.textTheme.titleMedium?.copyWith(
@@ -399,17 +410,7 @@ class _ParachuteRainEventScreenState extends State<ParachuteRainEventScreen> {
                 FilledButton(
                   onPressed: () {
                     widget.onRequestZombieSelection((id) {
-                      _data = ParachuteRainEventData(
-                        columnStart: _data.columnStart,
-                        columnEnd: _data.columnEnd,
-                        groupSize: _data.groupSize,
-                        spiderCount: _data.spiderCount,
-                        spiderZombieName: id,
-                        timeBeforeFullSpawn: _data.timeBeforeFullSpawn,
-                        timeBetweenGroups: _data.timeBetweenGroups,
-                        zombieFallTime: _data.zombieFallTime,
-                        waveStartMessage: _data.waveStartMessage,
-                      );
+                      _data.spiderZombieName = id;
                       _sync();
                     });
                   },
@@ -688,9 +689,14 @@ class _ZombieDropdownRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final zombie = ZombieRepository().getZombieById(zombieId);
-    final nameKey = ZombieRepository().getName(zombieId);
-    final displayName = ResourceNames.lookup(context, nameKey);
+    final typeName = ZombiePropertiesRepository.getTypeNameByAlias(zombieId);
+    final zombie = ZombieRepository().getZombieById(typeName);
+    final nameKey = ZombieRepository().getName(typeName);
+    final displayName = ResourceNames.lookupOrFallback(
+      context,
+      nameKey,
+      zombieId,
+    );
     final iconPath = zombie?.iconAssetPath;
     final size = iconSize.toInt();
     return Row(

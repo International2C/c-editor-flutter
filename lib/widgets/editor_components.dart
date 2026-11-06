@@ -2469,7 +2469,7 @@ String _standardizeEditorHelpTitle(
   switch (languageCode) {
     case 'zh':
       base = base
-          .replaceFirst(RegExp(r'^事件类型\s*[：:]\s*'), '')
+          .replaceFirst(RegExp(r'^事件(?:类型)?\s*[：:]\s*'), '')
           .replaceFirst(RegExp(r'(模块说明|事件说明|模块|事件|说明|帮助)$'), '')
           .trim();
       return '$base${isEvent ? '事件说明' : '模块说明'}';

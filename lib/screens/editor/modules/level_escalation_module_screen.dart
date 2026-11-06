@@ -2,6 +2,7 @@ import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:c_editor/data/custom_zombie_level_utils.dart';
 import 'package:c_editor/data/level_escalation_point_analysis.dart';
+import 'package:c_editor/data/level_escalation_runtime.dart';
 import 'package:c_editor/data/pvz_models.dart';
 import 'package:c_editor/data/rtid_parser.dart';
 import 'package:c_editor/data/repository/zombie_properties_repository.dart';
@@ -16,6 +17,7 @@ import 'package:c_editor/widgets/asset_image.dart'
 import 'package:c_editor/widgets/editor_components.dart';
 import 'package:c_editor/widgets/editor_object_alias.dart';
 import 'package:c_editor/widgets/wave_flag_strip.dart';
+import 'package:c_editor/widgets/zombie_count_estimate_text.dart';
 
 /// Level escalation module editor (LevelEscalationModuleProperties).
 class LevelEscalationModuleScreen extends StatefulWidget {
@@ -123,18 +125,43 @@ class _LevelEscalationModuleScreenState
     return alias;
   }
 
-  /// Creates the Wave Manager module + WaveManagerProperties container when
-  /// the level has no wave timeline, then links this module to it.
+  PvzObject? _linkedWaveManagerProps() {
+    final info = RtidParser.parse(_data.waveManagerProps ?? '');
+    if (info == null || info.source != 'CurrentLevel') return null;
+    return widget.levelFile.objects.firstWhereOrNull(
+      (object) =>
+          object.objClass == 'WaveManagerProperties' &&
+          object.aliases?.contains(info.alias) == true,
+    );
+  }
+
+  /// Creates or reuses WaveManagerProperties and links it only to Escalation
+  /// Spawning. A missing WaveManagerModule is added as a runner without an
+  /// independent WaveManagerProps reference, matching official level data.
   void _addWaveTimeline() {
     final levelFile = widget.levelFile;
+    final defObj = levelFile.objects.firstWhereOrNull(
+      (o) => o.objClass == 'LevelDefinition',
+    );
+    final definition = defObj?.objData is Map
+        ? LevelDefinitionData.fromJson(
+            Map<String, dynamic>.from(defObj!.objData as Map),
+          )
+        : null;
 
     var propsAlias = 'WaveManagerProps';
-    final existingProps = levelFile.objects.firstWhereOrNull(
-      (o) => o.objClass == 'WaveManagerProperties',
-    );
+    final existingProps =
+        _linkedWaveManagerProps() ??
+        levelFile.objects.firstWhereOrNull(
+          (o) => o.objClass == 'WaveManagerProperties',
+        );
     if (existingProps != null) {
       propsAlias =
           existingProps.aliases?.firstOrNull ?? _uniqueAlias(propsAlias);
+      existingProps.aliases ??= [propsAlias];
+      if (existingProps.aliases!.isEmpty) {
+        existingProps.aliases!.add(propsAlias);
+      }
     } else {
       propsAlias = _uniqueAlias(propsAlias);
       levelFile.objects.add(
@@ -147,47 +174,44 @@ class _LevelEscalationModuleScreenState
     }
     final propsRtid = RtidParser.build(propsAlias, 'CurrentLevel');
 
-    final wmmObj = levelFile.objects.firstWhereOrNull(
-      (o) => o.objClass == 'WaveManagerModuleProperties',
-    );
-    if (wmmObj != null && wmmObj.objData is Map) {
-      final data = WaveManagerModuleData.fromJson(
-        Map<String, dynamic>.from(wmmObj.objData as Map),
-      );
-      data.waveManagerProps = propsRtid;
-      wmmObj.objData = data.toJson();
-    } else if (wmmObj == null) {
-      final moduleAlias = _uniqueAlias('NewWaves');
-      levelFile.objects.add(
-        PvzObject(
-          aliases: [moduleAlias],
-          objClass: 'WaveManagerModuleProperties',
-          objData: WaveManagerModuleData(
-            waveManagerProps: propsRtid,
-            dynamicZombies: [
-              DynamicZombieGroup(
-                pointIncrement: 0,
-                startingPoints: 0,
-                startingWave: 0,
-                zombiePool: [],
-                zombieLevel: [],
-              ),
-            ],
-          ).toJson(),
-        ),
-      );
-      final defObj = levelFile.objects.firstWhereOrNull(
-        (o) => o.objClass == 'LevelDefinition',
-      );
-      if (defObj != null && defObj.objData is Map) {
-        final def = LevelDefinitionData.fromJson(
-          Map<String, dynamic>.from(defObj.objData as Map),
+    PvzObject? wmmObj;
+    if (definition != null) {
+      for (final moduleRtid in definition.modules) {
+        final info = RtidParser.parse(moduleRtid);
+        if (info == null || info.source != 'CurrentLevel') continue;
+        final candidate = levelFile.objects.firstWhereOrNull(
+          (object) =>
+              object.objClass == 'WaveManagerModuleProperties' &&
+              object.aliases?.contains(info.alias) == true,
         );
-        final moduleRtid = RtidParser.build(moduleAlias, 'CurrentLevel');
-        if (!def.modules.contains(moduleRtid)) {
-          def.modules = [...def.modules, moduleRtid];
-          defObj.objData = def.toJson();
+        if (candidate != null) {
+          wmmObj = candidate;
+          break;
         }
+      }
+    }
+    if (wmmObj == null) {
+      final moduleAlias = _uniqueAlias('NewWaves');
+      wmmObj = PvzObject(
+        aliases: [moduleAlias],
+        objClass: 'WaveManagerModuleProperties',
+        objData: WaveManagerModuleData(dynamicZombies: []).toJson(),
+      );
+      levelFile.objects.add(wmmObj);
+    }
+
+    final moduleAlias = wmmObj.aliases?.firstOrNull;
+    if (moduleAlias != null && defObj != null && definition != null) {
+      final moduleRtid = RtidParser.build(moduleAlias, 'CurrentLevel');
+      if (!definition.modules.contains(moduleRtid)) {
+        final escalationRtid = RtidParser.build(_alias, 'CurrentLevel');
+        final escalationIndex = definition.modules.indexOf(escalationRtid);
+        final insertAt = escalationIndex < 0
+            ? definition.modules.length
+            : escalationIndex + 1;
+        final modules = [...definition.modules]..insert(insertAt, moduleRtid);
+        definition.modules = modules;
+        defObj.objData = definition.toJson();
       }
     }
 
@@ -221,9 +245,9 @@ class _LevelEscalationModuleScreenState
   }
 
   void _showBlockedMessage(String message) {
-    ScaffoldMessenger.of(
-      context,
-    ).showSnackBar(SnackBar(content: Text(message)));
+    final messenger = ScaffoldMessenger.of(context);
+    messenger.clearSnackBars();
+    messenger.showSnackBar(SnackBar(content: Text(message)));
   }
 
   void _addZombie() {
@@ -244,9 +268,9 @@ class _LevelEscalationModuleScreenState
       if (!ZombiePropertiesRepository.canSpawnFromPoints(selectedId)) {
         _showBlockedMessage(
           l10n?.pointSpawnOnlyZombiesBlocked ??
-              'This zombie has no WavePointCost data, so the game '
-                  'cannot buy it from a point budget, and it cannot '
-                  'be added to the pool.',
+              'This zombie has no point cost (WavePointCost) data, so the '
+                  'game cannot select and spawn it according to the wave\'s '
+                  'points, and it cannot be added to the point-spawn pool.',
         );
         return;
       }
@@ -322,6 +346,10 @@ class _LevelEscalationModuleScreenState
         if (e.cost < 1) e.id,
     ];
     final total = LevelEscalationPointAnalysis.totalWaves(data);
+    final allocation = LevelEscalationRuntime(
+      order: LevelEscalationModuleOrder.missing,
+      data: data,
+    );
     var selected = total > 0 ? total : 1;
     var cachedWave = -1;
     var cachedItems = const <MapEntry<String, double>>[];
@@ -404,7 +432,28 @@ class _LevelEscalationModuleScreenState
                             for (var w = 1; w <= total; w++)
                               ChoiceChip(
                                 key: ValueKey('levelEscalationPredictWave-$w'),
-                                label: Text('W$w'),
+                                label: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Text(
+                                      l10n?.customZombieWaveItem(w) ??
+                                          'Wave $w',
+                                    ),
+                                    if (allocation.fixedPlantFoodAtWave(w) >
+                                        0) ...[
+                                      const SizedBox(width: 4),
+                                      const AssetImageWidget(
+                                        assetPath:
+                                            'assets/images/others/plantfood.webp',
+                                        width: 16,
+                                        height: 16,
+                                      ),
+                                      Text(
+                                        '×${allocation.fixedPlantFoodAtWave(w)}',
+                                      ),
+                                    ],
+                                  ],
+                                ),
                                 avatar:
                                     LevelEscalationPointAnalysis.isFlagWave(
                                       data,
@@ -427,32 +476,49 @@ class _LevelEscalationModuleScreenState
                             cachedWaveEstimate.maximum > 0) ...[
                           const SizedBox(height: 8),
                           Text(
-                            l10n?.zombieCountWaveEstimate(
-                                  cachedWaveEstimate.average.toStringAsFixed(1),
-                                  cachedWaveEstimate.minimum,
-                                  cachedWaveEstimate.maximum,
-                                ) ??
-                                'This wave: about '
-                                    '${cachedWaveEstimate.average.toStringAsFixed(1)} '
-                                    'zombies (from ${cachedWaveEstimate.minimum} '
-                                    'to ${cachedWaveEstimate.maximum})',
+                            zombieCountEstimateText(
+                              l10n,
+                              cachedWaveEstimate,
+                              scope: ZombieCountEstimateScope.wave,
+                            ),
                             style: theme.textTheme.bodyMedium,
                           ),
                           if (totalEstimate != null &&
                               (totalEstimate.average > 0 ||
                                   totalEstimate.maximum > 0))
                             Text(
-                              l10n?.zombieCountTotalEstimate(
-                                    totalEstimate.average.toStringAsFixed(1),
-                                    totalEstimate.minimum,
-                                    totalEstimate.maximum,
-                                  ) ??
-                                  'All waves combined: about '
-                                      '${totalEstimate.average.toStringAsFixed(1)} '
-                                      'zombies (from ${totalEstimate.minimum} '
-                                      'to ${totalEstimate.maximum})',
+                              zombieCountEstimateText(
+                                l10n,
+                                totalEstimate,
+                                scope: ZombieCountEstimateScope.allWaves,
+                              ),
                               style: theme.textTheme.bodyMedium,
                             ),
+                        ],
+                        if (allocation.fixedPlantFoodAtWave(selected) > 0) ...[
+                          const SizedBox(height: 8),
+                          Text(
+                            l10n?.levelEscalationWavePlantfood(
+                                  allocation.fixedPlantFoodAtWave(selected),
+                                ) ??
+                                'Plant Food fixed to this wave: '
+                                    '${allocation.fixedPlantFoodAtWave(selected)}',
+                          ),
+                        ],
+                        if (allocation.randomPlantFoodCount > 0) ...[
+                          const SizedBox(height: 4),
+                          Text(
+                            l10n?.levelEscalationRandomPlantfood(
+                                  allocation.randomPlantFoodCount,
+                                  total,
+                                ) ??
+                                '${allocation.randomPlantFoodCount} additional '
+                                    'Plant Food item(s) are randomly assigned '
+                                    'to waves 1–$total.',
+                            style: theme.textTheme.bodySmall?.copyWith(
+                              color: theme.colorScheme.onSurfaceVariant,
+                            ),
+                          ),
                         ],
                         if (missingIds.isNotEmpty) ...[
                           const SizedBox(height: 8),
@@ -470,13 +536,7 @@ class _LevelEscalationModuleScreenState
                         ],
                         const SizedBox(height: 12),
                       ],
-                      if (total <= 0)
-                        Text(
-                          l10n?.levelEscalationTotalWaves(total) ??
-                              'Total escalation waves: $total',
-                          style: theme.textTheme.bodyMedium,
-                        )
-                      else
+                      if (total > 0)
                         SizedBox(
                           height: 230,
                           child: cachedItems.isEmpty
@@ -487,9 +547,9 @@ class _LevelEscalationModuleScreenState
                                         ? (l10n?.noDynamicZombies ??
                                               'No dynamic zombies')
                                         : (l10n?.expectationNoAffordableZombies ??
-                                              'None of this wave\'s pool '
-                                                  'zombies can be bought with '
-                                                  'its points.'),
+                                              'This wave does not have enough '
+                                                  'points to select and spawn '
+                                                  'any zombie from the pool.'),
                                     style: theme.textTheme.bodySmall,
                                   ),
                                 )
@@ -586,12 +646,29 @@ class _LevelEscalationModuleScreenState
                                                             .onSurfaceVariant,
                                                       ),
                                                 ),
+                                                Text(
+                                                  l10n?.zombiePointCost(
+                                                        ZombiePropertiesRepository.getStats(
+                                                          e.key,
+                                                        ).cost,
+                                                      ) ??
+                                                      'Point cost: '
+                                                          '${ZombiePropertiesRepository.getStats(e.key).cost}',
+                                                  style:
+                                                      theme.textTheme.bodySmall,
+                                                ),
                                               ],
                                             ),
                                           ),
                                           const SizedBox(width: 8),
                                           Text(
-                                            e.value.toStringAsFixed(2),
+                                            l10n?.pointSpawnExpectedCount(
+                                                  e.value.toStringAsFixed(2),
+                                                ) ??
+                                                e.value.toStringAsFixed(2),
+                                            key: ValueKey(
+                                              'levelEscalationExpectationCount-${e.key}',
+                                            ),
                                             style: theme.textTheme.bodyMedium,
                                           ),
                                         ],
@@ -636,20 +713,46 @@ class _LevelEscalationModuleScreenState
     final propsSubtextColor = isDark
         ? Colors.white.withValues(alpha: 0.9)
         : const Color(0xFF689F38);
-
-    final propsObj = widget.levelFile.objects.firstWhere(
-      (o) => o.objClass == 'WaveManagerProperties',
-      orElse: () => PvzObject(objClass: '', objData: {}),
+    final runtime = LevelEscalationRuntime.resolve(
+      widget.levelFile,
+      escalationAlias: _alias,
     );
-    final propsAliases = propsObj.aliases;
+    final flagCountValue = int.tryParse(_flagCountCtrl.text);
+    final wavesPerFlagValue = int.tryParse(_wavesPerFlagCtrl.text);
+    final plantfoodCountValue = int.tryParse(_plantfoodCountCtrl.text);
+    final flagCountError = flagCountValue == null || flagCountValue <= 0
+        ? (l10n?.levelEscalationFlagCountInvalid ??
+              'Flag count must be a positive integer.')
+        : null;
+    final wavesPerFlagError =
+        wavesPerFlagValue == null || wavesPerFlagValue <= 0
+        ? (l10n?.levelEscalationWavesPerFlagInvalid ??
+              'Waves per flag must be a positive integer.')
+        : wavesPerFlagValue == 1 &&
+              plantfoodCountValue != null &&
+              plantfoodCountValue > 0
+        ? (l10n?.levelEscalationPlantfoodWavesPerFlagInvalid ??
+              'When Plant Food is allocated, Waves per flag must be at '
+                  'least 2.')
+        : null;
+    final plantfoodCountError =
+        plantfoodCountValue == null || plantfoodCountValue < 0
+        ? (l10n?.levelEscalationPlantfoodCountInvalid ??
+              'Plant Food count must be a non-negative integer.')
+        : null;
+
+    final linkedPropsObj = _linkedWaveManagerProps();
+    final fallbackPropsObj = widget.levelFile.objects.firstWhereOrNull(
+      (o) => o.objClass == 'WaveManagerProperties',
+    );
+    final propsObj = linkedPropsObj ?? fallbackPropsObj;
+    final propsAliases = propsObj?.aliases;
     final actualWaveMgrAlias = propsAliases != null && propsAliases.isNotEmpty
         ? propsAliases.first
         : null;
-    final currentPropsAlias = RtidParser.parse(
-      _data.waveManagerProps ?? '',
-    )?.alias;
-    final isPropsValid =
-        actualWaveMgrAlias != null && currentPropsAlias == actualWaveMgrAlias;
+    final hasWaveManagerRunner = runtime.waveManagerIndex != null;
+    final hasLinkedProps = linkedPropsObj != null;
+    final isPropsValid = hasLinkedProps && hasWaveManagerRunner;
 
     return Scaffold(
       appBar: AppBar(
@@ -675,29 +778,48 @@ class _LevelEscalationModuleScreenState
               context,
               isEvent: false,
               title:
-                  l10n?.moduleTitle_LevelEscalationModuleProperties ??
-                  'Level Escalation',
+                  l10n?.levelEscalationModuleHelpTitle ?? 'Escalation Spawning',
               themeColor: sectionTitleColor,
               sections: [
                 HelpSectionData(
-                  title: l10n?.overview ?? 'Overview',
+                  title: l10n?.levelEscalationModuleHelpOverview ?? 'Overview',
                   body:
-                      l10n?.levelEscalationHelpOverviewBody ??
+                      l10n?.levelEscalationModuleHelpOverviewBody ??
                       'Adds point-based difficulty escalation to the level.',
                 ),
                 HelpSectionData(
-                  title: l10n?.parameters ?? 'Parameters',
-                  body:
-                      l10n?.levelEscalationHelpFieldsBody ??
-                      'Description of the module fields.',
+                  title:
+                      l10n?.levelEscalationModuleHelpRuntime ??
+                      'Wave configuration and runner',
+                  body: l10n?.levelEscalationModuleHelpRuntimeBody ?? '',
                 ),
                 HelpSectionData(
                   title:
-                      l10n?.levelEscalationHelpLevelsTitle ?? 'Zombie levels',
-                  body:
-                      l10n?.levelEscalationHelpLevelsBody ??
-                      'The module has no per-zombie level setting: every '
-                          'zombie from the pool always spawns at level 1.',
+                      l10n?.levelEscalationModuleHelpWaveLayout ??
+                      'Waves and flags',
+                  body: l10n?.levelEscalationModuleHelpWaveLayoutBody ?? '',
+                ),
+                HelpSectionData(
+                  title:
+                      l10n?.levelEscalationModuleHelpSpending ??
+                      'Point trajectory',
+                  body: l10n?.levelEscalationModuleHelpSpendingBody ?? '',
+                ),
+                HelpSectionData(
+                  title:
+                      l10n?.levelEscalationModuleHelpPlantfood ??
+                      'Plant Food allocation',
+                  body: l10n?.levelEscalationModuleHelpPlantfoodBody ?? '',
+                ),
+                HelpSectionData(
+                  title: l10n?.levelEscalationModuleHelpPool ?? 'Zombie pool',
+                  body: l10n?.levelEscalationModuleHelpPoolBody ?? '',
+                ),
+                HelpSectionData(
+                  title:
+                      l10n?.levelEscalationModuleHelpLimits ??
+                      'Parameter limits',
+                  body: l10n?.levelEscalationModuleHelpLimitsBody ?? '',
                 ),
               ],
             ),
@@ -716,6 +838,22 @@ class _LevelEscalationModuleScreenState
               onAliasChanged: _handleAliasChanged,
               onChanged: widget.onChanged,
             ),
+            if (runtime.hasCompetingWaveManagerProps) ...[
+              const SizedBox(height: 8),
+              EditorWarningBanner(
+                margin: EdgeInsets.zero,
+                message:
+                    runtime.order == LevelEscalationModuleOrder.afterWaveManager
+                    ? (l10n?.levelEscalationAfterWaveManagerWarning ??
+                          'Both modules use different wave configurations. '
+                              'Escalation Spawning runs later, so its processed '
+                              'configuration is previewed.')
+                    : (l10n?.levelEscalationBeforeWaveManagerWarning ??
+                          'Both modules use different wave configurations. '
+                              'Wave Manager runs later and may replace the '
+                              'escalated result with its own configuration.'),
+              ),
+            ],
             const SizedBox(height: 16),
             Card(
               color: isPropsValid ? propsCardColor : theme.colorScheme.error,
@@ -747,7 +885,7 @@ class _LevelEscalationModuleScreenState
                         children: [
                           Text(
                             l10n?.moduleTitle_WaveManagerProperties ??
-                                'Linked Wave Parameters (WaveManagerProps)',
+                                'Wave Configuration (WaveManagerProperties)',
                             style: theme.textTheme.titleMedium?.copyWith(
                               fontWeight: FontWeight.bold,
                               color: isPropsValid
@@ -772,10 +910,36 @@ class _LevelEscalationModuleScreenState
                               padding: const EdgeInsets.only(top: 4),
                               child: Text(
                                 l10n?.noWaveManagerPropsFound ??
-                                    'Wave Manager module (WaveManagerProperties) not found.',
+                                    'No wave configuration '
+                                        '(WaveManagerProperties) object was found.',
                                 style: TextStyle(
                                   color: theme.colorScheme.onError,
                                   fontSize: 12,
+                                ),
+                              ),
+                            ),
+                          if (hasLinkedProps && !hasWaveManagerRunner)
+                            Padding(
+                              padding: const EdgeInsets.only(top: 8),
+                              child: Text(
+                                l10n?.levelEscalationWaveManagerRunnerMissing ??
+                                    'The linked wave configuration exists, but '
+                                        'the Wave Manager runner module is missing.',
+                                style: theme.textTheme.bodySmall?.copyWith(
+                                  color: theme.colorScheme.onError,
+                                ),
+                              ),
+                            ),
+                          if (!hasLinkedProps && fallbackPropsObj == null)
+                            Padding(
+                              padding: const EdgeInsets.only(top: 8),
+                              child: Text(
+                                l10n?.levelEscalationAddWaveTimelineHint ??
+                                    'Creates an empty wave configuration and '
+                                        'adds a runner-only Wave Manager module '
+                                        'when needed.',
+                                style: theme.textTheme.bodySmall?.copyWith(
+                                  color: theme.colorScheme.onError,
                                 ),
                               ),
                             ),
@@ -832,7 +996,9 @@ class _LevelEscalationModuleScreenState
                       }
 
                       final showPropsFixButton =
-                          !isPropsValid && actualWaveMgrAlias != null;
+                          !hasLinkedProps &&
+                          actualWaveMgrAlias != null &&
+                          hasWaveManagerRunner;
                       final addTimelineButton = FilledButton(
                         key: const ValueKey(
                           'levelEscalationAddWaveTimelineButton',
@@ -855,7 +1021,8 @@ class _LevelEscalationModuleScreenState
                           textAlign: TextAlign.center,
                         ),
                       );
-                      final showAddTimelineButton = actualWaveMgrAlias == null;
+                      final showAddTimelineButton =
+                          actualWaveMgrAlias == null || !hasWaveManagerRunner;
 
                       if (compact) {
                         return Column(
@@ -943,7 +1110,16 @@ class _LevelEscalationModuleScreenState
                 color: sectionColor,
               ),
             ),
-            const SizedBox(height: 8),
+            if (_data.totalWaves > 0) ...[
+              WaveFlagStrip(
+                color: sectionColor,
+                waveCount: _data.totalWaves,
+                isFlagWave: (w) =>
+                    LevelEscalationPointAnalysis.isFlagWave(_data, w),
+              ),
+              const SizedBox(height: 24),
+            ] else
+              const SizedBox(height: 8),
             Card(
               color: contentCardColor,
               child: Padding(
@@ -951,25 +1127,6 @@ class _LevelEscalationModuleScreenState
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // Flag strip: one equal (invisible) segment per wave
-                    // with visible flags on flag waves. Waves run right to
-                    // left, so the final flag wave sits at the left edge;
-                    // the strip updates live while the fields below change.
-                    WaveFlagStrip(
-                      waveCount: _data.totalWaves,
-                      isFlagWave: (w) =>
-                          LevelEscalationPointAnalysis.isFlagWave(_data, w),
-                    ),
-                    const SizedBox(height: 8),
-                    Text(
-                      l10n?.levelEscalationTotalWaves(_data.totalWaves) ??
-                          'Total escalation waves: ${_data.totalWaves}',
-                      style: theme.textTheme.bodyMedium?.copyWith(
-                        color: theme.colorScheme.onSurfaceVariant,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                    const SizedBox(height: 12),
                     Row(
                       children: [
                         Expanded(
@@ -980,6 +1137,7 @@ class _LevelEscalationModuleScreenState
                             controller: _flagCountCtrl,
                             label:
                                 l10n?.levelEscalationFlagCountShort ?? 'Flags',
+                            errorText: flagCountError,
                             onChanged: (v) => _update(
                               flagCount: int.tryParse(v) ?? _data.flagCount,
                             ),
@@ -995,6 +1153,7 @@ class _LevelEscalationModuleScreenState
                             label:
                                 l10n?.levelEscalationFlagIntervalShort ??
                                 'Interval',
+                            errorText: wavesPerFlagError,
                             onChanged: (v) => _update(
                               wavesPerFlag:
                                   int.tryParse(v) ?? _data.wavesPerFlag,
@@ -1006,11 +1165,9 @@ class _LevelEscalationModuleScreenState
                     const SizedBox(height: 8),
                     _intField(
                       controller: _startingPointsCtrl,
-                      label: localizedPropertyLabel(
-                        context,
-                        l10n?.startingPoints ?? 'Starting points',
-                        'StartingPoints',
-                      ),
+                      label:
+                          l10n?.startingPoints ??
+                          'Starting points (StartingPoints)',
                       onChanged: (v) => _update(
                         startingPoints: int.tryParse(v) ?? _data.startingPoints,
                       ),
@@ -1018,11 +1175,9 @@ class _LevelEscalationModuleScreenState
                     const SizedBox(height: 8),
                     _intField(
                       controller: _pointIncrementCtrl,
-                      label: localizedPropertyLabel(
-                        context,
-                        l10n?.pointIncrement ?? 'Point increase per wave',
-                        'PointIncrementPerWave',
-                      ),
+                      label:
+                          l10n?.pointIncrement ??
+                          'Point increase per wave (PointIncrementPerWave)',
                       onChanged: (v) => _update(
                         pointIncrementPerWave:
                             int.tryParse(v) ?? _data.pointIncrementPerWave,
@@ -1030,12 +1185,12 @@ class _LevelEscalationModuleScreenState
                     ),
                     const SizedBox(height: 8),
                     _intField(
+                      key: const ValueKey('levelEscalationPlantfoodCountField'),
                       controller: _plantfoodCountCtrl,
-                      label: localizedPropertyLabel(
-                        context,
-                        l10n?.plantfoodToSpawnCount ?? 'Plant Food drop count',
-                        'PlantfoodToSpawnCount',
-                      ),
+                      label:
+                          l10n?.plantfoodToSpawnCount ??
+                          'Plant Food count (PlantfoodToSpawnCount)',
+                      errorText: plantfoodCountError,
                       onChanged: (v) => _update(
                         plantfoodToSpawnCount:
                             int.tryParse(v) ?? _data.plantfoodToSpawnCount,
@@ -1127,6 +1282,9 @@ class _LevelEscalationModuleScreenState
               final nameKey =
                   info?.name ?? ZombieRepository().getName(typeName);
               final displayName = ResourceNames.lookup(context, nameKey);
+              final pointCost = ZombiePropertiesRepository.getStats(
+                typeName,
+              ).cost;
               final iconPath = info?.iconAssetPath;
               return Card(
                 key: ValueKey('levelEscalationZombie-$idx'),
@@ -1166,11 +1324,23 @@ class _LevelEscalationModuleScreenState
                       ),
                       const SizedBox(width: 8),
                       Expanded(
-                        child: Text(
-                          displayName,
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
-                          style: const TextStyle(fontWeight: FontWeight.bold),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              displayName,
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                              style: const TextStyle(
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            Text(
+                              l10n?.zombiePointCost(pointCost) ??
+                                  'Point cost: $pointCost',
+                              style: theme.textTheme.bodySmall,
+                            ),
+                          ],
                         ),
                       ),
                       IconButton(
@@ -1194,6 +1364,7 @@ class _LevelEscalationModuleScreenState
     Key? key,
     required TextEditingController controller,
     required String label,
+    String? errorText,
     required ValueChanged<String> onChanged,
   }) {
     return EditorResponsiveInputField(
@@ -1202,7 +1373,10 @@ class _LevelEscalationModuleScreenState
       builder: (context, decoration) => TextField(
         controller: controller,
         keyboardType: TextInputType.number,
-        decoration: decoration,
+        decoration: decoration.copyWith(
+          errorText: errorText,
+          errorMaxLines: errorText == null ? null : 3,
+        ),
         onChanged: onChanged,
       ),
     );

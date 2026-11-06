@@ -190,7 +190,7 @@ void main() {
     },
   );
 
-  testWidgets('point pool add excludes unsupported zombies and aligns levels', (
+  testWidgets('point pool batch rejects elites once and aligns levels', (
     tester,
   ) async {
     final level = _level();
@@ -204,13 +204,14 @@ void main() {
       find.byType(ZombieSelectionScreen),
     );
     expect(selector.multiSelect, isTrue);
-    final elite = ZombieRepository().allZombies.firstWhere(
-      (zombie) => ZombieRepository().isElite(zombie.id),
-    );
-    expect(selector.excludeIds, contains(elite.id));
-    expect(selector.excludeIds, contains('yeti'));
-    expect(selector.excludeIds, contains('treasureyeti'));
-    selector.onMultiZombieSelected!(['tutorial', 'tutorial_armor1']);
+    expect(selector.pointSpawnOnly, isTrue);
+    final elites = ZombieRepository().allZombies
+        .where((zombie) => ZombieRepository().isElite(zombie.id))
+        .take(2)
+        .map((zombie) => zombie.id)
+        .toList();
+    expect(elites, hasLength(2));
+    selector.onMultiZombieSelected!([...elites, 'tutorial', 'tutorial_armor1']);
     await tester.pumpAndSettle();
 
     final group = WaveManagerModuleData.fromJson(
@@ -224,6 +225,7 @@ void main() {
     expect(group.zombieLevel, [3, 1, 1]);
     expect(find.byType(ZombieSelectionScreen), findsNothing);
     expect(find.byType(WaveManagerModuleScreen), findsOneWidget);
+    expect(find.text('Elite zombies are not allowed here'), findsOneWidget);
     expect(editor.state.hasChanges, isTrue);
     expect(tester.takeException(), isNull);
   });

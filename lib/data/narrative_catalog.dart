@@ -1237,6 +1237,11 @@ const _powerGestureTutorialOrder = <String, int>{
   'WIZARDFINGER': 2,
 };
 
+const _seedRainTutorialOrder = <String, int>{
+  'SEEDRAIN_DAVE_INTRO': 0,
+  'SEEDRAIN_ACORN_INTRO': 1,
+};
+
 const _plantPuzzleTutorialOrder = <String, int>{
   'ELIMINATE_BLOCK_INTRO': 0,
   'ELIMINATE_COLOR_INTRO': 1,
@@ -1290,6 +1295,9 @@ bool _isSystemFeatureTutorial(String id) =>
 Map<String, int>? _systemTutorialFamily(String id) {
   if (_powerGestureTutorialOrder.containsKey(id)) {
     return _powerGestureTutorialOrder;
+  }
+  if (_seedRainTutorialOrder.containsKey(id)) {
+    return _seedRainTutorialOrder;
   }
   if (_plantPuzzleTutorialOrder.containsKey(id)) {
     return _plantPuzzleTutorialOrder;

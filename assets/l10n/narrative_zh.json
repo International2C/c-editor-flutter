@@ -29484,7 +29484,7 @@
         {
           "key": "NARRATIVE_ZOMBIE_INTRO_LEVEL2_1",
           "kind": "speech",
-          "text": "哼哼,我最新制造的超级僵尸MKII型终于上场了,凭你们的智慧是不可能想到把植物进阶到2阶来对付它的!",
+          "text": "哼哼,我最新制造的^00FF00超级僵尸MKII型^oldclr终于上场了,凭你们的智慧是不可能想到把^00FF00植物进阶到2阶^oldclr来对付它的!",
           "speaker": "僵尸博士",
           "npc": "zombossicon"
         },
@@ -29516,7 +29516,7 @@
         {
           "key": "NARRATIVE_ZOMBIE_INTRO_LEVEL3_1",
           "kind": "speech",
-          "text": "你们的幸运到此为止了！我最新研制的三阶超级僵尸，是不可能被战胜的！除非你们把植物进阶到3……差点说漏嘴了。总之，你们好好享受吧，哈哈！",
+          "text": "你们的幸运到此为止了！我最新研制的^00FF00三阶超级僵尸^oldclr，是不可能被战胜的！除非你们把^00FF00植物进阶到3^oldclr……差点说漏嘴了。总之，你们好好享受吧，哈哈！",
           "speaker": "僵尸博士",
           "npc": "zombossicon"
         },
@@ -29548,7 +29548,7 @@
         {
           "key": "NARRATIVE_ZOMBIE_INTRO_LEVEL4_1",
           "kind": "speech",
-          "text": "亲爱的植物们，前所未有的4 阶僵尸终于被我研制出来了，我把它命名为Z-800，相信你们对他们的强大会有一个直观的认识。如果你们还没有进阶到 4阶 的话，就乖乖等着让它吃掉你的脑子吧!",
+          "text": "亲爱的植物们，前所未有的^00FF004 阶僵尸^oldclr终于被我研制出来了，我把它命名为Z-800，相信你们对他们的强大会有一个直观的认识。如果你们还没有进阶到 ^00FF004阶^oldclr 的话，就乖乖等着让它吃掉你的脑子吧!",
           "speaker": "僵尸博士",
           "npc": "zombossicon"
         },
@@ -29580,7 +29580,7 @@
         {
           "key": "NARRATIVE_ZOMBIE_INTRO_LEVEL5_1",
           "kind": "speech",
-          "text": "亲爱的植物们，准备好颤抖了吗？让我向你们隆重介绍我最完美的作品，嗯……虽然还没来得及命名，不过我想你们是不可能应付得了这种5 阶强化型僵尸的，乖乖地交出你的脑子吧。",
+          "text": "亲爱的植物们，准备好颤抖了吗？让我向你们隆重介绍我最完美的作品，嗯……虽然还没来得及命名，不过我想你们是不可能应付得了这种^00FF005 阶强化型僵尸^oldclr的，乖乖地交出你的脑子吧。",
           "speaker": "僵尸博士",
           "npc": "zombossicon"
         },
@@ -29612,7 +29612,7 @@
         {
           "key": "NARRATIVE_ZOMBIE_INTRO_ELIMINATE_MISSIONFINISH_1",
           "kind": "speech",
-          "text": "不要以为我这么容易被击败\\n我还会回来的！",
+          "text": "^FF0000不要以为我这么容易被击败^oldclr\\n^FF0000我还会回来的！^oldclr",
           "speaker": "僵尸博士",
           "npc": "zombossicon"
         },
@@ -29644,7 +29644,7 @@
         {
           "key": "NARRATIVE_ZOMBIE_INTRO_ELIMINATE_FREEZINGWIND_1",
           "kind": "speech",
-          "text": "/ 这些小球真是讨厌，看我的猛犸冰风吐息！",
+          "text": "^FF0000这些小球真是讨厌，看我的猛犸冰风吐息！^oldclr",
           "speaker": "僵尸博士",
           "npc": "zombossicon"
         },
@@ -29676,7 +29676,7 @@
         {
           "key": "NARRATIVE_ZOMBIE_INTRO_ELIMINATE_SPAWNSHIELD_1",
           "kind": "speech",
-          "text": "/ 最新研制的量子护盾登场！你猜多少个小球才能把它打坏？",
+          "text": "^FF0000最新研制的量子护盾登场！你猜多少个小球才能把它打坏？^oldclr",
           "speaker": "僵尸博士",
           "npc": "zombossicon"
         },
@@ -29708,7 +29708,7 @@
         {
           "key": "NARRATIVE_ZOMBIE_INTRO_ELIMINATE_STAGE11_1",
           "kind": "speech",
-          "text": "/ 万万没想到，我的冰雪堡垒可以重生！",
+          "text": "^FF0000万万没想到，我的冰雪堡垒可以重生！^oldclr",
           "speaker": "僵尸博士",
           "npc": "zombossicon"
         },
@@ -29740,7 +29740,7 @@
         {
           "key": "NARRATIVE_ZOMBIE_INTRO_ELIMINATE_STAGE12_1",
           "kind": "speech",
-          "text": "/ 你猜我的冰雪堡垒可以重生几次？",
+          "text": "^FF0000你猜我的冰雪堡垒可以重生几次？^oldclr",
           "speaker": "僵尸博士",
           "npc": "zombossicon"
         },
@@ -29772,7 +29772,7 @@
         {
           "key": "NARRATIVE_ZOMBIE_INTRO_ELIMINATE_STAGE21_1",
           "kind": "speech",
-          "text": "/ 居然把我的冰雪堡垒打坏了，这么调皮你家里人知道嘛？",
+          "text": "^FF0000居然把我的冰雪堡垒打坏了，这么调皮你家里人知道嘛？^oldclr",
           "speaker": "僵尸博士",
           "npc": "zombossicon"
         },
@@ -29804,7 +29804,7 @@
         {
           "key": "NARRATIVE_ZOMBIE_INTRO_ELIMINATE_STAGE22_1",
           "kind": "speech",
-          "text": "/ 这个豆腐渣工程，看来我得重新换个包工头了！",
+          "text": "^FF0000这个豆腐渣工程，看来我得重新换个包工头了！^oldclr",
           "speaker": "僵尸博士",
           "npc": "zombossicon"
         },
@@ -29836,7 +29836,7 @@
         {
           "key": "NARRATIVE_ZOMBIE_INTRO_ELIMINATE_STAGE31_1",
           "kind": "speech",
-          "text": "/ 挖掘机技术哪家强？当然是我的猛犸象！",
+          "text": "^FF0000挖掘机技术哪家强？当然是我的猛犸象！^oldclr",
           "speaker": "僵尸博士",
           "npc": "zombossicon"
         },
@@ -29868,7 +29868,7 @@
         {
           "key": "NARRATIVE_ZOMBIE_INTRO_ELIMINATE_STAGE32_1",
           "kind": "speech",
-          "text": "/ 不管冰雪堡垒什么样，猛犸象都萌萌哒！",
+          "text": "^FF0000不管冰雪堡垒什么样，猛犸象都萌萌哒！^oldclr",
           "speaker": "僵尸博士",
           "npc": "zombossicon"
         },
@@ -29900,7 +29900,7 @@
         {
           "key": "NARRATIVE_ZOMBIE_INTRO_ELIMINATE_STAGE41_1",
           "kind": "speech",
-          "text": "/ 游戏虽易，过关不易，且行且珍惜",
+          "text": "^FF0000游戏虽易，过关不易，且行且珍惜^oldclr",
           "speaker": "僵尸博士",
           "npc": "zombossicon"
         },
@@ -29932,7 +29932,7 @@
         {
           "key": "NARRATIVE_ZOMBIE_INTRO_ELIMINATE_STAGE42_1",
           "kind": "speech",
-          "text": "/ 我只想安安静静地做一个美男子，你为何来打扰我？",
+          "text": "^FF0000我只想安安静静地做一个美男子，你为何来打扰我？^oldclr",
           "speaker": "僵尸博士",
           "npc": "zombossicon"
         },

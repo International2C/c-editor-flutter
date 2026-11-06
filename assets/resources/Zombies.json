@@ -781,6 +781,15 @@
     "icon": "zombie_future_protector.webp"
   },
   {
+    "id": "wave_airbubble",
+    "name": "zombie_wave_airbubble",
+    "tags": [
+      "Memory",
+      "Chinese"
+    ],
+    "icon": "zombie_children_airbubble.webp"
+  },
+  {
     "id": "wave_elecshieldgenerator",
     "name": "zombie_wave_elecshieldgenerator",
     "tags": [
@@ -7476,7 +7485,7 @@
     "name": "zombie_werewolf",
     "tags": [
       "Festival2",
-      "Basic",
+      "Strong",
       "Pet",
       "Chinese"
     ],

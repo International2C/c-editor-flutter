@@ -418,8 +418,10 @@ class _ZombieSelectionScreenState extends State<ZombieSelectionScreen> {
         l10n?.pointSpawnOnlyZombieBlockedTitle ??
             'Cannot be used in point auto-spawn',
         l10n?.pointSpawnOnlyZombieBlockedMessage ??
-            'This zombie has no WavePointCost data, so the game cannot '
-                'buy it in a point-based auto-spawner.',
+            'This zombie has no point cost (WavePointCost) data. The game '
+                'needs this field to select and spawn zombies according to '
+                'the wave\'s points, so this zombie cannot be used in point '
+                'auto-spawn.',
       ),
     };
     await showDialog<void>(

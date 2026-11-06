@@ -9,6 +9,8 @@ Future<void> _openSheet(
   WidgetTester tester, {
   required Size size,
   int eventCount = 10,
+  List<String?>? eventClasses,
+  Locale locale = const Locale('en'),
   double textScale = 1,
   double bottomSafeArea = 0,
   ThemeData? theme,
@@ -20,28 +22,29 @@ Future<void> _openSheet(
   addTearDown(tester.view.resetDevicePixelRatio);
   final notifier = ValueNotifier<({int waveIndex, String? rtid})?>(null);
   addTearDown(notifier.dispose);
-  final events = List.generate(
-    eventCount,
-    (i) => PvzObject(
-      aliases: ['Wave1Event$i'],
-      objClass: 'SpawnZombiesJitteredWaveActionProps',
-      objData: const <String, dynamic>{'Zombies': <dynamic>[]},
-    ),
+  final aliases = List.generate(
+    eventClasses?.length ?? eventCount,
+    (i) => 'Wave1Event$i',
   );
+  final events = [
+    for (final (i, alias) in aliases.indexed)
+      if (eventClasses == null || eventClasses[i] != null)
+        PvzObject(
+          aliases: [alias],
+          objClass: eventClasses?[i] ?? 'SpawnZombiesJitteredWaveActionProps',
+          objData: const <String, dynamic>{'Zombies': <dynamic>[]},
+        ),
+  ];
   final wm = WaveManagerData(
     waveCount: 1,
     waves: [
-      events
-          .map(
-            (event) => RtidParser.build(event.aliases!.first, 'CurrentLevel'),
-          )
-          .toList(),
+      aliases.map((alias) => RtidParser.build(alias, 'CurrentLevel')).toList(),
     ],
   );
   await tester.pumpWidget(
     MaterialApp(
       theme: theme,
-      locale: const Locale('en'),
+      locale: locale,
       supportedLocales: AppLocalizations.supportedLocales,
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       builder: (context, child) => MediaQuery(
@@ -76,6 +79,26 @@ Future<void> _openSheet(
 }
 
 void main() {
+  testWidgets('wave sheet localizes known, unknown, and missing events', (
+    tester,
+  ) async {
+    await _openSheet(
+      tester,
+      size: const Size(420, 900),
+      locale: const Locale('zh'),
+      eventClasses: const [
+        'SpawnZombiesJitteredWaveActionProps',
+        'UnsupportedWaveActionProps',
+        null,
+      ],
+    );
+    expect(find.text('普通出怪'), findsOneWidget);
+    expect(find.text('未知事件'), findsOneWidget);
+    expect(find.text('无效事件'), findsOneWidget);
+    expect(find.text('Unknown event'), findsNothing);
+    expect(tester.takeException(), isNull);
+  });
+
   testWidgets('portrait sheet starts with two complete events and can expand', (
     tester,
   ) async {

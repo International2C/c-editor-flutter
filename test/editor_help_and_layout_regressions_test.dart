@@ -89,6 +89,12 @@ void main() {
         ),
         (
           locale: const Locale('zh'),
+          title: '事件：泡泡雨',
+          isEvent: true,
+          expected: '泡泡雨事件说明',
+        ),
+        (
+          locale: const Locale('zh'),
           title: '复兴时代模块',
           isEvent: false,
           expected: '复兴时代模块说明',

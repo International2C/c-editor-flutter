@@ -119,6 +119,9 @@ class AppLocalizationsRu extends AppLocalizations {
   String get waveNumberLegend => 'Цифра — номер волны';
 
   @override
+  String get waveFlagLabel => 'Флаговая волна';
+
+  @override
   String get expand => 'Развернуть';
 
   @override
@@ -1911,22 +1914,22 @@ class AppLocalizationsRu extends AppLocalizations {
       'Вы уверены, что хотите удалить пустой контейнер волн? Позже вы можете создать новый.';
 
   @override
-  String get noWaveManager => 'Менеджер волн не найден';
+  String get noWaveManager => 'Контейнер волн не найден';
 
   @override
   String get noWaveManagerHint =>
-      'У уровня есть модуль волн, но отсутствует объект WaveManagerProperties.';
+      'У уровня есть модуль волн, но отсутствует контейнер волн (WaveManagerProperties), в котором хранятся данные волн. Создайте пустой контейнер волн.';
 
   @override
   String get waveTimelineGuideTitle => 'Инструкция';
 
   @override
   String get waveTimelineGuideBodyDesktop =>
-      'Клик левой кнопокой мыши по волне: управление событиями\nКнопка удаления: убрать волну\nКлик по очкам: ожидание по зомби';
+      'Клик левой кнопокой мыши по волне: управление событиями\nКнопка удаления: убрать волну\nКлик по очкам: предпросмотр призыва за очки';
 
   @override
   String get waveTimelineGuideBodyMobile =>
-      'Нажмите на волну: управление событиями\nСвайп влево: удалить волну\nНажмите на очки: ожидание по зомби';
+      'Нажмите на волну: управление событиями\nСвайп влево: удалить волну\nНажмите на очки: предпросмотр призыва за очки';
 
   @override
   String get waveDeadLinksTitle => 'Неверные ссылки';
@@ -1996,7 +1999,7 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get moduleTitle_WaveManagerProperties =>
-      'Параметры менеджера волн (WaveManagerProps)';
+      'Контейнер волн (WaveManagerProperties)';
 
   @override
   String waveManagerPropsCurrent(String value) {
@@ -2060,14 +2063,14 @@ class AppLocalizationsRu extends AppLocalizations {
   String get flagInterval => 'Интервал флага';
 
   @override
-  String get waveManagerHelpTitle => 'Менеджер волн';
+  String get waveManagerHelpTitle => 'Контейнер событий волн';
 
   @override
   String get waveManagerHelpOverviewTitle => 'Обзор';
 
   @override
   String get waveManagerHelpOverviewBody =>
-      'Глобальные параметры волн и пороги здоровья.';
+      'Контейнер волн (WaveManagerProperties) хранит события по порядку волн, а также глобальные параметры: обратный отсчёт до первой волны, пороги здоровья, интервал флагов и другие настройки. Эти данные используются для инициализации фактического менеджера волн (WaveManager), а не образуют вторую работающую систему волн. На этой странице редактируется данный контейнер.';
 
   @override
   String get waveManagerHelpFlagTitle => 'Интервал флага';
@@ -2219,7 +2222,12 @@ class AppLocalizationsRu extends AppLocalizations {
   String get addWave => 'Добавить волну';
 
   @override
-  String get expectation => 'Ожидание';
+  String get expectation => 'Предпросмотр призыва за очки';
+
+  @override
+  String pointSpawnExpectedCount(String count) {
+    return '$count';
+  }
 
   @override
   String get close => 'Закрыть';
@@ -2445,7 +2453,7 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get conflictDesc_WaveGeneratorLevelEscalation =>
-      'Модуль Level Escalation масштабирует уровни зомби на основе волн из системы менеджера волн, поэтому его нельзя использовать вместе с генератором волн.';
+      'Прогрессивный спавн по очкам зависит от системы менеджера волн и несовместим с генератором волн.';
 
   @override
   String conflictDesc_CamelMinigameNonTouchZombies(String zombies) {
@@ -2613,7 +2621,7 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get moduleDesc_WaveManagerModuleProperties =>
-      'Управление волнами уровня';
+      'Запускает волны уровня и настраивает спавн по очкам и другие параметры выполнения';
 
   @override
   String get moduleTitle_WaveGeneratorProperties => 'Генератор волн';
@@ -3022,50 +3030,118 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get moduleTitle_LevelEscalationModuleProperties =>
-      'Эскалация сложности';
+      'Прогрессивный спавн по очкам';
 
   @override
   String get moduleDesc_LevelEscalationModuleProperties =>
-      'Усложняет уровень по флажкам: очки растут с каждой волной, а новые зомби попадают в пул';
+      'Планирует случайный призыв с первой волны и может распределять подкормку между случайно призванными зомби';
 
   @override
-  String get flagCount => 'Количество флажков';
+  String get flagCount => 'Количество флажков (FlagCount)';
 
   @override
-  String get wavesPerFlag => 'Волн на флажок';
+  String get wavesPerFlag => 'Волн на флажок (WavesPerFlag)';
 
   @override
-  String get plantfoodToSpawnCount => 'Количество выпадений питания растений';
+  String get plantfoodToSpawnCount =>
+      'Количество подкормки (PlantfoodToSpawnCount)';
 
   @override
-  String levelEscalationTotalWaves(int count) {
-    return 'Всего волн эскалации: $count';
-  }
+  String get levelEscalationFlagCountShort => 'Количество флажков (FlagCount)';
 
   @override
-  String get levelEscalationFlagCountShort => 'Флаги';
-
-  @override
-  String get levelEscalationFlagIntervalShort => 'Интервал';
+  String get levelEscalationFlagIntervalShort =>
+      'Волн на флажок (WavesPerFlag)';
 
   @override
   String get expectationNoAffordableZombies =>
-      'Ни один зомби из пула этой волны нельзя купить за её очки.';
+      'Очков этой волны недостаточно, чтобы выбрать и призвать какого-либо зомби из пула.';
 
   @override
-  String get levelEscalationHelpOverviewBody =>
-      'Добавляет на уровень эскалацию сложности на основе очков. Волны сгруппированы в флажки; с каждой новой волной выдаётся больше очков, а очки тратятся на появление зомби из пула. Количество выпадений питания растений ограничено настроенным значением.';
+  String get levelEscalationModuleHelpTitle => 'Прогрессивный спавн по очкам';
 
   @override
-  String get levelEscalationHelpFieldsBody =>
-      'Количество флажков (FlagCount) — число флажков на уровне, а волн на флажок (WavesPerFlag) — число волн в каждом флажке; вместе они дают общее число волн.\nСтартовые очки (StartingPoints) — начальный пул очков, а прирост очков за волну (PointIncrementPerWave) — сколько дополнительных очков выдаётся за каждую новую волну.\nКоличество выпадений питания растений (PlantfoodToSpawnCount) ограничивает число выпадений питания растений.\nПул зомби (ZombiePool) — список типов зомби, которые могут появиться за очки, а ссылка на волны (WaveManagerProps) связывает модуль с объектом WaveManagerProperties уровня.';
+  String get levelEscalationModuleHelpOverview => 'Обзор';
 
   @override
-  String get levelEscalationHelpLevelsTitle => 'Уровни зомби';
+  String get levelEscalationModuleHelpOverviewBody =>
+      'Модуль «Прогрессивный спавн по очкам» должен использоваться вместе с «Менеджером волн». При загрузке уровня он берёт за основу связанный «Контейнер волн (WaveManagerProperties)», сохраняет имеющийся фиксированный призыв, другие события волн, а также такие настройки, как задержка первой волны, пороги здоровья для следующей волны и подавление флаговых зомби. Затем согласно своим параметрам он создаёт случайный призыв начиная с первой волны и распределяет подкормку между некоторыми случайно призванными зомби, после чего результат запускает менеджер волн.';
 
   @override
-  String get levelEscalationHelpLevelsBody =>
-      'В модуле нельзя задать уровни зомби (ZombieLevel): каждый зомби из пула всегда появляется первого уровня.';
+  String get levelEscalationModuleHelpRuntime => 'Контейнер и запуск волн';
+
+  @override
+  String get levelEscalationModuleHelpRuntimeBody =>
+      'Команда «Добавить таймлайн волн» сначала использует контейнер волн, уже связанный с прогрессивным спавном, либо другой контейнер, имеющийся в уровне. Пустой контейнер волн создаётся только при отсутствии подходящего, после чего итоговый контейнер связывается с прогрессивным спавном. Если в списке модулей уровня (LevelDefinition.Modules) нет активного модуля менеджера волн, отвечающего за запуск волн, добавляется модуль запуска без собственного независимого контейнера волн; существующий активный модуль не изменяется.\nОбычно именно прогрессивный спавн хранит ссылку на контейнер волн и предоставляет его для выполнения, а менеджер волн лишь запускает его. Если у менеджера волн нет независимого контейнера либо оба модуля ссылаются на один контейнер, порядок модулей не приводит к замене результата прогрессивного спавна. Повторная инициализация одного фактического менеджера волн (WaveManager) возможна только при ссылках на разные действительные контейнеры волн; если она происходит, содержимое, применённое позже, заменяет предыдущий результат.';
+
+  @override
+  String get levelEscalationModuleHelpWaveLayout => 'Волны и флаги';
+
+  @override
+  String get levelEscalationModuleHelpWaveLayoutBody =>
+      'Число волн, для которых модуль создаёт случайный спавн, равно произведению «Количество флагов × Волн на флаг» и не обязательно совпадает с итоговым числом волн уровня.\nЕсли в связанном контейнере волн меньше волн, игра добавит недостающие в копию времени выполнения и установит общее число волн равным этому значению. Если волн уже столько же или больше, игра не удалит лишние и не станет принудительно изменять существующее общее число волн, однако модуль всё равно добавит случайный спавн только в пределах своего диапазона. Интервал флаговых волн в копии времени выполнения будет заменён значением «Волн на флаг».\nНапример, при 4 флагах и 3 волнах на флаг модуль добавит случайный спавн в первые 12 волн, а волны 3, 6, 9 и 12 будут флаговыми. Если в контейнере есть волны 13 и далее, волны 15, 18 и т. д. всё ещё будут считаться флаговыми, но не получат случайный спавн от этого модуля.';
+
+  @override
+  String get levelEscalationModuleHelpSpending => 'Траектория очков';
+
+  @override
+  String get levelEscalationModuleHelpSpendingBody =>
+      'Первая волна использует «Начальные очки», а каждая следующая получает дополнительно значение «Прирост очков за волну». На флаговой волне базовое число очков умножается на 2,5; дробная часть результата отбрасывается.\nНа каждой волне игра случайно выбирает зомби из пула в пределах доступных очков. Неиспользованные очки не переносятся на следующую волну.';
+
+  @override
+  String get levelEscalationModuleHelpPlantfood => 'Распределение подкормки';
+
+  @override
+  String get levelEscalationModuleHelpPlantfoodBody =>
+      '«Количество подкормки» — это общее число единиц подкормки, распределяемых между случайно созданными зомби за весь уровень. Оно не связано с начальной подкормкой и подкормкой из фиксированных событий.\nИгра последовательно назначает по одной единице подкормки волне перед каждой флаговой волной. Если подкормки меньше, чем флагов, она назначается только нескольким первым сегментам. Если подкормки больше, чем флагов, оставшиеся единицы независимо распределяются по случайным волнам в номинальном диапазоне случайного спавна. Одна волна может быть выбрана несколько раз, в том числе после уже назначенной ей подкормки.\nНапример, при 3 флагах, 10 волнах на флаг и 5 единицах подкормки волны 9, 19 и 29 сначала получат по одной единице, а оставшиеся 2 независимо попадут в случайные волны с 1-й по 30-ю.\nПодкормка назначается только случайно созданным зомби, способным её нести. Если на волне недостаточно подходящих зомби, лишняя подкормка теряется и не переносится на другие волны.';
+
+  @override
+  String get levelEscalationModuleHelpPool => 'Пул зомби';
+
+  @override
+  String get levelEscalationModuleHelpPoolBody =>
+      'Все зомби из пула добавляются в список кандидатов до начала первой волны и остаются доступными на последующих волнах, а не открываются постепенно.\nЗомби из пула всегда имеют первый уровень; изменить их уровень нельзя.\nНа каждой волне зомби выбираются заново в соответствии с доступными очками. Зомби, на которых не хватает очков, не участвуют в выборе. Не добавляйте в пул элитных зомби, йети и пользовательских зомби.';
+
+  @override
+  String get levelEscalationModuleHelpLimits => 'Ограничения параметров';
+
+  @override
+  String get levelEscalationModuleHelpLimitsBody =>
+      '«Количество флагов» и «Волн на флаг» должны быть положительными целыми числами, а «Количество подкормки» — неотрицательным целым числом.\nЕсли требуется распределять подкормку, значение «Волн на флаг» должно быть не меньше 2. При значении 1 предустановленная для каждого сегмента подкормка попадёт на недопустимую волну и не появится ожидаемым образом.';
+
+  @override
+  String get levelEscalationFlagCountInvalid =>
+      'Количество флагов должно быть положительным целым числом.';
+
+  @override
+  String get levelEscalationWavesPerFlagInvalid =>
+      'Количество волн на флаг должно быть положительным целым числом.';
+
+  @override
+  String get levelEscalationPlantfoodCountInvalid =>
+      'Количество подкормки должно быть неотрицательным целым числом.';
+
+  @override
+  String get levelEscalationPlantfoodWavesPerFlagInvalid =>
+      'При распределении подкормки число волн на флаг должно быть не меньше 2. Значение 1 помещает предустановленную подкормку на недопустимую волну.';
+
+  @override
+  String get levelEscalationAfterWaveManagerWarning =>
+      'Прогрессивный спавн и менеджер волн ссылаются на разные действительные контейнеры волн, причём прогрессивный спавн расположен позже. Один фактический менеджер волн (WaveManager) может быть инициализирован повторно; таймлайн показывает контейнер, обработанный прогрессивным спавном.';
+
+  @override
+  String get levelEscalationBeforeWaveManagerWarning =>
+      'Прогрессивный спавн и менеджер волн ссылаются на разные действительные контейнеры волн, причём менеджер волн расположен позже. Он может повторно инициализировать тот же фактический менеджер волн (WaveManager) содержимым собственного контейнера и заменить результат; таймлайн показывает контейнер менеджера волн.';
+
+  @override
+  String levelEscalationWavePlantfood(int count) {
+    return 'Подкормка, закреплённая за этой волной: $count';
+  }
+
+  @override
+  String levelEscalationRandomPlantfood(int count, int waves) {
+    return 'Ещё $count подкормок случайно распределяются по волнам 1–$waves; повторы разрешены.';
+  }
 
   @override
   String get levelEscalationPredict => 'Предсказание по очкам';
@@ -3084,15 +3160,15 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get pointSpawnOnlyZombiesBlocked =>
-      'У этого зомби нет данных WavePointCost — игра не может покупать его за очки, и добавить его в пул нельзя.';
+      'У этого зомби нет данных «Стоимость в очках (WavePointCost)». Игра не может выбрать и призвать его в соответствии с очками волны, поэтому его нельзя добавить в пул призыва за очки.';
 
   @override
   String get pointSpawnOnlyZombieBlockedTitle =>
-      'Нельзя добавить в автоспавнер за очки';
+      'Нельзя использовать для автоматического призыва за очки';
 
   @override
   String get pointSpawnOnlyZombieBlockedMessage =>
-      'У этого зомби нет данных о стоимости очков волны (WavePointCost), поэтому игра не может покупать его в автоспавнере за очки.';
+      'У этого зомби нет данных «Стоимость в очках (WavePointCost)». Игра должна прочитать это поле, чтобы выбрать и призвать зомби в соответствии с очками волны, поэтому этого зомби нельзя использовать для автоматического призыва за очки.';
 
   @override
   String get moduleTitle_DeathHoleModuleProperties => 'Кратеры';
@@ -3148,7 +3224,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get frozenPlantPlacementConditionNull => 'Нет (null)';
 
   @override
-  String get noConditions => 'Нет условий';
+  String get noConditions => 'Нет';
 
   @override
   String get frozenPlantPlacementHelpTitle =>
@@ -3166,7 +3242,7 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get frozenPlantPlacementHelpConditionBody =>
-      'Растениям можно задать особое состояние: заморозка (icecubed), охлаждение (chill), теневое усиление (shadowboosted) или усиление грибом-стражем (shroomboosted).';
+      'Растениям можно задавать особые состояния, например лёгкое обледенение (froststage1), сильное обледенение (froststage2), полную заморозку (icecubed) и теневое усиление (shadowboosted). При вводе состояний растений в режиме ручного редактирования учитывайте, что некоторые состояния могут не сработать как ожидается.';
 
   @override
   String get frozenPlantPlacementHelpLastStandTitle =>
@@ -3596,11 +3672,7 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get eventHelpHeianNinjaRainBody =>
-      'Ниндзя-бесенята падают на газон во время волны. Используйте Heian Ninjimp или вариант для двух игроков (new_pvp). Уровни зомби следуют последовательности уровня газона.';
-
-  @override
-  String get eventHelpHeianNinjaRainLogic =>
-      'Зомби падают группами. Настраивайте общее число, размер группы, диапазон колонок и тайминги. Перед событием может появиться красное предупреждение; оставьте тип зомби пустым, чтобы использовать событие только для субтитров.';
+      'Ниндзя-бесенята десантируются сверху экрана и внезапно атакуют. Это событие часто встречается на уровнях эпохи Хэйан. В отличие от обычного десанта бесенят, ниндзя-бесенята в этом событии приземляются с эффектом дымовой шашки. Уровни зомби определяются последовательностью уровней газона. В Творческом дворе зомби имеют уровень 1.';
 
   @override
   String get eventTitle_BlackHoleWaveActionProps => 'Чёрная дыра';
@@ -3649,14 +3721,21 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get eventDesc_ZombieAirbubbleActionProps =>
-      'Пузыри падают с неба: количество, прочность и скорость падения';
+      'Пузыри падают с неба и уносят растения';
 
   @override
   String get eventAirbubble => 'Событие: дождь из пузырей';
 
   @override
   String get eventHelpAirbubbleWaveBody =>
-      'Добавляет эффект волны, при котором сверху падают пузыри. У каждого пузыря есть своя прочность, а диапазон скоростей задаёт, как быстро они падают.';
+      'Это событие часто встречается в режиме «Дорога Воспоминаний». Разноцветные мыльные пузыри спускаются с неба и зависают над растениями. Через некоторое время пузыри захватывают растения и уносят их за пределы поля. Ветродуй может сдуть пузыри.';
+
+  @override
+  String get eventHelpAirbubbleWaveFieldsTitle => 'Описание параметров';
+
+  @override
+  String get eventHelpAirbubbleWaveFields =>
+      'Пузыри (wave_airbubble) в этом событии представляют собой отдельные единицы зомби и отличаются от пузырей Бесёнка с пузырьковой пушкой и Бесёнка в пузырной машине. Их прочность можно задать в параметрах события. Эта настройка действует только на пузыри, созданные данным событием волны.\nМинимальная и максимальная скорости падения задают диапазон, из которого случайным образом выбирается скорость спуска каждого пузыря к цели. После захвата растения пузырь удерживает его в течение обычного времени и уносит вверх с обычной скоростью.';
 
   @override
   String get airbubbleParameters => 'Параметры дождя из пузырей';
@@ -4325,6 +4404,9 @@ class AppLocalizationsRu extends AppLocalizations {
   String get invalidEventTitle => 'Недействительное событие';
 
   @override
+  String get unknownEventTitle => 'Неизвестное событие';
+
+  @override
   String get invalidReference => 'Недействительная ссылка';
 
   @override
@@ -4579,7 +4661,7 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get eventHelpParachuteRainBody =>
-      'Зомби падают с неба во время волны.';
+      'Зомби падают с неба во время волны. Уровни зомби определяются последовательностью уровней газона. В Творческом дворе зомби имеют уровень 1.';
 
   @override
   String get eventHelpParachuteRainLogic =>
@@ -5136,7 +5218,8 @@ class AppLocalizationsRu extends AppLocalizations {
   String get zombieFromLeft => 'Слева';
 
   @override
-  String get zombieFromRight => 'Появляться с правой стороны поля';
+  String get zombieFromRight =>
+      'Если переключатель выключен, зомби по умолчанию появляются с правой стороны поля.';
 
   @override
   String get zombieEntrySideLabel => 'Сторона появления (Direction)';
@@ -5927,7 +6010,12 @@ class AppLocalizationsRu extends AppLocalizations {
       'Нет предметов. Добавьте растения, зомби или коллекционные.';
 
   @override
-  String get zombieTypeSpiderZombieName => 'Тип зомби (SpiderZombieName)';
+  String get zombieTypeSpiderZombieName =>
+      'Десантируемый зомби (SpiderZombieName)';
+
+  @override
+  String get airdropZombieReplaceWarning =>
+      'Этот зомби отсутствует в списке вариантов, которые редактор предлагает для этого модуля. При смене исходный идентификатор будет перезаписан без возможности восстановления. Продолжить?';
 
   @override
   String get noneSelected => 'Не выбрано';
@@ -6539,7 +6627,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get pointSettings => 'Настройки очков';
 
   @override
-  String get startingWave => 'Начальная волна (StartingWave)';
+  String get startingWave => 'Начальная волна (StartingWave, отсчёт с 0)';
 
   @override
   String get startingPoints => 'Начальные очки (StartingPoints)';
@@ -6555,11 +6643,11 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get waveManagerHelpOverview =>
-      'Включает менеджер волн. Без этого модуля редактирование волн отключено.';
+      'Модуль менеджера волн владеет и запускает фактический менеджер волн (WaveManager); контейнер волн (WaveManagerProperties) хранит только данные, используемые для его инициализации. В обычном уровне модуль может ссылаться на контейнер напрямую. При прогрессивном спавне ссылку на контейнер обычно хранит и предоставляет модуль прогрессивного спавна, а менеджер волн только запускает его.';
 
   @override
   String get waveManagerHelpPoints =>
-      'Спавн по очкам использует этот пул. Избегайте элитных и кастомных зомби.';
+      'Спавн по очкам добавляет зомби в подходящих волнах, расходуя очки на каждого зомби.\nДля обычных волн действует лимит в 60 000 очков, а для флаговых число очков умножается на 2,5.\nЕсли очков больше нуля, зомби выбираются из пула. В контейнере событий волн можно посмотреть ожидаемое количество зомби каждого типа.\nЕсли очков меньше нуля, из событий «Обычная волна» убираются зомби на соответствующую сумму очков.\nНумерация начальной волны начинается с 0. Укажите 0 для появления зомби на первой волне или 1 для появления на второй.\nНе добавляйте в пул для спавна по очкам элитных зомби, снеговиков и пользовательских зомби.';
 
   @override
   String get pointsSection => 'Очки';
@@ -6577,10 +6665,23 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get noWaveManagerPropsFound =>
-      'Объект WaveManagerProperties не найден.';
+      'Объект контейнера волн (WaveManagerProperties) не найден.';
 
   @override
   String get levelEscalationAddWaveTimeline => 'Добавить таймлайн волн';
+
+  @override
+  String get levelEscalationAddWaveTimelineHint =>
+      'Использует существующий контейнер волн и связывает его с прогрессивным спавном либо создаёт пустой, если подходящего контейнера нет. Если в списке модулей уровня (LevelDefinition.Modules) отсутствует активный модуль менеджера волн, также добавляется модуль запуска без собственного независимого контейнера волн.';
+
+  @override
+  String get levelEscalationWaveManagerRunnerMissing =>
+      'Связанный контейнер волн найден, но отсутствует модуль менеджера волн, который запускает его. Нажмите «Добавить таймлайн волн», чтобы добавить модуль запуска.';
+
+  @override
+  String waveManagerPropsProvidedByEscalation(String value) {
+    return 'Контейнер волн для выполнения предоставляет прогрессивный спавн: $value';
+  }
 
   @override
   String get itemsSortedByRow => 'Предметы (по рядам)';
@@ -6590,7 +6691,7 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get zombieLevelsBody =>
-      'Уровень и ряд зомби внутри бури нельзя задавать независимо. Ручное изменение уровня зомби не действует: уровень по умолчанию определяется последовательностью уровней газона.';
+      'Уровень и ряд зомби внутри бури нельзя задавать независимо. Ручное изменение уровня зомби не действует. По умолчанию уровни зомби определяются последовательностью уровней газона. В Творческом дворе зомби имеют уровень 1.';
 
   @override
   String get batchLevel => 'Пакетный уровень';
@@ -9153,7 +9254,7 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get waveGeneratorModuleHelpSpendingBody =>
-      'Случайный призыв расходует очки, доступные на текущей волне. Игра выбирает по шансу одного из зомби, доступных за оставшиеся очки, вычитает его стоимость и снова фильтрует кандидатов, пока подходящих зомби не останется. Неиспользованные очки не переносятся на следующую волну, а фиксированный призыв их не расходует.';
+      'Случайный призыв расходует очки, доступные на текущей волне. Игра выбирает по весу одного из зомби, стоимость которого не превышает оставшиеся очки, вычитает его стоимость и снова фильтрует кандидатов, пока подходящих зомби не останется. Неиспользованные очки не переносятся на следующую волну, а фиксированный призыв их не расходует.';
 
   @override
   String get waveGeneratorModuleHelpPointTrajectory => 'Параметры';
@@ -9477,7 +9578,7 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get waveGeneratorExpectationPoolNote =>
-      'Предпросмотр оценивает количество зомби с помощью повторных симуляций случайных покупок. Даже при одинаковом числе очков результат может меняться из-за порядка выбора, поэтому точно предсказать фактический призыв в игре невозможно.';
+      'Предпросмотр оценивает количество призывов с помощью повторных симуляций взвешенного выбора. Даже при одинаковом числе очков результат может меняться из-за порядка выбора, поэтому точно предсказать фактический призыв в игре невозможно.';
 
   @override
   String waveGeneratorExpectationTitle(int wave) {
@@ -9511,27 +9612,42 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String waveGeneratorExpectationMissingData(String types) {
-    return 'Невозможно рассчитать предпросмотр случайного призыва: у следующих зомби отсутствуют надёжные данные WavePointCost: $types';
+    return 'Для следующих зомби не удалось определить действительную стоимость или вес; они исключены из предпросмотра случайного призыва: $types';
+  }
+
+  @override
+  String waveGeneratorExpectationZeroWeight(String types) {
+    return 'Вес случайного призыва следующих зомби равен 0, поэтому генератор волн их не выберет: $types';
   }
 
   @override
   String waveGeneratorExpectationEstimatedTotal(String count) {
-    return 'Среднее количество зомби при случайном призыве: около $count';
+    return 'Среднее число случайных призывов: около $count';
   }
 
   @override
   String waveGeneratorExpectationCommonRange(int minimum, int maximum) {
-    return 'Ожидаемый диапазон количества: $minimum–$maximum';
+    return 'Типичный диапазон количества: $minimum–$maximum';
   }
 
   @override
   String zombieCountWaveEstimate(String count, int minimum, int maximum) {
-    return 'За эту волну: около $count зомби (от $minimum до $maximum)';
+    return 'За эту волну: около $count (типичный диапазон: $minimum–$maximum)';
+  }
+
+  @override
+  String zombieCountWaveEstimateNoRange(String count) {
+    return 'За эту волну: около $count';
   }
 
   @override
   String zombieCountTotalEstimate(String count, int minimum, int maximum) {
-    return 'За все волны суммарно: около $count зомби (от $minimum до $maximum)';
+    return 'За все волны суммарно: около $count (типичный диапазон: $minimum–$maximum)';
+  }
+
+  @override
+  String zombieCountTotalEstimateNoRange(String count) {
+    return 'За все волны суммарно: около $count';
   }
 
   @override

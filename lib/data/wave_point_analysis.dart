@@ -28,7 +28,8 @@ class WaveExpectation {
 
   /// Ids that must not appear as prediction rows: custom entries and
   /// entries without WavePointCost data. Weight = 0 does not matter — the
-  /// game's point purchase does not read the sheet's Weight.
+  /// Wave Manager / Escalation Spawning purchase path does not read the
+  /// sheet's Weight. Legacy WaveGenerator previewing is handled separately.
   Set<String> get hiddenIds => {...missingStats, ...customIds};
 }
 
@@ -47,9 +48,10 @@ class WavePointAnalysis {
     if (totalPoints <= 0 || entries.isEmpty) {
       return {for (final e in entries) e.id: 0.0};
     }
-    // Every zombie the budget can buy is equally likely: the game's point
-    // purchase selects uniformly among affordable pool entries and ignores
-    // the sheet's Weight. Entries without usable cost data never spawn.
+    // Wave Manager / Escalation Spawning selects uniformly among affordable
+    // pool entries and ignores the sheet's Weight. The legacy WaveGenerator
+    // uses a separate weighted simulation. Entries without usable cost data
+    // never spawn in this path.
     final valid = entries.where((e) => e.cost >= 1).toList();
     if (valid.isEmpty) return {for (final e in entries) e.id: 0.0};
 

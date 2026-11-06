@@ -7,6 +7,7 @@ import 'package:c_editor/l10n/resource_names.dart';
 import 'package:c_editor/widgets/asset_image.dart'
     show AssetImageWidget, imageAltCandidates;
 import 'package:c_editor/widgets/editor_components.dart' show isDesktopPlatform;
+import 'package:c_editor/widgets/zombie_count_estimate_text.dart';
 
 const _kUnknownIconPath = 'assets/images/others/unknown.webp';
 
@@ -55,6 +56,7 @@ void showWaveGeneratorExpectationDialog(
       ];
 
       final missing = preview.missingDataTypes;
+      final zeroWeight = preview.zeroWeightTypes;
       // Only block the whole preview when nothing was left to simulate;
       // otherwise the remaining pool zombies are still listed.
       final blocked =
@@ -81,13 +83,41 @@ void showWaveGeneratorExpectationDialog(
             ),
           ),
         ]);
+        if (zeroWeight.isNotEmpty) {
+          body.addAll([
+            const SizedBox(height: 12),
+            Text(
+              l10n?.waveGeneratorExpectationZeroWeight(zeroWeight.join(', ')) ??
+                  'These zombies have a random-spawn weight of 0 and will not '
+                      'be selected by the Wave Generator: '
+                      '${zeroWeight.join(', ')}',
+              style: theme.textTheme.bodySmall?.copyWith(
+                color: theme.colorScheme.error,
+              ),
+            ),
+          ]);
+        }
       } else {
         body.addAll([
           if (missing.isNotEmpty) ...[
             const SizedBox(height: 12),
             Text(
-              l10n?.waveManagerExpectationMissingData(missing.join(', ')) ??
-                  'These zombies lack reliable WavePointCost data and are not counted: ${missing.join(', ')}',
+              l10n?.waveGeneratorExpectationMissingData(missing.join(', ')) ??
+                  'These zombies have no resolvable effective spawn cost or '
+                      'weight and are excluded from the preview: '
+                      '${missing.join(', ')}',
+              style: theme.textTheme.bodySmall?.copyWith(
+                color: theme.colorScheme.error,
+              ),
+            ),
+          ],
+          if (zeroWeight.isNotEmpty) ...[
+            const SizedBox(height: 12),
+            Text(
+              l10n?.waveGeneratorExpectationZeroWeight(zeroWeight.join(', ')) ??
+                  'These zombies have a random-spawn weight of 0 and will not '
+                      'be selected by the Wave Generator: '
+                      '${zeroWeight.join(', ')}',
               style: theme.textTheme.bodySmall?.copyWith(
                 color: theme.colorScheme.error,
               ),
@@ -101,7 +131,8 @@ void showWaveGeneratorExpectationDialog(
             ),
           ] else if (preview.poolIsEmpty ||
               preview.points <= 0 ||
-              shownItems.isEmpty) ...[
+              (shownItems.isEmpty &&
+                  !(preview.entries.isEmpty && zeroWeight.isNotEmpty))) ...[
             const SizedBox(height: 12),
             Text(
               l10n?.waveGeneratorExpectationEmpty ??
@@ -112,9 +143,10 @@ void showWaveGeneratorExpectationDialog(
             const SizedBox(height: 8),
             Text(
               l10n?.waveGeneratorExpectationEstimatedTotal(
-                    preview.averageTotal.toStringAsFixed(1),
+                    formatEstimatedCount(preview.averageTotal),
                   ) ??
-                  'Estimated random spawns: about ${preview.averageTotal.toStringAsFixed(1)}',
+                  'Average random spawns: about '
+                      '${formatEstimatedCount(preview.averageTotal)}',
               style: summaryStyle,
             ),
             if (preview.commonMinimum != preview.commonMaximum) ...[
@@ -131,19 +163,21 @@ void showWaveGeneratorExpectationDialog(
             if (totalEstimate != null && totalEstimate.average > 0) ...[
               const SizedBox(height: 6),
               Text(
-                l10n?.zombieCountTotalEstimate(
-                      totalEstimate.average.toStringAsFixed(1),
-                      totalEstimate.minimum,
-                      totalEstimate.maximum,
-                    ) ??
-                    'All waves combined: about ${totalEstimate.average.toStringAsFixed(1)} zombies (from ${totalEstimate.minimum} to ${totalEstimate.maximum})',
+                zombieCountEstimateText(
+                  l10n,
+                  totalEstimate,
+                  scope: ZombieCountEstimateScope.allWaves,
+                ),
                 style: summaryStyle,
               ),
             ],
             const SizedBox(height: 8),
             Text(
               l10n?.waveGeneratorExpectationPoolNote ??
-                  'This is a stable statistical preview of repeated random purchases from the current effective pool, not a prediction of the game RNG.',
+                  'This is a stable statistical preview of repeated weighted '
+                      'selections from the current effective pool, not a '
+                      'prediction of the game RNG.',
+              key: const ValueKey('waveGeneratorExpectationPoolNote'),
               style: theme.textTheme.bodySmall?.copyWith(
                 color: theme.colorScheme.onSurfaceVariant,
               ),
@@ -258,7 +292,9 @@ class _ExpectationZombieEntryTile extends StatelessWidget {
 
     return LayoutBuilder(
       builder: (context, constraints) {
-        final compact = constraints.maxWidth < 420;
+        final compact =
+            constraints.maxWidth < 420 ||
+            MediaQuery.textScalerOf(context).scale(1) > 1.3;
         return Container(
           margin: const EdgeInsets.only(bottom: 8),
           padding: const EdgeInsets.all(10),
@@ -307,16 +343,16 @@ class _ExpectationZombieEntryTile extends StatelessWidget {
                     ),
                     Text(
                       costWeightLabel,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
+                      key: const ValueKey('waveGeneratorExpectationCostWeight'),
                       style: secondaryStyle,
                     ),
                     if (compact) ...[
                       const SizedBox(height: 4),
                       Text(
                         averageLabel,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
+                        key: const ValueKey(
+                          'waveGeneratorExpectationAverageCount',
+                        ),
                         style: theme.textTheme.bodyMedium?.copyWith(
                           fontWeight: FontWeight.w600,
                         ),
@@ -330,8 +366,7 @@ class _ExpectationZombieEntryTile extends StatelessWidget {
                 Flexible(
                   child: Text(
                     averageLabel,
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
+                    key: const ValueKey('waveGeneratorExpectationAverageCount'),
                     textAlign: TextAlign.end,
                     style: theme.textTheme.bodyMedium?.copyWith(
                       fontWeight: FontWeight.w600,

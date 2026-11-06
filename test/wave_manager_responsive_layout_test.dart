@@ -125,4 +125,57 @@ void main() {
     );
     expect(tester.takeException(), isNull);
   });
+
+  testWidgets('runner-only wave manager accepts escalation configuration', (
+    tester,
+  ) async {
+    tester.view.devicePixelRatio = 1;
+    tester.view.physicalSize = const Size(500, 900);
+    addTearDown(tester.view.reset);
+
+    final level = PvzLevelFile(
+      objects: [
+        PvzObject(
+          aliases: const ['LevelDefinition'],
+          objClass: 'LevelDefinition',
+          objData: LevelDefinitionData(
+            modules: const [
+              'RTID(LevelEscalation@CurrentLevel)',
+              'RTID(NewWaves@CurrentLevel)',
+            ],
+          ).toJson(),
+        ),
+        PvzObject(
+          aliases: const ['LevelEscalation'],
+          objClass: 'LevelEscalationModuleProperties',
+          objData: LevelEscalationModuleData(
+            waveManagerProps: 'RTID(WaveManagerProps@CurrentLevel)',
+          ).toJson(),
+        ),
+        PvzObject(
+          aliases: const ['NewWaves'],
+          objClass: 'WaveManagerModuleProperties',
+          objData: WaveManagerModuleData().toJson(),
+        ),
+        PvzObject(
+          aliases: const ['WaveManagerProps'],
+          objClass: 'WaveManagerProperties',
+          objData: WaveManagerData(waves: [<String>[]]).toJson(),
+        ),
+      ],
+    );
+
+    await tester.pumpWidget(_app(level: level, themeMode: ThemeMode.light));
+    await tester.pumpAndSettle();
+
+    expect(
+      find.textContaining('provided by Escalation Spawning'),
+      findsOneWidget,
+    );
+    expect(
+      find.byKey(const ValueKey('waveManagerPropsFixButton')),
+      findsNothing,
+    );
+    expect(tester.takeException(), isNull);
+  });
 }

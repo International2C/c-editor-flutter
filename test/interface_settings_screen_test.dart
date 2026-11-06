@@ -221,7 +221,6 @@ void main() {
     'global setting sections appear only when either app bar keeps them here',
     (tester) async {
       await pumpScreen(tester);
-      final l10n = lookupAppLocalizations(const Locale('en'));
 
       expect(
         find.byKey(const ValueKey('interfaceSettingsUiScaleSlider')),
@@ -271,6 +270,40 @@ void main() {
       );
     },
   );
+
+  testWidgets('menu action can be moved directly to the end of the list', (
+    tester,
+  ) async {
+    await pumpScreen(tester, size: const Size(700, 700));
+    final l10n = lookupAppLocalizations(const Locale('en'));
+    await tester.ensureVisible(find.text(l10n.menuCustomization));
+    await tester.pumpAndSettle();
+
+    final viewport = find.byKey(
+      const ValueKey('interfaceMenuViewport_workspace'),
+    );
+    final listFinder = find.byKey(const ValueKey('interfaceMenu_workspace'));
+    expect(viewport, findsOneWidget);
+    expect(tester.getSize(viewport).height, lessThanOrEqualTo(455));
+
+    final list = tester.widget<ReorderableListView>(listFinder);
+    expect(list.physics, isA<ClampingScrollPhysics>());
+    final firstId = settings.state
+        .interfaceMenuActionsFor(InterfaceMenuSurface.workspace)
+        .first
+        .id;
+
+    list.onReorderItem!(0, list.itemCount - 1);
+    await tester.pumpAndSettle();
+
+    expect(
+      settings.state
+          .interfaceMenuActionsFor(InterfaceMenuSurface.workspace)
+          .last
+          .id,
+      firstId,
+    );
+  });
 
   testWidgets('customizes all three top-right action surfaces independently', (
     tester,

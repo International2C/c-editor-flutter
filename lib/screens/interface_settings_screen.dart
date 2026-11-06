@@ -460,44 +460,56 @@ class _InterfaceSettingsScreenState extends State<InterfaceSettingsScreen> {
             style: Theme.of(context).textTheme.bodySmall,
           ),
           const SizedBox(height: 4),
-          ReorderableListView.builder(
-            key: ValueKey('interfaceMenu_${_selectedSurface.name}'),
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            buildDefaultDragHandles: false,
-            itemCount: actions.length,
-            onReorderItem: (oldIndex, newIndex) {
-              _reorderVisibleAction(
-                context,
-                allActions,
-                actions,
-                oldIndex,
-                newIndex,
-              );
-            },
-            itemBuilder: (context, index) {
-              final action = actions[index];
-              return _MenuActionTile(
-                key: ValueKey('${_selectedSurface.name}_${action.id}'),
-                index: index,
-                icon: _actionIcon(action.id),
-                label: _actionLabel(action.id, l10n),
-                placement: action.placement,
-                toolbarLabel: l10n.menuPlacementToolbar,
-                overflowLabel: l10n.menuPlacementOverflow,
-                settingsPageLabel: l10n.menuPlacementSettingsPage,
-                allowSettingsPage: supportsInterfaceSettingsPagePlacement(
-                  action.id,
-                ),
-                onPlacementChanged: (placement) {
-                  context.read<SettingsCubit>().setInterfaceMenuActionPlacement(
-                    _selectedSurface,
+          ConstrainedBox(
+            key: ValueKey('interfaceMenuViewport_${_selectedSurface.name}'),
+            constraints: BoxConstraints(
+              maxHeight: (MediaQuery.sizeOf(context).height * 0.65).clamp(
+                320.0,
+                720.0,
+              ),
+            ),
+            child: ReorderableListView.builder(
+              key: ValueKey('interfaceMenu_${_selectedSurface.name}'),
+              shrinkWrap: true,
+              primary: false,
+              physics: const ClampingScrollPhysics(),
+              buildDefaultDragHandles: false,
+              itemCount: actions.length,
+              onReorderItem: (oldIndex, newIndex) {
+                _reorderVisibleAction(
+                  context,
+                  allActions,
+                  actions,
+                  oldIndex,
+                  newIndex,
+                );
+              },
+              itemBuilder: (context, index) {
+                final action = actions[index];
+                return _MenuActionTile(
+                  key: ValueKey('${_selectedSurface.name}_${action.id}'),
+                  index: index,
+                  icon: _actionIcon(action.id),
+                  label: _actionLabel(action.id, l10n),
+                  placement: action.placement,
+                  toolbarLabel: l10n.menuPlacementToolbar,
+                  overflowLabel: l10n.menuPlacementOverflow,
+                  settingsPageLabel: l10n.menuPlacementSettingsPage,
+                  allowSettingsPage: supportsInterfaceSettingsPagePlacement(
                     action.id,
-                    placement,
-                  );
-                },
-              );
-            },
+                  ),
+                  onPlacementChanged: (placement) {
+                    context
+                        .read<SettingsCubit>()
+                        .setInterfaceMenuActionPlacement(
+                          _selectedSurface,
+                          action.id,
+                          placement,
+                        );
+                  },
+                );
+              },
+            ),
           ),
           const SizedBox(height: 8),
           Align(
