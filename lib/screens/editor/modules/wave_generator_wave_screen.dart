@@ -415,13 +415,15 @@ class _WaveGeneratorWaveScreenState extends State<WaveGeneratorWaveScreen> {
     return id == 'yeti' || id == 'treasureyeti' || id == 'treasureyeti_egypt';
   }
 
+  void _showBlockedMessage(String message) {
+    final messenger = ScaffoldMessenger.of(context);
+    messenger.clearSnackBars();
+    messenger.showSnackBar(SnackBar(content: Text(message)));
+  }
+
   void _showYetiZombieBlockedMessage(AppLocalizations? l10n) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(
-          l10n?.yetiZombiesNotAllowed ?? 'Yetis are not allowed here',
-        ),
-      ),
+    _showBlockedMessage(
+      l10n?.yetiZombiesNotAllowed ?? 'Yetis are not allowed here',
     );
   }
 
@@ -545,13 +547,9 @@ class _WaveGeneratorWaveScreenState extends State<WaveGeneratorWaveScreen> {
         'ZombieTypes',
       );
       if (RtidParser.parse(rtid)?.source == 'CurrentLevel') {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(
-              l10n?.waveGeneratorCustomZombieBlocked ??
-                  'Custom zombies are not supported in wave generator levels.',
-            ),
-          ),
+        _showBlockedMessage(
+          l10n?.waveGeneratorCustomZombieBlocked ??
+              'Custom zombies are not supported in wave generator levels.',
         );
         return;
       }
@@ -582,26 +580,17 @@ class _WaveGeneratorWaveScreenState extends State<WaveGeneratorWaveScreen> {
         return;
       }
       if (ZombieRepository().isElite(selectedId)) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(
-              l10n?.eliteZombiesNotAllowed ??
-                  'Elite zombies are not allowed here',
-            ),
-          ),
+        _showBlockedMessage(
+          l10n?.eliteZombiesNotAllowed ?? 'Elite zombies are not allowed here',
         );
         return;
       }
       if (!ZombiePropertiesRepository.canSpawnFromPoints(selectedId)) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(
-              l10n?.pointSpawnOnlyZombiesBlocked ??
-                  'This zombie has no WavePointCost data, so the game '
-                      'cannot buy it from a point budget, and it cannot '
-                      'be added to the pool.',
-            ),
-          ),
+        _showBlockedMessage(
+          l10n?.pointSpawnOnlyZombiesBlocked ??
+              'This zombie has no point cost (WavePointCost) data, so the '
+                  'game cannot select and spawn it according to the wave\'s '
+                  'points, and it cannot be added to the point-spawn pool.',
         );
         return;
       }
@@ -610,13 +599,9 @@ class _WaveGeneratorWaveScreenState extends State<WaveGeneratorWaveScreen> {
         'ZombieTypes',
       );
       if (RtidParser.parse(rtid)?.source == 'CurrentLevel') {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(
-              l10n?.waveGeneratorCustomZombieBlocked ??
-                  'Custom zombies are not supported.',
-            ),
-          ),
+        _showBlockedMessage(
+          l10n?.waveGeneratorCustomZombieBlocked ??
+              'Custom zombies are not supported.',
         );
         return;
       }
@@ -690,7 +675,7 @@ class _WaveGeneratorWaveScreenState extends State<WaveGeneratorWaveScreen> {
                               wave,
                             ),
                           ) ??
-                          'W$wave · ${WaveGeneratorPointAnalysis.pointsAtWave(_generatorData, wave)}',
+                          'Wave $wave · ${WaveGeneratorPointAnalysis.pointsAtWave(_generatorData, wave)}',
                     ),
                   ),
               ],
@@ -750,7 +735,8 @@ class _WaveGeneratorWaveScreenState extends State<WaveGeneratorWaveScreen> {
           title: l10n?.waveGeneratorModuleHelpSpending ?? 'Random spawning',
           body:
               l10n?.waveGeneratorModuleHelpSpendingBody ??
-              'Random spawns buy zombies from the effective pool with the points available to this wave.',
+              'Random spawns select and spawn zombies from the effective '
+                  'pool according to the points available to this wave.',
         ),
         HelpSectionData(
           title:
@@ -973,12 +959,7 @@ class _WaveGeneratorWaveScreenState extends State<WaveGeneratorWaveScreen> {
   }
 
   Widget _buildFixedSpawnsPage(ThemeData theme, AppLocalizations? l10n) {
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: _buildLaneRows(context, theme, l10n),
-      ),
-    );
+    return _buildLaneRows(context, theme, l10n);
   }
 
   Widget _buildRandomSpawnsPage(

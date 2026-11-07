@@ -24,7 +24,7 @@ void main() {
       lookupAppLocalizations(
         const Locale('zh'),
       ).waveGeneratorStatisticalPreview,
-      '出怪预览',
+      '随机出怪预览',
     );
     expect(
       lookupAppLocalizations(
@@ -126,6 +126,13 @@ void main() {
     await tester.tap(find.text('固定出怪'));
     await tester.pumpAndSettle();
     expect(find.byIcon(Icons.help_outline), findsOneWidget);
+    expect(
+      find.ancestor(
+        of: find.byKey(const ValueKey('zombie_lane_row_1')),
+        matching: find.byType(Card),
+      ),
+      findsOneWidget,
+    );
 
     await tester.tap(find.byIcon(Icons.arrow_back));
     await tester.pumpAndSettle();

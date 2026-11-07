@@ -310,6 +310,12 @@ abstract class AppLocalizations {
   /// **'Number indicates the wave number'**
   String get waveNumberLegend;
 
+  /// No description provided for @waveFlagLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Flag wave'**
+  String get waveFlagLabel;
+
   /// No description provided for @expand.
   ///
   /// In en, this message translates to:
@@ -3481,7 +3487,7 @@ abstract class AppLocalizations {
   /// No description provided for @noWaveManagerHint.
   ///
   /// In en, this message translates to:
-  /// **'Wave management is enabled, but the entity object (WaveManagerProperties) is missing. Please create an empty wave container.'**
+  /// **'Wave management is enabled, but the wave container (WaveManagerProperties) that stores wave data is missing. Please create an empty wave container.'**
   String get noWaveManagerHint;
 
   /// No description provided for @waveTimelineGuideTitle.
@@ -3493,13 +3499,13 @@ abstract class AppLocalizations {
   /// No description provided for @waveTimelineGuideBodyDesktop.
   ///
   /// In en, this message translates to:
-  /// **'Left-click a wave: Manage wave events\nLong-press an event: Drag to reorder or move waves\nClick points: View spawn expectations'**
+  /// **'Left-click a wave: Manage wave events\nLong-press an event: Drag to reorder or move waves\nClick points: View the point-spawn preview'**
   String get waveTimelineGuideBodyDesktop;
 
   /// No description provided for @waveTimelineGuideBodyMobile.
   ///
   /// In en, this message translates to:
-  /// **'Tap a wave: Manage events\nLong-press an event: Drag to reorder or move waves\nTap points: View spawn expectations'**
+  /// **'Tap a wave: Manage events\nLong-press an event: Drag to reorder or move waves\nTap points: View the point-spawn preview'**
   String get waveTimelineGuideBodyMobile;
 
   /// No description provided for @waveDeadLinksTitle.
@@ -3619,7 +3625,7 @@ abstract class AppLocalizations {
   /// No description provided for @moduleTitle_WaveManagerProperties.
   ///
   /// In en, this message translates to:
-  /// **'Linked Wave Parameters (WaveManagerProps)'**
+  /// **'Wave Container (WaveManagerProperties)'**
   String get moduleTitle_WaveManagerProperties;
 
   /// No description provided for @waveManagerPropsCurrent.
@@ -3631,7 +3637,7 @@ abstract class AppLocalizations {
   /// No description provided for @waveManagerGlobalParams.
   ///
   /// In en, this message translates to:
-  /// **'Wave Manager Parameters'**
+  /// **'Wave Container Global Parameters'**
   String get waveManagerGlobalParams;
 
   /// No description provided for @waveContainerAliasSection.
@@ -3712,10 +3718,16 @@ abstract class AppLocalizations {
   /// **'Flag interval'**
   String get flagInterval;
 
+  /// No description provided for @waveManagerFlagIntervalOverridden.
+  ///
+  /// In en, this message translates to:
+  /// **'Escalation Spawning overrides this setting with Waves per flag at runtime. The effective flag interval is {interval, plural, one{1 wave} other{{interval} waves}}.'**
+  String waveManagerFlagIntervalOverridden(int interval);
+
   /// No description provided for @waveManagerHelpTitle.
   ///
   /// In en, this message translates to:
-  /// **'Wave Manager module'**
+  /// **'Wave Event Container'**
   String get waveManagerHelpTitle;
 
   /// No description provided for @waveManagerHelpOverviewTitle.
@@ -3727,7 +3739,7 @@ abstract class AppLocalizations {
   /// No description provided for @waveManagerHelpOverviewBody.
   ///
   /// In en, this message translates to:
-  /// **'The wave event container organizes level events by wave order. Most levels use it to control zombie spawning. This page allows you to adjust its global settings.'**
+  /// **'The Wave Container (WaveManagerProperties) stores level events in wave order together with global settings such as the first-wave countdown, health thresholds, and flag interval. It holds the data used to initialize the actual wave manager (WaveManager), not a second runtime wave system. This page edits that container.'**
   String get waveManagerHelpOverviewBody;
 
   /// No description provided for @waveManagerHelpFlagTitle.
@@ -3979,8 +3991,14 @@ abstract class AppLocalizations {
   /// No description provided for @expectation.
   ///
   /// In en, this message translates to:
-  /// **'Expectation'**
+  /// **'Point-spawn preview'**
   String get expectation;
+
+  /// No description provided for @pointSpawnExpectedCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count}'**
+  String pointSpawnExpectedCount(String count);
 
   /// No description provided for @close.
   ///
@@ -4375,7 +4393,7 @@ abstract class AppLocalizations {
   /// No description provided for @conflictDesc_WaveGeneratorLevelEscalation.
   ///
   /// In en, this message translates to:
-  /// **'The Level Escalation module scales zombie levels based on waves from the Wave Manager system, so it cannot be used with the Wave Generator.'**
+  /// **'Escalation Spawning depends on the Wave Manager system and cannot be used with the Wave Generator.'**
   String get conflictDesc_WaveGeneratorLevelEscalation;
 
   /// No description provided for @conflictDesc_CamelMinigameNonTouchZombies.
@@ -4669,7 +4687,7 @@ abstract class AppLocalizations {
   /// No description provided for @moduleDesc_WaveManagerModuleProperties.
   ///
   /// In en, this message translates to:
-  /// **'Manages overall wave event configuration for the level'**
+  /// **'Runs the level\'s waves and configures runtime features such as point-based spawning'**
   String get moduleDesc_WaveManagerModuleProperties;
 
   /// No description provided for @moduleTitle_WaveGeneratorProperties.
@@ -5359,80 +5377,194 @@ abstract class AppLocalizations {
   /// No description provided for @moduleTitle_LevelEscalationModuleProperties.
   ///
   /// In en, this message translates to:
-  /// **'Level Escalation'**
+  /// **'Escalation Spawning'**
   String get moduleTitle_LevelEscalationModuleProperties;
 
   /// No description provided for @moduleDesc_LevelEscalationModuleProperties.
   ///
   /// In en, this message translates to:
-  /// **'Escalates difficulty across flags: points grow with each wave and new zombies join the spawn pool'**
+  /// **'Plans random spawning from the first wave and can assign Plant Food to randomly spawned zombies'**
   String get moduleDesc_LevelEscalationModuleProperties;
 
   /// No description provided for @flagCount.
   ///
   /// In en, this message translates to:
-  /// **'Flag count'**
+  /// **'Flag count (FlagCount)'**
   String get flagCount;
 
   /// No description provided for @wavesPerFlag.
   ///
   /// In en, this message translates to:
-  /// **'Waves per flag'**
+  /// **'Waves per flag (WavesPerFlag)'**
   String get wavesPerFlag;
 
   /// No description provided for @plantfoodToSpawnCount.
   ///
   /// In en, this message translates to:
-  /// **'Plant Food drop count'**
+  /// **'Plant Food count (PlantfoodToSpawnCount)'**
   String get plantfoodToSpawnCount;
-
-  /// No description provided for @levelEscalationTotalWaves.
-  ///
-  /// In en, this message translates to:
-  /// **'Total escalation waves: {count}'**
-  String levelEscalationTotalWaves(int count);
 
   /// No description provided for @levelEscalationFlagCountShort.
   ///
   /// In en, this message translates to:
-  /// **'Flags'**
+  /// **'Flag count (FlagCount)'**
   String get levelEscalationFlagCountShort;
 
   /// No description provided for @levelEscalationFlagIntervalShort.
   ///
   /// In en, this message translates to:
-  /// **'Interval'**
+  /// **'Waves per flag (WavesPerFlag)'**
   String get levelEscalationFlagIntervalShort;
 
   /// No description provided for @expectationNoAffordableZombies.
   ///
   /// In en, this message translates to:
-  /// **'None of this wave\'s pool zombies can be bought with its points.'**
+  /// **'This wave does not have enough points to select and spawn any zombie from the pool.'**
   String get expectationNoAffordableZombies;
 
-  /// No description provided for @levelEscalationHelpOverviewBody.
+  /// No description provided for @levelEscalationModuleHelpTitle.
   ///
   /// In en, this message translates to:
-  /// **'Adds point-based difficulty escalation to the level. Waves are grouped into flags; each new wave grants more points, and those points are spent to spawn zombies from the pool. Plant Food drops are limited to the configured count.'**
-  String get levelEscalationHelpOverviewBody;
+  /// **'Escalation Spawning module'**
+  String get levelEscalationModuleHelpTitle;
 
-  /// No description provided for @levelEscalationHelpFieldsBody.
+  /// No description provided for @levelEscalationModuleHelpOverview.
   ///
   /// In en, this message translates to:
-  /// **'Flag count (FlagCount) is the number of flags in the level, and Waves per flag (WavesPerFlag) is the number of waves in each flag; together they give the total wave count.\nStarting points (StartingPoints) is the initial point pool, and Point increase per wave (PointIncrementPerWave) is how many extra points are granted for every new wave.\nPlant Food drop count (PlantfoodToSpawnCount) limits how many Plant Food drops the module spawns.\nZombie pool (ZombiePool) lists the zombie types the points can spawn, and Wave manager props (WaveManagerProps) links the module to the level\'s WaveManagerProperties object.'**
-  String get levelEscalationHelpFieldsBody;
+  /// **'Overview'**
+  String get levelEscalationModuleHelpOverview;
 
-  /// No description provided for @levelEscalationHelpLevelsTitle.
+  /// No description provided for @levelEscalationModuleHelpOverviewBody.
   ///
   /// In en, this message translates to:
-  /// **'Zombie levels'**
-  String get levelEscalationHelpLevelsTitle;
+  /// **'Escalation Spawning must be used with the Wave Manager. When the level loads, it uses the linked Wave Container (WaveManagerProperties) as a base, preserves its existing fixed spawns, other wave events, and settings such as the first-wave delay, next-wave health thresholds, and suppression of flag zombies, then generates random spawns from wave 1 according to its own parameters and assigns Plant Food to some randomly spawned zombies. The Wave Manager then runs the result.'**
+  String get levelEscalationModuleHelpOverviewBody;
 
-  /// No description provided for @levelEscalationHelpLevelsBody.
+  /// No description provided for @levelEscalationModuleHelpRuntime.
   ///
   /// In en, this message translates to:
-  /// **'The module has no per-zombie level setting (ZombieLevel): every zombie from the pool always spawns at level 1.'**
-  String get levelEscalationHelpLevelsBody;
+  /// **'Wave container and runner'**
+  String get levelEscalationModuleHelpRuntime;
+
+  /// No description provided for @levelEscalationModuleHelpRuntimeBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Add wave container reuses the wave container already linked to Escalation Spawning, or another container already in the level. It creates an empty wave container only when none can be reused, then links the resulting container to Escalation Spawning. If the level module list (LevelDefinition.Modules) contains no enabled Wave Manager module to run waves, a runner-only module with no independent wave container is added; an existing enabled runner is not rewritten.\nNormally Escalation Spawning references and supplies the wave container used at runtime, while Wave Manager only runs it. If Wave Manager has no independent wave container, or both modules reference the same container, module order does not overwrite the escalated result. Only different valid wave containers can initialize the same runtime wave manager (WaveManager) more than once; if that happens, the contents applied later replace the earlier result.'**
+  String get levelEscalationModuleHelpRuntimeBody;
+
+  /// No description provided for @levelEscalationModuleHelpWaveLayout.
+  ///
+  /// In en, this message translates to:
+  /// **'Waves and flags'**
+  String get levelEscalationModuleHelpWaveLayout;
+
+  /// No description provided for @levelEscalationModuleHelpWaveLayoutBody.
+  ///
+  /// In en, this message translates to:
+  /// **'The module generates random spawns for Flag count × Waves per flag, which does not necessarily equal the level\'s final runtime wave count.\nIf the linked wave container contains fewer waves, the game adds the missing waves to the runtime copy and changes its total wave count to that value. If the container already contains the same number or more, the game does not remove extra waves or force its existing total wave count to change, but this module still adds random spawns only within its generated range. The flag interval in the runtime copy is replaced by Waves per flag.\nFor example, with 4 flags and 3 waves per flag, this module adds random spawns to the first 12 waves, and waves 3, 6, 9, and 12 are flag waves. If the container also contains wave 13 and later waves, waves 15, 18, and so on are still treated as flag waves, but receive no random spawns from this module.'**
+  String get levelEscalationModuleHelpWaveLayoutBody;
+
+  /// No description provided for @levelEscalationModuleHelpSpending.
+  ///
+  /// In en, this message translates to:
+  /// **'Point trajectory'**
+  String get levelEscalationModuleHelpSpending;
+
+  /// No description provided for @levelEscalationModuleHelpSpendingBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Wave 1 uses Starting points. Each later wave adds Point increase per wave to the previous wave\'s base budget. Flag waves multiply that wave\'s base points by 2.5 and discard the fractional part.\nOn each wave, the game randomly selects and spawns zombies from the pool according to the available points. Unspent points are not carried forward to the next wave.'**
+  String get levelEscalationModuleHelpSpendingBody;
+
+  /// No description provided for @levelEscalationModuleHelpPlantfood.
+  ///
+  /// In en, this message translates to:
+  /// **'Plant Food allocation'**
+  String get levelEscalationModuleHelpPlantfood;
+
+  /// No description provided for @levelEscalationModuleHelpPlantfoodBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Plant Food count is the total amount allocated to randomly spawned zombies across the level. It is separate from starting Plant Food and Plant Food carried by fixed spawn events.\nFrom first to last, the game assigns one Plant Food to the wave before each flag wave. If the count is lower than the flag count, only the first several flag segments receive one. If it is higher, each remaining Plant Food is independently assigned to a random wave in the nominal random-spawn range. Random assignments may repeat or land on a wave that already received Plant Food, so one wave can receive several.\nFor example, with 3 flags, 10 waves per flag, and 5 Plant Food, waves 9, 19, and 29 first receive one each; the remaining 2 are then independently assigned to waves 1–30.\nOnly eligible randomly spawned zombies can carry Plant Food. If a wave has too few eligible zombies, excess Plant Food is lost rather than reassigned to another wave.'**
+  String get levelEscalationModuleHelpPlantfoodBody;
+
+  /// No description provided for @levelEscalationModuleHelpPool.
+  ///
+  /// In en, this message translates to:
+  /// **'Zombie pool'**
+  String get levelEscalationModuleHelpPool;
+
+  /// No description provided for @levelEscalationModuleHelpPoolBody.
+  ///
+  /// In en, this message translates to:
+  /// **'The entire pool is available from wave 1 and remains available; zombies are not unlocked progressively. Pool zombies always spawn at level 1. Zombies that cost more than the current budget cannot be selected. Do not add elite, Yeti, or custom zombies.'**
+  String get levelEscalationModuleHelpPoolBody;
+
+  /// No description provided for @levelEscalationModuleHelpLimits.
+  ///
+  /// In en, this message translates to:
+  /// **'Parameter limits'**
+  String get levelEscalationModuleHelpLimits;
+
+  /// No description provided for @levelEscalationModuleHelpLimitsBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Flag count and Waves per flag must be positive integers, and Plant Food count must be a non-negative integer.\nWhen Plant Food is allocated, Waves per flag must be at least 2. A value of 1 places each preset Plant Food assignment on an invalid wave, so it cannot appear as intended.'**
+  String get levelEscalationModuleHelpLimitsBody;
+
+  /// No description provided for @levelEscalationFlagCountInvalid.
+  ///
+  /// In en, this message translates to:
+  /// **'Flag count must be a positive integer.'**
+  String get levelEscalationFlagCountInvalid;
+
+  /// No description provided for @levelEscalationWavesPerFlagInvalid.
+  ///
+  /// In en, this message translates to:
+  /// **'Waves per flag must be a positive integer.'**
+  String get levelEscalationWavesPerFlagInvalid;
+
+  /// No description provided for @levelEscalationPlantfoodCountInvalid.
+  ///
+  /// In en, this message translates to:
+  /// **'Plant Food count must be a non-negative integer.'**
+  String get levelEscalationPlantfoodCountInvalid;
+
+  /// No description provided for @levelEscalationPlantfoodWavesPerFlagInvalid.
+  ///
+  /// In en, this message translates to:
+  /// **'When Plant Food is allocated, Waves per flag must be at least 2. A value of 1 places each preset Plant Food assignment on an invalid wave.'**
+  String get levelEscalationPlantfoodWavesPerFlagInvalid;
+
+  /// No description provided for @levelEscalationAfterWaveManagerWarning.
+  ///
+  /// In en, this message translates to:
+  /// **'Escalation Spawning and Wave Manager reference different valid wave containers, and Escalation Spawning appears later. The same runtime wave manager (WaveManager) may be initialized again; the timeline previews the container processed by Escalation Spawning.'**
+  String get levelEscalationAfterWaveManagerWarning;
+
+  /// No description provided for @levelEscalationBeforeWaveManagerWarning.
+  ///
+  /// In en, this message translates to:
+  /// **'Escalation Spawning and Wave Manager reference different valid wave containers, and Wave Manager appears later. It may initialize the same runtime wave manager (WaveManager) again with its own container and replace the escalated result, so the timeline previews Wave Manager\'s wave container.'**
+  String get levelEscalationBeforeWaveManagerWarning;
+
+  /// No description provided for @levelEscalationOverriddenByPointSpawning.
+  ///
+  /// In en, this message translates to:
+  /// **'Wave Manager loads its own wave container after Escalation Spawning, so Point-Based Spawning takes over. To use Escalation Spawning, move it after Wave Manager in the module list.'**
+  String get levelEscalationOverriddenByPointSpawning;
+
+  /// No description provided for @levelEscalationWavePlantfood.
+  ///
+  /// In en, this message translates to:
+  /// **'Plant Food fixed to this wave: {count}'**
+  String levelEscalationWavePlantfood(int count);
+
+  /// No description provided for @levelEscalationRandomPlantfood.
+  ///
+  /// In en, this message translates to:
+  /// **'Another {count} Plant Food item(s) are independently assigned to waves 1–{waves}; repeats are allowed.'**
+  String levelEscalationRandomPlantfood(int count, int waves);
 
   /// No description provided for @levelEscalationPredict.
   ///
@@ -5461,7 +5593,7 @@ abstract class AppLocalizations {
   /// No description provided for @pointSpawnOnlyZombiesBlocked.
   ///
   /// In en, this message translates to:
-  /// **'This zombie has no WavePointCost data, so the game cannot buy it from a point budget, and it cannot be added to the pool.'**
+  /// **'This zombie has no point cost (WavePointCost) data, so the game cannot select and spawn it according to the wave\'s points, and it cannot be added to the point-spawn pool.'**
   String get pointSpawnOnlyZombiesBlocked;
 
   /// No description provided for @pointSpawnOnlyZombieBlockedTitle.
@@ -5473,7 +5605,7 @@ abstract class AppLocalizations {
   /// No description provided for @pointSpawnOnlyZombieBlockedMessage.
   ///
   /// In en, this message translates to:
-  /// **'This zombie has no WavePointCost data (the field the game uses to buy zombies from wave points), so it cannot be used in point auto-spawn.'**
+  /// **'This zombie has no point cost (WavePointCost) data. The game needs this field to select and spawn zombies according to the wave\'s points, so this zombie cannot be used in point auto-spawn.'**
   String get pointSpawnOnlyZombieBlockedMessage;
 
   /// No description provided for @moduleTitle_DeathHoleModuleProperties.
@@ -5569,7 +5701,7 @@ abstract class AppLocalizations {
   /// No description provided for @noConditions.
   ///
   /// In en, this message translates to:
-  /// **'No conditions'**
+  /// **'None'**
   String get noConditions;
 
   /// No description provided for @frozenPlantPlacementHelpTitle.
@@ -5599,7 +5731,7 @@ abstract class AppLocalizations {
   /// No description provided for @frozenPlantPlacementHelpConditionBody.
   ///
   /// In en, this message translates to:
-  /// **'Plants can be set to a special state: frozen (icecubed), chilled (chill), shadow boosted (shadowboosted), or shroom boosted (shroomboosted).'**
+  /// **'Plants can be given special states such as Light frost (froststage1), Heavy frost (froststage2), Fully frozen (icecubed), and Shadow boosted (shadowboosted). When entering plant states in manual edit mode, keep in mind that some states may not take effect as expected.'**
   String get frozenPlantPlacementHelpConditionBody;
 
   /// No description provided for @frozenPlantPlacementHelpLastStandTitle.
@@ -6331,26 +6463,20 @@ abstract class AppLocalizations {
   /// No description provided for @eventTitle_HeianNinjaZombieSpawnerProps.
   ///
   /// In en, this message translates to:
-  /// **'Ninjimp Airstrike'**
+  /// **'Ninjimp Rain'**
   String get eventTitle_HeianNinjaZombieSpawnerProps;
 
   /// No description provided for @eventDesc_HeianNinjaZombieSpawnerProps.
   ///
   /// In en, this message translates to:
-  /// **'Ninjimp zombies drop in from above'**
+  /// **'Ninjimps drop in from above'**
   String get eventDesc_HeianNinjaZombieSpawnerProps;
 
   /// No description provided for @eventHelpHeianNinjaRainBody.
   ///
   /// In en, this message translates to:
-  /// **'Ninjimp zombies drop onto the lawn during a wave. Use this for Heian Ninjimp or the two-player (new_pvp) variant. Zombie levels follow the lawn’s level sequence.'**
+  /// **'Ninjimps drop from the top of the screen for a surprise attack, commonly seen in Heian Ages levels. Compared with the standard Imp Drop event, this event gives Ninjimps a smoke bomb visual effect when they land. Zombie levels follow the lawn’s level sequence, with Level 1 used in Creative Courtyard.'**
   String get eventHelpHeianNinjaRainBody;
-
-  /// No description provided for @eventHelpHeianNinjaRainLogic.
-  ///
-  /// In en, this message translates to:
-  /// **'Zombies drop in batches. Control total count, group size, column range, and timing. A red warning message can appear before the event; leave the zombie type empty to use this event only for the subtitle.'**
-  String get eventHelpHeianNinjaRainLogic;
 
   /// No description provided for @eventTitle_BlackHoleWaveActionProps.
   ///
@@ -6433,7 +6559,7 @@ abstract class AppLocalizations {
   /// No description provided for @eventDesc_ZombieAirbubbleActionProps.
   ///
   /// In en, this message translates to:
-  /// **'Rains bubbles from the sky: count, health and fall speed'**
+  /// **'Bubbles fall from the sky and carry plants away'**
   String get eventDesc_ZombieAirbubbleActionProps;
 
   /// No description provided for @eventAirbubble.
@@ -6445,8 +6571,20 @@ abstract class AppLocalizations {
   /// No description provided for @eventHelpAirbubbleWaveBody.
   ///
   /// In en, this message translates to:
-  /// **'Adds a wave effect that summons bubbles falling from the sky. Each bubble has its own health, and the fall speed range controls how fast they drop.'**
+  /// **'Commonly seen in Memory Lane levels. Colorful soap bubbles fall from the sky and hover above plants. After a while, each bubble encloses a plant and carries it off the lawn. Blover can blow the bubbles away.'**
   String get eventHelpAirbubbleWaveBody;
+
+  /// No description provided for @eventHelpAirbubbleWaveFieldsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Parameter Description'**
+  String get eventHelpAirbubbleWaveFieldsTitle;
+
+  /// No description provided for @eventHelpAirbubbleWaveFields.
+  ///
+  /// In en, this message translates to:
+  /// **'The bubbles (wave_airbubble) spawned by this event are separate zombie entities with configurable health. They differ from the bubbles produced by Bubble Gun Imp and Bubble Machine Imp. The health setting applies only to the bubbles spawned by this wave event.\nThe minimum and maximum fall speeds define the range from which each bubble\'s speed is randomly chosen as it descends toward its target. After enclosing a plant, the bubble holds it for the usual duration and carries it upward at the usual speed.'**
+  String get eventHelpAirbubbleWaveFields;
 
   /// No description provided for @airbubbleParameters.
   ///
@@ -7666,6 +7804,12 @@ abstract class AppLocalizations {
   /// **'Invalid event'**
   String get invalidEventTitle;
 
+  /// No description provided for @unknownEventTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Unknown event'**
+  String get unknownEventTitle;
+
   /// No description provided for @invalidReference.
   ///
   /// In en, this message translates to:
@@ -8119,7 +8263,7 @@ abstract class AppLocalizations {
   /// No description provided for @eventHelpParachuteRainBody.
   ///
   /// In en, this message translates to:
-  /// **'Zombies will parachute in from above for a surprise attack. Commonly used for Bug Bot Imp, Lost Pilot Zombie, Bass Zombie, ZCorp Helpdesk, and more. Zombie levels follow the lawn’s level sequence.'**
+  /// **'Zombies will parachute in from above for a surprise attack. Commonly used for Bug Bot Imp, Lost Pilot Zombie, Bass Zombie, ZCorp Helpdesk, and more. Zombie levels follow the lawn’s level sequence, with Level 1 used in Creative Courtyard.'**
   String get eventHelpParachuteRainBody;
 
   /// No description provided for @eventHelpParachuteRainLogic.
@@ -9109,7 +9253,7 @@ abstract class AppLocalizations {
   /// No description provided for @zombieFromRight.
   ///
   /// In en, this message translates to:
-  /// **'Appear from the right side of the lawn'**
+  /// **'When off, zombies spawn from the right side of the lawn by default.'**
   String get zombieFromRight;
 
   /// No description provided for @zombieEntrySideLabel.
@@ -10537,8 +10681,14 @@ abstract class AppLocalizations {
   /// No description provided for @zombieTypeSpiderZombieName.
   ///
   /// In en, this message translates to:
-  /// **'Zombie type (SpiderZombieName)'**
+  /// **'Airdropped zombie (SpiderZombieName)'**
   String get zombieTypeSpiderZombieName;
+
+  /// No description provided for @airdropZombieReplaceWarning.
+  ///
+  /// In en, this message translates to:
+  /// **'This zombie is outside the editor’s list of available zombies for this module. Switching will permanently overwrite the original zombie\'s codename. Continue?'**
+  String get airdropZombieReplaceWarning;
 
   /// No description provided for @noneSelected.
   ///
@@ -11541,6 +11691,12 @@ abstract class AppLocalizations {
   /// **'Disabled (event-based spawning only)'**
   String get pointSpawningDisabledDesc;
 
+  /// No description provided for @waveManagerPointsOverriddenByEscalation.
+  ///
+  /// In en, this message translates to:
+  /// **'Because Escalation Spawning supplies the wave container, it overrides Point-Based Spawning. To use Point-Based Spawning, remove the Escalation Spawning module.'**
+  String get waveManagerPointsOverriddenByEscalation;
+
   /// No description provided for @pointSettings.
   ///
   /// In en, this message translates to:
@@ -11550,7 +11706,7 @@ abstract class AppLocalizations {
   /// No description provided for @startingWave.
   ///
   /// In en, this message translates to:
-  /// **'Starting wave (StartingWave)'**
+  /// **'Starting wave (StartingWave, counting from 0)'**
   String get startingWave;
 
   /// No description provided for @startingPoints.
@@ -11580,13 +11736,13 @@ abstract class AppLocalizations {
   /// No description provided for @waveManagerHelpOverview.
   ///
   /// In en, this message translates to:
-  /// **'Wave Manager defines the wave event container. Wave editing is only available after adding this module.'**
+  /// **'The Wave Manager module owns and runs the actual wave manager (WaveManager); the Wave Container (WaveManagerProperties) only stores the data used to initialize it. Ordinary levels may link the wave container directly from this module. With Escalation Spawning, Escalation Spawning normally references and supplies the wave container while this module only runs it.'**
   String get waveManagerHelpOverview;
 
   /// No description provided for @waveManagerHelpPoints.
   ///
   /// In en, this message translates to:
-  /// **'Point-based spawning generates additional zombies during valid waves based on point cost.\nNormal waves have a cap of 60,000 points, while flag waves use a 2.5× multiplier.\nWhen points are positive, zombies are selected from the zombie pool. Expected spawn values for each zombie can be viewed in the wave event container.\nWhen points are negative, zombies with equivalent point value are removed from Basic Spawner events.\nDo not include Elite Zombies, Yetis, or custom zombies in the point-based spawning pool.'**
+  /// **'Point-based spawning generates additional zombies during valid waves based on point cost.\nNormal waves have a cap of 60,000 points, while flag waves use a 2.5× multiplier.\nWhen points are positive, zombies are selected from the zombie pool. Expected spawn values for each zombie can be viewed in the wave event container.\nWhen points are negative, zombies with equivalent point value are removed from Basic Spawner events.\nThe starting wave is counted from 0. Enter 0 to start spawning on wave 1 or 1 to start on wave 2.\nDo not include Elite Zombies, Yetis, or custom zombies in the point-based spawning pool.'**
   String get waveManagerHelpPoints;
 
   /// No description provided for @pointsSection.
@@ -11613,17 +11769,41 @@ abstract class AppLocalizations {
   /// **'Applies to all instances of the plant used in the level, including endangered plants and packet drops.'**
   String get globalPlantLevelsScope;
 
+  /// No description provided for @waveManagerContainerMissing.
+  ///
+  /// In en, this message translates to:
+  /// **'No wave container (WaveManagerProperties) object was found.'**
+  String get waveManagerContainerMissing;
+
   /// No description provided for @noWaveManagerPropsFound.
   ///
   /// In en, this message translates to:
-  /// **'Wave Manager module (WaveManagerProperties) not found.'**
+  /// **'Escalation Spawning requires a wave container (WaveManagerProperties) object to work. None was found.'**
   String get noWaveManagerPropsFound;
+
+  /// No description provided for @addWaveContainer.
+  ///
+  /// In en, this message translates to:
+  /// **'Add wave container'**
+  String get addWaveContainer;
 
   /// No description provided for @levelEscalationAddWaveTimeline.
   ///
   /// In en, this message translates to:
   /// **'Add wave timeline'**
   String get levelEscalationAddWaveTimeline;
+
+  /// No description provided for @levelEscalationWaveManagerRunnerMissing.
+  ///
+  /// In en, this message translates to:
+  /// **'The linked wave container exists, but the Wave Manager module that runs waves is missing. Select Add wave timeline to add the runner.'**
+  String get levelEscalationWaveManagerRunnerMissing;
+
+  /// No description provided for @waveManagerPropsProvidedByEscalation.
+  ///
+  /// In en, this message translates to:
+  /// **'The runtime wave container is provided by Escalation Spawning: {value}'**
+  String waveManagerPropsProvidedByEscalation(String value);
 
   /// No description provided for @itemsSortedByRow.
   ///
@@ -11640,7 +11820,7 @@ abstract class AppLocalizations {
   /// No description provided for @zombieLevelsBody.
   ///
   /// In en, this message translates to:
-  /// **'Zombie level and row cannot be set independently within storms. Manually editing zombie levels has no effect; zombie levels follow the lawn’s level sequence by default.'**
+  /// **'Zombie level and row cannot be set independently within storms. Manually editing zombie levels has no effect. Zombie levels follow the lawn’s level sequence by default, with Level 1 used in Creative Courtyard.'**
   String get zombieLevelsBody;
 
   /// No description provided for @batchLevel.
@@ -16080,7 +16260,7 @@ abstract class AppLocalizations {
   /// No description provided for @waveGeneratorModuleHelpSpendingBody.
   ///
   /// In en, this message translates to:
-  /// **'Random spawns use the points available to the current wave. The game selects by weight from zombies affordable with the remaining points, deducts the selected cost, and filters the candidates again until none are eligible. Unused points do not carry over to the next wave, and fixed spawns consume none of these points.'**
+  /// **'Random spawns use the points available to the current wave. The game selects by weight from zombies whose cost does not exceed the remaining points, deducts the selected cost, and filters the candidates again until none are eligible. Unused points do not carry over to the next wave, and fixed spawns consume none of these points.'**
   String get waveGeneratorModuleHelpSpendingBody;
 
   /// No description provided for @waveGeneratorModuleHelpPointTrajectory.
@@ -16374,7 +16554,7 @@ abstract class AppLocalizations {
   /// No description provided for @waveGeneratorPointTrajectoryWaveValue.
   ///
   /// In en, this message translates to:
-  /// **'W{wave} · {points} pts.'**
+  /// **'Wave {wave} · {points} pts.'**
   String waveGeneratorPointTrajectoryWaveValue(int wave, int points);
 
   /// No description provided for @waveGeneratorBlackHoleFieldHint.
@@ -16584,7 +16764,7 @@ abstract class AppLocalizations {
   /// No description provided for @waveGeneratorExpectationPoolNote.
   ///
   /// In en, this message translates to:
-  /// **'The preview estimates spawn counts by repeatedly simulating random purchases. Results can vary with selection order even when the point budget is unchanged, so it cannot precisely predict the game\'s actual spawns.'**
+  /// **'The preview estimates spawn counts by repeatedly simulating weighted selections. Results can vary with selection order even when the point budget is unchanged, so it cannot precisely predict the game\'s actual spawns.'**
   String get waveGeneratorExpectationPoolNote;
 
   /// No description provided for @waveGeneratorExpectationTitle.
@@ -16632,8 +16812,14 @@ abstract class AppLocalizations {
   /// No description provided for @waveGeneratorExpectationMissingData.
   ///
   /// In en, this message translates to:
-  /// **'Random-spawn preview unavailable because these zombies are missing reliable WavePointCost data: {types}'**
+  /// **'These zombies have no resolvable effective spawn cost or weight and are excluded from the random-spawn preview: {types}'**
   String waveGeneratorExpectationMissingData(String types);
+
+  /// No description provided for @waveGeneratorExpectationZeroWeight.
+  ///
+  /// In en, this message translates to:
+  /// **'These zombies have a random-spawn weight of 0 and will not be selected by the Wave Generator: {types}'**
+  String waveGeneratorExpectationZeroWeight(String types);
 
   /// No description provided for @waveGeneratorExpectationEstimatedTotal.
   ///
@@ -16644,20 +16830,32 @@ abstract class AppLocalizations {
   /// No description provided for @waveGeneratorExpectationCommonRange.
   ///
   /// In en, this message translates to:
-  /// **'Estimated count range: {minimum}–{maximum}'**
+  /// **'Common count range: {minimum}–{maximum}'**
   String waveGeneratorExpectationCommonRange(int minimum, int maximum);
 
   /// No description provided for @zombieCountWaveEstimate.
   ///
   /// In en, this message translates to:
-  /// **'This wave: about {count} zombies (from {minimum} to {maximum})'**
+  /// **'This wave: about {count} (common range: {minimum}–{maximum})'**
   String zombieCountWaveEstimate(String count, int minimum, int maximum);
+
+  /// No description provided for @zombieCountWaveEstimateNoRange.
+  ///
+  /// In en, this message translates to:
+  /// **'This wave: about {count}'**
+  String zombieCountWaveEstimateNoRange(String count);
 
   /// No description provided for @zombieCountTotalEstimate.
   ///
   /// In en, this message translates to:
-  /// **'All waves combined: about {count} zombies (from {minimum} to {maximum})'**
+  /// **'All waves combined: about {count} (common range: {minimum}–{maximum})'**
   String zombieCountTotalEstimate(String count, int minimum, int maximum);
+
+  /// No description provided for @zombieCountTotalEstimateNoRange.
+  ///
+  /// In en, this message translates to:
+  /// **'All waves combined: about {count}'**
+  String zombieCountTotalEstimateNoRange(String count);
 
   /// No description provided for @waveGeneratorExpectationCostWeight.
   ///

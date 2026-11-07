@@ -300,27 +300,6 @@ class EventRegistry {
         }
       },
     ),
-    'ZombieAirbubbleActionProps': EventMetadata(
-      titleKey: 'eventTitle_ZombieAirbubbleActionProps',
-      descriptionKey: 'eventDesc_ZombieAirbubbleActionProps',
-      icon: Icons.bubble_chart,
-      color: const Color(0xFF00BCD4),
-      darkColor: const Color(0xFF80DEEA),
-      category: EventCategory.zombieSpawn,
-      defaultAlias: 'AirbubbleEvent',
-      defaultObjClass: 'ZombieAirbubbleActionProps',
-      initialDataFactory: () => ZombieAirbubbleActionPropsData(),
-      summaryProvider: (obj) {
-        try {
-          final data = ZombieAirbubbleActionPropsData.fromJson(
-            obj.objData as Map<String, dynamic>,
-          );
-          return '${data.bubbleNumber}';
-        } catch (_) {
-          return '';
-        }
-      },
-    ),
     'BassRainZombieSpawnerProps': EventMetadata(
       titleKey: 'eventTitle_BassRainZombieSpawnerProps',
       descriptionKey: 'eventDesc_BassRainZombieSpawnerProps',
@@ -331,27 +310,6 @@ class EventRegistry {
       defaultAlias: 'BassRainEvent',
       defaultObjClass: 'BassRainZombieSpawnerProps',
       initialDataFactory: () => ParachuteRainEventData(),
-    ),
-    'HeianNinjaZombieSpawnerProps': EventMetadata(
-      titleKey: 'eventTitle_HeianNinjaZombieSpawnerProps',
-      descriptionKey: 'eventDesc_HeianNinjaZombieSpawnerProps',
-      icon: Icons.sports_martial_arts,
-      color: const Color(0xFFFF9800),
-      darkColor: const Color(0xFFFFCC80),
-      category: EventCategory.zombieSpawn,
-      defaultAlias: 'HeianNinjaEvent',
-      defaultObjClass: 'HeianNinjaZombieSpawnerProps',
-      initialDataFactory: () => ParachuteRainEventData(),
-      summaryProvider: (obj) {
-        try {
-          final data = ParachuteRainEventData.fromJson(
-            obj.objData as Map<String, dynamic>,
-          );
-          return '${data.groupSize}x${data.spiderCount}';
-        } catch (_) {
-          return '';
-        }
-      },
     ),
     'DinoWaveActionProps': EventMetadata(
       titleKey: 'eventTitle_DinoWaveActionProps',
@@ -396,6 +354,27 @@ class EventRegistry {
       defaultAlias: 'PortalEvent',
       defaultObjClass: 'SpawnModernPortalsWaveActionProps',
       initialDataFactory: () => PortalEventData(),
+    ),
+    'HeianNinjaZombieSpawnerProps': EventMetadata(
+      titleKey: 'eventTitle_HeianNinjaZombieSpawnerProps',
+      descriptionKey: 'eventDesc_HeianNinjaZombieSpawnerProps',
+      icon: Icons.sports_martial_arts,
+      color: const Color(0xFFFF9800),
+      darkColor: const Color(0xFFFFCC80),
+      category: EventCategory.zombieSpawn,
+      defaultAlias: 'HeianNinjaEvent',
+      defaultObjClass: 'HeianNinjaZombieSpawnerProps',
+      initialDataFactory: () => ParachuteRainEventData(),
+      summaryProvider: (obj) {
+        try {
+          final data = ParachuteRainEventData.fromJson(
+            obj.objData as Map<String, dynamic>,
+          );
+          return '${data.groupSize}x${data.spiderCount}';
+        } catch (_) {
+          return '';
+        }
+      },
     ),
     'TideWaveWaveActionProps': EventMetadata(
       titleKey: 'eventTitle_TideWaveWaveActionProps',
@@ -510,6 +489,27 @@ class EventRegistry {
             obj.objData as Map<String, dynamic>,
           );
           return '${data.flags.length}';
+        } catch (_) {
+          return '';
+        }
+      },
+    ),
+    'ZombieAirbubbleActionProps': EventMetadata(
+      titleKey: 'eventTitle_ZombieAirbubbleActionProps',
+      descriptionKey: 'eventDesc_ZombieAirbubbleActionProps',
+      icon: Icons.bubble_chart,
+      color: const Color(0xFF00BCD4),
+      darkColor: const Color(0xFF80DEEA),
+      category: EventCategory.zombieSpawn,
+      defaultAlias: 'AirbubbleEvent',
+      defaultObjClass: 'ZombieAirbubbleActionProps',
+      initialDataFactory: () => ZombieAirbubbleActionPropsData(),
+      summaryProvider: (obj) {
+        try {
+          final data = ZombieAirbubbleActionPropsData.fromJson(
+            obj.objData as Map<String, dynamic>,
+          );
+          return '${data.bubbleNumber}';
         } catch (_) {
           return '';
         }

@@ -1,4 +1,5 @@
 import 'package:c_editor/data/pvz_models.dart';
+import 'package:c_editor/data/repository/zombie_properties_repository.dart';
 import 'package:c_editor/data/wave_generator_point_analysis.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -17,6 +18,10 @@ WaveGeneratorPropertiesData generator({
 }
 
 void main() {
+  TestWidgetsFlutterBinding.ensureInitialized();
+
+  setUpAll(ZombiePropertiesRepository.init);
+
   group('legacy point trajectory', () {
     test('uses global start and increment for ordinary waves', () {
       final data = generator(
@@ -304,23 +309,25 @@ void main() {
       expect(preview.commonMaximum, 50);
     });
 
-    test('cost produces a bounded, plausible stable expectation', () {
+    test('uses weighted roulette among equally affordable candidates', () {
       final preview = WaveGeneratorPointAnalysis.simulateRandomSpawns(
-        points: 100,
+        points: 10,
         fixedSpawnCount: 0,
-        candidates: const [cheap, heavy],
-        iterations: 4000,
+        candidates: const [
+          WaveGeneratorSpawnCandidate(id: 'light', cost: 10, weight: 1),
+          WaveGeneratorSpawnCandidate(id: 'heavy', cost: 10, weight: 3),
+        ],
+        iterations: 12000,
         seed: 42,
       );
 
-      expect(preview.averageTotal, inInclusiveRange(5, 10));
-      // The cheaper zombie fits more spawns into the same budget, so the
-      // average count ranks it first under the uniform selection.
-      expect(preview.entries.first.id, 'cheap');
-      expect(preview.commonMinimum, lessThanOrEqualTo(preview.commonMaximum));
+      final byId = {for (final entry in preview.entries) entry.id: entry};
+      expect(preview.averageTotal, 1);
+      expect(byId['light']!.averageCount, closeTo(0.25, 0.03));
+      expect(byId['heavy']!.averageCount, closeTo(0.75, 0.03));
     });
 
-    test('a Weight = 0 candidate is bought like any other', () {
+    test('a Weight = 0 candidate is never bought', () {
       const zeroWeight = WaveGeneratorSpawnCandidate(
         id: 'zero',
         cost: 10,
@@ -334,8 +341,8 @@ void main() {
         seed: 7,
       );
 
-      expect(preview.averageTotal, 10);
-      expect(preview.entries.single.averageCount, 10);
+      expect(preview.averageTotal, 0);
+      expect(preview.entries.single.averageCount, 0);
     });
 
     test('fixed seed returns exactly the same statistical preview', () {
@@ -357,6 +364,117 @@ void main() {
         second.entries.map((entry) => entry.averageCount),
         first.entries.map((entry) => entry.averageCount),
       );
+    });
+  });
+
+  group('legacy pool entry overrides', () {
+    test('round-trips Cost, Weight, and Overridden', () {
+      final entry = WaveGeneratorPoolEntryData.fromJson(const {
+        'Type': 'RTID(tutorial@ZombieTypes)',
+        'Cost': 25,
+        'Weight': 7000,
+        'Overridden': true,
+      });
+
+      expect(entry.cost, 25);
+      expect(entry.weight, 7000);
+      expect(entry.overridden, isTrue);
+      expect(entry.toJson(), {
+        'Type': 'RTID(tutorial@ZombieTypes)',
+        'Cost': 25,
+        'Weight': 7000,
+        'Overridden': true,
+      });
+    });
+
+    test('pool overrides beat property values and -1 falls back', () {
+      final overridden = generator(
+        start: 100,
+        pool: [
+          WaveGeneratorPoolEntryData(
+            type: 'RTID(modern_balloon@ZombieTypes)',
+            cost: 50,
+            weight: 1234,
+          ),
+        ],
+        waves: [WaveGeneratorWaveData(disableRandomSpawns: false)],
+      );
+      final fallback = generator(
+        start: 400,
+        pool: [
+          WaveGeneratorPoolEntryData(type: 'RTID(modern_balloon@ZombieTypes)'),
+        ],
+        waves: [WaveGeneratorWaveData(disableRandomSpawns: false)],
+      );
+
+      final overriddenEntry = WaveGeneratorPointAnalysis.calculatePreview(
+        overridden,
+        1,
+        iterations: 20,
+      ).entries.single;
+      final fallbackEntry = WaveGeneratorPointAnalysis.calculatePreview(
+        fallback,
+        1,
+        iterations: 20,
+      ).entries.single;
+      expect((overriddenEntry.cost, overriddenEntry.weight), (50, 1234));
+      expect((fallbackEntry.cost, fallbackEntry.weight), (400, 3000));
+    });
+
+    test('preview cache and whole-level count both include Weight', () {
+      WaveGeneratorPropertiesData weighted(
+        int tutorialWeight,
+        int balloonWeight,
+      ) => generator(
+        start: 100,
+        pool: [
+          WaveGeneratorPoolEntryData(
+            type: 'RTID(tutorial@ZombieTypes)',
+            cost: 100,
+            weight: tutorialWeight,
+          ),
+          WaveGeneratorPoolEntryData(
+            type: 'RTID(modern_balloon@ZombieTypes)',
+            cost: 100,
+            weight: balloonWeight,
+          ),
+        ],
+        waves: [WaveGeneratorWaveData(disableRandomSpawns: false)],
+      );
+
+      final tutorialHeavy = WaveGeneratorPointAnalysis.calculatePreview(
+        weighted(9, 1),
+        1,
+      );
+      final balloonHeavy = WaveGeneratorPointAnalysis.calculatePreview(
+        weighted(1, 9),
+        1,
+      );
+      double average(WaveGeneratorSpawnPreview preview, String id) =>
+          preview.entries.singleWhere((entry) => entry.id == id).averageCount;
+      expect(average(tutorialHeavy, 'tutorial'), greaterThan(0.8));
+      expect(average(balloonHeavy, 'tutorial'), lessThan(0.2));
+
+      final differentCosts = generator(
+        start: 100,
+        pool: [
+          WaveGeneratorPoolEntryData(
+            type: 'RTID(tutorial@ZombieTypes)',
+            cost: 10,
+            weight: 1,
+          ),
+          WaveGeneratorPoolEntryData(
+            type: 'RTID(modern_balloon@ZombieTypes)',
+            cost: 100,
+            weight: 100,
+          ),
+        ],
+        waves: [WaveGeneratorWaveData(disableRandomSpawns: false)],
+      );
+      final total = WaveGeneratorPointAnalysis.simulateTotalZombieCount(
+        differentCosts,
+      );
+      expect(total.average, lessThan(2));
     });
   });
 

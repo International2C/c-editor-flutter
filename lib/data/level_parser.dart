@@ -1,5 +1,6 @@
 import 'package:collection/collection.dart';
 import 'package:c_editor/data/custom_stage_level_utils.dart';
+import 'package:c_editor/data/level_escalation_runtime.dart';
 import 'package:c_editor/data/repository/reference_repository.dart';
 import 'package:c_editor/data/rtid_parser.dart';
 
@@ -49,10 +50,26 @@ class LevelParser {
       );
     }
 
+    final escalationRuntime = LevelEscalationRuntime.resolve(levelFile);
+    final effectivePropsInfo = RtidParser.parse(
+      escalationRuntime.effectiveWaveManagerProps ?? '',
+    );
+    final effectivePropsAlias = effectivePropsInfo?.source == 'CurrentLevel'
+        ? effectivePropsInfo?.alias
+        : null;
     WaveManagerData? waveManager;
-    final wmObj = levelFile.objects
-        .where((o) => o.objClass == 'WaveManagerProperties')
-        .firstOrNull;
+    final wmObj = effectivePropsInfo == null
+        ? levelFile.objects
+              .where((o) => o.objClass == 'WaveManagerProperties')
+              .firstOrNull
+        : effectivePropsAlias == null
+        ? null
+        : levelFile.objects.firstWhereOrNull(
+            (o) =>
+                o.objClass == 'WaveManagerProperties' &&
+                o.aliases?.contains(effectivePropsAlias) == true,
+          );
+    final waveManagerAlias = wmObj?.aliases?.firstOrNull;
     if (wmObj != null && wmObj.objData is Map<String, dynamic>) {
       waveManager = WaveManagerData.fromJson(
         wmObj.objData as Map<String, dynamic>,
@@ -82,6 +99,7 @@ class LevelParser {
     return ParsedLevelData(
       levelDef: levelDef,
       waveManager: waveManager,
+      waveManagerAlias: waveManagerAlias,
       waveModule: waveModule,
       waveGenerator: waveGenerator,
       objectMap: objectMap,

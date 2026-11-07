@@ -49,7 +49,7 @@ void main() {
       // Costs 100: cannot be bought with a 50 point budget.
       'RTID(pirate@ZombieTypes)',
       // Bundled flag carrier: WavePointCost is known but Weight is 0. The
-      // point purchase ignores Weight, so it stays a normal row.
+      // Wave Manager path ignores Weight, so it stays a normal row.
       'RTID(pirate_flag@ZombieTypes)',
       'RTID(my_custom@CurrentLevel)',
     ], 50);

@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:c_editor/data/level_escalation_point_analysis.dart';
+import 'package:c_editor/data/level_escalation_runtime.dart';
 import 'package:c_editor/data/pvz_models.dart';
+import 'package:c_editor/data/rtid_parser.dart';
 import 'package:c_editor/l10n/app_localizations.dart';
 import 'package:c_editor/widgets/editor_components.dart';
 import 'package:c_editor/widgets/level_jam_picker.dart';
@@ -10,12 +13,14 @@ class WaveManagerSettingsScreen extends StatefulWidget {
   const WaveManagerSettingsScreen({
     super.key,
     required this.levelFile,
+    this.waveManagerAlias,
     required this.hasConveyor,
     required this.onChanged,
     required this.onBack,
   });
 
   final PvzLevelFile levelFile;
+  final String? waveManagerAlias;
   final bool hasConveyor;
   final VoidCallback onChanged;
   final VoidCallback onBack;
@@ -46,7 +51,10 @@ class _WaveManagerSettingsScreenState extends State<WaveManagerSettingsScreen> {
 
   void _loadData() {
     _wmObj = widget.levelFile.objects.firstWhere(
-      (o) => o.objClass == 'WaveManagerProperties',
+      (o) =>
+          o.objClass == 'WaveManagerProperties' &&
+          (widget.waveManagerAlias == null ||
+              o.aliases?.contains(widget.waveManagerAlias) == true),
       orElse: () => PvzObject(
         aliases: ['WaveManager'],
         objClass: 'WaveManagerProperties',
@@ -84,7 +92,6 @@ class _WaveManagerSettingsScreenState extends State<WaveManagerSettingsScreen> {
     if (n != null && n > 0) {
       _wm.flagWaveInterval = n;
       _save();
-      // Rebuild so the flag strip reflects the new interval live.
       setState(() {});
     }
   }
@@ -127,6 +134,25 @@ class _WaveManagerSettingsScreenState extends State<WaveManagerSettingsScreen> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
     final theme = Theme.of(context);
+    final escalation = LevelEscalationRuntime.resolve(widget.levelFile);
+    final runtimeProps = RtidParser.parse(
+      escalation.effectiveWaveManagerProps ?? '',
+    );
+    final usesEscalation =
+        escalation.isEffective &&
+        runtimeProps != null &&
+        runtimeProps.source == 'CurrentLevel' &&
+        _wmObj.aliases?.contains(runtimeProps.alias) == true &&
+        widget.levelFile.objects.contains(_wmObj);
+    final escalationInterval = usesEscalation
+        ? LevelEscalationPointAnalysis.flagInterval(escalation.data!)
+        : null;
+    final interval =
+        escalationInterval ??
+        (_wm.flagWaveInterval <= 0 ? 10 : _wm.flagWaveInterval);
+    final waveCount = usesEscalation
+        ? escalation.effectiveWaveCount(_wm)
+        : _wm.waves.length;
     // Use secondary (blue) to match Kotlin WaveManagerPropertiesEP PvzBlueLight/Dark
     final themeColor = theme.colorScheme.secondary;
     final onAccent = theme.colorScheme.onPrimary;
@@ -229,23 +255,16 @@ class _WaveManagerSettingsScreenState extends State<WaveManagerSettingsScreen> {
                 color: themeColor,
               ),
             ),
-            const SizedBox(height: 12),
-            if (_wm.waves.isNotEmpty) ...[
-              // Flag strip: one equal (invisible) segment per wave with
-              // visible flags on flag waves; the final wave (always a flag
-              // wave) sits at the left edge. Updates live with the interval
-              // field below.
+            if (waveCount > 0) ...[
               WaveFlagStrip(
-                waveCount: _wm.waves.length,
-                isFlagWave: (w) {
-                  final interval = _wm.flagWaveInterval <= 0
-                      ? 10
-                      : _wm.flagWaveInterval;
-                  return w % interval == 0 || w == _wm.waves.length;
-                },
+                color: themeColor,
+                waveCount: waveCount,
+                isFlagWave: (w) =>
+                    w % interval == 0 || (!usesEscalation && w == waveCount),
               ),
+              const SizedBox(height: 24),
+            ] else
               const SizedBox(height: 12),
-            ],
             EditorResponsiveInputField(
               label: l10n?.flagInterval ?? 'Flag interval (FlagWaveInterval)',
               builder: (context, decoration) => TextField(
@@ -255,6 +274,16 @@ class _WaveManagerSettingsScreenState extends State<WaveManagerSettingsScreen> {
                 onChanged: _updateFlagInterval,
               ),
             ),
+            if (escalationInterval != null) ...[
+              const SizedBox(height: 8),
+              EditorWarningBanner(
+                margin: EdgeInsets.zero,
+                message:
+                    l10n?.waveManagerFlagIntervalOverridden(escalationInterval) ??
+                    'Escalation Spawning uses Waves per flag at runtime. '
+                    'The effective flag interval is $escalationInterval waves.',
+              ),
+            ],
             const SizedBox(height: 16),
             EditorResponsiveFieldRow(
               children: [

@@ -2,12 +2,12 @@
 abstract class PlantConditions {
   PlantConditions._();
 
-  /// Conditions supported on legacy preset plants.
+  /// Preset states offered in the initial plant editor.
   static const ids = [
+    'froststage1',
+    'froststage2',
     'icecubed',
-    'chill',
     'shadowboosted',
-    'shroomboosted',
   ];
 
   static String resourceKey(String id) => 'plantCondition_$id';

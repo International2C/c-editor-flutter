@@ -7037,6 +7037,16 @@
     "icon": "zombie_children_airbubble.webp"
   },
   {
+    "id": "wave_airbubble",
+    "name": "zombie_wave_airbubble",
+    "tags": [
+      "Memory",
+      "Festival1",
+      "Chinese"
+    ],
+    "icon": "zombie_children_airbubble.webp"
+  },
+  {
     "id": "children_lollipops",
     "name": "zombie_children_lollipops",
     "tags": [
@@ -7476,7 +7486,7 @@
     "name": "zombie_werewolf",
     "tags": [
       "Festival2",
-      "Basic",
+      "Strong",
       "Pet",
       "Chinese"
     ],

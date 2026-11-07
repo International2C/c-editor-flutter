@@ -4,6 +4,8 @@ import 'package:c_editor/l10n/app_localizations.dart';
 import 'package:c_editor/l10n/resource_names.dart';
 import 'package:c_editor/screens/editor/events/fish_properties_entry_screen.dart';
 import 'package:c_editor/screens/editor/modules/bronze_module_screen.dart';
+import 'package:c_editor/screens/editor/modules/initial_plant_entry_screen.dart';
+import 'package:c_editor/screens/editor/others/custom_fish_properties_screen.dart';
 import 'package:c_editor/screens/editor/others/custom_zombie_properties_screen.dart';
 import 'package:c_editor/screens/editor/others/custom_zomboss_mech_action_editor_screen.dart';
 import 'package:c_editor/widgets/editor_components.dart';
@@ -243,6 +245,135 @@ void main() {
     await tester.pumpAndSettle();
     expect((props.objData as Map)['SizeType'], 'large');
     expect(changed, 1);
+    expect(tester.takeException(), isNull);
+  });
+
+  for (final isFish in [false, true]) {
+    testWidgets(
+      'custom ${isFish ? 'fish' : 'zombie'} fields clear the footer with the keyboard open',
+      (tester) async {
+        final props = PvzObject(
+          aliases: ['CustomProps'],
+          objClass: isFish ? 'CreatureFishProperties' : 'ZombiePropertySheet',
+          objData: {
+            'HitRect': {'mX': 1, 'mY': 2, 'mWidth': 3, 'mHeight': 4},
+          },
+        );
+        final level = PvzLevelFile(
+          objects: [
+            PvzObject(
+              aliases: ['CustomType'],
+              objClass: isFish ? 'CreatureType' : 'ZombieType',
+              objData: {
+                'TypeName': 'test_type',
+                'Properties': 'RTID(CustomProps@CurrentLevel)',
+              },
+            ),
+            props,
+          ],
+        );
+        const rtid = 'RTID(CustomType@CurrentLevel)';
+        void noop() {}
+        final screen = isFish
+            ? CustomFishPropertiesScreen(
+                rtid: rtid,
+                levelFile: level,
+                onChanged: noop,
+                onBack: noop,
+              )
+            : CustomZombiePropertiesScreen(
+                rtid: rtid,
+                levelFile: level,
+                onChanged: noop,
+                onBack: noop,
+              );
+        await _pumpEditor(tester, screen, width: 430);
+        addTearDown(tester.view.resetViewInsets);
+        final strings = _strings(tester, screen.runtimeType);
+        final labels = [
+          isFish ? strings.fishPropHitRect : strings.hitRect,
+          if (!isFish) strings.shadowOffset,
+        ];
+        for (final label in labels) {
+          final field = find.text(label);
+          await tester.ensureVisible(field);
+          await tester.tap(field);
+          await tester.pumpAndSettle();
+          final dialog = find.byType(AlertDialog);
+          final dialogFields = find.descendant(
+            of: dialog,
+            matching: find.byType(TextField),
+          );
+          await tester.showKeyboard(dialogFields.first);
+          tester.view.physicalSize = const Size(430, 500);
+          tester.view.viewInsets = const FakeViewPadding(bottom: 220);
+          await tester.pumpAndSettle();
+          expect(tester.takeException(), isNull);
+          final confirm = find.widgetWithText(FilledButton, strings.ok);
+          final close = find.widgetWithText(TextButton, strings.cancel);
+          final confirmBounds = tester.getRect(confirm);
+          expect(confirmBounds.bottom, lessThanOrEqualTo(280));
+          await tester.ensureVisible(dialogFields.last);
+          await tester.pumpAndSettle();
+          expect(dialogFields.last.hitTestable(), findsOneWidget);
+          expect(
+            tester.getBottomRight(dialogFields.last).dy,
+            lessThanOrEqualTo(confirmBounds.top),
+          );
+          expect(tester.getRect(confirm), confirmBounds);
+          await tester.tap(close);
+          await tester.pumpAndSettle();
+          expect(dialog, findsNothing);
+          tester.view.resetViewInsets();
+          await _resize(tester, const Size(430, 2200));
+        }
+      },
+    );
+  }
+
+  testWidgets('short initial plant editor keeps actions below the fields', (
+    tester,
+  ) async {
+    final module = PvzObject(
+      aliases: ['InitialPlantEntry'],
+      objClass: 'InitialPlantEntryProperties',
+      objData: InitialPlantEntryData(
+        plants: [InitialPlantData(plantTypes: ['peashooter'])],
+      ).toJson(),
+    );
+    await _pumpEditor(
+      tester,
+      InitialPlantEntryScreen(
+        rtid: 'RTID(InitialPlantEntry@CurrentLevel)',
+        levelFile: PvzLevelFile(objects: [module]),
+        onChanged: () {},
+        onBack: () {},
+      ),
+      width: 420,
+    );
+    final strings = _strings(tester, InitialPlantEntryScreen);
+    await tester.tap(find.text(strings.costumeOff));
+    await tester.pumpAndSettle();
+    await _resize(tester, const Size(420, 360));
+
+    final dialog = find.byType(AlertDialog);
+    final cancel = find.widgetWithText(TextButton, strings.cancel);
+    final save = find.widgetWithText(FilledButton, strings.save);
+    expect(tester.takeException(), isNull);
+    final viewport = find.descendant(
+      of: dialog,
+      matching: find.byType(SingleChildScrollView),
+    );
+    final footer = tester.getRect(save);
+    expect(tester.getRect(viewport).bottom, lessThanOrEqualTo(footer.top));
+    final costume = find.byType(Switch);
+    await tester.ensureVisible(costume);
+    await tester.pumpAndSettle();
+    expect(costume.hitTestable(), findsOneWidget);
+    expect(tester.getRect(save), footer);
+    await tester.tap(cancel);
+    await tester.pumpAndSettle();
+    expect(dialog, findsNothing);
     expect(tester.takeException(), isNull);
   });
 

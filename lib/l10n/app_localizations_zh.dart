@@ -117,6 +117,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get waveNumberLegend => '数字表示波次编号';
 
   @override
+  String get waveFlagLabel => '旗帜波';
+
+  @override
   String get expand => '展开';
 
   @override
@@ -1845,18 +1848,18 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get noWaveManagerHint =>
-      '当前关卡启用了波次管理模块，但缺少存储波次数据的实体对象 (WaveManagerProperties)。请创建一个空波次容器。';
+      '当前关卡启用了波次管理模块，但缺少用于存储波次数据的「波次容器 (WaveManagerProperties)」对象。请创建一个空波次容器。';
 
   @override
   String get waveTimelineGuideTitle => '操作指引';
 
   @override
   String get waveTimelineGuideBodyDesktop =>
-      '左键点击波次：管理事件\n长按事件：拖动排序或移到其他波次\n点击点数：查看点数出怪期望';
+      '左键点击波次：管理事件\n长按事件：拖动排序或移到其他波次\n点击点数：查看点数出怪预览';
 
   @override
   String get waveTimelineGuideBodyMobile =>
-      '点击波次：管理事件\n长按事件：拖动排序或移到其他波次\n点击点数：查看点数出怪期望';
+      '点击波次：管理事件\n长按事件：拖动排序或移到其他波次\n点击点数：查看点数出怪预览';
 
   @override
   String get waveDeadLinksTitle => '引用失效报警';
@@ -1922,7 +1925,8 @@ class AppLocalizationsZh extends AppLocalizations {
   String get customLabel => '自定义';
 
   @override
-  String get moduleTitle_WaveManagerProperties => '关联波次参数 (WaveManagerProps)';
+  String get moduleTitle_WaveManagerProperties =>
+      '波次容器 (WaveManagerProperties)';
 
   @override
   String waveManagerPropsCurrent(String value) {
@@ -1930,7 +1934,7 @@ class AppLocalizationsZh extends AppLocalizations {
   }
 
   @override
-  String get waveManagerGlobalParams => '波次管理器全局参数';
+  String get waveManagerGlobalParams => '波次容器全局参数';
 
   @override
   String get waveContainerAliasSection => '波次容器代号';
@@ -1983,6 +1987,11 @@ class AppLocalizationsZh extends AppLocalizations {
   String get flagInterval => '旗帜间隔 (FlagWaveInterval)';
 
   @override
+  String waveManagerFlagIntervalOverridden(int interval) {
+    return '递进出怪运行时会以「每旗波数」覆盖此处设置，实际旗帜间隔为 $interval 波。';
+  }
+
+  @override
   String get waveManagerHelpTitle => '波次事件容器说明';
 
   @override
@@ -1990,7 +1999,7 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get waveManagerHelpOverviewBody =>
-      '波次事件容器用于按波次顺序存放关卡的众多事件，大部分关卡都是通过波次事件进行出怪安排的。这个页面用于调控波次事件容器的全局参数。';
+      '「波次容器 (WaveManagerProperties)」用于按波次顺序存放关卡事件及首波倒计时、刷新血线、旗帜间隔等全局设置。它保存初始化实际波次管理器 (WaveManager) 所需的数据，并不是另一套独立运行的波次系统；本页面用于编辑这个容器。';
 
   @override
   String get waveManagerHelpFlagTitle => '旗帜间隔';
@@ -2134,7 +2143,12 @@ class AppLocalizationsZh extends AppLocalizations {
   String get addWave => '添加波次';
 
   @override
-  String get expectation => '点数出怪期望';
+  String get expectation => '点数出怪预览';
+
+  @override
+  String pointSpawnExpectedCount(String count) {
+    return '$count只';
+  }
 
   @override
   String get close => '关闭';
@@ -2345,7 +2359,7 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get conflictDesc_WaveGeneratorLevelEscalation =>
-      'Level Escalation 模块基于波次管理器系统的波次来调整僵尸等级，因此不能与波次生成器同时使用。';
+      '递进出怪依赖波次管理器系统，根据波次点数选择并生成僵尸，因此不能与波次生成器同时使用。';
 
   @override
   String conflictDesc_CamelMinigameNonTouchZombies(String zombies) {
@@ -2455,7 +2469,7 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String zombiePointCost(int cost) {
-    return '所需点数：$cost';
+    return '消耗点数：$cost';
   }
 
   @override
@@ -2510,7 +2524,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get moduleTitle_WaveManagerModuleProperties => '波次管理器';
 
   @override
-  String get moduleDesc_WaveManagerModuleProperties => '管理关卡的波次事件总配置';
+  String get moduleDesc_WaveManagerModuleProperties => '运行关卡波次，可配置点数出怪等运行参数';
 
   @override
   String get moduleTitle_WaveGeneratorProperties => '波次生成器';
@@ -2878,49 +2892,116 @@ class AppLocalizationsZh extends AppLocalizations {
   String get moduleDesc_IncreasedCostModuleProperties => '植物阳光价格随种植次数递增';
 
   @override
-  String get moduleTitle_LevelEscalationModuleProperties => '关卡难度递增';
+  String get moduleTitle_LevelEscalationModuleProperties => '递进出怪';
 
   @override
   String get moduleDesc_LevelEscalationModuleProperties =>
-      '按旗帜递增难度：每波增加点数，新僵尸加入生成池';
+      '从首波开始统一规划随机出怪，可为随机生成的僵尸分配能量豆';
 
   @override
-  String get flagCount => '旗帜数';
+  String get flagCount => '旗帜数量 (FlagCount)';
 
   @override
-  String get wavesPerFlag => '每旗帜波数';
+  String get wavesPerFlag => '每旗波数 (WavesPerFlag)';
 
   @override
-  String get plantfoodToSpawnCount => '植物能量掉落次数';
+  String get plantfoodToSpawnCount => '能量豆数量 (PlantfoodToSpawnCount)';
 
   @override
-  String levelEscalationTotalWaves(int count) {
-    return '升级总波数：$count';
+  String get levelEscalationFlagCountShort => '旗帜数量 (FlagCount)';
+
+  @override
+  String get levelEscalationFlagIntervalShort => '每旗波数 (WavesPerFlag)';
+
+  @override
+  String get expectationNoAffordableZombies => '本波点数不足以从池中选择并生成任何僵尸。';
+
+  @override
+  String get levelEscalationModuleHelpTitle => '递进出怪模块说明';
+
+  @override
+  String get levelEscalationModuleHelpOverview => '简要介绍';
+
+  @override
+  String get levelEscalationModuleHelpOverviewBody =>
+      '递进出怪模块需要与「波次管理器」配合使用。关卡载入时，它会以所关联的「波次容器 (WaveManagerProperties)」为基础，保留其中已有的固定出怪、其他波次事件，以及首波延迟、刷新血线、屏蔽旗帜僵尸等设置，再按自身参数，从第1波开始生成随机出怪并为部分随机僵尸分配能量豆，最后由波次管理器运行。';
+
+  @override
+  String get levelEscalationModuleHelpRuntime => '波次容器与运行模块';
+
+  @override
+  String get levelEscalationModuleHelpRuntimeBody =>
+      '「添加波次容器」会优先复用递进出怪已关联或关卡中现有的波次容器；没有可复用容器时，才会创建空波次容器并关联到递进出怪。若关卡模块列表 (LevelDefinition.Modules) 中缺少负责运行波次的「波次管理器」模块，还会添加一个不持有独立波次容器的运行模块；已有且已启用的运行模块不会被改写。\n通常由递进出怪引用并提供运行所用的波次容器，波次管理器只负责运行。波次管理器没有独立波次容器，或两个模块引用同一容器时，不会发生覆盖，模块顺序也不会使递进出怪失效。只有两个模块分别引用不同且有效的波次容器时，才可能重复初始化同一个实际波次管理器 (WaveManager)；若发生重复初始化，后执行的容器内容会取代先前结果。';
+
+  @override
+  String get levelEscalationModuleHelpWaveLayout => '波次与旗帜';
+
+  @override
+  String get levelEscalationModuleHelpWaveLayoutBody =>
+      '本模块生成随机出怪的波数为「旗帜数量 × 每旗波数」，不一定等于关卡最终运行的总波数。\n如果所关联波次容器中的波次少于该值，游戏会在运行时副本中补足缺少的波次，并将总波数改为该值；如果波次容器已有相同或更多波次，游戏不会裁剪，也不会在此处强制改写原有总波数，但本模块仍只为范围内的波数生成随机出怪。运行时副本中的旗帜间隔会被「每旗波数」覆盖。\n例如旗帜数量为4、每旗波数为3时，本模块会为前12波生成随机出怪，第3、6、9、12波为旗帜波。如果波次容器中还有第13波及以后的波次，第15、18……波仍会按旗帜波处理，但不会获得本模块追加的随机出怪。';
+
+  @override
+  String get levelEscalationModuleHelpSpending => '点数轨迹';
+
+  @override
+  String get levelEscalationModuleHelpSpendingBody =>
+      '第1波使用「初始点数」，之后每波在上一波的基础上增加「每波点数增量」。旗帜波的可用点数会在当波基础点数上乘以2.5；结果含有小数时舍去小数部分。\n每波会根据该波次的可用点数从僵尸池中随机选取僵尸生成，未使用的点数不会保留到下一波。';
+
+  @override
+  String get levelEscalationModuleHelpPlantfood => '能量豆分配';
+
+  @override
+  String get levelEscalationModuleHelpPlantfoodBody =>
+      '「能量豆数量」表示整关分配给随机出怪的能量豆总数，与初始能量豆和固定出怪事件中的能量豆数量无关。\n游戏会从前往后，为每个旗帜波的前一波各分配1个能量豆。如果能量豆数量少于旗帜数量，只分配给前面的若干旗帜段；如果能量豆数量超过旗帜数量，剩余部分会分别随机分配到名义随机出怪范围内的任意波次。随机分配允许重复，也可能落到已经获得能量豆的波次，因此同一波可以分到多个。\n例如旗帜数量为3、每旗波数为10、能量豆数量为5时，第9、19、29波会先各分到1个，剩余2个再分别随机落到第1～30波。\n只有可以携带能量豆的随机生成僵尸才会被分配到能量豆；若当波合格僵尸不足，多余的能量豆会直接丢失，不会分配至其他波次。';
+
+  @override
+  String get levelEscalationModuleHelpPool => '僵尸池';
+
+  @override
+  String get levelEscalationModuleHelpPoolBody =>
+      '僵尸池中的全部僵尸会在第1波开始前一次性加入候选池，并在后续波次中继续可用，而不是逐波解锁。\n僵尸池中的僵尸固定为1阶，无法设置阶级。\n每一波都会根据当波点数重新选择僵尸；当前点数不足以生成的僵尸不会被选中。注意僵尸池不应该写精英僵尸、雪人僵尸以及自定义僵尸。';
+
+  @override
+  String get levelEscalationModuleHelpLimits => '参数范围';
+
+  @override
+  String get levelEscalationModuleHelpLimitsBody =>
+      '「旗帜数量」和「每旗波数」应填写正整数，「能量豆数量」应填写非负整数。\n需要分配能量豆时，「每旗波数」应至少为2；填写1时，每旗段预置的能量豆会落到无效波次，无法按预期出现。';
+
+  @override
+  String get levelEscalationFlagCountInvalid => '旗帜数量应填写正整数。';
+
+  @override
+  String get levelEscalationWavesPerFlagInvalid => '每旗波数应填写正整数。';
+
+  @override
+  String get levelEscalationPlantfoodCountInvalid => '能量豆数量应填写非负整数。';
+
+  @override
+  String get levelEscalationPlantfoodWavesPerFlagInvalid =>
+      '需要分配能量豆时，每旗波数应至少为2；填写1时，每旗段预置的能量豆会落到无效波次。';
+
+  @override
+  String get levelEscalationAfterWaveManagerWarning =>
+      '当前关卡中，「递进出怪」与「波次管理器」分别引用了不同的有效波次容器，且「递进出怪」位于后方。同一个实际波次管理器 (WaveManager) 可能被再次初始化，波次时间线将按递进出怪处理后的容器内容预览。';
+
+  @override
+  String get levelEscalationBeforeWaveManagerWarning =>
+      '当前关卡中，「递进出怪」与「波次管理器」分别引用了不同的有效波次容器，且「波次管理器」位于后方。它可能用自己的容器内容再次初始化同一个实际波次管理器 (WaveManager) 并覆盖递进结果，波次时间线将按波次管理器自身的波次容器预览。';
+
+  @override
+  String get levelEscalationOverriddenByPointSpawning =>
+      '「波次管理器」在「递进出怪」之后加载自己的波次容器，因此由「点数出怪」接管。若要使用「递进出怪」，请将该模块移到「波次管理器」之后。';
+
+  @override
+  String levelEscalationWavePlantfood(int count) {
+    return '本波固定分配能量豆：$count';
   }
 
   @override
-  String get levelEscalationFlagCountShort => '旗数';
-
-  @override
-  String get levelEscalationFlagIntervalShort => '间隔';
-
-  @override
-  String get expectationNoAffordableZombies => '本波点数不足以购买池中的任何僵尸。';
-
-  @override
-  String get levelEscalationHelpOverviewBody =>
-      '为关卡添加基于点数的难度递增。波次按旗帜分组；每进入新的一波都会获得更多点数，点数用于从僵尸池中生成僵尸。植物能量掉落次数受配置数量限制。';
-
-  @override
-  String get levelEscalationHelpFieldsBody =>
-      '旗帜数（FlagCount）是关卡中的旗帜数量，每旗帜波数（WavesPerFlag）是每个旗帜包含的波数；两者相乘即为总波数。\n起始点数（StartingPoints）是初始点数池，每波点数增量（PointIncrementPerWave）是每进入新的一波额外获得的点数。\n植物能量掉落次数（PlantfoodToSpawnCount）限制模块掉落植物能量的次数。\n僵尸池（ZombiePool）列出可用点数生成的僵尸类型，波次管理属性（WaveManagerProps）将本模块关联到关卡的 WaveManagerProperties 对象。';
-
-  @override
-  String get levelEscalationHelpLevelsTitle => '僵尸等级';
-
-  @override
-  String get levelEscalationHelpLevelsBody =>
-      '本模块无法设置僵尸等级（ZombieLevel）：池中的僵尸始终以 1 级出现。';
+  String levelEscalationRandomPlantfood(int count, int waves) {
+    return '另有 $count 个能量豆会分别随机分配到第1～$waves波，允许重复。';
+  }
 
   @override
   String get levelEscalationPredict => '点数预测';
@@ -2933,19 +3014,19 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String waveManagerExpectationMissingData(String types) {
-    return '以下僵尸缺少可靠的 WavePointCost 数据，未参与计算：$types';
+    return '以下僵尸缺少可靠的「消耗点数 (WavePointCost)」数据，未参与计算：$types';
   }
 
   @override
   String get pointSpawnOnlyZombiesBlocked =>
-      '此僵尸没有 WavePointCost 数据，游戏无法从点数预算中购买它，也无法添加到池中。';
+      '此僵尸没有「消耗点数 (WavePointCost)」数据，游戏无法根据波次点数将其加入出怪，因此也无法添加到按点数出怪池中。';
 
   @override
   String get pointSpawnOnlyZombieBlockedTitle => '不能用于按点数自动出怪';
 
   @override
   String get pointSpawnOnlyZombieBlockedMessage =>
-      '此僵尸没有 WavePointCost 数据（游戏读取该字段从波次点数购买僵尸），无法用于按点数自动出怪。';
+      '此僵尸没有「消耗点数 (WavePointCost)」数据。游戏需要读取该字段，根据波次点数选择并生成僵尸，因此该僵尸无法用于按点数自动出怪。';
 
   @override
   String get moduleTitle_DeathHoleModuleProperties => '死亡坑洞';
@@ -2995,7 +3076,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get frozenPlantPlacementConditionNull => '无状态 (null)';
 
   @override
-  String get noConditions => '无条件';
+  String get noConditions => '无状态';
 
   @override
   String get frozenPlantPlacementHelpTitle => '初始植物配置模块说明';
@@ -3012,7 +3093,7 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get frozenPlantPlacementHelpConditionBody =>
-      '可以为植物设置特殊状态：冰块冻住 (icecubed)、冰减速 (chill)、暗影状态 (shadowboosted)、守卫菇加成状态 (shroomboosted)。';
+      '可以为植物设置轻度积冰 (froststage1)、重度积冰 (froststage2)、完全冻住 (icecubed)、暗影状态 (shadowboosted)等多种特殊状态。若在手动编辑模式中填写植物状态，请注意，并非所有状态都能正常生效。';
 
   @override
   String get frozenPlantPlacementHelpLastStandTitle => '复活之战模式';
@@ -3392,18 +3473,14 @@ class AppLocalizationsZh extends AppLocalizations {
   String get eventDesc_BassRainZombieSpawnerProps => '贝斯手或喷射器僵尸从天而降';
 
   @override
-  String get eventTitle_HeianNinjaZombieSpawnerProps => '忍者小鬼空袭';
+  String get eventTitle_HeianNinjaZombieSpawnerProps => '忍者小鬼空降';
 
   @override
   String get eventDesc_HeianNinjaZombieSpawnerProps => '忍者小鬼僵尸从天而降';
 
   @override
   String get eventHelpHeianNinjaRainBody =>
-      '忍者小鬼会在波次中从天而降。可用于平安京忍者小鬼或其双人对决 (new_pvp) 版本。僵尸阶级随地图阶级序列。';
-
-  @override
-  String get eventHelpHeianNinjaRainLogic =>
-      '僵尸会分批次降落。可控制总数量、每组数量、列范围与时间参数。事件前可显示红色字幕；不设置僵尸类型时，此事件也可仅用于字幕显示。';
+      '忍者小鬼僵尸会从屏幕上方空降突袭，常见于平安时代关卡。与通用的小鬼空降事件不同的是，使用此事件生成的忍者小鬼僵尸降落时会带有烟雾弹的视觉效果。僵尸的阶级随地图阶级序列，庭院模式下即为1阶。';
 
   @override
   String get eventTitle_BlackHoleWaveActionProps => '黑洞吸引';
@@ -3445,29 +3522,36 @@ class AppLocalizationsZh extends AppLocalizations {
   String get eventTitle_ZombieAirbubbleActionProps => '泡泡雨';
 
   @override
-  String get eventDesc_ZombieAirbubbleActionProps => '从天而降召唤泡泡：数量、生命值与下落速度';
+  String get eventDesc_ZombieAirbubbleActionProps => '泡泡从天而降，带走植物';
 
   @override
   String get eventAirbubble => '事件：泡泡雨';
 
   @override
   String get eventHelpAirbubbleWaveBody =>
-      '为波次添加泡泡雨效果：指定数量的泡泡从天而降。每个泡泡拥有独立的生命值，速度范围决定它们下落的快慢。';
+      '常见于回忆之旅的事件，从空中降下多彩的肥皂泡，漂浮在植物的上空。停留一段时间后，泡泡会把植物包住并带离场外。泡泡可以被三叶草吹飞。';
+
+  @override
+  String get eventHelpAirbubbleWaveFieldsTitle => '参数说明';
+
+  @override
+  String get eventHelpAirbubbleWaveFields =>
+      '本事件召唤的泡泡 (wave_airbubble) 与儿童节泡泡枪小鬼僵尸、泡泡机小鬼僵尸的泡泡不同，为独立的僵尸个体，可以在事件中为其配置生命值。该生命值只影响其所在的波次事件本身，不会影响通过其他方式召唤的泡泡个体。\n最大下落速度和最小下落速度决定泡泡从天而降接近目标时随机取用的移动速度范围，不影响它包住植物后的停留时间，也不改变它带着植物向上离场的速度。';
 
   @override
   String get airbubbleParameters => '泡泡雨参数';
 
   @override
-  String get airbubbleBubbleNumber => '泡泡数量（BubbleNumber）';
+  String get airbubbleBubbleNumber => '泡泡数量 (BubbleNumber)';
 
   @override
-  String get airbubbleBubbleHealth => '泡泡生命值（BubbleHealth）';
+  String get airbubbleBubbleHealth => '泡泡生命值 (BubbleHealth)';
 
   @override
-  String get airbubbleSpeedRangeMin => '最小下落速度（SpeedRangeMin）';
+  String get airbubbleSpeedRangeMin => '最小下落速度 (SpeedRangeMin)';
 
   @override
-  String get airbubbleSpeedRangeMax => '最大下落速度（SpeedRangeMax）';
+  String get airbubbleSpeedRangeMax => '最大下落速度 (SpeedRangeMax)';
 
   @override
   String get eventTitle_MagicMirrorWaveActionProps => '魔镜传送';
@@ -4109,6 +4193,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get invalidEventTitle => '无效事件';
 
   @override
+  String get unknownEventTitle => '未知事件';
+
+  @override
   String get invalidReference => '引用失效提示';
 
   @override
@@ -4355,7 +4442,7 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get eventHelpParachuteRainBody =>
-      '僵尸会从屏幕上方空降突袭，通常用于未来世界的机器虫小鬼僵尸、失落之城的飞行员僵尸、摇滚年代的贝斯手僵尸、Z公司的技术支持僵尸等。僵尸的阶级随地图阶级序列。';
+      '僵尸会从屏幕上方空降突袭，通常用于未来世界的机器虫小鬼僵尸、失落之城的飞行员僵尸、摇滚年代的贝斯手僵尸、Z公司的技术支持僵尸等。僵尸的阶级随地图阶级序列，庭院模式下即为1阶。';
 
   @override
   String get eventHelpParachuteRainLogic =>
@@ -4900,7 +4987,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get zombieFromLeft => '从场地左侧出现';
 
   @override
-  String get zombieFromRight => '从场地右侧出现';
+  String get zombieFromRight => '关闭时默认从场地右侧出现。';
 
   @override
   String get zombieEntrySideLabel => '出现侧 (Direction)';
@@ -5670,7 +5757,11 @@ class AppLocalizationsZh extends AppLocalizations {
   String get noItemsAddHint => '暂无物品。可添加植物、僵尸或道具。';
 
   @override
-  String get zombieTypeSpiderZombieName => '僵尸代号 (SpiderZombieName)';
+  String get zombieTypeSpiderZombieName => '空降僵尸 (SpiderZombieName)';
+
+  @override
+  String get airdropZombieReplaceWarning =>
+      '该僵尸不在编辑器为此模块提供的可选僵尸列表中。切换后，原僵尸的代码名将被覆盖且无法恢复，是否继续？';
 
   @override
   String get noneSelected => '未选择';
@@ -6245,13 +6336,17 @@ class AppLocalizationsZh extends AppLocalizations {
   String get pointSpawningDisabledDesc => '未启用 (仅使用波次事件)';
 
   @override
+  String get waveManagerPointsOverriddenByEscalation =>
+      '由于波次容器由「递进出怪」模块提供，「点数出怪」无法生效，并会被「递进出怪」覆盖。若要使用「点数出怪」，建议删除「递进出怪」模块。';
+
+  @override
   String get pointSettings => '点数分配设置';
 
   @override
-  String get startingWave => '起始波次 (StartingWave)';
+  String get startingWave => '起始波次 (StartingWave，从0开始计数)';
 
   @override
-  String get startingPoints => '起始点数 (StartingPoints)';
+  String get startingPoints => '初始点数 (StartingPoints)';
 
   @override
   String get pointIncrement => '每波点数增量 (PointIncrementPerWave)';
@@ -6264,11 +6359,11 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get waveManagerHelpOverview =>
-      '波次管理器是波次事件容器的前置定义。只有添加了波次管理器模块，软件才会开放波次事件编辑入口。';
+      '「波次管理器」模块持有并运行实际波次管理器 (WaveManager)；「波次容器 (WaveManagerProperties)」只保存用于初始化它的数据。普通关卡可由该模块直接引用波次容器；使用「递进出怪」时，通常由递进出怪引用并提供波次容器，本模块只负责运行。';
 
   @override
   String get waveManagerHelpPoints =>
-      '点数出怪会根据僵尸消耗的点数在有效波次中额外刷新僵尸。常规波次点数上限为60000，旗帜波点数会变为2.5倍。点数为正数时，出怪使用的僵尸从僵尸池中选取。在波次容器编辑页面内可查看每种僵尸的出现期望。点数为负数时，会从普通出怪事件中扣除相应点数的僵尸。注意点数出怪池不应该写精英僵尸、雪人僵尸以及自定义僵尸。';
+      '点数出怪会根据僵尸消耗的点数在有效波次中额外刷新僵尸。常规波次点数上限为60000，旗帜波点数会变为2.5倍。点数为正数时，出怪使用的僵尸从僵尸池中选取。在波次容器编辑页面内可查看每种僵尸的出现期望。点数为负数时，会从普通出怪事件中扣除相应点数的僵尸。僵尸出现的起始波次从0开始计数，如第1波出现填0，第2波出现填1。注意点数出怪池不应该写精英僵尸、雪人僵尸以及自定义僵尸。';
 
   @override
   String get pointsSection => '点数出怪';
@@ -6284,10 +6379,27 @@ class AppLocalizationsZh extends AppLocalizations {
   String get globalPlantLevelsScope => '设置的阶级将应用于关卡内玩家使用的该种植物，包括保护植物、卡片掉落等。';
 
   @override
-  String get noWaveManagerPropsFound => '未找到波次管理器 (WaveManagerProperties) 模块。';
+  String get waveManagerContainerMissing =>
+      '未找到「波次容器 (WaveManagerProperties)」对象。';
+
+  @override
+  String get noWaveManagerPropsFound =>
+      '未找到「波次容器 (WaveManagerProperties)」对象，递进出怪模块无法生效';
+
+  @override
+  String get addWaveContainer => '添加波次容器';
 
   @override
   String get levelEscalationAddWaveTimeline => '添加波次时间线';
+
+  @override
+  String get levelEscalationWaveManagerRunnerMissing =>
+      '已找到递进出怪所关联的波次容器，但关卡缺少负责运行波次的「波次管理器」模块。点击「添加波次时间线」可补齐运行模块。';
+
+  @override
+  String waveManagerPropsProvidedByEscalation(String value) {
+    return '运行所用的波次容器由「递进出怪」提供：$value';
+  }
 
   @override
   String get itemsSortedByRow => '当前格子中的物品';
@@ -6297,7 +6409,7 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get zombieLevelsBody =>
-      '风暴内僵尸的阶级和所在行不能独立设置。因此对僵尸阶级进行手动编辑是无效的，阶级默认随地图阶级序列。';
+      '风暴内僵尸的阶级和所在行不能独立设置。因此对僵尸阶级进行手动编辑是无效的，阶级默认随地图阶级序列，庭院模式下即为1阶。';
 
   @override
   String get batchLevel => '批量设置阶级';
@@ -8813,7 +8925,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get waveGeneratorInitialPool => '初始僵尸池 (AddToZombiePool)';
 
   @override
-  String get waveGeneratorEmptyPool => '初始僵尸池为空。';
+  String get waveGeneratorEmptyPool => '初始僵尸池为空';
 
   @override
   String get waveGeneratorCustomZombieBlocked => '此处不允许添加自定义僵尸';
@@ -9010,14 +9122,14 @@ class AppLocalizationsZh extends AppLocalizations {
   String get waveGeneratorExpectationTapHint => '查看本波随机出怪预估结果';
 
   @override
-  String get waveGeneratorStatisticalPreview => '出怪预览';
+  String get waveGeneratorStatisticalPreview => '随机出怪预览';
 
   @override
   String get waveGeneratorExpectationEmpty => '本波的僵尸池中没有可用于随机出怪的僵尸。';
 
   @override
   String get waveGeneratorExpectationPoolNote =>
-      '预览会通过重复模拟随机购买来估算出怪数量。即使点数相同，结果也可能因选取顺序不同而变化，因此无法准确预测游戏中的实际出怪。';
+      '预览会通过重复模拟加权选取来估算出怪数量。即使点数相同，结果也可能因选取顺序不同而变化，因此无法准确预测游戏中的实际出怪。';
 
   @override
   String waveGeneratorExpectationTitle(int wave) {
@@ -9050,7 +9162,12 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String waveGeneratorExpectationMissingData(String types) {
-    return '以下僵尸缺少可靠的 WavePointCost 数据，无法计算随机出怪预览：$types';
+    return '以下僵尸无法解析有效的出怪点数或权重，未参与随机出怪预览：$types';
+  }
+
+  @override
+  String waveGeneratorExpectationZeroWeight(String types) {
+    return '以下僵尸的随机出怪权重为 0，不会被波次生成器随机选中：$types';
   }
 
   @override
@@ -9060,17 +9177,27 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String waveGeneratorExpectationCommonRange(int minimum, int maximum) {
-    return '预计数量范围：$minimum–$maximum只';
+    return '常见数量范围：$minimum只–$maximum只';
   }
 
   @override
   String zombieCountWaveEstimate(String count, int minimum, int maximum) {
-    return '本波：约$count只僵尸（$minimum–$maximum）';
+    return '本波：约$count只（常见范围：$minimum只–$maximum只）';
+  }
+
+  @override
+  String zombieCountWaveEstimateNoRange(String count) {
+    return '本波：约$count只';
   }
 
   @override
   String zombieCountTotalEstimate(String count, int minimum, int maximum) {
-    return '全部波次合计：约$count只僵尸（$minimum–$maximum）';
+    return '全部波次合计：约$count只（常见范围：$minimum只–$maximum只）';
+  }
+
+  @override
+  String zombieCountTotalEstimateNoRange(String count) {
+    return '全部波次合计：约$count只';
   }
 
   @override

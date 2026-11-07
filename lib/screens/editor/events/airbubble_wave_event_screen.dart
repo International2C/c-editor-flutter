@@ -165,6 +165,12 @@ class _AirbubbleWaveEventScreenState extends State<AirbubbleWaveEventScreen> {
                   title: l10n?.overview ?? 'Overview',
                   body: l10n?.eventHelpAirbubbleWaveBody ?? '',
                 ),
+                HelpSectionData(
+                  title:
+                      l10n?.eventHelpAirbubbleWaveFieldsTitle ??
+                      'Parameter Description',
+                  body: l10n?.eventHelpAirbubbleWaveFields ?? '',
+                ),
               ],
             ),
           ),

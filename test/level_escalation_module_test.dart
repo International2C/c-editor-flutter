@@ -38,6 +38,21 @@ void main() {
     expect(data.toJson(), json);
   });
 
+  test('Chinese escalation summary and overview use the updated wording', () {
+    final zh = lookupAppLocalizations(const Locale('zh'));
+    expect(
+      zh.moduleDesc_LevelEscalationModuleProperties,
+      '从首波开始统一规划随机出怪，可为随机生成的僵尸分配能量豆',
+    );
+    expect(
+      zh.levelEscalationModuleHelpOverviewBody,
+      '递进出怪模块需要与「波次管理器」配合使用。关卡载入时，它会以所关联的'
+      '「波次容器 (WaveManagerProperties)」为基础，保留其中已有的固定出怪、其他波次事件，'
+      '以及首波延迟、刷新血线、屏蔽旗帜僵尸等设置，再按自身参数，从第1波开始生成随机出怪'
+      '并为部分随机僵尸分配能量豆，最后由波次管理器运行。',
+    );
+  });
+
   group('LevelEscalationModuleScreen', () {
     Widget wrap(PvzLevelFile level) {
       return MaterialApp(
@@ -76,8 +91,82 @@ void main() {
           ),
         );
       }
+      objects.addAll([
+        PvzObject(
+          aliases: const ['NewWaves'],
+          objClass: 'WaveManagerModuleProperties',
+          objData: WaveManagerModuleData().toJson(),
+        ),
+        PvzObject(
+          aliases: const ['LevelDefinition'],
+          objClass: 'LevelDefinition',
+          objData: LevelDefinitionData(
+            modules: const [
+              'RTID(LevelEscalation@CurrentLevel)',
+              'RTID(NewWaves@CurrentLevel)',
+            ],
+          ).toJson(),
+        ),
+      ]);
       return PvzLevelFile(objects: objects);
     }
+
+    testWidgets('later point spawning with its own container warns on override', (
+      tester,
+    ) async {
+      final l10n = lookupAppLocalizations(const Locale('en'));
+      final level = buildLevel();
+      final manager = level.objects.singleWhere(
+        (object) => object.objClass == 'WaveManagerModuleProperties',
+      );
+      final definition = level.objects.singleWhere(
+        (object) => object.objClass == 'LevelDefinition',
+      );
+      final moduleReferences = List<String>.from(
+        (definition.objData as Map)['Modules'] as List,
+      );
+      final warnings = [
+        l10n.levelEscalationOverriddenByPointSpawning,
+        l10n.levelEscalationAfterWaveManagerWarning,
+        l10n.levelEscalationBeforeWaveManagerWarning,
+      ];
+
+      Future<void> expectWarning(String? expected) async {
+        await tester.pumpWidget(wrap(level));
+        await tester.pumpAndSettle();
+        for (final warning in warnings) {
+          expect(find.text(warning), warning == expected ? findsOneWidget : findsNothing);
+        }
+      }
+
+      manager.objData = WaveManagerModuleData(
+        dynamicZombies: [DynamicZombieGroup()],
+      ).toJson();
+      await expectWarning(null);
+
+      const independentContainer = 'RTID(ManagerWaves@CurrentLevel)';
+      level.objects.add(
+        PvzObject(
+          aliases: const ['ManagerWaves'],
+          objClass: 'WaveManagerProperties',
+          objData: WaveManagerData().toJson(),
+        ),
+      );
+      manager.objData = WaveManagerModuleData(
+        waveManagerProps: independentContainer,
+        dynamicZombies: [DynamicZombieGroup()],
+      ).toJson();
+      await expectWarning(l10n.levelEscalationOverriddenByPointSpawning);
+
+      (definition.objData as Map)['Modules'] = moduleReferences.reversed.toList();
+      await expectWarning(l10n.levelEscalationAfterWaveManagerWarning);
+
+      (definition.objData as Map)['Modules'] = moduleReferences;
+      manager.objData = WaveManagerModuleData(
+        waveManagerProps: independentContainer,
+      ).toJson();
+      await expectWarning(l10n.levelEscalationBeforeWaveManagerWarning);
+    });
 
     testWidgets('editing flag count writes objdata', (tester) async {
       final level = buildLevel();
@@ -93,7 +182,63 @@ void main() {
       expect(data['FlagCount'], 5);
       expect(data['WavesPerFlag'], 4);
       expect(data['ZombiePool'], ['RTID(pirate@ZombieTypes)']);
-      expect(find.text('Total escalation waves: 20'), findsOneWidget);
+      expect(find.textContaining('Total escalation waves'), findsNothing);
+    });
+
+    testWidgets('invalid parameter ranges show red field errors', (
+      tester,
+    ) async {
+      final level = buildLevel();
+      await tester.pumpWidget(wrap(level));
+      await tester.pumpAndSettle();
+
+      TextField field(String key) => tester.widget<TextField>(
+        find.descendant(
+          of: find.byKey(ValueKey(key)),
+          matching: find.byType(TextField),
+        ),
+      );
+
+      final flagFinder = find.descendant(
+        of: find.byKey(const ValueKey('levelEscalationFlagCountField')),
+        matching: find.byType(TextField),
+      );
+      final wavesFinder = find.descendant(
+        of: find.byKey(const ValueKey('levelEscalationWavesPerFlagField')),
+        matching: find.byType(TextField),
+      );
+      final plantfoodFinder = find.descendant(
+        of: find.byKey(const ValueKey('levelEscalationPlantfoodCountField')),
+        matching: find.byType(TextField),
+      );
+
+      await tester.enterText(flagFinder, '1.5');
+      await tester.pump();
+      expect(
+        field('levelEscalationFlagCountField').decoration?.errorText,
+        'Flag count must be a positive integer.',
+      );
+
+      await tester.enterText(wavesFinder, '1');
+      await tester.pump();
+      expect(
+        field('levelEscalationWavesPerFlagField').decoration?.errorText,
+        contains('Waves per flag must be at least 2'),
+      );
+
+      await tester.enterText(plantfoodFinder, '0');
+      await tester.pump();
+      expect(
+        field('levelEscalationWavesPerFlagField').decoration?.errorText,
+        isNull,
+      );
+
+      await tester.enterText(plantfoodFinder, '-1');
+      await tester.pump();
+      expect(
+        field('levelEscalationPlantfoodCountField').decoration?.errorText,
+        'Plant Food count must be a non-negative integer.',
+      );
     });
 
     testWidgets('dangling WaveManagerProps shows repair button', (
@@ -153,15 +298,16 @@ void main() {
       await tester.tap(button);
       await tester.pumpAndSettle();
 
+      final dialog = find.byType(AlertDialog);
       expect(
-        find.descendant(
-          of: find.byType(AlertDialog),
-          matching: find.text('Point prediction'),
-        ),
+        find.descendant(of: dialog, matching: find.text('Point prediction')),
         findsOneWidget,
       );
       // Defaults to the last wave (12), which is a flag wave.
-      expect(find.textContaining('Wave 12'), findsOneWidget);
+      expect(
+        find.descendant(of: dialog, matching: find.textContaining('Wave 12')),
+        findsWidgets,
+      );
       expect(
         find.byKey(const ValueKey('levelEscalationPredictWave-1')),
         findsOneWidget,
@@ -172,7 +318,10 @@ void main() {
       );
       await tester.pumpAndSettle();
 
-      expect(find.textContaining('Wave 1'), findsOneWidget);
+      expect(
+        find.descendant(of: dialog, matching: find.textContaining('Wave 1')),
+        findsWidgets,
+      );
       expect(tester.takeException(), isNull);
     });
 
@@ -257,7 +406,8 @@ void main() {
       expect(find.text('pirate'), findsNothing);
       expect(
         find.text(
-          "None of this wave's pool zombies can be bought with its points.",
+          'This wave does not have enough points to select and spawn any '
+          'zombie from the pool.',
         ),
         findsOneWidget,
       );
@@ -265,7 +415,7 @@ void main() {
       expect(tester.takeException(), isNull);
     });
 
-    testWidgets('add wave timeline creates missing wave manager objects', (
+    testWidgets('add wave container creates missing wave manager objects', (
       tester,
     ) async {
       final module = PvzObject(
@@ -286,7 +436,7 @@ void main() {
       var structureChanged = false;
       await tester.pumpWidget(
         MaterialApp(
-          locale: const Locale('en'),
+          locale: const Locale('zh'),
           localizationsDelegates: AppLocalizations.localizationsDelegates,
           supportedLocales: AppLocalizations.supportedLocales,
           home: LevelEscalationModuleScreen(
@@ -305,6 +455,12 @@ void main() {
         const ValueKey('levelEscalationAddWaveTimelineButton'),
       );
       expect(button, findsOneWidget);
+      expect(find.text('添加波次容器'), findsOneWidget);
+      expect(
+        find.text('未找到「波次容器 (WaveManagerProperties)」对象，递进出怪模块无法生效'),
+        findsOneWidget,
+      );
+      expect(find.textContaining('优先复用'), findsNothing);
       await tester.ensureVisible(button);
       await tester.pumpAndSettle();
       await tester.tap(button);
@@ -325,18 +481,16 @@ void main() {
       final wmmData = WaveManagerModuleData.fromJson(
         Map<String, dynamic>.from(wmm.single.objData as Map),
       );
-      expect(wmmData.waveManagerProps, 'RTID(WaveManagerProps@CurrentLevel)');
+      expect(wmmData.waveManagerProps, isNull);
+      expect(wmmData.dynamicZombies, isEmpty);
 
       final def = LevelDefinitionData.fromJson(
         Map<String, dynamic>.from(levelDef.objData as Map),
       );
-      expect(
-        def.modules,
-        containsAll(<String>[
-          'RTID(LevelEscalation@CurrentLevel)',
-          'RTID(NewWaves@CurrentLevel)',
-        ]),
-      );
+      expect(def.modules, <String>[
+        'RTID(LevelEscalation@CurrentLevel)',
+        'RTID(NewWaves@CurrentLevel)',
+      ]);
 
       final repaired = LevelEscalationModuleData.fromJson(
         Map<String, dynamic>.from(module.objData as Map),
@@ -346,6 +500,157 @@ void main() {
       // Card is valid now, so the add button is gone.
       expect(button, findsNothing);
       expect(tester.takeException(), isNull);
+    });
+
+    testWidgets('linked wave configuration can add its missing runner', (
+      tester,
+    ) async {
+      final level = buildLevel();
+      level.objects.removeWhere(
+        (object) => object.objClass == 'WaveManagerModuleProperties',
+      );
+
+      await tester.pumpWidget(wrap(level));
+      await tester.pumpAndSettle();
+
+      expect(
+        find.textContaining('Wave Manager module that runs waves is missing'),
+        findsOneWidget,
+      );
+      final button = find.byKey(
+        const ValueKey('levelEscalationAddWaveTimelineButton'),
+      );
+      expect(button, findsOneWidget);
+      expect(find.text('Add wave timeline'), findsOneWidget);
+      await tester.ensureVisible(button);
+      await tester.tap(button);
+      await tester.pumpAndSettle();
+
+      final runners = level.objects
+          .where((object) => object.objClass == 'WaveManagerModuleProperties')
+          .toList();
+      expect(runners, hasLength(1));
+      final runner = WaveManagerModuleData.fromJson(
+        Map<String, dynamic>.from(runners.single.objData as Map),
+      );
+      expect(runner.waveManagerProps, isNull);
+      expect(button, findsNothing);
+    });
+
+    testWidgets('add wave timeline preserves an existing runner config', (
+      tester,
+    ) async {
+      final module = PvzObject(
+        aliases: const ['LevelEscalation'],
+        objClass: 'LevelEscalationModuleProperties',
+        objData: LevelEscalationModuleData().toJson(),
+      );
+      final runner = PvzObject(
+        aliases: const ['ExistingWaves'],
+        objClass: 'WaveManagerModuleProperties',
+        objData: WaveManagerModuleData(
+          waveManagerProps: 'RTID(OtherWaves@CurrentLevel)',
+          manualStartup: true,
+        ).toJson(),
+      );
+      final levelDef = PvzObject(
+        aliases: const ['LevelDefinition'],
+        objClass: 'LevelDefinition',
+        objData: LevelDefinitionData(
+          modules: const [
+            'RTID(LevelEscalation@CurrentLevel)',
+            'RTID(ExistingWaves@CurrentLevel)',
+          ],
+        ).toJson(),
+      );
+      final level = PvzLevelFile(objects: [levelDef, module, runner]);
+
+      await tester.pumpWidget(wrap(level));
+      await tester.pumpAndSettle();
+      final button = find.byKey(
+        const ValueKey('levelEscalationAddWaveTimelineButton'),
+      );
+      await tester.ensureVisible(button);
+      await tester.tap(button);
+      await tester.pumpAndSettle();
+
+      final runnerData = WaveManagerModuleData.fromJson(
+        Map<String, dynamic>.from(runner.objData as Map),
+      );
+      expect(runnerData.waveManagerProps, 'RTID(OtherWaves@CurrentLevel)');
+      expect(runnerData.manualStartup, isTrue);
+      expect(
+        LevelEscalationModuleData.fromJson(
+          Map<String, dynamic>.from(module.objData as Map),
+        ).waveManagerProps,
+        'RTID(WaveManagerProps@CurrentLevel)',
+      );
+    });
+
+    testWidgets('add wave timeline ignores an unreferenced wave manager', (
+      tester,
+    ) async {
+      final module = PvzObject(
+        aliases: const ['LevelEscalation'],
+        objClass: 'LevelEscalationModuleProperties',
+        objData: LevelEscalationModuleData().toJson(),
+      );
+      final orphan = PvzObject(
+        aliases: const ['OrphanWaves'],
+        objClass: 'WaveManagerModuleProperties',
+        objData: WaveManagerModuleData(
+          waveManagerProps: 'RTID(OtherWaves@CurrentLevel)',
+          manualStartup: true,
+        ).toJson(),
+      );
+      final levelDef = PvzObject(
+        aliases: const ['LevelDefinition'],
+        objClass: 'LevelDefinition',
+        objData: LevelDefinitionData(
+          modules: const ['RTID(LevelEscalation@CurrentLevel)'],
+        ).toJson(),
+      );
+      final level = PvzLevelFile(objects: [levelDef, module, orphan]);
+
+      await tester.pumpWidget(wrap(level));
+      await tester.pumpAndSettle();
+      final button = find.byKey(
+        const ValueKey('levelEscalationAddWaveTimelineButton'),
+      );
+      await tester.ensureVisible(button);
+      await tester.tap(button);
+      await tester.pumpAndSettle();
+
+      final runners = level.objects
+          .where((object) => object.objClass == 'WaveManagerModuleProperties')
+          .toList();
+      expect(runners, hasLength(2));
+      final added = runners.singleWhere(
+        (object) => object.aliases?.contains('NewWaves') == true,
+      );
+      expect(
+        WaveManagerModuleData.fromJson(
+          Map<String, dynamic>.from(added.objData as Map),
+        ).waveManagerProps,
+        isNull,
+      );
+      expect(
+        WaveManagerModuleData.fromJson(
+          Map<String, dynamic>.from(orphan.objData as Map),
+        ).waveManagerProps,
+        'RTID(OtherWaves@CurrentLevel)',
+      );
+      final definition = LevelDefinitionData.fromJson(
+        Map<String, dynamic>.from(levelDef.objData as Map),
+      );
+      expect(definition.modules, const [
+        'RTID(LevelEscalation@CurrentLevel)',
+        'RTID(NewWaves@CurrentLevel)',
+      ]);
+      expect(
+        definition.modules,
+        isNot(contains('RTID(OrphanWaves@CurrentLevel)')),
+      );
     });
 
     testWidgets('help dialog states that zombies always spawn at level 1', (
@@ -358,8 +663,8 @@ void main() {
       await tester.tap(find.byIcon(Icons.help_outline));
       await tester.pumpAndSettle();
 
-      expect(find.text('• Zombie levels'), findsOneWidget);
-      expect(find.textContaining('always spawns at level 1'), findsOneWidget);
+      expect(find.text('• Zombie pool'), findsOneWidget);
+      expect(find.textContaining('always spawn at level 1'), findsOneWidget);
       expect(tester.takeException(), isNull);
     });
   });

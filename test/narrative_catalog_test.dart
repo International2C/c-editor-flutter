@@ -31,6 +31,23 @@ void main() {
     },
   );
 
+  test('dialogue search ignores color controls in Chinese text', () async {
+    final catalog = await NarrativeCatalog.load(const Locale('zh'));
+    final results = searchNarratives(
+      catalog,
+      NarrativeCategory.all,
+      '前所未有的4 阶僵尸终于被我研制出来了',
+    );
+    expect(
+      results.byContent.map((entry) => entry.groupId),
+      contains('ZOMBIE_INTRO_LEVEL4'),
+    );
+    expect(
+      searchNarratives(catalog, NarrativeCategory.all, '^oldclr').isEmpty,
+      isTrue,
+    );
+  });
+
   test(
     'three locale catalogues stay structurally aligned and exclude Heroes',
     () async {
@@ -348,6 +365,7 @@ void main() {
       }
 
       expectConsecutive(powerGestures);
+      expectConsecutive(const ['SEEDRAIN_DAVE_INTRO', 'SEEDRAIN_ACORN_INTRO']);
       expectConsecutive(plantPuzzle);
     }
   });

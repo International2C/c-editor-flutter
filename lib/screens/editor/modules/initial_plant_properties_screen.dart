@@ -673,6 +673,13 @@ class _PlacementEditDialogState extends State<_PlacementEditDialog> {
       context,
       PlantRepository().getName(widget.placement.typeName),
     );
+    const noConditionOption = '';
+    final condition = _condition;
+    // Keep legacy and manually entered values visible without adding presets.
+    final customCondition =
+        condition != null && !PlantConditions.ids.contains(condition)
+        ? condition
+        : null;
     return AlertDialog(
       scrollable: true,
       constraints: const BoxConstraints.tightFor(width: 560),
@@ -697,25 +704,31 @@ class _PlacementEditDialogState extends State<_PlacementEditDialog> {
             EditorResponsiveInputField(
               label: l10n.frozenPlantPlacementCondition,
               decoration: InputDecoration(),
-              builder: (context, decoration) =>
-                  DropdownButtonFormField<String?>(
-                    itemHeight: null,
-                    isExpanded: true,
-                    initialValue: _condition,
-                    decoration: decoration,
-                    items: [
-                      DropdownMenuItem<String?>(
-                        value: null,
-                        child: Text(l10n.frozenPlantPlacementConditionNull),
-                      ),
-                      for (final id in PlantConditions.ids)
-                        DropdownMenuItem<String?>(
-                          value: id,
-                          child: Text(ConditionL10n.plantLabel(context, id)),
-                        ),
-                    ],
-                    onChanged: (v) => setState(() => _condition = v),
+              builder: (context, decoration) => DropdownButtonFormField<String>(
+                itemHeight: null,
+                isExpanded: true,
+                initialValue: customCondition == null
+                    ? condition ?? noConditionOption
+                    : null,
+                hint: customCondition == null
+                    ? null
+                    : Text(ConditionL10n.plantLabel(context, customCondition)),
+                decoration: decoration,
+                items: [
+                  DropdownMenuItem<String>(
+                    value: noConditionOption,
+                    child: Text(l10n.frozenPlantPlacementConditionNull),
                   ),
+                  for (final id in PlantConditions.ids)
+                    DropdownMenuItem<String>(
+                      value: id,
+                      child: Text(ConditionL10n.plantLabel(context, id)),
+                    ),
+                ],
+                onChanged: (v) => setState(() {
+                  _condition = v == noConditionOption ? null : v;
+                }),
+              ),
             ),
           ],
         ),

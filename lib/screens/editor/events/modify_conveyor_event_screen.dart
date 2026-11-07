@@ -311,7 +311,7 @@ class _ModifyConveyorEventScreenState extends State<ModifyConveyorEventScreen> {
             onPressed: () => showEditorHelpDialog(
               context,
               isEvent: true,
-              title: l10n?.eventConveyorModify ?? 'Conveyor modify event',
+              title: eventTitle,
               sections: [
                 HelpSectionData(
                   title: l10n?.overview ?? 'Overview',

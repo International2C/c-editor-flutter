@@ -2,6 +2,7 @@ import 'dart:ui' as ui;
 
 import 'package:c_editor/data/narrative_catalog.dart';
 import 'package:c_editor/screens/select/narrative_preview_screen.dart';
+import 'package:c_editor/theme/app_theme.dart';
 import 'package:c_editor/widgets/asset_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -59,6 +60,69 @@ void main() {
     expect(text.textSpan, isNull);
     expect(tester.takeException(), isNull);
   });
+
+  for (final brightness in Brightness.values) {
+    testWidgets('Chinese dialogue colors are readable in ${brightness.name}', (
+      tester,
+    ) async {
+      final theme = brightness == Brightness.light ? lightTheme : darkTheme;
+      final background = theme.colorScheme.surfaceContainerLow;
+      final catalog = await NarrativeCatalog.load(const Locale('zh'));
+      NarrativeLine speech(String groupId) => catalog.dialogues
+          .singleWhere((entry) => entry.groupId == groupId)
+          .lines
+          .singleWhere((line) => line.kind == NarrativeLineKind.speech);
+
+      void expectReadableHue(Color? color, double hue) {
+        expect(color, isNotNull);
+        final accentColor = color!;
+        final accent = HSLColor.fromColor(accentColor);
+        final hueDifference = (accent.hue - hue + 180) % 360 - 180;
+        expect(hueDifference, closeTo(0, 10));
+        expect(accent.saturation, greaterThan(0.1));
+        final foreground = accentColor.computeLuminance();
+        final bubble = background.computeLuminance();
+        final ratio = foreground > bubble
+            ? (foreground + 0.05) / (bubble + 0.05)
+            : (bubble + 0.05) / (foreground + 0.05);
+        expect(ratio, greaterThanOrEqualTo(4.5));
+      }
+
+      await tester.pumpWidget(
+        _lineApp(
+          speech('ZOMBIE_INTRO_ELIMINATE_STAGE22'),
+          localeCode: 'zh',
+          theme: theme,
+        ),
+      );
+      const redText = '这个豆腐渣工程，看来我得重新换个包工头了！';
+      final red = tester.widget<Text>(find.text(redText));
+      final redRuns = _coloredRuns(red.textSpan!, red.style?.color).toList();
+      expect(redRuns.map((run) => run.text).join(), redText);
+      for (final run in redRuns) {
+        expectReadableHue(run.color, 0);
+      }
+
+      await tester.pumpWidget(
+        _lineApp(speech('ZOMBIE_INTRO_LEVEL4'), localeCode: 'zh', theme: theme),
+      );
+      final green = tester.widget<Text>(
+        find.textContaining('前所未有的4 阶僵尸终于被我研制出来了'),
+      );
+      final runs = _coloredRuns(green.textSpan!, green.style?.color).toList();
+      final greenRuns = runs.where((run) => run.color != green.style?.color);
+      expect(greenRuns.map((run) => run.text.trim()), ['4 阶僵尸', '4阶']);
+      for (final run in greenRuns) {
+        expectReadableHue(run.color, 120);
+      }
+      expect(
+        runs.singleWhere((run) => run.text.contains('终于被我研制出来了')).color,
+        green.style?.color,
+      );
+      expect(find.textContaining('^oldclr'), findsNothing);
+      expect(tester.takeException(), isNull);
+    });
+  }
 
   testWidgets('stage directions are italic in both Chinese and English', (
     tester,
@@ -238,8 +302,26 @@ void main() {
   });
 }
 
-Widget _lineApp(NarrativeLine line, {required String localeCode}) {
+Iterable<({String text, Color? color})> _coloredRuns(
+  InlineSpan span,
+  Color? inheritedColor,
+) sync* {
+  if (span is! TextSpan) return;
+  final color = span.style?.color ?? inheritedColor;
+  final text = span.text;
+  if (text != null) yield (text: text, color: color);
+  for (final child in span.children ?? const <InlineSpan>[]) {
+    yield* _coloredRuns(child, color);
+  }
+}
+
+Widget _lineApp(
+  NarrativeLine line, {
+  required String localeCode,
+  ThemeData? theme,
+}) {
   return MaterialApp(
+    theme: theme,
     home: Scaffold(
       body: NarrativeLineView(line: line, localeCode: localeCode),
     ),

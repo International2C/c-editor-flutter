@@ -153,42 +153,64 @@ class NarrativeLineView extends StatelessWidget {
     return text.replaceAll(r'\n', '\n');
   }
 
+  static Color _readableColor(int rgb, Color background) {
+    final color = HSLColor.fromColor(Color(0xFF000000 | rgb));
+    final muted = color.saturation > 0.75 ? color.withSaturation(0.75) : color;
+    final backgroundLuminance = background.computeLuminance();
+    double contrast(Color foreground) {
+      final foregroundLuminance = foreground.computeLuminance();
+      return foregroundLuminance >= backgroundLuminance
+          ? (foregroundLuminance + 0.05) / (backgroundLuminance + 0.05)
+          : (backgroundLuminance + 0.05) / (foregroundLuminance + 0.05);
+    }
+
+    // Preserve the hue and move only as far toward light or dark as needed.
+    final lighten = contrast(Colors.white) > contrast(Colors.black);
+    final target = lighten ? 1.0 : 0.0;
+    for (var step = 0; step < 20; step++) {
+      final lightness =
+          muted.lightness + (target - muted.lightness) * step / 20;
+      final candidate = muted.withLightness(lightness).toColor();
+      if (contrast(candidate) >= 4.5) return candidate;
+    }
+    return lighten ? Colors.white : Colors.black;
+  }
+
   static Text _displayText(
     String text, {
     required TextAlign textAlign,
+    required Color background,
     TextStyle? style,
   }) {
     final normalized = normalizeDisplayText(text);
-    final matches = narrativeStrikethroughMatches(normalized).toList();
-    if (matches.isEmpty) {
+    final runs = narrativeTextRuns(normalized).toList();
+    if (runs.length == 1 && runs.single.text == normalized) {
       return Text(normalized, textAlign: textAlign, style: style);
     }
-    final spans = <TextSpan>[];
-    var start = 0;
-    for (final match in matches) {
-      if (match.start > start) {
-        spans.add(TextSpan(text: normalized.substring(start, match.start)));
-      }
-      spans.add(
-        TextSpan(
-          text: match.group(1),
-          style: const TextStyle(decoration: TextDecoration.lineThrough),
-        ),
-      );
-      start = match.end;
-    }
-    if (start < normalized.length) {
-      spans.add(TextSpan(text: normalized.substring(start)));
-    }
     return Text.rich(
-      TextSpan(children: spans),
+      TextSpan(
+        children: [
+          for (final run in runs)
+            TextSpan(
+              text: run.text,
+              style: TextStyle(
+                color: run.rgb == null
+                    ? null
+                    : _readableColor(run.rgb!, background),
+                decoration: run.strikethrough
+                    ? TextDecoration.lineThrough
+                    : null,
+              ),
+            ),
+        ],
+      ),
       textAlign: textAlign,
       style: style,
     );
   }
 
   static bool isOperationHint(NarrativeLine line) {
-    final text = line.text.trimLeft().toLowerCase();
+    final text = narrativePlainText(line.text).trimLeft().toLowerCase();
     return text.startsWith('【操作提示】') ||
         text.startsWith('[操作提示]') ||
         text.startsWith('[tutorial prompt]') ||
@@ -201,6 +223,8 @@ class NarrativeLineView extends StatelessWidget {
       return _NarrativeStageDirection(line: line);
     }
 
+    final theme = Theme.of(context);
+    final background = theme.colorScheme.surfaceContainerLow;
     final rightAligned = isRightAlignedNpc(line.npc);
     final avatar = _NarrativeNpcAvatar(npc: line.npc);
     final bubble = Expanded(
@@ -212,27 +236,26 @@ class NarrativeLineView extends StatelessWidget {
           Text(
             _speakerWithEmotion(),
             textAlign: rightAligned ? TextAlign.right : TextAlign.left,
-            style: Theme.of(
-              context,
-            ).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.bold),
+            style: theme.textTheme.titleSmall?.copyWith(
+              fontWeight: FontWeight.bold,
+            ),
           ),
           const SizedBox(height: 5),
           Container(
             width: double.infinity,
             padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
             decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.surfaceContainerLow,
+              color: background,
               border: Border.all(
-                color: Theme.of(
-                  context,
-                ).colorScheme.outlineVariant.withValues(alpha: 0.9),
+                color: theme.colorScheme.outlineVariant.withValues(alpha: 0.9),
               ),
               borderRadius: BorderRadius.circular(4),
             ),
             child: _displayText(
               line.text,
               textAlign: rightAligned ? TextAlign.right : TextAlign.left,
-              style: Theme.of(context).textTheme.bodyLarge,
+              background: background,
+              style: theme.textTheme.bodyLarge,
             ),
           ),
         ],
@@ -264,17 +287,19 @@ class _NarrativeStageDirection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final background = theme.colorScheme.surfaceContainerHighest.withValues(
+      alpha: 0.45,
+    );
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       decoration: BoxDecoration(
-        color: theme.colorScheme.surfaceContainerHighest.withValues(
-          alpha: 0.45,
-        ),
+        color: background,
         borderRadius: BorderRadius.circular(10),
       ),
       child: NarrativeLineView._displayText(
         line.text,
         textAlign: TextAlign.center,
+        background: Color.alphaBlend(background, theme.scaffoldBackgroundColor),
         style: theme.textTheme.bodyMedium?.copyWith(
           color: theme.colorScheme.onSurfaceVariant,
           fontStyle: line.kind == NarrativeLineKind.stage

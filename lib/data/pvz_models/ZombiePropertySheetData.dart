@@ -11,8 +11,8 @@ class ZombiePropertySheetData extends PvzModel {
     this.speed = 0.0,
     this.speedVariance,
     this.eatDPS = 0.0,
-    this.weight = 0,
-    this.wavePointCost = 0,
+    this.weight = 4000,
+    this.wavePointCost = 100,
     this.sizeType,
     this.hitRect,
     this.attackRect,
@@ -83,8 +83,8 @@ class ZombiePropertySheetData extends PvzModel {
       speed: (json['Speed'] as num?)?.toDouble() ?? 0.0,
       speedVariance: (json['SpeedVariance'] as num?)?.toDouble(),
       eatDPS: (json['EatDPS'] as num?)?.toDouble() ?? 0.0,
-      weight: (json['Weight'] as num?)?.toInt() ?? 0,
-      wavePointCost: (json['WavePointCost'] as num?)?.toInt() ?? 0,
+      weight: (json['Weight'] as num?)?.toInt() ?? 4000,
+      wavePointCost: (json['WavePointCost'] as num?)?.toInt() ?? 100,
       sizeType: json['SizeType'] as String?,
       hitRect: json['HitRect'] is Map<String, dynamic>
           ? RectData.fromJson(json['HitRect'] as Map<String, dynamic>)
@@ -125,6 +125,7 @@ class ZombiePropertySheetData extends PvzModel {
     );
   }
 
+  @override
   Map<String, dynamic> toJson() => {
     'Hitpoints': hitpoints,
     'Speed': speed,

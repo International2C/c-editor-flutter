@@ -163,7 +163,7 @@ void main() {
     }
   });
 
-  testWidgets('renames references and blocks deletion while referenced', (
+  testWidgets('renames references with the keyboard open and blocks deletion', (
     tester,
   ) async {
     final preset = PvzObject(
@@ -183,8 +183,37 @@ void main() {
 
     await tester.tap(find.byIcon(Icons.drive_file_rename_outline));
     await tester.pumpAndSettle();
-    await tester.enterText(find.byType(TextFormField).last, 'FastOffsets');
-    await tester.tap(find.text('Confirm'));
+    final dialog = find.byType(AlertDialog);
+    final field = find.descendant(
+      of: dialog,
+      matching: find.byType(TextFormField),
+    );
+    final confirm = find.widgetWithText(FilledButton, 'Confirm');
+    addTearDown(tester.view.reset);
+    tester.view.devicePixelRatio = 1;
+    tester.view.physicalSize = const Size(400, 500);
+    tester.view.viewInsets = const FakeViewPadding(bottom: 220);
+    await tester.pumpAndSettle();
+    expect(tester.takeException(), isNull);
+    await tester.ensureVisible(field);
+    await tester.enterText(field, '');
+    await tester.tap(confirm);
+    await tester.pumpAndSettle();
+    expect(tester.takeException(), isNull);
+    expect(preset.aliases?.first, 'Offsets');
+    final validation = find.text('Alias cannot be empty');
+    await tester.ensureVisible(validation);
+    await tester.pumpAndSettle();
+    expect(validation.hitTestable(), findsOneWidget);
+    expect(
+      tester.getBottomRight(validation).dy,
+      lessThanOrEqualTo(tester.getTopLeft(confirm).dy),
+    );
+    expect(tester.getBottomRight(confirm).dy, lessThanOrEqualTo(280));
+    await tester.enterText(field, 'FastOffsets');
+    await tester.tap(confirm);
+    await tester.pumpAndSettle();
+    tester.view.reset();
     await tester.pumpAndSettle();
 
     expect(preset.aliases?.first, 'FastOffsets');

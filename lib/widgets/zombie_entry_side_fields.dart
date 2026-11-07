@@ -44,7 +44,9 @@ class _ZombieEntrySideFieldsState extends State<ZombieEntrySideFields> {
       children: [
         Text(
           l10n.zombieEntrySideLabel,
-          style: Theme.of(context).textTheme.bodyMedium,
+          style: Theme.of(context).textTheme.titleSmall?.copyWith(
+            fontWeight: FontWeight.bold,
+          ),
         ),
         SwitchListTile(
           key: const ValueKey('zombieRandomEntrySide'),

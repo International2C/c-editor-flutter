@@ -132,12 +132,16 @@ class ZombiePropertiesRepository {
     return instance._aliasToTypeCache.containsKey(alias);
   }
 
-  /// True when the bundled reference shows this zombie can be bought from a
-  /// wave point budget (WavePointCost >= 1). The game's point purchase reads
-  /// WavePointCost only and ignores the sheet's Weight, so Weight = 0
-  /// zombies (flag carriers) are buyable too. Zombies whose cost data is
-  /// missing (unknown/custom zombies or property sheets without cost)
-  /// return false.
+  static bool hasResolvedPropertySheet(String aliasOrTypeName) {
+    final rtidAlias = RtidParser.parse(aliasOrTypeName)?.alias;
+    final typeName = getTypeNameByAlias(rtidAlias ?? aliasOrTypeName);
+    return instance._originalPropsJson.containsKey(typeName);
+  }
+
+  /// True when the bundled reference resolves an effective WavePointCost for
+  /// this zombie. An omitted field uses the runtime default of 100. Weight is
+  /// intentionally not checked here: Weight = 0 is valid data, although the
+  /// legacy Wave Generator will not randomly select that pool entry.
   static bool canSpawnFromPoints(String aliasOrTypeName) {
     final rtidAlias = RtidParser.parse(aliasOrTypeName)?.alias;
     final typeName = getTypeNameByAlias(rtidAlias ?? aliasOrTypeName);

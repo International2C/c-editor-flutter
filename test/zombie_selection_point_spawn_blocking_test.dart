@@ -18,6 +18,21 @@ Widget _localizedApp(Widget home) {
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
+  test('point-spawn blocking copy describes selection and spawning', () {
+    final zh = lookupAppLocalizations(const Locale('zh'));
+    expect(
+      zh.pointSpawnOnlyZombiesBlocked,
+      '此僵尸没有「消耗点数 (WavePointCost)」数据，游戏无法根据波次点数将其加入出怪，'
+      '因此也无法添加到按点数出怪池中。',
+    );
+    expect(zh.pointSpawnOnlyZombieBlockedTitle, '不能用于按点数自动出怪');
+    expect(
+      zh.pointSpawnOnlyZombieBlockedMessage,
+      '此僵尸没有「消耗点数 (WavePointCost)」数据。游戏需要读取该字段，根据波次点数'
+      '选择并生成僵尸，因此该僵尸无法用于按点数自动出怪。',
+    );
+  });
+
   setUpAll(() async {
     SharedPreferences.setMockInitialValues({});
     await Future.wait([
@@ -52,6 +67,14 @@ void main() {
     addTearDown(tester.view.resetPhysicalSize);
     addTearDown(tester.view.resetDevicePixelRatio);
 
+    final blocked = ZombieInfo(
+      id: 'missing_spawn_stats_test',
+      name: 'zombie_missing_spawn_stats_test',
+      tags: const [ZombieTag.all],
+    );
+    ZombieRepository().allZombies.add(blocked);
+    addTearDown(() => ZombieRepository().allZombies.remove(blocked));
+
     String? selected;
     await tester.pumpWidget(
       _localizedApp(
@@ -65,21 +88,19 @@ void main() {
     );
     await tester.pumpAndSettle();
 
-    // Catapult's property sheet has no WavePointCost data, so the game
-    // cannot buy it from a point budget.
-    await search(tester, 'catapult');
-    expect(idText('catapult'), findsOneWidget);
-    expect(dimmedItem('catapult'), findsOneWidget);
+    await search(tester, blocked.id);
+    expect(idText(blocked.id), findsOneWidget);
+    expect(dimmedItem(blocked.id), findsOneWidget);
 
-    await tester.tap(idText('catapult'));
+    await tester.tap(idText(blocked.id));
     await tester.pumpAndSettle();
 
     expect(find.text('Cannot be used in point auto-spawn'), findsOneWidget);
     expect(
       find.text(
-        'This zombie has no WavePointCost data (the field the game uses '
-        'to buy zombies from wave points), so it cannot be used in point '
-        'auto-spawn.',
+        'This zombie has no point cost (WavePointCost) data. The game needs '
+        'this field to select and spawn zombies according to the wave\'s '
+        'points, so this zombie cannot be used in point auto-spawn.',
       ),
       findsOneWidget,
     );

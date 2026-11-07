@@ -1,6 +1,8 @@
 import 'dart:async';
 
 import 'package:c_editor/data/gladiator_row_utils.dart';
+import 'package:c_editor/data/grid_override_module_utils.dart'
+    show moduleRtidForClass;
 import 'package:c_editor/data/jitter_offsets_utils.dart';
 import 'package:c_editor/bloc/settings/settings_cubit.dart';
 import 'dart:convert';
@@ -13,15 +15,15 @@ import 'package:c_editor/data/pvz_alias_utils.dart';
 import 'package:c_editor/data/renai_wave_preview_utils.dart';
 import 'package:c_editor/data/registry/event_registry.dart';
 import 'package:c_editor/data/level_parser.dart';
+import 'package:c_editor/data/level_escalation_point_analysis.dart';
+import 'package:c_editor/data/level_escalation_runtime.dart';
 import 'package:c_editor/data/pvz_models.dart';
 import 'package:c_editor/data/rtid_parser.dart';
 import 'package:c_editor/data/wave_point_analysis.dart';
 import 'package:c_editor/data/zombie_count_simulation.dart';
 import 'package:c_editor/l10n/app_localizations.dart';
-import 'package:c_editor/l10n/resource_names.dart';
 import 'package:c_editor/escape_override.dart';
 import 'package:c_editor/data/repository/zombie_repository.dart';
-import 'package:c_editor/data/repository/zombie_properties_repository.dart';
 import 'package:c_editor/data/repository/fish_type_repository.dart';
 import 'package:c_editor/theme/app_theme.dart';
 import 'package:c_editor/screens/select/event_selection_screen.dart';
@@ -40,10 +42,12 @@ import 'package:c_editor/widgets/editor_components.dart'
         showEditorChoiceDialog;
 import 'package:c_editor/widgets/editor_object_alias.dart';
 import 'package:c_editor/widgets/initial_kongfu_grid_items_card.dart';
+import 'package:c_editor/widgets/zombie_count_estimate_text.dart';
 import 'package:c_editor/screens/common/level_preview_grid_helpers.dart'
     show readSeeingStarsModuleData;
 import 'package:c_editor/widgets/wave_module_preview_dialogs.dart';
 import 'package:c_editor/widgets/wave_number_label.dart';
+import 'package:c_editor/widgets/wave_point_expectation_row.dart';
 import 'package:c_editor/widgets/zombie_lane_drag_widgets.dart'
     show zombieDragLongPressDelay, zombieDropSlotWidth;
 
@@ -93,16 +97,11 @@ double _expectationDialogIconSize(BuildContext context) {
   return compact ? 36 : 40;
 }
 
-Size _expectationDialogListSize(BuildContext context) {
-  final isDesktop = isDesktopPlatform(context);
+double _expectationDialogWidth(BuildContext context) {
+  if (isDesktopPlatform(context)) return 420;
   final screenWidth = MediaQuery.sizeOf(context).width;
-  if (isDesktop) {
-    return Size(420, compactWidth(screenWidth) ? 300 : 360);
-  }
-  return Size((screenWidth - 96).clamp(280, 360), 280);
+  return (screenWidth - 96).clamp(280, 360);
 }
-
-bool compactWidth(double screenWidth) => screenWidth < 500;
 
 double _requiredIconButtonWidth(BuildContext context, String label) {
   final theme = Theme.of(context);
@@ -222,7 +221,7 @@ class _WaveTimelineTabState extends State<WaveTimelineTab> {
       final payload = widget.openWaveSheetNotifier?.value;
       if (payload != null && mounted) {
         widget.openWaveSheetNotifier!.value = null;
-        _showWaveManageSheet(context, payload.waveIndex);
+        _openWaveManageSheet(context, payload.waveIndex);
       }
     };
     widget.openWaveSheetNotifier?.addListener(_notifierListener!);
@@ -237,7 +236,7 @@ class _WaveTimelineTabState extends State<WaveTimelineTab> {
         final payload = widget.openWaveSheetNotifier?.value;
         if (payload != null && mounted) {
           widget.openWaveSheetNotifier!.value = null;
-          _showWaveManageSheet(context, payload.waveIndex);
+          _openWaveManageSheet(context, payload.waveIndex);
         }
       };
       widget.openWaveSheetNotifier?.addListener(_notifierListener!);
@@ -267,26 +266,59 @@ class _WaveTimelineTabState extends State<WaveTimelineTab> {
     return total;
   }
 
+  LevelEscalationRuntime get _levelEscalationRuntime =>
+      LevelEscalationRuntime.resolve(widget.levelFile);
+
+  void _openWaveManageSheet(BuildContext context, int waveIndex) {
+    final wm = widget.parsed.waveManager;
+    if (wm is! WaveManagerData || waveIndex <= 0) return;
+    if (waveIndex > wm.waves.length) {
+      while (wm.waves.length < waveIndex) {
+        wm.waves.add(<String>[]);
+      }
+      wm.waveCount = wm.waves.length;
+      _syncWaves();
+      setState(() {});
+    }
+    _showWaveManageSheet(context, waveIndex);
+  }
+
   /// Simulated zombie count summed across every wave of the Wave Manager:
   /// each run buys from that wave's own active pool with that wave's point
   /// budget (flag waves included), so the range covers a whole playthrough.
   ZombieCountEstimate? _totalExpectationEstimate() {
     final wm = widget.parsed.waveManager;
     final module = widget.parsed.waveModule;
-    if (wm is! WaveManagerData || module is! WaveManagerModuleData) {
+    if (wm is! WaveManagerData) return null;
+    final escalation = _levelEscalationRuntime;
+    if (!escalation.isEffective && module is! WaveManagerModuleData) {
       return null;
     }
-    final waves = wm.waves;
-    if (waves.isEmpty) return null;
-    final interval = wm.flagWaveInterval <= 0 ? 10 : wm.flagWaveInterval;
+    final waveCount = escalation.effectiveWaveCount(wm);
+    if (waveCount <= 0) return null;
+    final escalationData = escalation.data;
+    final interval = escalation.isEffective
+        ? LevelEscalationPointAnalysis.flagInterval(escalationData!)
+        : (wm.flagWaveInterval <= 0 ? 10 : wm.flagWaveInterval);
     final waveData = <({List<int> costs, int points})>[];
-    for (var index = 0; index < waves.length; index++) {
+    for (var index = 0; index < waveCount; index++) {
       final waveIndex = index + 1;
-      final isFlag = waveIndex % interval == 0 || waveIndex == waves.length;
-      final points = _pointsAtWave(module, waveIndex, isFlag);
+      final isFlag = escalation.isEffective
+          ? waveIndex % interval == 0
+          : waveIndex % interval == 0 || waveIndex == waveCount;
+      final points = escalation.isEffective
+          ? (waveIndex <= escalationData!.totalWaves
+                ? LevelEscalationPointAnalysis.pointsAtWave(
+                    escalationData,
+                    waveIndex,
+                  )
+                : 0)
+          : _pointsAtWave(module as WaveManagerModuleData, waveIndex, isFlag);
       if (points <= 0) continue;
       final entries = WavePointAnalysis.resolveEntries(
-        WavePointAnalysis.poolForWave(widget.parsed, waveIndex),
+        escalation.isEffective
+            ? escalationData!.zombiePool
+            : WavePointAnalysis.poolForWave(widget.parsed, waveIndex),
       );
       final costs = [
         for (final e in entries)
@@ -608,8 +640,11 @@ class _WaveTimelineTabState extends State<WaveTimelineTab> {
   Widget _buildWaveContainerAliasCard(BuildContext context) {
     final l10n = AppLocalizations.of(context);
     final theme = Theme.of(context);
+    final activeAlias = widget.parsed.waveManagerAlias;
     final propsObj = widget.levelFile.objects.firstWhereOrNull(
-      (o) => o.objClass == 'WaveManagerProperties',
+      (o) =>
+          o.objClass == 'WaveManagerProperties' &&
+          (activeAlias == null || o.aliases?.contains(activeAlias) == true),
     );
     final alias = propsObj?.aliases?.firstOrNull;
     if (alias == null) return const SizedBox.shrink();
@@ -669,7 +704,9 @@ class _WaveTimelineTabState extends State<WaveTimelineTab> {
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       child: ListTile(
         leading: const Icon(Icons.tune),
-        title: Text(l10n?.waveManagerGlobalParams ?? 'Wave manager parameters'),
+        title: Text(
+          l10n?.waveManagerGlobalParams ?? 'Global wave container parameters',
+        ),
         subtitle: Text(
           l10n?.waveManagerGlobalSummary(
                 interval,
@@ -769,22 +806,46 @@ class _WaveTimelineTabState extends State<WaveTimelineTab> {
                 color: Theme.of(context).colorScheme.onSurfaceVariant,
               ),
             ),
-            if (widget.onDeleteContainer != null) ...[
-              const SizedBox(height: 16),
-              FilledButton.icon(
-                style: FilledButton.styleFrom(
-                  backgroundColor: Theme.of(context).colorScheme.error,
-                ),
-                onPressed: widget.onDeleteContainer,
-                icon: const Icon(Icons.delete_forever),
-                label: Text(
-                  l10n?.deleteEmptyContainer ?? 'Delete empty container',
-                ),
-              ),
-            ],
+            const SizedBox(height: 16),
+            Wrap(
+              key: const ValueKey('waveTimelineEmptyActions'),
+              alignment: WrapAlignment.center,
+              runAlignment: WrapAlignment.center,
+              crossAxisAlignment: WrapCrossAlignment.center,
+              spacing: 12,
+              runSpacing: 12,
+              children: [
+                _buildAddWaveButton(context),
+                if (widget.onDeleteContainer != null)
+                  EditorFilledButton(
+                    key: const ValueKey(
+                      'waveTimelineDeleteEmptyContainerButton',
+                    ),
+                    style: FilledButton.styleFrom(
+                      backgroundColor: Theme.of(context).colorScheme.error,
+                      foregroundColor: Theme.of(context).colorScheme.onError,
+                    ),
+                    onPressed: widget.onDeleteContainer,
+                    icon: const Icon(Icons.delete_forever),
+                    label: Text(
+                      l10n?.deleteEmptyContainer ?? 'Delete empty container',
+                    ),
+                  ),
+              ],
+            ),
           ],
         ),
       ),
+    );
+  }
+
+  Widget _buildAddWaveButton(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    return EditorFilledButton(
+      key: const ValueKey('waveTimelineAddWaveButton'),
+      onPressed: _addWave,
+      icon: const Icon(Icons.add),
+      label: Text(l10n?.addWave ?? 'Add wave'),
     );
   }
 
@@ -1208,8 +1269,7 @@ class _WaveTimelineTabState extends State<WaveTimelineTab> {
         );
       },
       builder: (context, candidateData, rejectedData) {
-        final active =
-            candidateData.isNotEmpty || _dragHoverInsert == hover;
+        final active = candidateData.isNotEmpty || _dragHoverInsert == hover;
         final showPreview = active && _draggingEvent != null;
         if (showPreview) {
           // Jittered-style ghost at the hovered insert position.
@@ -1921,8 +1981,11 @@ class _WaveTimelineTabState extends State<WaveTimelineTab> {
   void _syncWaves() {
     final wm = widget.parsed.waveManager;
     if (wm is! WaveManagerData) return;
+    final activeAlias = widget.parsed.waveManagerAlias;
     final wmObj = widget.levelFile.objects.firstWhereOrNull(
-      (o) => o.objClass == 'WaveManagerProperties',
+      (o) =>
+          o.objClass == 'WaveManagerProperties' &&
+          (activeAlias == null || o.aliases?.contains(activeAlias) == true),
     );
     if (wmObj != null) {
       wmObj.objData = wm.toJson();
@@ -2778,9 +2841,7 @@ class _WaveTimelineTabState extends State<WaveTimelineTab> {
                                               dctx,
                                             ).colorScheme.primary,
                                           ),
-                                          child: Text(
-                                            l10n?.cancel ?? 'Cancel',
-                                          ),
+                                          child: Text(l10n?.cancel ?? 'Cancel'),
                                         ),
                                         FilledButton(
                                           onPressed: () =>
@@ -2835,6 +2896,7 @@ class _WaveTimelineTabState extends State<WaveTimelineTab> {
       barrierDismissible: false,
       builder: (ctx) => StatefulBuilder(
         builder: (ctx, setDialogState) => AlertDialog(
+          scrollable: true,
           title: Text(
             (l10n?.deleteWave != null && l10n?.waveLabel != null)
                 ? '${l10n?.deleteWave} ${l10n?.waveLabel} $waveIndex?'
@@ -2915,28 +2977,31 @@ class _WaveTimelineTabState extends State<WaveTimelineTab> {
               return painter.height;
             }
 
+            String eventSubtitle(
+              EventMetadata? meta, {
+              required bool missing,
+            }) {
+              if (meta != null) {
+                return EventSelectionScreen.resolveEventTitle(ctx, meta, l10n);
+              }
+              return missing
+                  ? (l10n?.invalidEventTitle ?? 'Invalid event')
+                  : (l10n?.unknownEventTitle ?? 'Unknown event');
+            }
+
             Widget eventCard(int i) {
               final rtid = rtidList[i];
               final alias = LevelParser.extractAlias(rtid);
               final obj = widget.parsed.objectMap[alias];
               final meta = EventRegistry.getByObjClass(obj?.objClass);
               final color = meta?.color ?? Theme.of(ctx).colorScheme.primary;
-              final displayTitle = EventSelectionScreen.resolveEventTitle(
-                ctx,
-                meta,
-                l10n,
-              );
               return Card(
                 key: ValueKey('waveManageEvent-$i'),
                 margin: const EdgeInsets.only(bottom: 8),
                 child: EditorOptionTile(
                   leading: Icon(meta?.icon ?? Icons.event, color: color),
                   title: Text(alias),
-                  subtitle: Text(
-                    displayTitle.isNotEmpty
-                        ? displayTitle
-                        : (meta?.titleKey ?? 'Unknown event'),
-                  ),
+                  subtitle: Text(eventSubtitle(meta, missing: obj == null)),
                   onTap: () {
                     Navigator.pop(ctx);
                     _showEventActionSheet(
@@ -3130,17 +3195,9 @@ class _WaveTimelineTabState extends State<WaveTimelineTab> {
             final visibleEventHeights = <double>[];
             for (final rtid in rtidList.take(3)) {
               final alias = LevelParser.extractAlias(rtid);
-              final meta = EventRegistry.getByObjClass(
-                widget.parsed.objectMap[alias]?.objClass,
-              );
-              final localizedTitle = EventSelectionScreen.resolveEventTitle(
-                ctx,
-                meta,
-                l10n,
-              );
-              final subtitle = localizedTitle.isNotEmpty
-                  ? localizedTitle
-                  : (meta?.titleKey ?? 'Unknown event');
+              final obj = widget.parsed.objectMap[alias];
+              final meta = EventRegistry.getByObjClass(obj?.objClass);
+              final subtitle = eventSubtitle(meta, missing: obj == null);
               final textExtent =
                   textHeight(
                     alias,
@@ -3323,9 +3380,18 @@ class _WaveTimelineTabState extends State<WaveTimelineTab> {
       );
     }
 
-    final waves = wm.waves;
+    final escalation = _levelEscalationRuntime;
+    final effectiveWaveCount = escalation.effectiveWaveCount(wm);
+    final waves = List<List<String>>.generate(
+      effectiveWaveCount,
+      (index) => index < wm.waves.length ? wm.waves[index] : const <String>[],
+      growable: false,
+    );
     final seeingStars = readSeeingStarsModuleData(widget.levelFile);
-    final interval = wm.flagWaveInterval <= 0 ? 10 : wm.flagWaveInterval;
+    final escalationData = escalation.data;
+    final interval = escalation.isEffective
+        ? LevelEscalationPointAnalysis.flagInterval(escalationData!)
+        : (wm.flagWaveInterval <= 0 ? 10 : wm.flagWaveInterval);
 
     final deadLinks = wm.waves
         .expand((w) => w)
@@ -3363,11 +3429,19 @@ class _WaveTimelineTabState extends State<WaveTimelineTab> {
           ...List.generate(waves.length, (index) {
             final waveIndex = index + 1;
             final waveEvents = waves[index];
-            final isFlagWave =
-                waveIndex % interval == 0 || waveIndex == waves.length;
-            final points = module != null
-                ? _pointsAtWave(module, waveIndex, isFlagWave)
-                : 0;
+            final isFlagWave = escalation.isEffective
+                ? waveIndex % interval == 0
+                : waveIndex % interval == 0 || waveIndex == waves.length;
+            final points = escalation.isEffective
+                ? (waveIndex <= escalationData!.totalWaves
+                      ? LevelEscalationPointAnalysis.pointsAtWave(
+                          escalationData,
+                          waveIndex,
+                        )
+                      : 0)
+                : (module != null
+                      ? _pointsAtWave(module, waveIndex, isFlagWave)
+                      : 0);
             final l10n = AppLocalizations.of(context);
             final actionButtons = <({String label, VoidCallback onTap})>[];
             if (points != 0) {
@@ -3455,21 +3529,16 @@ class _WaveTimelineTabState extends State<WaveTimelineTab> {
               rtidList: waveEvents,
               objectMap: objectMap,
               actionButtons: actionButtons,
-              onRowTap: () => _showWaveManageSheet(context, waveIndex),
+              onRowTap: () => _openWaveManageSheet(context, waveIndex),
             );
             return rowWidget;
           }),
         ],
-        Padding(
-          padding: const EdgeInsets.fromLTRB(32, 32, 32, 16),
-          child: Center(
-            child: EditorFilledButton(
-              onPressed: _addWave,
-              icon: const Icon(Icons.add),
-              label: Text(l10n?.addWave ?? 'Add wave'),
-            ),
+        if (waves.isNotEmpty)
+          Padding(
+            padding: const EdgeInsets.fromLTRB(32, 32, 32, 16),
+            child: Center(child: _buildAddWaveButton(context)),
           ),
-        ),
       ],
     );
   }
@@ -3560,15 +3629,6 @@ class _WaveTimelineTabState extends State<WaveTimelineTab> {
               ),
       );
     });
-  }
-
-  String? _getModuleRtid(String objClass) {
-    final obj = widget.levelFile.objects.firstWhereOrNull(
-      (o) => o.objClass == objClass,
-    );
-    final alias = obj?.aliases?.firstOrNull;
-    if (alias == null) return null;
-    return RtidParser.build(alias, 'CurrentLevel');
   }
 
   RenaiModulePropertiesData? _getRenaiModuleData() {
@@ -3672,11 +3732,23 @@ class _WaveTimelineTabState extends State<WaveTimelineTab> {
 
   void _showExpectationDialog(BuildContext context, int waveIndex, int points) {
     final l10n = AppLocalizations.of(context);
-    final analysis = WavePointAnalysis.analyze(
-      points,
-      widget.parsed,
-      waveIndex: waveIndex,
-    );
+    final escalation = _levelEscalationRuntime;
+    final escalationData = escalation.data;
+    final usesEscalation =
+        escalation.isEffective &&
+        escalationData != null &&
+        waveIndex <= escalationData.totalWaves;
+    final onOpenModule = widget.onOpenModule;
+    final settingsRtid = usesEscalation
+        ? escalation.escalationModuleRtid
+        : moduleRtidForClass(widget.levelFile, 'WaveManagerModuleProperties');
+    final analysis = usesEscalation
+        ? WavePointAnalysis.analyzePool(escalationData.zombiePool, points)
+        : WavePointAnalysis.analyze(
+            points,
+            widget.parsed,
+            waveIndex: waveIndex,
+          );
     final expectation = analysis.expectation;
     final missingStats = analysis.missingStats;
     final hiddenIds = analysis.hiddenIds;
@@ -3697,7 +3769,9 @@ class _WaveTimelineTabState extends State<WaveTimelineTab> {
     // Simulated zombie counts: one for this wave, one summed across all
     // waves of the level's spawner.
     final waveEntries = WavePointAnalysis.resolveEntries(
-      WavePointAnalysis.poolForWave(widget.parsed, waveIndex),
+      usesEscalation
+          ? escalationData.zombiePool
+          : WavePointAnalysis.poolForWave(widget.parsed, waveIndex),
     );
     final waveCosts = [
       for (final e in waveEntries)
@@ -3712,177 +3786,130 @@ class _WaveTimelineTabState extends State<WaveTimelineTab> {
     showDialog<void>(
       context: context,
       builder: (ctx) {
-        final scrollController = ScrollController();
         final iconSize = _expectationDialogIconSize(ctx);
-        final listSize = _expectationDialogListSize(ctx);
-        return AlertDialog(
-          title: Text(
-            '${l10n?.customZombieWaveItem(waveIndex) ?? "Wave $waveIndex"} ${l10n?.expectation ?? "Expectation"}',
-          ),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text('${l10n?.pointsLabel ?? "Points"}: $points'),
-              if (waveEstimate != null) ...[
-                const SizedBox(height: 8),
-                Text(
-                  l10n?.zombieCountWaveEstimate(
-                        waveEstimate.average.toStringAsFixed(1),
-                        waveEstimate.minimum,
-                        waveEstimate.maximum,
-                      ) ??
-                      'This wave: about '
-                          '${waveEstimate.average.toStringAsFixed(1)} '
-                          'zombies (from ${waveEstimate.minimum} '
-                          'to ${waveEstimate.maximum})',
+        final theme = Theme.of(ctx);
+        final title =
+            '${l10n?.customZombieWaveItem(waveIndex) ?? "Wave $waveIndex"} ${l10n?.expectation ?? "Expectation"}';
+        final summary = Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              title,
+              style:
+                  DialogTheme.of(ctx).titleTextStyle ??
+                  theme.textTheme.headlineSmall,
+            ),
+            const SizedBox(height: 16),
+            Text('${l10n?.pointsLabel ?? "Points"}: $points'),
+            if (usesEscalation &&
+                escalation.fixedPlantFoodAtWave(waveIndex) > 0) ...[
+              const SizedBox(height: 8),
+              Text(
+                l10n?.levelEscalationWavePlantfood(
+                      escalation.fixedPlantFoodAtWave(waveIndex),
+                    ) ??
+                    'Plant Food fixed to this wave: '
+                        '${escalation.fixedPlantFoodAtWave(waveIndex)}',
+              ),
+            ],
+            if (usesEscalation && escalation.randomPlantFoodCount > 0) ...[
+              const SizedBox(height: 4),
+              Text(
+                l10n?.levelEscalationRandomPlantfood(
+                      escalation.randomPlantFoodCount,
+                      escalationData.totalWaves,
+                    ) ??
+                    '${escalation.randomPlantFoodCount} additional Plant '
+                        'Food item(s) are randomly assigned to waves '
+                        '1–${escalationData.totalWaves}.',
+                style: theme.textTheme.bodySmall?.copyWith(
+                  color: theme.colorScheme.onSurfaceVariant,
                 ),
-                if (totalEstimate != null &&
-                    (totalEstimate.average > 0 || totalEstimate.maximum > 0))
-                  Text(
-                    l10n?.zombieCountTotalEstimate(
-                          totalEstimate.average.toStringAsFixed(1),
-                          totalEstimate.minimum,
-                          totalEstimate.maximum,
-                        ) ??
-                        'All waves combined: about '
-                            '${totalEstimate.average.toStringAsFixed(1)} '
-                            'zombies (from ${totalEstimate.minimum} '
-                            'to ${totalEstimate.maximum})',
-                  ),
-              ],
-              const SizedBox(height: 16),
-              if (missingStats.isNotEmpty) ...[
-                Text(
-                  l10n?.waveManagerExpectationMissingData(
-                        missingStats.join(', '),
-                      ) ??
-                      'These zombies lack reliable WavePointCost data and '
-                          'are not counted: ${missingStats.join(', ')}',
-                  style: Theme.of(ctx).textTheme.bodySmall?.copyWith(
-                    color: Theme.of(ctx).colorScheme.error,
-                  ),
+              ),
+            ],
+            if (waveEstimate != null) ...[
+              const SizedBox(height: 8),
+              Text(
+                zombieCountEstimateText(
+                  l10n,
+                  waveEstimate,
+                  scope: ZombieCountEstimateScope.wave,
                 ),
-                const SizedBox(height: 16),
-              ],
-              if (items.isEmpty)
+              ),
+              if (totalEstimate != null &&
+                  (totalEstimate.average > 0 || totalEstimate.maximum > 0))
                 Text(
-                  visiblePool.isEmpty
-                      ? (l10n?.noDynamicZombies ?? 'No dynamic zombies')
-                      : (l10n?.expectationNoAffordableZombies ??
-                            'None of this wave\'s pool zombies can be bought '
-                                'with its points.'),
-                  style: Theme.of(ctx).textTheme.bodySmall,
-                )
-              else
-                SizedBox(
-                  width: listSize.width,
-                  height: listSize.height,
-                  child: Scrollbar(
-                    controller: scrollController,
-                    thumbVisibility: true,
-                    child: ListView.builder(
-                      controller: scrollController,
-                      padding: const EdgeInsets.only(right: 14),
-                      itemCount: items.length,
-                      itemBuilder: (_, i) {
-                        final e = items[i];
-                        final typeName = e.key;
-                        final cost = ZombiePropertiesRepository.getStats(
-                          typeName,
-                        ).cost;
-                        final info = ZombieRepository().getZombieById(typeName);
-                        final nameKey =
-                            info?.name ?? ZombieRepository().getName(typeName);
-                        final displayName = ResourceNames.lookup(ctx, nameKey);
-                        final iconPath =
-                            info?.iconAssetPath ?? _kUnknownIconPath;
-                        return Padding(
-                          padding: EdgeInsets.symmetric(
-                            vertical: isDesktopPlatform(ctx) ? 5 : 4,
-                          ),
-                          child: Row(
-                            children: [
-                              ClipRRect(
-                                borderRadius: BorderRadius.circular(8),
-                                child: ColoredBox(
-                                  color: Theme.of(
-                                    ctx,
-                                  ).colorScheme.surfaceContainerHighest,
-                                  child: SizedBox(
-                                    width: iconSize,
-                                    height: iconSize,
-                                    child: AssetImageWidget(
-                                      assetPath: iconPath,
-                                      altCandidates: imageAltCandidates(
-                                        iconPath,
-                                      ),
-                                      width: iconSize,
-                                      height: iconSize,
-                                      fit: BoxFit.contain,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(width: 10),
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      displayName.isNotEmpty
-                                          ? displayName
-                                          : typeName,
-                                      overflow: TextOverflow.ellipsis,
-                                      style: Theme.of(ctx).textTheme.bodyMedium
-                                          ?.copyWith(
-                                            fontWeight: FontWeight.w500,
-                                          ),
-                                    ),
-                                    Text(
-                                      typeName,
-                                      overflow: TextOverflow.ellipsis,
-                                      style: Theme.of(ctx).textTheme.bodySmall
-                                          ?.copyWith(
-                                            color: Theme.of(
-                                              ctx,
-                                            ).colorScheme.onSurfaceVariant,
-                                          ),
-                                    ),
-                                    Text(
-                                      l10n?.zombiePointCost(cost) ??
-                                          'Point cost: $cost',
-                                      style: Theme.of(ctx).textTheme.bodySmall,
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              const SizedBox(width: 8),
-                              Text(
-                                e.value.toStringAsFixed(2),
-                                style: Theme.of(ctx).textTheme.bodyMedium,
-                              ),
-                            ],
-                          ),
-                        );
-                      },
-                    ),
+                  zombieCountEstimateText(
+                    l10n,
+                    totalEstimate,
+                    scope: ZombieCountEstimateScope.allWaves,
                   ),
                 ),
             ],
+            const SizedBox(height: 16),
+            if (missingStats.isNotEmpty) ...[
+              Text(
+                l10n?.waveManagerExpectationMissingData(
+                      missingStats.join(', '),
+                    ) ??
+                    'These zombies lack reliable WavePointCost data and '
+                        'are not counted: ${missingStats.join(', ')}',
+                style: theme.textTheme.bodySmall?.copyWith(
+                  color: theme.colorScheme.error,
+                ),
+              ),
+              const SizedBox(height: 16),
+            ],
+            if (items.isEmpty)
+              Text(
+                visiblePool.isEmpty
+                    ? (l10n?.noDynamicZombies ?? 'No dynamic zombies')
+                    : (l10n?.expectationNoAffordableZombies ??
+                          'This wave does not have enough points to select '
+                              'and spawn any zombie from the pool.'),
+                style: theme.textTheme.bodySmall,
+              ),
+          ],
+        );
+        return AlertDialog(
+          semanticLabel: title,
+          content: SizedBox(
+            width: _expectationDialogWidth(ctx),
+            child: ListView.builder(
+              primary: false,
+              shrinkWrap: true,
+              padding: EdgeInsets.zero,
+              itemCount: items.length + 1,
+              itemBuilder: (_, i) {
+                if (i == 0) return summary;
+                final entry = items[i - 1];
+                return Padding(
+                  padding: EdgeInsets.symmetric(
+                    vertical: isDesktopPlatform(ctx) ? 5 : 4,
+                  ),
+                  child: WavePointExpectationRow(
+                    typeName: entry.key,
+                    expectedCount: entry.value,
+                    countKey: ValueKey(
+                      'wavePointExpectationCount-${entry.key}',
+                    ),
+                    iconSize: iconSize,
+                    fallbackIconPath: _kUnknownIconPath,
+                  ),
+                );
+              },
+            ),
           ),
           actions: [
-            if (widget.onOpenModule != null)
+            if (onOpenModule != null && settingsRtid != null)
               FilledButton(
                 style: FilledButton.styleFrom(backgroundColor: Colors.green),
                 onPressed: () {
-                  final rtid = _getModuleRtid('WaveManagerModuleProperties');
-                  if (rtid != null) {
-                    Navigator.pop(ctx);
-                    WidgetsBinding.instance.addPostFrameCallback((_) {
-                      widget.onOpenModule!(rtid);
-                    });
-                  }
+                  Navigator.pop(ctx);
+                  WidgetsBinding.instance.addPostFrameCallback((_) {
+                    onOpenModule(settingsRtid);
+                  });
                 },
                 child: Text(l10n?.openModuleSettings ?? 'Open module settings'),
               ),

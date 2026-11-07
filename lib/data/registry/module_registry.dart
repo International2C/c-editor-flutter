@@ -526,6 +526,18 @@ class ModuleRegistry {
       ),
       routeId: 'WaveGenerator',
     ),
+    'LevelEscalationModuleProperties': ModuleMetadata(
+      titleKey: 'moduleTitle_LevelEscalationModuleProperties',
+      descriptionKey: 'moduleDesc_LevelEscalationModuleProperties',
+      icon: Icons.stairs,
+      isCore: true,
+      category: ModuleCategory.base,
+      defaultAlias: 'LevelEscalation',
+      initialDataFactory: () => LevelEscalationModuleData(
+        waveManagerProps: 'RTID(WaveManagerProps@CurrentLevel)',
+      ),
+      routeId: 'LevelEscalationModule',
+    ),
     'CustomLevelModuleProperties': const ModuleMetadata(
       titleKey: 'moduleTitle_CustomLevelModuleProperties',
       descriptionKey: 'moduleDesc_CustomLevelModuleProperties',
@@ -974,18 +986,6 @@ class ModuleRegistry {
       defaultAlias: 'DeathHoleModule',
       initialDataFactory: () => DeathHoleModuleData(),
       routeId: 'DeathHoleModule',
-    ),
-    'LevelEscalationModuleProperties': ModuleMetadata(
-      titleKey: 'moduleTitle_LevelEscalationModuleProperties',
-      descriptionKey: 'moduleDesc_LevelEscalationModuleProperties',
-      icon: Icons.stairs,
-      isCore: true,
-      category: ModuleCategory.base,
-      defaultAlias: 'LevelEscalation',
-      initialDataFactory: () => LevelEscalationModuleData(
-        waveManagerProps: 'RTID(WaveManagerProps@CurrentLevel)',
-      ),
-      routeId: 'LevelEscalationModule',
     ),
     'PVZ1PassageModuleProperties': ModuleMetadata(
       titleKey: 'moduleTitle_PVZ1PassageModuleProperties',
