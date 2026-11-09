@@ -956,6 +956,14 @@ class LevelIssueRegistry {
       message: (_, l10n) => l10n.tunnelExpeditionCompatibilityWarningBody,
     ),
     LevelIssueRule(
+      id: 'speedUpTileCompatibilityWarning',
+      isActive: (ctx) =>
+          ctx.hasModule('SpeedUpTileModuleProperties') &&
+          (ctx.hasTunnelDefend || ctx.hasExpeditionTiles),
+      title: (_, l10n) => l10n.warning,
+      message: (_, l10n) => l10n.speedUpTileCompatibilityWarning,
+    ),
+    LevelIssueRule(
       id: 'expeditionTilesUnderwaterMismatch',
       severity: LevelIssueSeverity.error,
       isActive: (ctx) =>
