@@ -33,7 +33,7 @@ class _InterfaceSettingsScreenState extends State<InterfaceSettingsScreen> {
   // page is reopened, but naturally resets after the app process is cleared.
   static double _sessionScrollOffset = 0;
 
-  late final ScrollController _scrollController;
+  late final _SettingsScrollController _scrollController;
   final _scrollContentKey = GlobalKey();
   final _menuCustomizationKey = GlobalKey();
   InterfaceMenuSurface _selectedSurface = InterfaceMenuSurface.workspace;
@@ -42,8 +42,10 @@ class _InterfaceSettingsScreenState extends State<InterfaceSettingsScreen> {
   @override
   void initState() {
     super.initState();
-    _scrollController = ScrollController(
+    _scrollController = _SettingsScrollController(
       initialScrollOffset: _sessionScrollOffset,
+      anchorOffset: _menuOffsetInContent,
+      onDetach: (position) => _sessionScrollOffset = position.pixels,
     )..addListener(_rememberScrollOffset);
   }
 
@@ -63,28 +65,7 @@ class _InterfaceSettingsScreenState extends State<InterfaceSettingsScreen> {
   }
 
   void _preserveMenuScrollPosition(VoidCallback update) {
-    final before = _menuOffsetInContent();
-    final pixels = _scrollController.hasClients
-        ? _scrollController.offset
-        : null;
-    update();
-    if (before == null || pixels == null) return;
-
-    // Adding or removing a settings-only section above this card must not move
-    // the feature currently being edited. Content coordinates also work at UI zoom.
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (!mounted || !_scrollController.hasClients) return;
-      final after = _menuOffsetInContent();
-      if (after == null) return;
-      final position = _scrollController.position;
-      final target = (pixels + after - before).clamp(
-        position.minScrollExtent,
-        position.maxScrollExtent,
-      );
-      if ((target - position.pixels).abs() > 0.1) {
-        _scrollController.jumpTo(target);
-      }
-    });
+    _scrollController.preserveAnchor(update);
   }
 
   @override
@@ -674,6 +655,85 @@ class _InterfaceSettingsScreenState extends State<InterfaceSettingsScreen> {
       InterfaceMenuActionIds.editJson => Icons.edit,
       _ => Icons.more_horiz,
     };
+  }
+}
+
+class _SettingsScrollAnchor {
+  const _SettingsScrollAnchor(this.contentOffset, this.pixels);
+
+  final double contentOffset;
+  final double pixels;
+}
+
+/// Keeps the feature card stationary when the sections above it change height.
+class _SettingsScrollController extends ScrollController {
+  _SettingsScrollController({
+    required super.initialScrollOffset,
+    required this.anchorOffset,
+    super.onDetach,
+  });
+
+  final double? Function() anchorOffset;
+  _SettingsScrollAnchor? _pendingAnchor;
+
+  void preserveAnchor(VoidCallback update) {
+    final before = anchorOffset();
+    final snapshot = before != null && hasClients
+        ? _SettingsScrollAnchor(before, offset)
+        : null;
+    _pendingAnchor = snapshot;
+    update();
+
+    // An unchanged selection may not trigger layout. Discard its snapshot;
+    // never move the scroll position from a post-frame callback.
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (identical(_pendingAnchor, snapshot)) _pendingAnchor = null;
+    });
+  }
+
+  double? _takeAnchorTarget() {
+    final snapshot = _pendingAnchor;
+    _pendingAnchor = null;
+    if (snapshot == null) return null;
+    final after = anchorOffset();
+    if (after == null) return null;
+    return snapshot.pixels + after - snapshot.contentOffset;
+  }
+
+  @override
+  ScrollPosition createScrollPosition(
+    ScrollPhysics physics,
+    ScrollContext context,
+    ScrollPosition? oldPosition,
+  ) => _SettingsScrollPosition(
+    physics: physics,
+    context: context,
+    initialPixels: initialScrollOffset,
+    keepScrollOffset: keepScrollOffset,
+    oldPosition: oldPosition,
+    takeAnchorTarget: _takeAnchorTarget,
+  );
+}
+
+class _SettingsScrollPosition extends ScrollPositionWithSingleContext {
+  _SettingsScrollPosition({
+    required super.physics,
+    required super.context,
+    required super.initialPixels,
+    required super.keepScrollOffset,
+    super.oldPosition,
+    required this.takeAnchorTarget,
+  });
+
+  final double? Function() takeAnchorTarget;
+
+  @override
+  bool applyContentDimensions(double minScrollExtent, double maxScrollExtent) {
+    // SingleChildScrollView has laid out the full child by this point. Correct
+    // the anchor before paint, including when the total scroll extent is unchanged.
+    final target = takeAnchorTarget()?.clamp(minScrollExtent, maxScrollExtent);
+    if (target != null && target != pixels) correctBy(target - pixels);
+    return super.applyContentDimensions(minScrollExtent, maxScrollExtent);
   }
 }
 

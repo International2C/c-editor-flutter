@@ -474,6 +474,44 @@ void main() {
         innerPosition().jumpTo(90);
         await tester.pumpAndSettle();
 
+        VoidCallback? observePaintedFrame;
+        // Rendering runs in an earlier persistent callback. Observe that frame
+        // before a post-frame jumpTo could conceal a briefly misplaced row.
+        tester.binding.addPersistentFrameCallback((_) {
+          observePaintedFrame?.call();
+        });
+        addTearDown(() => observePaintedFrame = null);
+
+        Future<void> expectStablePaintedPosition(
+          Finder target,
+          Future<void> Function() action,
+        ) async {
+          final targetTop = tester.getTopLeft(target).dy;
+          final viewportTop = tester.getTopLeft(viewport).dy;
+          final listOffset = innerPosition().pixels;
+          final paintedPositions =
+              <({double targetTop, double viewportTop, double listOffset})>[];
+          observePaintedFrame = () {
+            paintedPositions.add((
+              targetTop: tester.getTopLeft(target).dy,
+              viewportTop: tester.getTopLeft(viewport).dy,
+              listOffset: innerPosition().pixels,
+            ));
+          };
+          try {
+            await action();
+            await tester.pumpAndSettle();
+          } finally {
+            observePaintedFrame = null;
+          }
+          expect(paintedPositions, isNotEmpty);
+          for (final frame in paintedPositions) {
+            expect(frame.targetTop, closeTo(targetTop, 1));
+            expect(frame.viewportTop, closeTo(viewportTop, 1));
+            expect(frame.listOffset, closeTo(listOffset, 0.1));
+          }
+        }
+
         Future<void> selectPlacement(
           String id,
           InterfaceMenuPlacement placement,
@@ -493,15 +531,17 @@ void main() {
             ),
           );
           await tester.pumpAndSettle();
-          await tester.tap(
-            find.text(switch (placement) {
-              InterfaceMenuPlacement.toolbar => l10n.menuPlacementToolbar,
-              InterfaceMenuPlacement.overflow => l10n.menuPlacementOverflow,
-              InterfaceMenuPlacement.settingsPage =>
-                l10n.menuPlacementSettingsPage,
-            }).last,
+          await expectStablePaintedPosition(
+            row,
+            () => tester.tap(
+              find.text(switch (placement) {
+                InterfaceMenuPlacement.toolbar => l10n.menuPlacementToolbar,
+                InterfaceMenuPlacement.overflow => l10n.menuPlacementOverflow,
+                InterfaceMenuPlacement.settingsPage =>
+                  l10n.menuPlacementSettingsPage,
+              }).last,
+            ),
           );
-          await tester.pumpAndSettle();
 
           expect(
             settings.state
@@ -542,8 +582,7 @@ void main() {
         final viewportTop = tester.getTopLeft(viewport).dy;
         final resetTop = tester.getTopLeft(reset).dy;
         final listOffset = innerPosition().pixels;
-        await tester.tap(reset);
-        await tester.pumpAndSettle();
+        await expectStablePaintedPosition(reset, () => tester.tap(reset));
         expect(tester.getTopLeft(viewport).dy, closeTo(viewportTop, 1));
         expect(tester.getTopLeft(reset).dy, closeTo(resetTop, 1));
         expect(innerPosition().pixels, closeTo(listOffset, 0.1));
@@ -557,6 +596,54 @@ void main() {
       },
     );
   }
+
+  testWidgets(
+    'reopening remembers a layout-corrected offset without scrolling',
+    (tester) async {
+      await pumpScreen(tester, size: const Size(800, 640));
+      final l10n = lookupAppLocalizations(const Locale('en'));
+      ScrollController outerController() => tester
+          .widget<SingleChildScrollView>(
+            find.byType(SingleChildScrollView).first,
+          )
+          .controller!;
+      outerController().jumpTo(0);
+      await tester.pumpAndSettle();
+
+      final row = find.byKey(const ValueKey('workspace_lang'));
+      await tester.ensureVisible(row);
+      await tester.pumpAndSettle();
+      final originalOffset = outerController().offset;
+      await tester.tap(
+        find.descendant(
+          of: row,
+          matching: find.byType(DropdownButton<InterfaceMenuPlacement>),
+        ),
+      );
+      await tester.pumpAndSettle();
+      await tester.tap(find.text(l10n.menuPlacementSettingsPage).last);
+      await tester.pumpAndSettle();
+      final correctedOffset = outerController().offset;
+      expect(correctedOffset, greaterThan(originalOffset));
+      expect(
+        settings.state
+            .interfaceMenuActionsFor(InterfaceMenuSurface.workspace)
+            .singleWhere(
+              (action) => action.id == InterfaceMenuActionIds.language,
+            )
+            .placement,
+        InterfaceMenuPlacement.settingsPage,
+      );
+
+      // Layout corrections do not emit ordinary scroll notifications. Closing
+      // immediately must still remember them without another drag or jumpTo.
+      await tester.pumpWidget(const SizedBox.shrink());
+      await tester.pump();
+      await pumpScreen(tester, size: const Size(800, 640));
+      expect(outerController().offset, closeTo(correctedOffset, 0.1));
+      expect(tester.takeException(), isNull);
+    },
+  );
 
   testWidgets('restores scroll offset in memory without persisting it', (
     tester,
