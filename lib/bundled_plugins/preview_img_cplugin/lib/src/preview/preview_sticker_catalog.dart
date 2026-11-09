@@ -778,6 +778,7 @@ Iterable<PreviewSticker> _supplementalStickers() sync* {
     'griditems/magic_mirror1': 'griditem_magic_mirror1',
     'griditems/magic_mirror2': 'griditem_magic_mirror2',
     'griditems/magic_mirror3': 'griditem_magic_mirror3',
+    'round_icons/Mode_CardClash': 'stage_CardGameStage',
     'round_icons/Stage_LostVolcano': 'customStagePreset_lostVolcano',
     'round_icons/Stage_TeamBoss': 'musicSuffix_TeamBoss',
     'round_icons/Suffix_TeamBoss': 'musicSuffix_TeamBoss',

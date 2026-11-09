@@ -1,5 +1,6 @@
 import 'package:c_editor/data/level_parser.dart';
 import 'package:c_editor/data/pvz_models.dart';
+import 'package:c_editor/data/registry/issue_registry.dart';
 import 'package:c_editor/data/speed_up_tile_catalog.dart';
 import 'package:c_editor/l10n/app_localizations.dart';
 import 'package:c_editor/theme/app_theme.dart' show pvzCyanDark, pvzCyanLight;
@@ -237,6 +238,10 @@ class _SpeedUpTileModuleScreenState extends State<SpeedUpTileModuleScreen> {
     final isDark = theme.brightness == Brightness.dark;
     final accent = isDark ? pvzCyanDark : pvzCyanLight;
     final outside = _outsideRoads;
+    final compatibilityWarnings = LevelIssueRegistry.forLevel(
+      context,
+      widget.levelFile,
+    ).where((issue) => issue.id == 'speedUpTileCompatibilityWarning');
     const border = Color(0xFF6B899A);
     return Scaffold(
       appBar: AppBar(
@@ -330,13 +335,13 @@ class _SpeedUpTileModuleScreenState extends State<SpeedUpTileModuleScreen> {
                 ),
               ),
             ),
-            const SizedBox(height: 16),
-            EditorWarningBanner(
-              key: const ValueKey('speedUpTileCompatibilityWarning'),
-              message:
-                  l10n?.speedUpTileCompatibilityWarning ??
-                  'Speed-Up Tiles are covered by Underground Palace Pathways or Expedition Tiles and will not work. Do not use these modules together.',
-            ),
+            for (final issue in compatibilityWarnings) ...[
+              const SizedBox(height: 16),
+              EditorWarningBanner(
+                key: ValueKey(issue.id),
+                message: issue.message,
+              ),
+            ],
             const SizedBox(height: 16),
             Card(
               child: Padding(

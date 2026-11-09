@@ -2,6 +2,9 @@
   "default": "Unknown",
   "extension": ".png",
   "directory": "banners",
+  "variants": {
+    "Moon2": "Moon"
+  },
   "stages": {
     "AquariumStage": "Aquarium",
     "AutumnEarlyStage": "AutumnEarly",
@@ -81,6 +84,7 @@
     "MixtapeSummerNightCustom": "SummerNight",
     "OneSidedAtlantisCustom": "DeepSeaLand",
     "ModernGraveyardCustom": "Modern",
+    "AutumnEarlyStageCustom": "AutumnEarly",
     "LostVolcanoCustom": "VolcanoLostCity",
     "RomanEmpireCustom": "Roman"
   }

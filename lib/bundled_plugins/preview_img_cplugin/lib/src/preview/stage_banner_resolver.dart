@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:collection/collection.dart';
 import 'package:flutter/services.dart';
+import 'package:c_editor/data/custom_stage_level_utils.dart';
 import 'package:c_editor/data/repository/stage_repository.dart';
 
 /// Resolves stage / custom-stage aliases to banner asset paths.
@@ -11,6 +12,7 @@ class StageBannerResolver {
     this._extension,
     this._directory,
     this._stages,
+    this._variantBaseStems,
   );
 
   static const flutterAssetsRoot =
@@ -20,6 +22,7 @@ class StageBannerResolver {
   final String _extension;
   final String _directory;
   final Map<String, String> _stages;
+  final Map<String, String> _variantBaseStems;
 
   static StageBannerResolver? _instance;
 
@@ -41,6 +44,7 @@ class StageBannerResolver {
       (json['extension'] as String?) ?? '.png',
       (json['directory'] as String?) ?? 'banners',
       stages,
+      Map<String, String>.from(json['variants'] as Map? ?? const {}),
     );
     return _instance!;
   }
@@ -53,8 +57,15 @@ class StageBannerResolver {
     String extension = '.png',
     String directory = 'banners',
     Map<String, String> stages = const {},
+    Map<String, String> variants = const {},
   }) {
-    return StageBannerResolver._(defaultStem, extension, directory, stages);
+    return StageBannerResolver._(
+      defaultStem,
+      extension,
+      directory,
+      stages,
+      variants,
+    );
   }
 
   String get defaultStem => _defaultStem;
@@ -62,7 +73,13 @@ class StageBannerResolver {
   String assetPathForStem(String stem) =>
       '$flutterAssetsRoot/$_directory/$stem$_extension';
 
-  String resolveStem(String? stageAlias) {
+  String resolveStem(String? stageAlias, {Map<String, dynamic>? stageObjdata}) {
+    if (stageObjdata != null &&
+        CustomStageLevelUtils.supportsMoonPart2Appearance(stageObjdata)) {
+      return CustomStageLevelUtils.isMoonPart2AppearanceEnabled(stageObjdata)
+          ? 'Moon2'
+          : 'Moon';
+    }
     if (stageAlias == null || stageAlias.isEmpty) return _defaultStem;
     final direct = _stages[stageAlias];
     if (direct != null && direct.isNotEmpty) return direct;
@@ -81,7 +98,7 @@ class StageBannerResolver {
   /// that belongs to that banner in selection UI.
   List<String> stageAliasesForStem(String stem) => [
     for (final entry in _stages.entries)
-      if (entry.value == stem) entry.key,
+      if (entry.value == (_variantBaseStems[stem] ?? stem)) entry.key,
   ];
 
   /// Banner stems ordered by the supplied stage catalog, followed by banners
@@ -98,20 +115,28 @@ class StageBannerResolver {
     for (final stem in _stages.values) {
       if (stem.isNotEmpty && stem != _defaultStem) stems.add(stem);
     }
-    return [...stems, _defaultStem];
+    return [
+      for (final stem in stems) ...[
+        stem,
+        for (final variant in _variantBaseStems.entries)
+          if (variant.value == stem) variant.key,
+      ],
+      _defaultStem,
+    ];
   }
 
   List<String> get allStems {
-    final stems = <String>{_defaultStem, ..._stages.values};
+    final stems = <String>{
+      _defaultStem,
+      ..._stages.values,
+      ..._variantBaseStems.keys,
+    };
     return stems.toList()..sort();
   }
 
   /// Stage aliases that map to [stem] (e.g. EgyptStage → Egypt).
   List<String> aliasesForStem(String stem) {
-    final out = <String>[];
-    for (final e in _stages.entries) {
-      if (e.value == stem) out.add(e.key);
-    }
+    final out = stageAliasesForStem(stem);
     out.sort();
     return out;
   }
@@ -122,6 +147,7 @@ class StageBannerResolver {
     if (_isUnknownStem(stem)) {
       return 'assets/images/others/unknown.webp';
     }
+    stem = _variantBaseStems[stem] ?? stem;
     final aliases = aliasesForStem(stem);
     for (final alias in aliases) {
       final icon = StageRepository.allItems

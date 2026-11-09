@@ -317,7 +317,7 @@ class _WaveTicksPainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     final paint = Paint()
       ..color = color
-      ..strokeWidth = 1;
+      ..strokeWidth = 2;
     for (var wave = waveCount; wave >= 1; wave--) {
       final x = finalWaveX + (waveCount - wave) * waveSpacing;
       final height = markedWaves.contains(wave) ? size.height : _minorTickHeight;

@@ -6032,7 +6032,7 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get airdropZombieReplaceWarning =>
-      'Этот зомби отсутствует в списке вариантов, которые редактор предлагает для этого модуля. При смене исходный идентификатор будет перезаписан без возможности восстановления. Продолжить?';
+      'Зомби, который сейчас используется в этом событии, отсутствует в списке доступных вариантов редактора. При смене исходное кодовое имя зомби будет перезаписано без возможности восстановления. Продолжить?';
 
   @override
   String get noneSelected => 'Не выбрано';
@@ -9767,6 +9767,10 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get customStageBeachMinigame => 'Использовать мини-игровую версию';
+
+  @override
+  String get customStageMoonPart2Appearance =>
+      'Использовать внешний вид второй части лужайки';
 
   @override
   String get customStageOnePerLevelLimit =>

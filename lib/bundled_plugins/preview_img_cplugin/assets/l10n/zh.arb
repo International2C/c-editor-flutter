@@ -20,6 +20,8 @@
   "previewGenExportEncodingFail": "无法编码预览图，请重试。",
   "previewGenExportLibraryNotConfigured": "请先设置关卡库文件夹，再导出预览图。",
   "previewGenChooseBanner": "选择背景图",
+  "previewGenMoonPart1Banner": "月球基地-第一部分",
+  "previewGenMoonPart2Banner": "月球基地-第二部分",
   "previewGenUnknownBanner": "时空主界面",
   "previewGenCustomBanner": "自定义背景图",
   "previewGenScale": "元素缩放",

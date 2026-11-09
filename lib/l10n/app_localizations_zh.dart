@@ -5761,7 +5761,7 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get airdropZombieReplaceWarning =>
-      '该僵尸不在编辑器为此模块提供的可选僵尸列表中。切换后，原僵尸的代码名将被覆盖且无法恢复，是否继续？';
+      '此事件当前使用的僵尸不在编辑器提供的可选列表中。继续切换将覆盖原僵尸的代码名，且无法恢复。是否继续？';
 
   @override
   String get noneSelected => '未选择';
@@ -9290,6 +9290,9 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get customStageBeachMinigame => '使用小游戏版本';
+
+  @override
+  String get customStageMoonPart2Appearance => '使用第二部分地图外观';
 
   @override
   String get customStageOnePerLevelLimit => '此关卡已有自定义地图，请先删除后再添加。';

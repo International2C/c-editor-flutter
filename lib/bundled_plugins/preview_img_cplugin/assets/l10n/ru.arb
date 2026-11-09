@@ -20,6 +20,8 @@
   "previewGenExportEncodingFail": "Не удалось закодировать изображение превью. Попробуйте ещё раз.",
   "previewGenExportLibraryNotConfigured": "Настройте папку библиотеки уровней перед экспортом превью.",
   "previewGenChooseBanner": "Выбрать баннер",
+  "previewGenMoonPart1Banner": "Лунная База — часть 1",
+  "previewGenMoonPart2Banner": "Лунная База — часть 2",
   "previewGenUnknownBanner": "Главное меню пространства-времени",
   "previewGenCustomBanner": "Своё изображение",
   "previewGenScale": "Масштаб",

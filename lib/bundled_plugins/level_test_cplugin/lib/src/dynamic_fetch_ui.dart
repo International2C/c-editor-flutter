@@ -138,98 +138,89 @@ class _ReleasePickerDialogState extends State<_ReleasePickerDialog> {
   @override
   Widget build(BuildContext context) {
     final host = widget.host;
-    return AlertDialog(
-      key: const ValueKey('dynamicReleasePickerDialog'),
-      scrollable: true,
-      insetPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-      title: Text(host.localize(context, 'dynamicSelectTitle')),
-      content: SizedBox(
-        width: double.maxFinite,
-        child: FutureBuilder<List<DynamicReleaseOption>>(
-          future: _future,
-          builder: (context, snapshot) {
-            if (snapshot.connectionState != ConnectionState.done) {
-              return const Padding(
-                padding: EdgeInsets.all(24),
-                child: Center(child: CircularProgressIndicator()),
-              );
-            }
-            if (snapshot.hasError) {
-              final message = localizeDynamicDownloadError(
-                host,
-                context,
-                snapshot.error!,
-              );
+    return FutureBuilder<List<DynamicReleaseOption>>(
+      future: _future,
+      builder: (context, snapshot) => AlertDialog(
+        key: const ValueKey('dynamicReleasePickerDialog'),
+        scrollable: true,
+        insetPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        title: Text(host.localize(context, 'dynamicSelectTitle')),
+        content: SizedBox(
+          width: double.maxFinite,
+          child: Builder(
+            builder: (context) {
+              if (snapshot.connectionState != ConnectionState.done) {
+                return const Padding(
+                  padding: EdgeInsets.all(24),
+                  child: Center(child: CircularProgressIndicator()),
+                );
+              }
+              if (snapshot.hasError) {
+                final message = localizeDynamicDownloadError(
+                  host,
+                  context,
+                  snapshot.error!,
+                );
+                return Text(
+                  message,
+                  style: TextStyle(color: Theme.of(context).colorScheme.error),
+                );
+              }
+              final items = snapshot.data ?? const [];
+              if (items.isEmpty) {
+                return Text(host.localize(context, 'dynamicEmpty'));
+              }
               return Column(
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  Text(
-                    message,
-                    style: TextStyle(
-                      color: Theme.of(context).colorScheme.error,
+                  for (var index = 0; index < items.length; index++) ...[
+                    if (index > 0) const Divider(height: 1),
+                    Builder(
+                      builder: (context) {
+                        final item = items[index];
+                        final sizeLabel = item.sizeBytes > 0
+                            ? formatDynamicBytes(item.sizeBytes)
+                            : '';
+                        return EditorOptionTile(
+                          key: ValueKey('dynamicReleaseOption-${item.tagName}'),
+                          leading: item.isLatest
+                              ? const Icon(Icons.star, color: Colors.amber)
+                              : const Icon(Icons.inventory_2_outlined),
+                          title: Text(item.name),
+                          subtitle: Text(
+                            [
+                              item.tagName,
+                              if (sizeLabel.isNotEmpty) sizeLabel,
+                              if (item.isLatest)
+                                host.localize(context, 'dynamicLatestBadge'),
+                            ].join(' · '),
+                          ),
+                          onTap: () => Navigator.of(context).pop(item),
+                        );
+                      },
                     ),
-                  ),
-                  Align(
-                    alignment: Alignment.centerRight,
-                    child: TextButton(
-                      onPressed: () => setState(() {
-                        _future = _load();
-                      }),
-                      child: Text(
-                        host.localize(context, 'dynamicRetry', 'Retry'),
-                      ),
-                    ),
-                  ),
+                  ],
                 ],
               );
-            }
-            final items = snapshot.data ?? const [];
-            if (items.isEmpty) {
-              return Text(host.localize(context, 'dynamicEmpty'));
-            }
-            return Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                for (var index = 0; index < items.length; index++) ...[
-                  if (index > 0) const Divider(height: 1),
-                  Builder(
-                    builder: (context) {
-                      final item = items[index];
-                      final sizeLabel = item.sizeBytes > 0
-                          ? formatDynamicBytes(item.sizeBytes)
-                          : '';
-                      return EditorOptionTile(
-                        key: ValueKey('dynamicReleaseOption-${item.tagName}'),
-                        leading: item.isLatest
-                            ? const Icon(Icons.star, color: Colors.amber)
-                            : const Icon(Icons.inventory_2_outlined),
-                        title: Text(item.name),
-                        subtitle: Text(
-                          [
-                            item.tagName,
-                            if (sizeLabel.isNotEmpty) sizeLabel,
-                            if (item.isLatest)
-                              host.localize(context, 'dynamicLatestBadge'),
-                          ].join(' · '),
-                        ),
-                        onTap: () => Navigator.of(context).pop(item),
-                      );
-                    },
-                  ),
-                ],
-              ],
-            );
-          },
+            },
+          ),
         ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: Text(host.localize(context, 'cancel', 'Cancel')),
+          ),
+          if (snapshot.connectionState == ConnectionState.done &&
+              snapshot.hasError)
+            FilledButton(
+              onPressed: () => setState(() {
+                _future = _load();
+              }),
+              child: Text(host.localize(context, 'dynamicRetry', 'Retry')),
+            ),
+        ],
       ),
-      actions: [
-        TextButton(
-          onPressed: () => Navigator.of(context).pop(),
-          child: Text(host.localize(context, 'cancel', 'Cancel')),
-        ),
-      ],
     );
   }
 }

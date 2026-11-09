@@ -300,7 +300,10 @@ class PreviewAutoComposer {
 
     final levelDef = parsed.levelDef;
     final stageAlias = RtidParser.parse(levelDef?.stageModule ?? '')?.alias;
-    final stem = banners.resolveStem(stageAlias);
+    final stem = banners.resolveStem(
+      stageAlias,
+      stageObjdata: LevelParser.resolveStageObjdata(levelDef, levelFile),
+    );
     final banner = PreviewBannerRef(
       kind: PreviewBannerSourceKind.stageMapped,
       stem: stem,

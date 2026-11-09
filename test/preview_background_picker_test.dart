@@ -21,6 +21,66 @@ Map<String, dynamic> _pluginLocale(String locale) =>
         as Map<String, dynamic>;
 
 void main() {
+  test('Moon Part 2 is adjacent to Part 1 and shares its stage icon', () async {
+    final banners = await StageBannerResolver.load();
+    final entries = previewBannerPickerEntries(
+      banners: banners,
+      stageAliases: const ['ModernStage', 'MoonStage', 'MoonGrappleStage'],
+    );
+    expect(entries.take(4), ['Modern', 'Moon', 'Moon2', 'MoonGrapple']);
+    expect(entries.where((stem) => stem == 'Moon2'), hasLength(1));
+    expect(
+      banners.roundIconAssetForStem('Moon2'),
+      banners.roundIconAssetForStem('Moon'),
+    );
+    expect(File(banners.assetPathForStem('Moon2')).existsSync(), isTrue);
+  });
+
+  testWidgets('Moon background picker labels and selection use both parts', (
+    tester,
+  ) async {
+    await tester.runAsync(() async {
+      await Future.wait([
+        StageRepository.init(),
+        CustomStagePresetRepository.init(),
+        ResourceNames.ensureLoaded(),
+      ]);
+    });
+    for (final locale in ['zh', 'en', 'ru']) {
+      final strings = _pluginLocale(locale);
+      String? selected;
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Builder(
+            builder: (context) => Scaffold(
+              body: TextButton(
+                onPressed: () async {
+                  selected = await showPreviewBannerPicker(
+                    context: context,
+                    banners: StageBannerResolver.forTest(
+                      stages: const {'MoonStage': 'Moon'},
+                      variants: const {'Moon2': 'Moon'},
+                    ),
+                    t: (key, [fallback]) =>
+                        strings[key] as String? ?? fallback ?? key,
+                  );
+                },
+                child: const Text('Open'),
+              ),
+            ),
+          ),
+        ),
+      );
+      await tester.tap(find.text('Open'));
+      await tester.pumpAndSettle();
+      expect(find.text(strings['previewGenMoonPart1Banner']), findsOneWidget);
+      expect(find.text(strings['previewGenMoonPart2Banner']), findsOneWidget);
+      await tester.tap(find.byKey(const ValueKey('preview-banner-Moon2')));
+      await tester.pumpAndSettle();
+      expect(selected, 'Moon2');
+    }
+  });
+
   test('keeps map order, then main menu immediately above custom images', () {
     final banners = StageBannerResolver.forTest(
       stages: const {

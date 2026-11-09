@@ -300,7 +300,7 @@ class _ParachuteRainEventScreenState extends State<ParachuteRainEventScreen> {
                           title: Text(l10n?.warning ?? 'Warning'),
                           content: Text(
                             l10n?.airdropZombieReplaceWarning ??
-                                'This zombie is outside the editor’s list for this module. Switching will overwrite the original ID and it cannot be restored. Continue?',
+                                'The zombie currently used by this event is not in the editor’s list of available options. Switching will permanently overwrite its original codename. Continue?',
                           ),
                           actions: [
                             TextButton(

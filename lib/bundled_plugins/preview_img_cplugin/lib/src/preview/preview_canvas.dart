@@ -1596,7 +1596,7 @@ class _LayerWidgetState extends State<_LayerWidget> {
         );
       } else {
         img = Image.asset(
-          layer.imageAsset!,
+          canonicalImageAssetPath(layer.imageAsset!),
           fit: BoxFit.contain,
           width: width,
           height: height,

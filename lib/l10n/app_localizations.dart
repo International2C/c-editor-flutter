@@ -10687,7 +10687,7 @@ abstract class AppLocalizations {
   /// No description provided for @airdropZombieReplaceWarning.
   ///
   /// In en, this message translates to:
-  /// **'This zombie is outside the editor’s list of available zombies for this module. Switching will permanently overwrite the original zombie\'s codename. Continue?'**
+  /// **'The zombie currently used by this event is not in the editor’s list of available options. Switching will permanently overwrite its original codename. Continue?'**
   String get airdropZombieReplaceWarning;
 
   /// No description provided for @noneSelected.
@@ -17018,6 +17018,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Use minigame version'**
   String get customStageBeachMinigame;
+
+  /// No description provided for @customStageMoonPart2Appearance.
+  ///
+  /// In en, this message translates to:
+  /// **'Use part 2 lawn appearance'**
+  String get customStageMoonPart2Appearance;
 
   /// No description provided for @customStageOnePerLevelLimit.
   ///

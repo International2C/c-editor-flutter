@@ -209,6 +209,10 @@ class _CustomPortalPropertiesScreenState
       color: theme.colorScheme.primary,
       fontWeight: FontWeight.bold,
     );
+    final fieldHeadingStyle = theme.textTheme.titleSmall?.copyWith(
+      color: theme.colorScheme.onSurface,
+      fontWeight: FontWeight.bold,
+    );
     final selectedValueStyle = theme.textTheme.bodyLarge?.copyWith(
       color: theme.colorScheme.onSurface,
       fontWeight: FontWeight.normal,
@@ -358,9 +362,7 @@ class _CustomPortalPropertiesScreenState
                     ),
                     const SizedBox(height: 16),
                     ZombossMechWeightedZombieListEditor(
-                      headingStyle: theme.textTheme.bodyMedium?.copyWith(
-                        color: theme.colorScheme.onSurfaceVariant,
-                      ),
+                      headingStyle: fieldHeadingStyle,
                       fieldLabel: _portalPropertyLabel(
                         l10n?.customPortalZombieTypes ?? 'Zombie types',
                         'ZombieTypesToSpawn',
@@ -397,15 +399,13 @@ class _CustomPortalPropertiesScreenState
                                         'Spawn interval',
                                     'TimeBetweenSpawns',
                                   ),
-                                  style: theme.textTheme.bodyMedium?.copyWith(
-                                    color: theme.colorScheme.onSurfaceVariant,
-                                  ),
+                                  style: fieldHeadingStyle,
                                 ),
                                 const SizedBox(height: 4),
                                 Text(
                                   l10n?.customPortalSpawnIntervalSubtitle ??
                                       'Optionally limit the time between zombie spawns.',
-                                  style: theme.textTheme.bodyMedium?.copyWith(
+                                  style: theme.textTheme.bodySmall?.copyWith(
                                     color: theme.colorScheme.onSurfaceVariant,
                                   ),
                                 ),

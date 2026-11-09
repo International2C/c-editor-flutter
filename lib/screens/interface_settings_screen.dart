@@ -4,6 +4,7 @@ import 'package:c_editor/data/registry/module_registry.dart';
 import 'package:c_editor/screens/editor/tabs/level_settings_tab.dart';
 import 'package:c_editor/l10n/app_localizations.dart';
 import 'package:c_editor/plugins/plugin_host_hooks.dart';
+import 'package:c_editor/plugins/interface_menu_plugin_actions.dart';
 import 'package:c_editor/plugins/plugin_manager.dart';
 import 'package:c_editor/widgets/app_ui_scale.dart';
 import 'package:c_editor/widgets/dropdown_pointer_focus.dart';
@@ -32,15 +33,19 @@ class _InterfaceSettingsScreenState extends State<InterfaceSettingsScreen> {
   // page is reopened, but naturally resets after the app process is cleared.
   static double _sessionScrollOffset = 0;
 
-  late final ScrollController _scrollController;
+  late final _SettingsScrollController _scrollController;
+  final _scrollContentKey = GlobalKey();
+  final _menuCustomizationKey = GlobalKey();
   InterfaceMenuSurface _selectedSurface = InterfaceMenuSurface.workspace;
   double? _pendingUiScale;
 
   @override
   void initState() {
     super.initState();
-    _scrollController = ScrollController(
+    _scrollController = _SettingsScrollController(
       initialScrollOffset: _sessionScrollOffset,
+      anchorOffset: _menuOffsetInContent,
+      onDetach: (position) => _sessionScrollOffset = position.pixels,
     )..addListener(_rememberScrollOffset);
   }
 
@@ -48,6 +53,19 @@ class _InterfaceSettingsScreenState extends State<InterfaceSettingsScreen> {
     if (_scrollController.hasClients) {
       _sessionScrollOffset = _scrollController.offset;
     }
+  }
+
+  double? _menuOffsetInContent() {
+    final menu = _menuCustomizationKey.currentContext?.findRenderObject();
+    final content = _scrollContentKey.currentContext?.findRenderObject();
+    if (menu is! RenderBox || content is! RenderBox || !menu.hasSize) {
+      return null;
+    }
+    return menu.localToGlobal(Offset.zero, ancestor: content).dy;
+  }
+
+  void _preserveMenuScrollPosition(VoidCallback update) {
+    _scrollController.preserveAnchor(update);
   }
 
   @override
@@ -101,6 +119,7 @@ class _InterfaceSettingsScreenState extends State<InterfaceSettingsScreen> {
                   child: ConstrainedBox(
                     constraints: const BoxConstraints(maxWidth: 880),
                     child: Column(
+                      key: _scrollContentKey,
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
                         for (
@@ -435,6 +454,7 @@ class _InterfaceSettingsScreenState extends State<InterfaceSettingsScreen> {
         .toList(growable: false);
 
     return _SettingsSection(
+      key: _menuCustomizationKey,
       icon: Icons.more_vert,
       title: l10n.menuCustomization,
       child: Column(
@@ -459,7 +479,7 @@ class _InterfaceSettingsScreenState extends State<InterfaceSettingsScreen> {
             l10n.menuCustomizationDragHint,
             style: Theme.of(context).textTheme.bodySmall,
           ),
-          const SizedBox(height: 4),
+          const SizedBox(height: 12),
           ConstrainedBox(
             key: ValueKey('interfaceMenuViewport_${_selectedSurface.name}'),
             constraints: BoxConstraints(
@@ -472,6 +492,7 @@ class _InterfaceSettingsScreenState extends State<InterfaceSettingsScreen> {
               key: ValueKey('interfaceMenu_${_selectedSurface.name}'),
               shrinkWrap: true,
               primary: false,
+              padding: EdgeInsets.zero,
               physics: const ClampingScrollPhysics(),
               buildDefaultDragHandles: false,
               itemCount: actions.length,
@@ -499,13 +520,15 @@ class _InterfaceSettingsScreenState extends State<InterfaceSettingsScreen> {
                     action.id,
                   ),
                   onPlacementChanged: (placement) {
-                    context
-                        .read<SettingsCubit>()
-                        .setInterfaceMenuActionPlacement(
-                          _selectedSurface,
-                          action.id,
-                          placement,
-                        );
+                    _preserveMenuScrollPosition(() {
+                      context
+                          .read<SettingsCubit>()
+                          .setInterfaceMenuActionPlacement(
+                            _selectedSurface,
+                            action.id,
+                            placement,
+                          );
+                    });
                   },
                 );
               },
@@ -516,9 +539,11 @@ class _InterfaceSettingsScreenState extends State<InterfaceSettingsScreen> {
             alignment: Alignment.centerRight,
             child: TextButton.icon(
               onPressed: () {
-                context.read<SettingsCubit>().resetInterfaceMenuActions(
-                  _selectedSurface,
-                );
+                _preserveMenuScrollPosition(() {
+                  context.read<SettingsCubit>().resetInterfaceMenuActions(
+                    _selectedSurface,
+                  );
+                });
               },
               icon: const Icon(Icons.restore),
               label: Text(l10n.menuConfigurationReset),
@@ -569,6 +594,8 @@ class _InterfaceSettingsScreenState extends State<InterfaceSettingsScreen> {
       InterfaceMenuActionIds.importFiles ||
       InterfaceMenuActionIds.importFolder ||
       InterfaceMenuActionIds.downloadAll => kIsWeb,
+      InterfaceMenuActionIds.levelTestingMod =>
+        workspacePluginMenuElement(id) != null,
       _ => true,
     };
   }
@@ -589,6 +616,9 @@ class _InterfaceSettingsScreenState extends State<InterfaceSettingsScreen> {
       InterfaceMenuActionIds.clearCache => l10n.clearCache,
       InterfaceMenuActionIds.plugins => l10n.pluginsTitle,
       InterfaceMenuActionIds.about => l10n.aboutSoftware,
+      InterfaceMenuActionIds.levelTestingMod =>
+        workspacePluginMenuElement(id)?.resolvedTitle(context) ??
+            l10n.exportLevels,
       InterfaceMenuActionIds.viewJson => l10n.tooltipJsonViewer,
       InterfaceMenuActionIds.levelOverview => l10n.levelOverview,
       InterfaceMenuActionIds.toggleJsonView => l10n.tooltipToggleObjectView,
@@ -615,6 +645,8 @@ class _InterfaceSettingsScreenState extends State<InterfaceSettingsScreen> {
       InterfaceMenuActionIds.clearCache => Icons.delete_outline,
       InterfaceMenuActionIds.plugins => Icons.extension,
       InterfaceMenuActionIds.about => Icons.info_outline,
+      InterfaceMenuActionIds.levelTestingMod =>
+        workspacePluginMenuElement(id)?.icon ?? Icons.inventory_2,
       InterfaceMenuActionIds.viewJson => Icons.code,
       InterfaceMenuActionIds.levelOverview => Icons.visibility,
       InterfaceMenuActionIds.toggleJsonView => Icons.data_object,
@@ -626,8 +658,88 @@ class _InterfaceSettingsScreenState extends State<InterfaceSettingsScreen> {
   }
 }
 
+class _SettingsScrollAnchor {
+  const _SettingsScrollAnchor(this.contentOffset, this.pixels);
+
+  final double contentOffset;
+  final double pixels;
+}
+
+/// Keeps the feature card stationary when the sections above it change height.
+class _SettingsScrollController extends ScrollController {
+  _SettingsScrollController({
+    required super.initialScrollOffset,
+    required this.anchorOffset,
+    super.onDetach,
+  });
+
+  final double? Function() anchorOffset;
+  _SettingsScrollAnchor? _pendingAnchor;
+
+  void preserveAnchor(VoidCallback update) {
+    final before = anchorOffset();
+    final snapshot = before != null && hasClients
+        ? _SettingsScrollAnchor(before, offset)
+        : null;
+    _pendingAnchor = snapshot;
+    update();
+
+    // An unchanged selection may not trigger layout. Discard its snapshot;
+    // never move the scroll position from a post-frame callback.
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (identical(_pendingAnchor, snapshot)) _pendingAnchor = null;
+    });
+  }
+
+  double? _takeAnchorTarget() {
+    final snapshot = _pendingAnchor;
+    _pendingAnchor = null;
+    if (snapshot == null) return null;
+    final after = anchorOffset();
+    if (after == null) return null;
+    return snapshot.pixels + after - snapshot.contentOffset;
+  }
+
+  @override
+  ScrollPosition createScrollPosition(
+    ScrollPhysics physics,
+    ScrollContext context,
+    ScrollPosition? oldPosition,
+  ) => _SettingsScrollPosition(
+    physics: physics,
+    context: context,
+    initialPixels: initialScrollOffset,
+    keepScrollOffset: keepScrollOffset,
+    oldPosition: oldPosition,
+    takeAnchorTarget: _takeAnchorTarget,
+  );
+}
+
+class _SettingsScrollPosition extends ScrollPositionWithSingleContext {
+  _SettingsScrollPosition({
+    required super.physics,
+    required super.context,
+    required super.initialPixels,
+    required super.keepScrollOffset,
+    super.oldPosition,
+    required this.takeAnchorTarget,
+  });
+
+  final double? Function() takeAnchorTarget;
+
+  @override
+  bool applyContentDimensions(double minScrollExtent, double maxScrollExtent) {
+    // SingleChildScrollView has laid out the full child by this point. Correct
+    // the anchor before paint, including when the total scroll extent is unchanged.
+    final target = takeAnchorTarget()?.clamp(minScrollExtent, maxScrollExtent);
+    if (target != null && target != pixels) correctBy(target - pixels);
+    return super.applyContentDimensions(minScrollExtent, maxScrollExtent);
+  }
+}
+
 class _SettingsSection extends StatelessWidget {
   const _SettingsSection({
+    super.key,
     required this.icon,
     required this.title,
     required this.child,
@@ -1043,12 +1155,21 @@ class _PlacementControl extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final labelStyle = theme.textTheme.labelLarge!;
+    final labelHeight =
+        MediaQuery.textScalerOf(context).scale(labelStyle.fontSize ?? 14) *
+        (labelStyle.height ?? 1);
+    final controlHeight =
+        (labelHeight + 16).clamp(40.0, double.infinity) +
+        theme.visualDensity.baseSizeAdjustment.dy;
     if (compact) {
       return Container(
+        height: controlHeight,
         padding: const EdgeInsets.symmetric(horizontal: 14),
         decoration: ShapeDecoration(
           shape: StadiumBorder(
-            side: BorderSide(color: Theme.of(context).colorScheme.outline),
+            side: BorderSide(color: theme.colorScheme.outline),
           ),
         ),
         child: DropdownButtonHideUnderline(
@@ -1058,6 +1179,10 @@ class _PlacementControl extends StatelessWidget {
                   focusNode: focusNode,
                   value: placement,
                   isExpanded: true,
+                  isDense: true,
+                  style: labelStyle.copyWith(
+                    color: theme.colorScheme.onSurface,
+                  ),
                   items: [
                     DropdownMenuItem(
                       value: InterfaceMenuPlacement.toolbar,
@@ -1117,29 +1242,37 @@ class _PlacementControl extends StatelessWidget {
         ),
       );
     }
-    return SegmentedButton<InterfaceMenuPlacement>(
-      showSelectedIcon: false,
-      expandedInsets: EdgeInsets.zero,
-      segments: [
-        ButtonSegment(
-          value: InterfaceMenuPlacement.toolbar,
-          icon: const Icon(Icons.push_pin_outlined),
-          label: Text(toolbarLabel),
+    return SizedBox(
+      height: controlHeight,
+      child: SegmentedButton<InterfaceMenuPlacement>(
+        showSelectedIcon: false,
+        expandedInsets: EdgeInsets.zero,
+        style: SegmentedButton.styleFrom(
+          textStyle: labelStyle,
+          visualDensity: theme.visualDensity,
+          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
         ),
-        ButtonSegment(
-          value: InterfaceMenuPlacement.overflow,
-          icon: const Icon(Icons.more_vert),
-          label: Text(overflowLabel),
-        ),
-        if (allowSettingsPage)
+        segments: [
           ButtonSegment(
-            value: InterfaceMenuPlacement.settingsPage,
-            icon: const Icon(Icons.tune),
-            label: Text(settingsPageLabel),
+            value: InterfaceMenuPlacement.toolbar,
+            icon: const Icon(Icons.push_pin_outlined),
+            label: Text(toolbarLabel),
           ),
-      ],
-      selected: {placement},
-      onSelectionChanged: (selection) => onChanged(selection.first),
+          ButtonSegment(
+            value: InterfaceMenuPlacement.overflow,
+            icon: const Icon(Icons.more_vert),
+            label: Text(overflowLabel),
+          ),
+          if (allowSettingsPage)
+            ButtonSegment(
+              value: InterfaceMenuPlacement.settingsPage,
+              icon: const Icon(Icons.tune),
+              label: Text(settingsPageLabel),
+            ),
+        ],
+        selected: {placement},
+        onSelectionChanged: (selection) => onChanged(selection.first),
+      ),
     );
   }
 }

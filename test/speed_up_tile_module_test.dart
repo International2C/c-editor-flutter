@@ -73,7 +73,7 @@ Future<void> _tapCell(WidgetTester tester, int x, int y) async {
 
 void main() {
   testWidgets(
-    'narrow direction selector fits two choices per row and warns about conflicting tiles',
+    'narrow direction selector fits two choices per row without an unrelated warning',
     (tester) async {
       tester.view.physicalSize = const Size(320, 1200);
       tester.view.devicePixelRatio = 1;
@@ -104,11 +104,51 @@ void main() {
       expect(tester.getTopLeft(up).dy, greaterThan(tester.getTopLeft(left).dy));
       expect(
         find.text('加速带会被「地宫坑道」或「远征地砖」模块添加的地块覆盖，从而无法生效，请勿同时使用。'),
-        findsOneWidget,
+        findsNothing,
       );
       expect(tester.takeException(), isNull);
     },
   );
+  testWidgets('compatibility warning follows active tile modules', (
+    tester,
+  ) async {
+    for (final brickMapIndex in [0, 3]) {
+      final definition = PvzObject(
+        aliases: ['LevelDefinition'],
+        objClass: 'LevelDefinition',
+        objData: LevelDefinitionData(
+          modules: const [
+            'RTID(SpeedUpTile@CurrentLevel)',
+            'RTID(Tunnel@CurrentLevel)',
+          ],
+        ).toJson(),
+      );
+      final level = PvzLevelFile(
+        objects: [
+          definition,
+          _module({'Roads': []}),
+          PvzObject(
+            aliases: ['Tunnel'],
+            objClass: 'TunnelDefendModuleProperties',
+            objData: {'BrickMapIndex': brickMapIndex},
+          ),
+        ],
+      );
+      final banner = find.byKey(
+        const ValueKey('speedUpTileCompatibilityWarning'),
+      );
+      await tester.pumpWidget(_screen(level));
+      await tester.pumpAndSettle();
+      expect(banner, findsOneWidget);
+      // Keep the object in the file: unlinking it must still clear the warning.
+      definition.objData['Modules'] = ['RTID(SpeedUpTile@CurrentLevel)'];
+      await tester.pumpWidget(_screen(level));
+      await tester.pumpAndSettle();
+      expect(banner, findsNothing);
+      expect(tester.takeException(), isNull);
+      await tester.pumpWidget(const SizedBox.shrink());
+    }
+  });
   test('official roads retain zero-based coordinates and list order', () {
     final original = <String, dynamic>{'Roads': _officialRoads()};
     final data = SpeedUpTileModulePropertiesData.fromJson(original);

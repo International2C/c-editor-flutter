@@ -612,6 +612,7 @@ class _InitialZombieEditDialogState extends State<_InitialZombieEditDialog> {
                   value: _isCustomInput,
                   onChanged: (v) => setState(() => _isCustomInput = v),
                 ),
+                const SizedBox(height: 16),
                 if (_isCustomInput) ...[
                   EditorResponsiveInputField(
                     label:

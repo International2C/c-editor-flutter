@@ -47,6 +47,53 @@ Future<Color> _centerPixel(WidgetTester tester, GlobalKey boundaryKey) async {
 }
 
 void main() {
+  testWidgets('legacy autumn stickers render through the renamed asset', (
+    tester,
+  ) async {
+    const original = 'assets/images/round_icons/Stage_Autumn.webp';
+    const renamed = 'assets/images/round_icons/Stage_AutumnLate.webp';
+    final document = PreviewDocument(
+      banner: PreviewBannerRef(
+        kind: PreviewBannerSourceKind.assetStem,
+        assetPath: 'assets/meta/icon.png',
+      ),
+      layers: [
+        PreviewLayer(
+          id: 'sticker',
+          kind: PreviewLayerKind.image,
+          bounds: const Rect.fromLTWH(0.1, 0.1, 0.3, 0.3),
+          imageAsset: original,
+        ),
+        PreviewLayer(
+          id: 'icons',
+          kind: PreviewLayerKind.iconGrid,
+          bounds: const Rect.fromLTWH(0.5, 0.5, 0.4, 0.3),
+          items: [PreviewItem(id: 'autumn', assetPath: original)],
+        ),
+      ],
+    );
+    final boundaryKey = GlobalKey();
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Scaffold(
+          body: PreviewCanvas(document: document, boundaryKey: boundaryKey),
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+    final assets = tester
+        .widgetList<Image>(find.byType(Image))
+        .map((image) => image.image)
+        .whereType<AssetImage>()
+        .map((image) => image.assetName);
+    expect(assets.where((path) => path == renamed), hasLength(2));
+    expect(assets, isNot(contains(original)));
+    expect(document.layers.first.imageAsset, original);
+    expect(document.layers.last.items.single.assetPath, original);
+    await _centerPixel(tester, boundaryKey);
+    expect(tester.takeException(), isNull);
+  });
+
   for (final interactive in [false, true]) {
     testWidgets(
       'editing=$interactive and the export boundary share the complete render order',

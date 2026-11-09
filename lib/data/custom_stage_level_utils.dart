@@ -69,7 +69,9 @@ abstract final class CustomStageLevelUtils {
     'DisabledStreetCells',
     'CosmicPlantfoodFillSeconds',
     'LinkedTilePropagationAlpha',
+    'BackgroundImageLeft',
     'BackgroundImageMiddle',
+    'BackgroundImageRight',
     'InitSubmarineInfo',
     'HasGridItemAirShip',
     'HasCannon',
@@ -424,6 +426,24 @@ abstract final class CustomStageLevelUtils {
 
   static bool supportsCosmicPlantfoodFill(String objclass) =>
       objclass == 'MoonStageProperties';
+
+  static bool supportsMoonPart2Appearance(Map<String, dynamic> objdata) =>
+      objdata['BackgroundImagePrefix'] == 'IMAGE_BACKGROUNDS_MOON';
+
+  static bool isMoonPart2AppearanceEnabled(Map<String, dynamic> objdata) =>
+      objdata['BackgroundImageMiddle'] == 'MOONPART2' &&
+      objdata['BackgroundImageRight'] == 'MOONPART2_RIGHT';
+
+  static void applyMoonPart2Appearance(
+    Map<String, dynamic> objdata, {
+    required bool enabled,
+  }) {
+    objdata['BackgroundImageLeft'] = 'MOON_LEFT';
+    objdata['BackgroundImageMiddle'] = enabled ? 'MOONPART2' : 'MOON';
+    objdata['BackgroundImageRight'] = enabled
+        ? 'MOONPART2_RIGHT'
+        : 'MOON_RIGHT';
+  }
 
   static bool isBeachMinigameEnabled(Map<String, dynamic> objdata) =>
       objdata['BackgroundImageMiddle'] == 'TEXTURE_01';
