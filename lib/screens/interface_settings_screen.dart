@@ -34,6 +34,8 @@ class _InterfaceSettingsScreenState extends State<InterfaceSettingsScreen> {
   static double _sessionScrollOffset = 0;
 
   late final ScrollController _scrollController;
+  final _scrollContentKey = GlobalKey();
+  final _menuCustomizationKey = GlobalKey();
   InterfaceMenuSurface _selectedSurface = InterfaceMenuSurface.workspace;
   double? _pendingUiScale;
 
@@ -49,6 +51,40 @@ class _InterfaceSettingsScreenState extends State<InterfaceSettingsScreen> {
     if (_scrollController.hasClients) {
       _sessionScrollOffset = _scrollController.offset;
     }
+  }
+
+  double? _menuOffsetInContent() {
+    final menu = _menuCustomizationKey.currentContext?.findRenderObject();
+    final content = _scrollContentKey.currentContext?.findRenderObject();
+    if (menu is! RenderBox || content is! RenderBox || !menu.hasSize) {
+      return null;
+    }
+    return menu.localToGlobal(Offset.zero, ancestor: content).dy;
+  }
+
+  void _preserveMenuScrollPosition(VoidCallback update) {
+    final before = _menuOffsetInContent();
+    final pixels = _scrollController.hasClients
+        ? _scrollController.offset
+        : null;
+    update();
+    if (before == null || pixels == null) return;
+
+    // Adding or removing a settings-only section above this card must not move
+    // the feature currently being edited. Content coordinates also work at UI zoom.
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted || !_scrollController.hasClients) return;
+      final after = _menuOffsetInContent();
+      if (after == null) return;
+      final position = _scrollController.position;
+      final target = (pixels + after - before).clamp(
+        position.minScrollExtent,
+        position.maxScrollExtent,
+      );
+      if ((target - position.pixels).abs() > 0.1) {
+        _scrollController.jumpTo(target);
+      }
+    });
   }
 
   @override
@@ -102,6 +138,7 @@ class _InterfaceSettingsScreenState extends State<InterfaceSettingsScreen> {
                   child: ConstrainedBox(
                     constraints: const BoxConstraints(maxWidth: 880),
                     child: Column(
+                      key: _scrollContentKey,
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
                         for (
@@ -436,6 +473,7 @@ class _InterfaceSettingsScreenState extends State<InterfaceSettingsScreen> {
         .toList(growable: false);
 
     return _SettingsSection(
+      key: _menuCustomizationKey,
       icon: Icons.more_vert,
       title: l10n.menuCustomization,
       child: Column(
@@ -501,13 +539,15 @@ class _InterfaceSettingsScreenState extends State<InterfaceSettingsScreen> {
                     action.id,
                   ),
                   onPlacementChanged: (placement) {
-                    context
-                        .read<SettingsCubit>()
-                        .setInterfaceMenuActionPlacement(
-                          _selectedSurface,
-                          action.id,
-                          placement,
-                        );
+                    _preserveMenuScrollPosition(() {
+                      context
+                          .read<SettingsCubit>()
+                          .setInterfaceMenuActionPlacement(
+                            _selectedSurface,
+                            action.id,
+                            placement,
+                          );
+                    });
                   },
                 );
               },
@@ -518,9 +558,11 @@ class _InterfaceSettingsScreenState extends State<InterfaceSettingsScreen> {
             alignment: Alignment.centerRight,
             child: TextButton.icon(
               onPressed: () {
-                context.read<SettingsCubit>().resetInterfaceMenuActions(
-                  _selectedSurface,
-                );
+                _preserveMenuScrollPosition(() {
+                  context.read<SettingsCubit>().resetInterfaceMenuActions(
+                    _selectedSurface,
+                  );
+                });
               },
               icon: const Icon(Icons.restore),
               label: Text(l10n.menuConfigurationReset),
@@ -637,6 +679,7 @@ class _InterfaceSettingsScreenState extends State<InterfaceSettingsScreen> {
 
 class _SettingsSection extends StatelessWidget {
   const _SettingsSection({
+    super.key,
     required this.icon,
     required this.title,
     required this.child,

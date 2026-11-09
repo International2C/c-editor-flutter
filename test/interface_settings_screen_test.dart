@@ -440,6 +440,124 @@ void main() {
     expect(tester.takeException(), isNull);
   });
 
+  for (final scenario in const [
+    (name: 'wide', size: Size(1000, 800), scale: 1.0),
+    (name: 'narrow zoomed', size: Size(400, 800), scale: 1.5),
+  ]) {
+    testWidgets(
+      '${scenario.name}: settings-only changes keep feature display anchored',
+      (tester) async {
+        await pumpScreen(tester, size: scenario.size, appScale: scenario.scale);
+        final l10n = lookupAppLocalizations(const Locale('en'));
+        final viewport = find.byKey(
+          const ValueKey('interfaceMenuViewport_workspace'),
+        );
+        final list = find.byKey(const ValueKey('interfaceMenu_workspace'));
+        final outerController = tester
+            .widget<SingleChildScrollView>(
+              find.byType(SingleChildScrollView).first,
+            )
+            .controller!;
+        outerController.jumpTo(0);
+        await tester.pumpAndSettle();
+        await tester.ensureVisible(viewport);
+        await tester.pumpAndSettle();
+
+        ScrollPosition innerPosition() => tester
+            .state<ScrollableState>(
+              find
+                  .descendant(of: list, matching: find.byType(Scrollable))
+                  .first,
+            )
+            .position;
+
+        innerPosition().jumpTo(90);
+        await tester.pumpAndSettle();
+
+        Future<void> selectPlacement(
+          String id,
+          InterfaceMenuPlacement placement,
+        ) async {
+          final row = find.byKey(ValueKey('workspace_$id'));
+          await tester.ensureVisible(row);
+          await tester.pumpAndSettle();
+          final rowTop = tester.getTopLeft(row).dy;
+          final viewportTop = tester.getTopLeft(viewport).dy;
+          final listOffset = innerPosition().pixels;
+          expect(listOffset, greaterThan(0));
+
+          await tester.tap(
+            find.descendant(
+              of: row,
+              matching: find.byType(DropdownButton<InterfaceMenuPlacement>),
+            ),
+          );
+          await tester.pumpAndSettle();
+          await tester.tap(
+            find.text(switch (placement) {
+              InterfaceMenuPlacement.toolbar => l10n.menuPlacementToolbar,
+              InterfaceMenuPlacement.overflow => l10n.menuPlacementOverflow,
+              InterfaceMenuPlacement.settingsPage =>
+                l10n.menuPlacementSettingsPage,
+            }).last,
+          );
+          await tester.pumpAndSettle();
+
+          expect(
+            settings.state
+                .interfaceMenuActionsFor(InterfaceMenuSurface.workspace)
+                .singleWhere((action) => action.id == id)
+                .placement,
+            placement,
+          );
+          expect(tester.getTopLeft(row).dy, closeTo(rowTop, 1));
+          expect(tester.getTopLeft(viewport).dy, closeTo(viewportTop, 1));
+          expect(innerPosition().pixels, closeTo(listOffset, 0.1));
+          expect(tester.takeException(), isNull);
+        }
+
+        for (final id in [
+          InterfaceMenuActionIds.language,
+          InterfaceMenuActionIds.theme,
+          InterfaceMenuActionIds.uiScale,
+        ]) {
+          await selectPlacement(id, InterfaceMenuPlacement.settingsPage);
+        }
+        expect(
+          find.byKey(const ValueKey('interfaceSettingsUiScaleSlider')),
+          findsOneWidget,
+        );
+        await selectPlacement(
+          InterfaceMenuActionIds.uiScale,
+          InterfaceMenuPlacement.overflow,
+        );
+        expect(
+          find.byKey(const ValueKey('interfaceSettingsUiScaleSlider')),
+          findsNothing,
+        );
+
+        final reset = find.text(l10n.menuConfigurationReset);
+        await tester.ensureVisible(reset);
+        await tester.pumpAndSettle();
+        final viewportTop = tester.getTopLeft(viewport).dy;
+        final resetTop = tester.getTopLeft(reset).dy;
+        final listOffset = innerPosition().pixels;
+        await tester.tap(reset);
+        await tester.pumpAndSettle();
+        expect(tester.getTopLeft(viewport).dy, closeTo(viewportTop, 1));
+        expect(tester.getTopLeft(reset).dy, closeTo(resetTop, 1));
+        expect(innerPosition().pixels, closeTo(listOffset, 0.1));
+        expect(
+          settings.state.interfaceMenuActionsFor(
+            InterfaceMenuSurface.workspace,
+          ),
+          defaultInterfaceMenuActions(InterfaceMenuSurface.workspace),
+        );
+        expect(tester.takeException(), isNull);
+      },
+    );
+  }
+
   testWidgets('restores scroll offset in memory without persisting it', (
     tester,
   ) async {
