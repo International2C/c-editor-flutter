@@ -18,20 +18,21 @@
       "path": { "type": "String" }
     }
   },
-  "dynamicFetchError": "Download failed: {error}",
-  "@dynamicFetchError": {
-    "placeholders": {
-      "error": { "type": "String" }
-    }
-  },
+  "dynamicFetchError": "Could not download the data package. Check your network, workspace write permissions, and free space, then try again.",
+  "dynamicTimeout": "The connection timed out. Check your network connection, then try again.",
+  "dynamicRateLimited": "GitHub has temporarily limited requests from your network. Wait and try again later, or switch networks.",
+  "dynamicAccessDenied": "GitHub refused this request. Please try again later.",
+  "dynamicNotFound": "This release or download is no longer available. Refresh the release list and choose another version.",
+  "dynamicInvalidResponse": "The server returned unexpected data. Please try again later.",
+  "dynamicStorageError": "Could not save the data package. Check workspace write permissions and free space, then try again.",
   "dynamicCancelTitle": "Cancel download?",
   "dynamicCancelBody": "Stop downloading and discard the partial file?",
   "dynamicCancelConfirm": "Cancel download",
   "dynamicCancelKeep": "Keep downloading",
   "dynamicCanceling": "Canceling…",
   "dynamicCanceled": "Download canceled.",
-  "dynamicNoConnection": "No internet connection. Check your network and try again.",
-  "dynamicConnectionLost": "Connection lost while downloading. Please try again.",
+  "dynamicNoConnection": "Could not connect to GitHub. Check your network connection, then try again.",
+  "dynamicConnectionLost": "The download connection was interrupted. Check your network connection, then try again.",
   "dynamicServerError": "Server error ({code}). Please try again later.",
   "@dynamicServerError": {
     "placeholders": {
@@ -40,7 +41,7 @@
   },
   "dynamicRetry": "Retry",
   "dynamicExistsTitle": "File already exists",
-  "dynamicExistsBody": "“{name}” is already in your workspace.\n\nOverwrite it, or save under a different name?",
+  "dynamicExistsBody": "\"{name}\" is already in your workspace.\n\nOverwrite it, or save under a different name?",
   "@dynamicExistsBody": {
     "placeholders": {
       "name": { "type": "String" }
@@ -54,7 +55,7 @@
   "dynamicRenameInvalid": "Enter a valid file name.",
   "dynamicRenameExists": "That file already exists. Choose another name.",
   "dynamicWebImportTitle": "Import dynamic",
-  "dynamicWebImportBody": "1. Let the browser finish downloading {asset}{size}.\n2. Click “Choose file” and select that download to add it to your workspace as {name}.",
+  "dynamicWebImportBody": "1. Let the browser finish downloading {asset}{size}.\n2. Click \"Choose file\" and select that download to add it to your workspace as {name}.",
   "@dynamicWebImportBody": {
     "placeholders": {
       "asset": { "type": "String" },
@@ -64,9 +65,9 @@
   },
   "dynamicWebOpen": "Open download",
   "dynamicWebOpenAgain": "Open link again",
-  "dynamicWebOpenFailed": "Could not open the download link. Copy it from the release page, or try again.",
+  "dynamicWebOpenFailed": "Could not open the download link. Allow browser pop-ups, or download manually from GitHub Releases.",
   "dynamicWebPick": "Choose file",
   "dynamicWebPickTitle": "Select downloaded dynamic.rsb.smf",
-  "dynamicWebPickEmpty": "Could not read the selected file. Try again.",
-  "dynamicWebImportFailed": "Failed to store the file in the workspace."
+  "dynamicWebPickEmpty": "Could not read the selected file. Make sure the download has finished and select a readable .rsb.smf file again.",
+  "dynamicWebImportFailed": "Could not store the file in the workspace. Check free space and make sure the browser allows local storage, then try again."
 }

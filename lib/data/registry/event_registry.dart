@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:c_editor/data/halloween_content.dart';
 import '../pvz_models.dart';
 
 enum EventCategory { zombieSpawn, gridItemSpawn, environmental, other }
@@ -354,6 +355,27 @@ class EventRegistry {
       defaultObjClass: 'SpawnModernPortalsWaveActionProps',
       initialDataFactory: () => PortalEventData(),
     ),
+    'HeianNinjaZombieSpawnerProps': EventMetadata(
+      titleKey: 'eventTitle_HeianNinjaZombieSpawnerProps',
+      descriptionKey: 'eventDesc_HeianNinjaZombieSpawnerProps',
+      icon: Icons.sports_martial_arts,
+      color: const Color(0xFFFF9800),
+      darkColor: const Color(0xFFFFCC80),
+      category: EventCategory.zombieSpawn,
+      defaultAlias: 'HeianNinjaEvent',
+      defaultObjClass: 'HeianNinjaZombieSpawnerProps',
+      initialDataFactory: () => ParachuteRainEventData(),
+      summaryProvider: (obj) {
+        try {
+          final data = ParachuteRainEventData.fromJson(
+            obj.objData as Map<String, dynamic>,
+          );
+          return '${data.groupSize}x${data.spiderCount}';
+        } catch (_) {
+          return '';
+        }
+      },
+    ),
     'TideWaveWaveActionProps': EventMetadata(
       titleKey: 'eventTitle_TideWaveWaveActionProps',
       descriptionKey: 'eventDesc_TideWaveWaveActionProps',
@@ -472,6 +494,27 @@ class EventRegistry {
         }
       },
     ),
+    'ZombieAirbubbleActionProps': EventMetadata(
+      titleKey: 'eventTitle_ZombieAirbubbleActionProps',
+      descriptionKey: 'eventDesc_ZombieAirbubbleActionProps',
+      icon: Icons.bubble_chart,
+      color: const Color(0xFF00BCD4),
+      darkColor: const Color(0xFF80DEEA),
+      category: EventCategory.zombieSpawn,
+      defaultAlias: 'AirbubbleEvent',
+      defaultObjClass: 'ZombieAirbubbleActionProps',
+      initialDataFactory: () => ZombieAirbubbleActionPropsData(),
+      summaryProvider: (obj) {
+        try {
+          final data = ZombieAirbubbleActionPropsData.fromJson(
+            obj.objData as Map<String, dynamic>,
+          );
+          return '${data.bubbleNumber}';
+        } catch (_) {
+          return '';
+        }
+      },
+    ),
     'BarrelWaveActionProps': EventMetadata(
       titleKey: 'eventTitle_BarrelWaveActionProps',
       descriptionKey: 'eventDesc_BarrelWaveActionProps',
@@ -488,6 +531,27 @@ class EventRegistry {
             obj.objData as Map<String, dynamic>,
           );
           return '${data.barrels.length}';
+        } catch (_) {
+          return '';
+        }
+      },
+    ),
+    'WaveActionZombieTentProps': EventMetadata(
+      titleKey: 'eventTitle_WaveActionZombieTentProps',
+      descriptionKey: 'eventDesc_WaveActionZombieTentProps',
+      icon: Icons.festival,
+      color: const Color(0xFFC62828),
+      darkColor: const Color(0xFFEF9A9A),
+      category: EventCategory.gridItemSpawn,
+      defaultAlias: 'FestivalZombieTentEvent',
+      defaultObjClass: 'WaveActionZombieTentProps',
+      initialDataFactory: () => WaveActionZombieTentPropsData(),
+      summaryProvider: (obj) {
+        try {
+          final data = WaveActionZombieTentPropsData.fromJson(
+            obj.objData as Map<String, dynamic>,
+          );
+          return '${data.zombieTents.length}';
         } catch (_) {
           return '';
         }
@@ -557,26 +621,18 @@ class EventRegistry {
         }
       },
     ),
-    'WaveActionZombieTentProps': EventMetadata(
-      titleKey: 'eventTitle_WaveActionZombieTentProps',
-      descriptionKey: 'eventDesc_WaveActionZombieTentProps',
-      icon: Icons.festival,
-      color: const Color(0xFFC62828),
-      darkColor: const Color(0xFFEF9A9A),
+    scarecrowClass: EventMetadata(
+      titleKey: 'eventTitle_SpawnPumpkinScarecrowWaveActionProps',
+      descriptionKey: 'eventDesc_SpawnPumpkinScarecrowWaveActionProps',
+      icon: Icons.cruelty_free,
+      color: Colors.deepOrange,
+      darkColor: Colors.orangeAccent,
       category: EventCategory.gridItemSpawn,
-      defaultAlias: 'FestivalZombieTentEvent',
-      defaultObjClass: 'WaveActionZombieTentProps',
-      initialDataFactory: () => WaveActionZombieTentPropsData(),
-      summaryProvider: (obj) {
-        try {
-          final data = WaveActionZombieTentPropsData.fromJson(
-            obj.objData as Map<String, dynamic>,
-          );
-          return '${data.zombieTents.length}';
-        } catch (_) {
-          return '';
-        }
-      },
+      defaultAlias: 'PumpkinScarecrowEvent',
+      defaultObjClass: scarecrowClass,
+      initialDataFactory: () => HalloweenContentData(cauldron: false),
+      summaryProvider: (obj) =>
+          '${((obj.objData as Map)['SpawnPositionsPool'] as List? ?? []).length}',
     ),
     'PumpkinHouseActionProps': EventMetadata(
       titleKey: 'eventTitle_PumpkinHouseActionProps',

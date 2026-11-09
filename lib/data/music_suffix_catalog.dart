@@ -15,7 +15,7 @@ class MusicSuffixCatalog {
   static String _iconFolder = 'assets/images/round_icons/';
   static bool _isLoaded = false;
 
-  /// Display order (excluding default empty suffix in JSON list).
+  /// Display order. Empty/default suffix is deliberately not selectable.
   static List<String> get orderedCodes => List.unmodifiable(_orderedCodenames);
 
   static Future<void> init() async {
@@ -47,13 +47,28 @@ class MusicSuffixCatalog {
     }
   }
 
-  static String resourceKey(String code) =>
-      code.isEmpty ? 'musicSuffix_default' : 'musicSuffix_$code';
+  /// Returns the guide-canonical casing for a known suffix while continuing to
+  /// recognize levels saved with older casing.
+  static String canonicalCode(String code) {
+    final trimmed = code.trim();
+    if (trimmed.isEmpty) return '';
+    final normalized = trimmed.toLowerCase();
+    for (final candidate in _orderedCodenames) {
+      if (candidate.toLowerCase() == normalized) return candidate;
+    }
+    return trimmed;
+  }
+
+  static String resourceKey(String code) {
+    final canonical = canonicalCode(code);
+    return canonical.isEmpty ? '' : 'musicSuffix_$canonical';
+  }
 
   /// Full asset path for tile icon (`unknown` uses [unknownIconAsset]).
   static String iconAsset(String codename) {
-    if (codename.isEmpty) return unknownIconAsset;
-    final file = _iconFilenameByCodename[codename];
+    final canonical = canonicalCode(codename);
+    if (canonical.isEmpty) return unknownIconAsset;
+    final file = _iconFilenameByCodename[canonical];
     if (file == null || file.isEmpty) return unknownIconAsset;
     return '$_iconFolder$file';
   }

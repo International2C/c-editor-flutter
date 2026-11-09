@@ -207,6 +207,12 @@ void _expectLastItemClear(
   final buttonRect = tester.getRect(confirmation);
   expect(tester.getRect(card).overlaps(buttonRect), isFalse);
   expect(tester.getRect(icon).overlaps(buttonRect), isFalse);
+  final bulk = find.byType(SelectionGridSelectAllButton);
+  if (bulk.evaluate().isNotEmpty) {
+    final bulkRect = tester.getRect(bulk);
+    expect(tester.getRect(card).overlaps(bulkRect), isFalse);
+    expect(tester.getRect(icon).overlaps(bulkRect), isFalse);
+  }
   expect(tester.takeException(), isNull);
 }
 
@@ -276,10 +282,14 @@ void main() {
             onMultiSelected: (ids) => submitted = ids,
           );
           expect(find.byKey(_confirmationRow), findsNothing);
+          final padding = tester
+              .widget<GridView>(find.byType(GridView))
+              .padding!;
           expect(
-            tester.widget<GridView>(find.byType(GridView)).padding,
-            const EdgeInsets.all(12),
-            reason: 'A clear final row must not add trailing empty space',
+            padding.resolve(TextDirection.ltr).bottom,
+            count == 1 ? equals(12) : greaterThan(12),
+            reason:
+                'The bulk control covers the last row despite the gap beside the FAB',
           );
           expect(
             _gridController(tester).position.maxScrollExtent,
@@ -315,8 +325,13 @@ void main() {
           );
           expect(find.byKey(_confirmationRow), findsNothing);
           expect(
-            tester.widget<GridView>(find.byType(GridView)).padding,
-            const EdgeInsets.all(12),
+            tester
+                .widget<GridView>(find.byType(GridView))
+                .padding!
+                .resolve(TextDirection.ltr)
+                .bottom,
+            greaterThan(12),
+            reason: 'Safe-area insets put the bulk control above the final row',
           );
           await _exerciseScrollingViewport(tester);
           _expectLastItemClear(tester, isPlant: isPlant, count: 41);

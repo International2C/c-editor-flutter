@@ -9,8 +9,13 @@ import 'dart:math' as math;
 import 'package:c_editor/widgets/editor_components.dart'
     show HorizontalTagScroller, isDesktopPlatform;
 import 'package:c_editor/data/zombie_conditions.dart';
+import 'package:c_editor/data/condition_l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:c_editor/data/lunar_mine_vein_type_catalog.dart';
+import 'package:c_editor/data/music_suffix_catalog.dart';
+import 'package:c_editor/data/music_type_catalog.dart';
+import 'package:c_editor/data/narrative_catalog.dart';
+import 'package:c_editor/data/speed_up_tile_catalog.dart';
 import 'package:c_editor/data/pvz_models.dart';
 import 'package:c_editor/data/level_parser.dart';
 import 'package:c_editor/data/rtid_parser.dart';
@@ -76,6 +81,9 @@ class LevelOverviewDialog extends StatefulWidget {
   final bool showOpenLevel;
   final VoidCallback onClose;
 
+  /// Read-only grid embedded by the preview image generator.
+  final bool initialLawnOnly;
+
   const LevelOverviewDialog({
     super.key,
     required this.levelFile,
@@ -84,6 +92,7 @@ class LevelOverviewDialog extends StatefulWidget {
     required this.onClose,
     this.filePath,
     this.showOpenLevel = false,
+    this.initialLawnOnly = false,
   });
 
   @override
@@ -143,6 +152,8 @@ class _LevelOverviewDialogState extends State<LevelOverviewDialog> {
   int _plantTypeIndex = 0;
   String? _gridItemCategoryKey;
   bool _isLoadingRepos = true;
+  Future<NarrativeCatalog>? _narrativeCatalogFuture;
+  Locale? _narrativeLocale;
 
   List<String> _cachedZombies = [];
   List<DiscoveredGridItem> _cachedGridItems = [];
@@ -192,6 +203,16 @@ class _LevelOverviewDialogState extends State<LevelOverviewDialog> {
   void initState() {
     super.initState();
     _initData();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final locale = Localizations.localeOf(context);
+    if (_narrativeLocale != locale) {
+      _narrativeLocale = locale;
+      _narrativeCatalogFuture = NarrativeCatalog.load(locale);
+    }
   }
 
   Future<void> _initData() async {
@@ -259,6 +280,8 @@ class _LevelOverviewDialogState extends State<LevelOverviewDialog> {
         return l10n.previewTabPlants;
       case GridPreviewModuleKind.zombies:
         return _p('previewInitial', 'Initial');
+      case GridPreviewModuleKind.initialLawnOverview:
+        return l10n.previewTabInitialLawnOverview;
       case GridPreviewModuleKind.common:
         return _p('previewInitial', 'Initial');
       case GridPreviewModuleKind.piratePlank:
@@ -291,6 +314,10 @@ class _LevelOverviewDialogState extends State<LevelOverviewDialog> {
         return l10n.moduleTitle_ManholePipelineModuleProperties;
       case GridPreviewModuleKind.roofProperties:
         return l10n.moduleTitle_RoofProperties;
+      case GridPreviewModuleKind.speedUpTile:
+        return l10n.moduleTitle_SpeedUpTileModuleProperties;
+      case GridPreviewModuleKind.wizardCauldron:
+        return l10n.moduleTitle_InitialGridItemWizardCrucibleProps;
       case GridPreviewModuleKind.tunnelDefend:
         return l10n.moduleTitle_TunnelDefendModuleProperties;
       case GridPreviewModuleKind.expeditionTiles:
@@ -357,6 +384,22 @@ class _LevelOverviewDialogState extends State<LevelOverviewDialog> {
     final theme = Theme.of(context);
     final levelDef = widget.parsed.levelDef;
     final isDesktop = isDesktopPlatform(context);
+
+    if (widget.initialLawnOnly) {
+      final (rows, cols) = getGridDimensions(widget.levelFile);
+      return IgnorePointer(
+        child: LayoutBuilder(
+          builder: (context, constraints) => _buildInitialLawnOverview(
+            rows,
+            cols,
+            resolveGridStyle(
+              context,
+              GridPreviewModuleKind.initialLawnOverview,
+            ).copyWith(maxWidth: constraints.maxWidth),
+          ),
+        ),
+      );
+    }
 
     if (_isLoadingRepos) {
       // Prefer Dialog over AlertDialog: AlertDialog wraps content in
@@ -691,6 +734,41 @@ class _LevelOverviewDialogState extends State<LevelOverviewDialog> {
         ? 'assets/images/round_icons/$stageIconFile'
         : null;
 
+    final stageObjdata = LevelParser.resolveStageObjdata(def, widget.levelFile);
+    final stageMusicSuffix = stageObjdata?['MusicSuffix'];
+    final rawMusicSuffix = stageMusicSuffix is String
+        ? stageMusicSuffix
+        : def.musicSuffix;
+    final musicModule = MusicTypeCatalog.forSuffix(rawMusicSuffix);
+    final musicSuffixCode = musicModule?.suffix ?? rawMusicSuffix.trim();
+    final musicSuffixName = musicSuffixCode.isEmpty
+        ? '—'
+        : ResourceNames.lookupOrFallback(
+            context,
+            musicModule?.suffixNameKey ??
+                MusicSuffixCatalog.resourceKey(musicSuffixCode),
+            musicSuffixCode,
+          );
+    final musicSuffixDisplay = musicSuffixName;
+
+    final musicTypeCode = def.musicType.isEmpty
+        ? MusicTypeCatalog.mainPath
+        : def.musicType;
+    final musicTypeChoices =
+        musicModule?.choices ??
+        MusicTypeCatalog.fallbackChoicesForSuffix(rawMusicSuffix);
+    final musicTypeChoice = musicTypeChoices.firstWhereOrNull(
+      (choice) => choice.value == musicTypeCode,
+    );
+    final musicTypeName = ResourceNames.lookupOrFallback(
+      context,
+      musicTypeChoice?.labelKey ?? musicTypeCode,
+      musicTypeChoice?.labelKey.startsWith('musicSuffix_') == true
+          ? musicSuffixName
+          : musicTypeCode,
+    );
+    final musicTypeDisplay = musicTypeName;
+
     int startingSun = def.startingSun ?? 0;
     int pfCount = PlantFoodDiscovery.getStartingPlantFood(
       widget.levelFile,
@@ -713,6 +791,14 @@ class _LevelOverviewDialogState extends State<LevelOverviewDialog> {
         def.modules.any((m) => m.contains('SunBomb'));
 
     bool sunBombsActive = skySunEnabled && hasSunBombModule;
+    final peaSymbiosisEnabled = def.disablePeavine != true;
+    final peaSymbiosisLabel = peaSymbiosisEnabled
+        ? l10n.peaSymbiosisActive
+        : l10n.peaSymbiosisInactive;
+    final peaSymbiosisIcon = peaSymbiosisEnabled ? Icons.link : Icons.link_off;
+    final peaSymbiosisColor = peaSymbiosisEnabled
+        ? Colors.greenAccent
+        : Colors.redAccent;
 
     bool hasOverwhelm = levelHasModule(
       widget.levelFile,
@@ -821,6 +907,12 @@ class _LevelOverviewDialogState extends State<LevelOverviewDialog> {
       color: sunBombsActive
           ? Colors.deepPurpleAccent
           : (skySunEnabled ? Colors.lightBlueAccent : Colors.redAccent),
+    ));
+    summaryLegends.add((
+      title: peaSymbiosisLabel,
+      icon: peaSymbiosisIcon,
+      iconId: null,
+      color: peaSymbiosisColor,
     ));
     if (hasOverwhelm)
       summaryLegends.add((
@@ -944,6 +1036,66 @@ class _LevelOverviewDialogState extends State<LevelOverviewDialog> {
                         fontSize: 14,
                       ),
                     ),
+                    const SizedBox(height: 4),
+                    Text(
+                      '${l10n.musicSuffix}: $musicSuffixDisplay',
+                      style: TextStyle(
+                        color: theme.colorScheme.onSurface.withValues(
+                          alpha: 0.8,
+                        ),
+                        fontSize: 14,
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      '${l10n.musicType}: $musicTypeDisplay',
+                      style: TextStyle(
+                        color: theme.colorScheme.onSurface.withValues(
+                          alpha: 0.8,
+                        ),
+                        fontSize: 14,
+                      ),
+                    ),
+                    FutureBuilder<NarrativeCatalog>(
+                      future: _narrativeCatalogFuture,
+                      builder: (context, snapshot) {
+                        if (!snapshot.hasData) {
+                          return const SizedBox.shrink();
+                        }
+                        final catalog = snapshot.requireData;
+                        String title(Object? value) => value == null
+                            ? catalog.strings.noDialogue
+                            : catalog.findByValue(value)?.title ??
+                                  value.toString();
+                        final style = TextStyle(
+                          color: theme.colorScheme.onSurface.withValues(
+                            alpha: 0.8,
+                          ),
+                          fontSize: 14,
+                        );
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const SizedBox(height: 4),
+                            Text(
+                              '${catalog.strings.firstIntro}: ${title(def.firstIntroNarrative)}',
+                              key: const ValueKey(
+                                'overview-first-intro-narrative',
+                              ),
+                              style: style,
+                            ),
+                            const SizedBox(height: 4),
+                            Text(
+                              '${catalog.strings.firstOutro}: ${title(def.firstOutroNarrative)}',
+                              key: const ValueKey(
+                                'overview-first-outro-narrative',
+                              ),
+                              style: style,
+                            ),
+                          ],
+                        );
+                      },
+                    ),
                     const SizedBox(height: 12),
                     Wrap(
                       spacing: 10,
@@ -1047,6 +1199,13 @@ class _LevelOverviewDialogState extends State<LevelOverviewDialog> {
                       : (skySunEnabled
                             ? l10n.sunDroppingActive
                             : l10n.sunDroppingInactive),
+                ),
+                ResourceChip(
+                  key: const ValueKey('overview-pea-symbiosis'),
+                  icon: peaSymbiosisIcon,
+                  label: isDesktop ? '' : (peaSymbiosisEnabled ? '✓' : '✕'),
+                  color: peaSymbiosisColor,
+                  tooltip: peaSymbiosisLabel,
                 ),
                 if (hasOverwhelm)
                   ResourceChip(
@@ -1900,6 +2059,7 @@ class _LevelOverviewDialogState extends State<LevelOverviewDialog> {
                           activeGridKey,
                           l10n,
                           theme,
+                          showModuleLabel: activeTabIndex == 2,
                         ),
                         const SizedBox(height: 12),
                         _buildLawnGrid(
@@ -2405,15 +2565,20 @@ class _LevelOverviewDialogState extends State<LevelOverviewDialog> {
     List<GridPreviewCategoryOption> categories,
     String activeKey,
     AppLocalizations l10n,
-    ThemeData theme,
-  ) {
+    ThemeData theme, {
+    bool showModuleLabel = false,
+  }) {
     final selectedOption = _selectedGridCategory(categories, activeKey);
     if (selectedOption == null) return const SizedBox.shrink();
 
     final optionsForKind = categories
         .where((c) => c.kind == selectedOption.kind)
         .toList();
-    if (optionsForKind.length <= 1) return const SizedBox.shrink();
+    final showKindLabel =
+        showModuleLabel && selectedOption.kind != GridPreviewModuleKind.common;
+    if (optionsForKind.length <= 1 && !showKindLabel) {
+      return const SizedBox.shrink();
+    }
 
     Widget content = SingleChildScrollView(
       controller: _subCategoryScrollController,
@@ -2435,7 +2600,9 @@ class _LevelOverviewDialogState extends State<LevelOverviewDialog> {
               mainAxisSize: MainAxisSize.min,
               children: optionsForKind.map((option) {
                 final isSelected = activeKey == option.key;
-                String label = option.wave != null
+                String label = showKindLabel && optionsForKind.length == 1
+                    ? _getModuleLabel(option.kind, l10n)
+                    : option.wave != null
                     ? l10n.customZombieWaveItem(option.wave!)
                     : option.label;
                 return InkWell(
@@ -2486,6 +2653,14 @@ class _LevelOverviewDialogState extends State<LevelOverviewDialog> {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          if (showKindLabel && optionsForKind.length > 1)
+            Padding(
+              padding: const EdgeInsets.only(bottom: 8),
+              child: Text(
+                _getModuleLabel(selectedOption.kind, l10n),
+                style: theme.textTheme.labelLarge,
+              ),
+            ),
           LocalScrollbarRegion(
             child: Scrollbar(
               key: const ValueKey('gridSubCategoryScrollbar'),
@@ -2617,18 +2792,19 @@ class _LevelOverviewDialogState extends State<LevelOverviewDialog> {
 
   Widget _buildTideGrid(int rows, int cols, LevelPreviewGridStyle style) {
     final tideData = readTideModuleData(widget.levelFile);
+    final waterColumns = (tideData?.startingWaveLocation ?? 0)
+        .clamp(0, cols)
+        .toInt();
     return _buildCompositeLawnGrid(
       rows: rows,
       cols: cols,
       style: style,
-      background: tideData != null
+      background: waterColumns > 0
           ? Row(
               children: [
-                Spacer(
-                  flex: (cols - tideData.startingWaveLocation).clamp(0, cols),
-                ),
+                if (waterColumns < cols) Spacer(flex: cols - waterColumns),
                 Expanded(
-                  flex: tideData.startingWaveLocation.clamp(0, cols),
+                  flex: waterColumns,
                   child: Container(color: Colors.blue.withValues(alpha: 0.25)),
                 ),
               ],
@@ -2964,6 +3140,34 @@ class _LevelOverviewDialogState extends State<LevelOverviewDialog> {
     );
   }
 
+  Widget _buildSpeedUpTileGrid(
+    int rows,
+    int cols,
+    LevelPreviewGridStyle style,
+  ) {
+    final data = readSpeedUpTileData(widget.levelFile);
+    return _buildCompositeLawnGrid(
+      rows: rows,
+      cols: cols,
+      style: style,
+      cellBuilder: (col, row) {
+        final road = data?.roads.reversed.firstWhereOrNull(
+          (road) => road.gridX == col && road.gridY == row,
+        );
+        if (road == null) return null;
+        final path = SpeedUpTileCatalog.assetForImage(road.img);
+        if (path == null) {
+          return const Center(child: Icon(Icons.help_outline));
+        }
+        return AssetImageWidget(
+          assetPath: path,
+          altCandidates: imageAltCandidates(path),
+          fit: BoxFit.contain,
+        );
+      },
+    );
+  }
+
   Widget _buildGulliverGrid(int rows, int cols, LevelPreviewGridStyle style) {
     final data = readGulliverTunnelData(widget.levelFile);
     return _buildCompositeLawnGrid(
@@ -3052,6 +3256,9 @@ class _LevelOverviewDialogState extends State<LevelOverviewDialog> {
           : (isMobile ? 550 * textScale : 400 * textScale).clamp(300.0, 1000.0),
     );
 
+    if (activeKind == GridPreviewModuleKind.initialLawnOverview) {
+      return _buildInitialLawnOverview(rows, cols, style);
+    }
     if (activeKind != GridPreviewModuleKind.plants &&
         activeKind != GridPreviewModuleKind.zombies &&
         activeKind != GridPreviewModuleKind.common &&
@@ -3145,6 +3352,41 @@ class _LevelOverviewDialogState extends State<LevelOverviewDialog> {
         );
       case GridPreviewModuleKind.common:
         return _buildCommonGridItemsPreview(rows, cols, style);
+      case GridPreviewModuleKind.wizardCauldron:
+        final items = widget.levelFile.objects
+            .where((o) => o.objClass == 'InitialGridItemWizardCrucibleProps')
+            .expand(
+              (o) =>
+                  ((o.objData as Map)['InitialGridItemWizardCrucibles']
+                              as List? ??
+                          [])
+                      .whereType<Map>(),
+            );
+        return _buildCompositeLawnGrid(
+          rows: rows,
+          cols: cols,
+          style: style,
+          cellBuilder: (col, row) =>
+              items.any((item) => item['GridX'] == col && item['GridY'] == row)
+              ? LayoutBuilder(
+                  builder: (context, constraints) => Center(
+                    child: GridItemIcon(
+                      id: 'wizard_crucible',
+                      size:
+                          math.min(
+                            constraints.maxWidth,
+                            constraints.maxHeight,
+                          ) *
+                          0.9,
+                      isGrid: true,
+                      levelFile: widget.levelFile,
+                    ),
+                  ),
+                )
+              : null,
+        );
+      case GridPreviewModuleKind.initialLawnOverview:
+        return _buildInitialLawnOverview(rows, cols, style);
       case GridPreviewModuleKind.piratePlank:
         return _buildPiratePlankGrid(rows, cols, style);
       case GridPreviewModuleKind.railcart:
@@ -3192,6 +3434,8 @@ class _LevelOverviewDialogState extends State<LevelOverviewDialog> {
         return _buildRenaiGrid(rows, cols, style, category!);
       case GridPreviewModuleKind.roofProperties:
         return _buildRoofGrid(rows, cols, style);
+      case GridPreviewModuleKind.speedUpTile:
+        return _buildSpeedUpTileGrid(rows, cols, style);
       case GridPreviewModuleKind.tunnelDefend:
         return _buildTunnelDefendGrid(rows, cols, style);
       case GridPreviewModuleKind.expeditionTiles:
@@ -4821,80 +5065,76 @@ class _LevelOverviewDialogState extends State<LevelOverviewDialog> {
                 ],
               ),
               const SizedBox(height: 12),
-              ...((_challengesExpanded ? featureInfos : featureInfos.take(3))
-                  .map((info) {
-                    final isClickable = targetChallengeClasses.contains(
-                      info.objClass,
-                    );
-                    final param = _getChallengeParam(
-                      info.objClass,
-                      info.objData,
-                    );
-                    final title =
-                        param != null &&
-                            info.objClass != 'StarChallengeDisablePlantProps'
-                        ? '${info.title} ($param)'
-                        : info.title;
+              ...((_challengesExpanded ? featureInfos : featureInfos.take(3)).map((
+                info,
+              ) {
+                final isClickable = targetChallengeClasses.contains(
+                  info.objClass,
+                );
+                final param = _getChallengeParam(info.objClass, info.objData);
+                final title = param != null
+                    ? '${info.title} (${info.objClass == 'StarChallengeDisablePlantProps' ? ChallengeResourceL10n.profession(context, param) : param})'
+                    : info.title;
 
-                    return Padding(
-                      padding: const EdgeInsets.only(bottom: 8),
-                      child: Wrap(
-                        crossAxisAlignment: WrapCrossAlignment.start,
-                        spacing: 10,
+                return Padding(
+                  padding: const EdgeInsets.only(bottom: 8),
+                  child: Wrap(
+                    crossAxisAlignment: WrapCrossAlignment.start,
+                    spacing: 10,
+                    runSpacing: 4,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(top: 2),
+                        child: Icon(
+                          info.icon,
+                          size: 16,
+                          color: info.icon == Icons.star
+                              ? Colors.amber
+                              : Colors.greenAccent,
+                        ),
+                      ),
+                      Wrap(
+                        spacing: 8,
                         runSpacing: 4,
+                        crossAxisAlignment: WrapCrossAlignment.center,
                         children: [
-                          Padding(
-                            padding: const EdgeInsets.only(top: 2),
-                            child: Icon(
-                              info.icon,
-                              size: 16,
-                              color: info.icon == Icons.star
-                                  ? Colors.amber
-                                  : Colors.greenAccent,
-                            ),
-                          ),
-                          Wrap(
-                            spacing: 8,
-                            runSpacing: 4,
-                            crossAxisAlignment: WrapCrossAlignment.center,
-                            children: [
-                              isClickable
-                                  ? InkWell(
-                                      onTap: () => _showChallengeDetails(
-                                        context,
-                                        info.objClass,
-                                        info.objData,
-                                        info.title,
-                                      ),
-                                      borderRadius: BorderRadius.circular(4),
-                                      child: Text(
-                                        title,
-                                        style: const TextStyle(
-                                          fontSize: 15,
-                                          color: Colors.blueAccent,
-                                        ),
-                                      ),
-                                    )
-                                  : Text(
-                                      title,
-                                      style: const TextStyle(fontSize: 15),
-                                    ),
-                              if (info.objClass ==
-                                      'StarChallengeDisablePlantProps' &&
-                                  param != null)
-                                AssetImageWidget(
-                                  assetPath: StarChallengeProfessions.iconAsset(
-                                    param,
+                          isClickable
+                              ? InkWell(
+                                  onTap: () => _showChallengeDetails(
+                                    context,
+                                    info.objClass,
+                                    info.objData,
+                                    info.title,
                                   ),
-                                  width: 20,
-                                  height: 20,
+                                  borderRadius: BorderRadius.circular(4),
+                                  child: Text(
+                                    title,
+                                    style: const TextStyle(
+                                      fontSize: 15,
+                                      color: Colors.blueAccent,
+                                    ),
+                                  ),
+                                )
+                              : Text(
+                                  title,
+                                  style: const TextStyle(fontSize: 15),
                                 ),
-                            ],
-                          ),
+                          if (info.objClass ==
+                                  'StarChallengeDisablePlantProps' &&
+                              param != null)
+                            AssetImageWidget(
+                              assetPath: StarChallengeProfessions.iconAsset(
+                                param,
+                              ),
+                              width: 20,
+                              height: 20,
+                            ),
                         ],
                       ),
-                    );
-                  })),
+                    ],
+                  ),
+                );
+              })),
             ],
             if (riftThemes.isNotEmpty) ...[
               if (activeModules.isNotEmpty || featureInfos.isNotEmpty)
@@ -5183,7 +5423,7 @@ class _LevelOverviewDialogState extends State<LevelOverviewDialog> {
           children.add(const SizedBox(height: 8));
           for (var c in conditions) {
             final id = c.toString();
-            final name = ResourceNames.lookup(context, id);
+            final name = ConditionL10n.zombieLabel(context, id);
             children.add(
               Padding(
                 padding: const EdgeInsets.only(bottom: 6),
@@ -5194,15 +5434,16 @@ class _LevelOverviewDialogState extends State<LevelOverviewDialog> {
                       name != id ? name : id,
                       style: const TextStyle(fontSize: 14),
                     ),
-                    Text(
-                      id,
-                      style: TextStyle(
-                        fontSize: 11,
-                        color: theme.colorScheme.onSurface.withValues(
-                          alpha: 0.4,
+                    if (name != id)
+                      Text(
+                        id,
+                        style: TextStyle(
+                          fontSize: 11,
+                          color: theme.colorScheme.onSurface.withValues(
+                            alpha: 0.4,
+                          ),
                         ),
                       ),
-                    ),
                   ],
                 ),
               ),
@@ -5254,7 +5495,11 @@ class _LevelOverviewDialogState extends State<LevelOverviewDialog> {
                 const SizedBox(width: 12),
                 Expanded(
                   child: Text(
-                    ResourceNames.lookup(context, 'plant_$plantId'),
+                    ResourceNames.lookupOrFallback(
+                      context,
+                      'plant_$plantId',
+                      plantId,
+                    ),
                     style: TextStyle(
                       fontSize: 15,
                       fontWeight: FontWeight.w500,
@@ -5369,7 +5614,11 @@ class _LevelOverviewDialogState extends State<LevelOverviewDialog> {
                               widget.levelFile,
                             )
                         ? itemType
-                        : ResourceNames.lookup(context, 'griditem_$itemType'),
+                        : ResourceNames.lookupOrFallback(
+                            context,
+                            'griditem_$itemType',
+                            itemType,
+                          ),
                     style: TextStyle(
                       fontSize: 15,
                       fontWeight: FontWeight.w500,
@@ -5851,6 +6100,7 @@ class _LevelOverviewDialogState extends State<LevelOverviewDialog> {
     required int cols,
     required LevelPreviewGridStyle style,
     required Widget? Function(int col, int row) cellBuilder,
+    bool paintCellBelowItems = false,
     BoxDecoration? Function(int col, int row, bool isSelected, bool isStripe)?
     cellDecorationBuilder,
     BoxDecoration? Function(int col, int row, bool isSelected)?
@@ -5887,10 +6137,13 @@ class _LevelOverviewDialogState extends State<LevelOverviewDialog> {
       },
       cellBuilder: (context, col, row) {
         final ids = moduleData?['$col,$row'] ?? [];
+        final cellContent = cellBuilder(col, row);
 
         return Stack(
           alignment: Alignment.center,
           children: [
+            if (paintCellBelowItems && cellContent != null)
+              Positioned.fill(child: IgnorePointer(child: cellContent)),
             if (ids.isNotEmpty)
               Stack(
                 fit: StackFit.expand,
@@ -5932,7 +6185,7 @@ class _LevelOverviewDialogState extends State<LevelOverviewDialog> {
                     ),
                 ],
               ),
-            cellBuilder(col, row) ?? const SizedBox.shrink(),
+            if (!paintCellBelowItems) cellContent ?? const SizedBox.shrink(),
           ],
         );
       },
@@ -6222,6 +6475,51 @@ class _LevelOverviewDialogState extends State<LevelOverviewDialog> {
     );
   }
 
+  /// Reuse each module's existing paint callbacks without mounting extra grids
+  /// or their tap handlers. Later-wave configurations keep their own tabs.
+  Map<GridPreviewModuleKind, LawnGrid> _buildInitialTerrainLayers(
+    int rows,
+    int cols,
+    LevelPreviewGridStyle style,
+  ) {
+    final layers = <GridPreviewModuleKind, LawnGrid>{};
+    void add(GridPreviewModuleKind kind) {
+      final preview = _buildGridItemCategoryGrid(
+        rows,
+        cols,
+        style,
+        GridPreviewCategoryOption(kind: kind, label: ''),
+        2,
+      );
+      final grid = preview is LawnGrid
+          ? preview
+          : preview is Column
+          ? preview.children.whereType<LawnGrid>().firstOrNull
+          : null;
+      if (grid != null) layers[kind] = grid;
+    }
+
+    for (final entry in initialTerrainModuleKinds.entries) {
+      if (entry.value == GridPreviewModuleKind.tunnelDefend) {
+        if (levelHasStandardTunnelDefendModule(widget.levelFile)) {
+          add(GridPreviewModuleKind.tunnelDefend);
+        }
+        if (levelHasExpeditionTilesModule(widget.levelFile)) {
+          add(GridPreviewModuleKind.expeditionTiles);
+        }
+      } else if (levelHasModule(widget.levelFile, entry.key)) {
+        add(entry.value);
+      }
+    }
+    if (hasInitialArmrackItems(readArmrackModuleData(widget.levelFile))) {
+      add(GridPreviewModuleKind.armrack);
+    }
+    if (hasInitialEnergyGridItems(readEnergyGridModuleData(widget.levelFile))) {
+      add(GridPreviewModuleKind.energyGrid);
+    }
+    return layers;
+  }
+
   Widget _buildCommonGridItemsPreview(
     int rows,
     int cols,
@@ -6234,6 +6532,66 @@ class _LevelOverviewDialogState extends State<LevelOverviewDialog> {
       moduleData: _getCommonGridData(),
       activeTabIndex: 2,
       cellBuilder: (col, row) => null,
+    );
+  }
+
+  Widget _buildInitialLawnOverview(
+    int rows,
+    int cols,
+    LevelPreviewGridStyle style,
+  ) {
+    final terrain = _buildInitialTerrainLayers(rows, cols, style);
+    Widget? gridLayer({required bool foreground}) {
+      final layers = <Widget>[];
+      for (final entry in terrain.entries) {
+        final layer = foreground
+            ? entry.value.foreground
+            : entry.value.background;
+        if (layer == null) continue;
+        layers.add(
+          Positioned.fill(
+            key: ValueKey(
+              'initialTerrain${foreground ? 'Foreground' : 'Background'}_'
+              '${entry.key.name}',
+            ),
+            child: IgnorePointer(child: layer),
+          ),
+        );
+      }
+      return layers.isEmpty ? null : Stack(children: layers);
+    }
+
+    return _buildCompositeLawnGrid(
+      rows: rows,
+      cols: cols,
+      style: style,
+      moduleData: _getInitialLawnGridData(),
+      activeTabIndex: 2,
+      background: gridLayer(foreground: false),
+      foreground: gridLayer(foreground: true),
+      paintCellBelowItems: true,
+      cellBuilder: (col, row) => terrain.isEmpty
+          ? null
+          : Builder(
+              builder: (cellContext) => Stack(
+                fit: StackFit.expand,
+                children: [
+                  for (final entry in terrain.entries)
+                    Positioned.fill(
+                      key: ValueKey(
+                        'initialTerrainLayer_${entry.key.name}:$col:$row',
+                      ),
+                      child:
+                          entry.value.cellBuilder?.call(
+                            cellContext,
+                            col,
+                            row,
+                          ) ??
+                          const SizedBox.shrink(),
+                    ),
+                ],
+              ),
+            ),
     );
   }
 
@@ -6382,8 +6740,13 @@ class _LevelOverviewDialogState extends State<LevelOverviewDialog> {
         );
     }
 
-    // Overlay every lunar vein (all waves) as dormant vein art on the
-    // Initial grid-items preview; duplicate cells get a count badge.
+    return result;
+  }
+
+  Map<String, List<String>> _getInitialLawnGridData() {
+    final result = _getCommonGridData();
+    // All veins are present as dormant art in the initial lawn overview;
+    // their emergence-wave categories continue to show the active crystals.
     final lunarMineData = readLunarMineVeinModuleData(widget.levelFile);
     if (lunarMineData != null) {
       for (final placement in lunarMineData.placements) {

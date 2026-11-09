@@ -21,7 +21,8 @@ const _labels = <String, String>{
   'previewStickerTagCreatures': '中立生物',
   'previewStickerTagToolPackets': '工具卡',
   'previewStickerTagComponents': '场地组件',
-  'previewStickerTagMapAndMusic': '地图与音乐',
+  'previewStickerTagNPC': '剧情角色',
+  'previewStickerTagMapAndMusic': '模式与音乐',
   'previewStickerTagUI': '标记与主题',
   'previewStickerTagWorlds': '世界',
   'previewStickerTagOthers': '其他',
@@ -228,6 +229,7 @@ void main() {
         'creatures',
         'tool_packets',
         'components',
+        'npcs',
       ])
         PreviewSticker(
           assetPath: 'assets/images/others/fixture_$tag.webp',
@@ -240,6 +242,7 @@ void main() {
       ('creatures', '中立生物'),
       ('tool_packets', '工具卡'),
       ('components', '场地组件'),
+      ('npcs', '剧情角色'),
       ('griditems', '障碍物'),
     ]) {
       await tester.ensureVisible(find.text(label));

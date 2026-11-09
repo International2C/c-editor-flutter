@@ -204,6 +204,27 @@ class GridItemDiscovery {
       if (obj.objClass == 'PumpkinHouseActionProps') {
         addItem('pumpkin_house');
       }
+      if (obj.objClass == 'SpawnPumpkinScarecrowWaveActionProps' &&
+          obj.objData is Map) {
+        for (final entry
+            in ((obj.objData as Map)['PumpkinScarecrowPool'] as List? ?? [])
+                .whereType<Map>()) {
+          if (entry['Type'] is String) addItem(entry['Type']);
+        }
+      }
+      if (obj.objClass == 'InitialGridItemWizardCrucibleProps' &&
+          obj.objData is Map) {
+        for (final entry
+            in ((obj.objData as Map)['InitialGridItemWizardCrucibles']
+                        as List? ??
+                    [])
+                .whereType<Map>()) {
+          addItem(
+            entry['TypeName'] as String? ?? 'wizard_crucible',
+            isDedicatedModuleItem: true,
+          );
+        }
+      }
       if (obj.objClass == 'WaveActionZombieTentProps' && obj.objData is Map) {
         final tents = (obj.objData as Map)['ZombieTents'];
         if (tents is List) {

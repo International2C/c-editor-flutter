@@ -19,6 +19,36 @@
     {
       "objclass": "GridItemType",
       "aliases": [
+        "living_armor_left"
+      ],
+      "objdata": {
+        "TypeName": "living_armor_left",
+        "GridItemClass": "LivingArmorGridItem",
+        "Properties": "RTID(LivingArmorLeftGridItemDefault@PropertySheets)",
+        "ResourceGroups": [
+          "LivingArmorGroup",
+          "GridItemlivingArmorAudio"
+        ]
+      }
+    },
+    {
+      "objclass": "GridItemType",
+      "aliases": [
+        "living_armor_right"
+      ],
+      "objdata": {
+        "TypeName": "living_armor_right",
+        "GridItemClass": "LivingArmorGridItem",
+        "Properties": "RTID(LivingArmorRightGridItemDefault@PropertySheets)",
+        "ResourceGroups": [
+          "LivingArmorGroup",
+          "GridItemlivingArmorAudio"
+        ]
+      }
+    },
+    {
+      "objclass": "GridItemType",
+      "aliases": [
         "soudache_resource"
       ],
       "objdata": {
@@ -1120,7 +1150,9 @@
         "TypeName": "skate_griditem",
         "GridItemClass": "SkateGridItem",
         "Properties": "RTID(SkateGridItemDefault@PropertySheets)",
-        "ResourceGroups": []
+        "ResourceGroups": [
+          "Effects_Artifact"
+        ]
       }
     },
     {
@@ -1396,7 +1428,9 @@
         "TypeName": "guitar_grid_audio",
         "GridItemClass": "GuitarGridAudio",
         "Properties": "RTID(GuitarGridAudioDefault@PropertySheets)",
-        "ResourceGroups": []
+        "ResourceGroups": [
+          "Effects_Artifact"
+        ]
       }
     },
     {
@@ -1446,6 +1480,20 @@
         "TypeName": "zombietarget_squid",
         "GridItemClass": "GridItemZombieConditionTarget",
         "Properties": "RTID(GridItemZombieConditionTarget_Squid@PropertySheets)",
+        "ResourceGroups": [
+          "ZombieBeachOctopusGroup"
+        ]
+      }
+    },
+    {
+      "objclass": "GridItemType",
+      "aliases": [
+        "davecup_zombietarget_squid"
+      ],
+      "objdata": {
+        "TypeName": "davecup_zombietarget_squid",
+        "GridItemClass": "GridItemZombieConditionTarget",
+        "Properties": "RTID(GridItemPlantConditionTarget_Squid@PropertySheets)",
         "ResourceGroups": [
           "ZombieBeachOctopusGroup"
         ]
@@ -2710,7 +2758,9 @@
         "TypeName": "WaterHole",
         "GridItemClass": "GridItemWaterHole",
         "Properties": "RTID(GridItemWaterHoleDefault@PropertySheets)",
-        "ResourceGroups": []
+        "ResourceGroups": [
+          "Effects_Artifact"
+        ]
       }
     },
     {
@@ -3538,8 +3588,21 @@
         "ResourceGroups": [
           "UI_WHACKZOMBIE",
           "UI_WHACKZOMBIEAudio",
-          "Missile_Explosion_Common",
-          "PlantImpPear"
+          "Missile_Explosion_Common"
+        ]
+      }
+    },
+    {
+      "objclass": "GridItemType",
+      "aliases": [
+        "gingle_wizard"
+      ],
+      "objdata": {
+        "TypeName": "gingle_wizard",
+        "GridItemClass": "PVZ2GingleWizardGridItem",
+        "Properties": "RTID(PVZ2GingleWizardGridItemDefault@PropertySheets)",
+        "ResourceGroups": [
+          "ZombiePumpkinHouseGroup"
         ]
       }
     },
@@ -4547,7 +4610,9 @@
       "objdata": {
         "TypeName": "Trident_water",
         "GridItemClass": "GridItemTrident",
-        "ResourceGroups": [],
+        "ResourceGroups": [
+          "Effects_Artifact"
+        ],
         "Properties": "RTID(GridItemTridentDefault@PropertySheets)"
       }
     },
@@ -5588,7 +5653,9 @@
         "TypeName": "artifact_timestop",
         "GridItemClass": "GridItemArtifactTimeStop",
         "Properties": "RTID(GridItemArtifactTimeStopDefault@PropertySheets)",
-        "ResourceGroups": []
+        "ResourceGroups": [
+          "Effects_Artifact"
+        ]
       }
     },
     {
@@ -5600,7 +5667,9 @@
         "TypeName": "artifact_timespeedup",
         "GridItemClass": "GridItemArtifactTimeSpeedUp",
         "Properties": "RTID(GridItemArtifactTimeSpeedUpDefault@PropertySheets)",
-        "ResourceGroups": []
+        "ResourceGroups": [
+          "Effects_Artifact"
+        ]
       }
     },
     {
@@ -5612,7 +5681,9 @@
         "TypeName": "artifact_weathermonkey",
         "GridItemClass": "GridItemArtifactWeatherMonkey",
         "Properties": "RTID(GridItemArtifactWeatherMonkeyDefault@PropertySheets)",
-        "ResourceGroups": []
+        "ResourceGroups": [
+          "Effects_Artifact"
+        ]
       }
     },
     {
@@ -6084,7 +6155,9 @@
         "TypeName": "griditem_artifact_blackhole",
         "GridItemClass": "GridItemArtifactBlackhole",
         "Properties": "RTID(GridItemArtifactBlackholeDefault@PropertySheets)",
-        "ResourceGroups": []
+        "ResourceGroups": [
+          "Effects_Artifact"
+        ]
       }
     },
     {
@@ -6096,7 +6169,9 @@
         "TypeName": "griditem_artifact_blackhole_tile",
         "GridItemClass": "GridItemArtifactBlackholeTile",
         "Properties": "RTID(GridItemArtifactBlackholeTileDefault@PropertySheets)",
-        "ResourceGroups": []
+        "ResourceGroups": [
+          "Effects_Artifact"
+        ]
       }
     },
     {
@@ -6222,6 +6297,7 @@
         "GridItemClass": "GridItemArtifactSilverkeyGate",
         "Properties": "RTID(GridItemArtifactSilverkeyGateDefault@PropertySheets)",
         "ResourceGroups": [
+          "Effects_Artifact",
           "LevelCommon2"
         ]
       }
@@ -7190,6 +7266,7 @@
         "GridItemClass": "GridItemGladiatorVisual",
         "Properties": "RTID(GridItemGladiatorFence@PropertySheets)",
         "ResourceGroups": [
+          "Effects_Artifact",
           "LevelCommon2"
         ]
       }

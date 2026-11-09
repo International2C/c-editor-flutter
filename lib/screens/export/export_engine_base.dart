@@ -44,7 +44,10 @@ abstract class ExportEngine {
 
   /// Lists directories plus eligible files under [path]. When [archiveStep] is
   /// true only `.rsb.smf` files are returned; otherwise `.json`/`.rton` levels.
-  Future<List<ExportEntry>> listDirectory(String path, {required bool archiveStep});
+  Future<List<ExportEntry>> listDirectory(
+    String path, {
+    required bool archiveStep,
+  });
 
   /// Returns the parent directory path for [path] in this engine's scheme.
   String parentDirectory(String path);
@@ -63,4 +66,17 @@ abstract class ExportEngine {
   /// and the target archive is left untouched. Safe to call when nothing is
   /// running.
   void cancelExport();
+
+  /// Clears any pending cancellation state before a new export run starts.
+  ///
+  /// The UI calls this at the very beginning of an export (before the level
+  /// encoding stage), so a cancellation requested while the pipeline is not
+  /// running yet still applies to the run about to start instead of being
+  /// silently dropped.
+  void resetExportState() {}
+
+  /// True while a cancellation request is pending for this engine. The UI
+  /// polls it during stages it runs on its own (e.g. level RTON encoding)
+  /// to abort as early as possible.
+  bool get isCancelledByUser => false;
 }

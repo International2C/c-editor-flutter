@@ -605,7 +605,7 @@ class _CustomZombossMechPropertiesScreenState
         ),
         content: Text(
           l10n?.zombossMechOrphanActionDeleteMessage(alias) ??
-              '“$alias” is no longer used in this level. Remove its action object from the level file?',
+              '"$alias" is no longer used in this level. Remove its action object from the level file?',
         ),
         actions: [
           TextButton(

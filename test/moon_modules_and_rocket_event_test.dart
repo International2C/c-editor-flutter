@@ -482,6 +482,13 @@ void main() {
       lessThanOrEqualTo(tester.getRect(countField).top),
     );
     expect(tester.takeException(), isNull);
+    await tester.tap(find.byIcon(Icons.help_outline));
+    await tester.pumpAndSettle();
+    expect(find.text('• ${AppLocalizationsZh().logic}'), findsOneWidget);
+    expect(
+      find.text(AppLocalizationsZh().rocketLandingHelpLogic),
+      findsOneWidget,
+    );
   });
 
   test('level overview classifies rockets as grid items, not zombies', () {

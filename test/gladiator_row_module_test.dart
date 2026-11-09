@@ -124,6 +124,85 @@ void main() {
     ]);
   });
 
+  for (final locale in ['zh', 'en', 'ru']) {
+    testWidgets('duplicate wave hints follow the first group in $locale', (
+      tester,
+    ) async {
+      final level = _level();
+      level.objects.last.objData['Encounters'] = [
+        for (final wave in [2, 8, 12])
+          GladiatorEncounterData(wave: wave).toJson(),
+      ];
+      final original = jsonEncode(level.objects.last.objData);
+      final l10n = lookupAppLocalizations(Locale(locale));
+      final hint = find.byKey(const ValueKey('gladiator-duplicate-wave-hint'));
+      await tester.pumpWidget(_app(_editor(level), locale: locale));
+      await tester.pumpAndSettle();
+      await _tap(tester, find.text(l10n.groupN(3)));
+      expect(hint, findsNothing);
+      expect(jsonEncode(level.objects.last.objData), original);
+
+      await _enter(tester, 'encounter-Wave', '2');
+      expect(find.text(l10n.gladiatorDuplicateWaveHint(1)), findsOneWidget);
+      expect(
+        tester.widget<Text>(hint).style?.color,
+        Theme.of(tester.element(hint)).colorScheme.tertiary,
+      );
+      expect(
+        tester.getRect(hint).top,
+        greaterThanOrEqualTo(
+          tester
+              .getRect(find.byKey(const ValueKey('gladiator-encounter-Wave')))
+              .bottom,
+        ),
+      );
+      expect(
+        tester.getRect(hint).bottom,
+        lessThanOrEqualTo(
+          tester
+              .getRect(find.byKey(const ValueKey('gladiator-encounter-Row')))
+              .top,
+        ),
+      );
+      expect(
+        readGladiatorRowModuleData(
+          level,
+        )!.encounters.map((entry) => entry.wave),
+        [2, 8, 2],
+      );
+
+      await _enter(tester, 'encounter-Wave', '8');
+      expect(find.text(l10n.gladiatorDuplicateWaveHint(2)), findsOneWidget);
+      await _tap(tester, find.text(l10n.groupN(2)));
+      expect(hint, findsNothing);
+      await _tap(tester, find.text(l10n.groupN(3)));
+      expect(find.text(l10n.gladiatorDuplicateWaveHint(2)), findsOneWidget);
+
+      await _enter(tester, 'encounter-Wave', '7');
+      expect(hint, findsNothing);
+      await _enter(tester, 'encounter-Wave', '8');
+      final group = find
+          .ancestor(
+            of: find.text(l10n.groupN(2)),
+            matching: find.byType(Material),
+          )
+          .first;
+      await _tap(
+        tester,
+        find.descendant(of: group, matching: find.byType(IconButton)),
+      );
+      await _tap(tester, find.text(l10n.remove));
+      expect(hint, findsNothing);
+      expect(
+        readGladiatorRowModuleData(
+          level,
+        )!.encounters.map((entry) => entry.wave),
+        [2, 8],
+      );
+      expect(tester.takeException(), isNull);
+    });
+  }
+
   for (final fixture in _fixtures()) {
     test(
       '${fixture['level']} imports and exports the official module unchanged',
@@ -178,6 +257,31 @@ void main() {
       expect(rule.isActive!(LevelIssueContext.fromLevel(level)), isFalse);
     },
   );
+
+  testWidgets('gladiator spawn cards stay separated from their heading', (
+    tester,
+  ) async {
+    tester.view.physicalSize = const Size(360, 850);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.reset);
+    final l10n = lookupAppLocalizations(const Locale('en'));
+    await tester.pumpWidget(_app(_editor(_level(1)), scale: 2));
+    await tester.pumpAndSettle();
+    final heading = find.text(l10n.gladiatorSpawns);
+    await tester.ensureVisible(heading);
+    await tester.pumpAndSettle();
+    final firstSpawnField = find.byKey(
+      const ValueKey('gladiator-spawn-0-Time'),
+    );
+    final firstCard = find
+        .ancestor(of: firstSpawnField, matching: find.byType(Card))
+        .first;
+    expect(
+      tester.getRect(firstCard).top - tester.getRect(heading).bottom,
+      greaterThanOrEqualTo(16),
+    );
+    expect(tester.takeException(), isNull);
+  });
 
   for (final locale in ['zh', 'en', 'ru']) {
     testWidgets(
@@ -591,6 +695,68 @@ void main() {
       await tester.pumpAndSettle();
       expect(readGladiatorRowModuleData(level)!.encounters, isEmpty);
       expect(find.byType(GladiatorRowPreview), findsNothing);
+      expect(tester.takeException(), isNull);
+    },
+  );
+
+  testWidgets(
+    'batch zombie additions retain every spawn and required resource group',
+    (tester) async {
+      final level = PvzLevelFile(objects: []);
+      var changes = 0;
+      await tester.pumpWidget(_app(_editor(level, changed: () => changes++)));
+      await tester.pumpAndSettle();
+      await _tap(
+        tester,
+        find.byKey(const ValueKey('addGridOverrideWaveGroup')),
+      );
+      await _tap(tester, find.byKey(const ValueKey('gladiator-add-spawn')));
+      final spawns = tester.widget<ZombieSelectionScreen>(
+        find.byType(ZombieSelectionScreen),
+      );
+      expect(spawns.multiSelect, isTrue);
+      final changesBefore = changes;
+      spawns.onMultiZombieSelected!(['roman_shield_top', 'roman_healer']);
+      await tester.pumpAndSettle();
+      expect(
+        readGladiatorRowModuleData(
+          level,
+        )!.encounters.single.spawns.map((entry) => entry.zombieType),
+        ['roman_shield_top', 'roman_healer'],
+      );
+      expect(changes, changesBefore + 1);
+      expect(
+        level.objects.single.objData['ResourceGroupNames'],
+        containsAll([
+          'GladiatorRow',
+          'ZombieRomanTopShieldGroup',
+          'ZombieRomanHealerGroup',
+        ]),
+      );
+      await _tap(
+        tester,
+        find.byKey(const ValueKey('gladiator-add-punishment')),
+      );
+      final pool = tester.widget<ZombieSelectionScreen>(
+        find.byType(ZombieSelectionScreen),
+      );
+      expect(pool.multiSelect, isTrue);
+      final existingPool = readGladiatorRowModuleData(
+        level,
+      )!.punishmentPool.map((entry) => entry.toJson()).toList();
+      pool.onMultiZombieSelected!(['roman_armor1', 'roman_armor2']);
+      await tester.pumpAndSettle();
+      expect(
+        readGladiatorRowModuleData(
+          level,
+        )!.punishmentPool.map((entry) => entry.toJson()),
+        [
+          ...existingPool,
+          {'ZombieTypeName': 'roman_armor1', 'Weight': 1},
+          {'ZombieTypeName': 'roman_armor2', 'Weight': 1},
+        ],
+      );
+      expect(find.byType(ZombieSelectionScreen), findsNothing);
       expect(tester.takeException(), isNull);
     },
   );

@@ -109,6 +109,36 @@ void _expectReadableBadge(WidgetTester tester, int wave) {
 }
 
 void main() {
+  testWidgets(
+    'light offset preset card uses a pale background and left-aligned header and description',
+    (tester) async {
+      await _pumpTimeline(tester, width: 400, textScale: 1);
+      final l10n = lookupAppLocalizations(const Locale('en'));
+      final title = find.text(l10n.waveTimelineJitterOffsetsTitle);
+      await tester.ensureVisible(title);
+      await tester.pumpAndSettle();
+      final card = find.ancestor(of: title, matching: find.byType(Card)).first;
+      final icon = find.descendant(
+        of: card,
+        matching: find.byIcon(Icons.speed),
+      );
+      final description = find.descendant(
+        of: card,
+        matching: find.text(l10n.waveTimelineJitterOffsetsNone),
+      );
+      expect(tester.widget<Card>(card).color, Colors.blue.shade100);
+      expect(tester.widget<Text>(title).style?.color, Colors.black87);
+      expect(
+        tester.getTopLeft(description).dx,
+        closeTo(tester.getTopLeft(icon).dx, .1),
+      );
+      expect(
+        tester.getCenter(icon).dy,
+        closeTo(tester.getCenter(title).dy, .1),
+      );
+      expect(tester.takeException(), isNull);
+    },
+  );
   for (final width in [320.0, 360.0, 480.0]) {
     for (final scale in [1.0, 2.0]) {
       testWidgets(

@@ -192,7 +192,7 @@ class _PreviewExportFolderPickerState extends State<PreviewExportFolderPicker> {
                           _t(
                             'previewSettingsFolderPickerHint',
                             'Open a folder below or create a new one, then tap '
-                                '“Select this folder” to use the folder shown '
+                                '"Select this folder" to use the folder shown '
                                 'above for export.',
                           ),
                           style: theme.textTheme.bodyMedium?.copyWith(

@@ -109,8 +109,7 @@
         "tags": [
             "White",
             "Trapper",
-            "International",
-            "Tier4"
+            "International"
         ],
         "icon": "icon_springbean.webp"
     },
@@ -1220,8 +1219,7 @@
             "Ranger",
             "Magic",
             "Ice",
-            "Chinese",
-            "Tier4"
+            "Chinese"
         ],
         "icon": "icon_cottonyeti.webp"
     },
@@ -3593,11 +3591,22 @@
         "name": "plant_nagasalak",
         "tags": [
             "Orange",
-            "Ice",
             "Ranger",
+            "Ice",
             "Chinese"
         ],
         "icon": "icon_nagasalak.gif"
+    },
+    {
+        "id": "mangofier",
+        "name": "plant_mangofier",
+        "tags": [
+            "Orange",
+            "Ranger",
+            "Electric",
+            "International"
+        ],
+        "icon": "icon_mangofier.webp"
     },
     {
         "id": "smallcherry",

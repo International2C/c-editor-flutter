@@ -5,6 +5,7 @@ import 'package:c_editor/data/app_links.dart';
 import 'package:c_editor/data/app_properties.dart';
 import 'package:c_editor/data/launch_external_url.dart';
 import 'package:c_editor/l10n/app_localizations.dart';
+import 'package:c_editor/widgets/app_update_prompt.dart';
 
 String _usageTextForPlatform(BuildContext context, AppLocalizations l10n) {
   final p = Theme.of(context).platform;
@@ -33,6 +34,18 @@ class AboutScreen extends StatefulWidget {
 }
 
 class _AboutScreenState extends State<AboutScreen> {
+  bool _checkingForUpdates = false;
+
+  Future<void> _checkForUpdates() async {
+    if (_checkingForUpdates) return;
+    setState(() => _checkingForUpdates = true);
+    try {
+      await checkForAppUpdates(context);
+    } finally {
+      if (mounted) setState(() => _checkingForUpdates = false);
+    }
+  }
+
   late final Future<AppLinks> _linksFuture = AppLinks.load();
   late final Future<AppProperties> _propertiesFuture = AppProperties.load();
   late final Future<PackageInfo> _packageInfoFuture =
@@ -256,10 +269,43 @@ class _AboutScreenState extends State<AboutScreen> {
                     );
                     return Column(
                       children: [
-                        Text(
-                          l10n.editorVersion(editorVersion),
-                          textAlign: TextAlign.center,
-                          style: versionStyle,
+                        Wrap(
+                          alignment: WrapAlignment.center,
+                          crossAxisAlignment: WrapCrossAlignment.center,
+                          spacing: 8,
+                          runSpacing: 4,
+                          children: [
+                            Text(
+                              l10n.editorVersion(editorVersion),
+                              textAlign: TextAlign.center,
+                              style: versionStyle,
+                            ),
+                            TextButton.icon(
+                              key: const ValueKey('aboutCheckForUpdates'),
+                              style: TextButton.styleFrom(
+                                textStyle: versionStyle,
+                              ),
+                              onPressed: _checkingForUpdates
+                                  ? null
+                                  : _checkForUpdates,
+                              icon: _checkingForUpdates
+                                  ? const SizedBox.square(
+                                      dimension: 16,
+                                      child: CircularProgressIndicator(
+                                        strokeWidth: 2,
+                                      ),
+                                    )
+                                  : const Icon(
+                                      Icons.system_update_alt,
+                                      size: 18,
+                                    ),
+                              label: Text(
+                                _checkingForUpdates
+                                    ? l10n.checkingForUpdates
+                                    : l10n.checkForUpdates,
+                              ),
+                            ),
+                          ],
                         ),
                         const SizedBox(height: 4),
                         Text(

@@ -98,6 +98,60 @@ void main() {
     },
   );
 
+  test('plant defeat zombie challenge defaults to KILL_DESC', () {
+    final challenge = ChallengeRepository.getInfo(
+      'PlantDefeatZombieChallengeProps',
+    )!;
+
+    expect(
+      challenge.initialDataFactory!(),
+      containsPair('Description', kPlantDefeatZombieDefaultDescription),
+    );
+    expect(kPlantDefeatZombieDefaultDescription, '[KILL_DESC]');
+  });
+
+  test('plant defeat zombie hint explains the KILL_DESC placeholder', () {
+    expect(
+      lookupAppLocalizations(
+        const Locale('zh'),
+      ).plantDefeatZombieDescriptionHint,
+      '默认填写[KILL_DESC]可显示“用...击杀...只僵尸”，不支持直接输入中文',
+    );
+  });
+
+  testWidgets('plant defeat zombie editor uses its dedicated hint', (
+    tester,
+  ) async {
+    final info = ChallengeRepository.getInfo(
+      'PlantDefeatZombieChallengeProps',
+    )!;
+    final challenge = PvzObject(
+      aliases: [info.defaultAlias],
+      objClass: info.objClass,
+      objData: info.initialDataFactory!(),
+    );
+
+    await tester.pumpWidget(
+      _localizedApp(
+        Scaffold(
+          body: SingleChildScrollView(
+            child: ChallengeEditorContent(object: challenge, onChanged: () {}),
+          ),
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    expect(find.text('[KILL_DESC]'), findsOneWidget);
+    expect(
+      find.text(
+        'The default [KILL_DESC] displays ‘Use ... to defeat ... zombies’; '
+        'direct Chinese input is not supported.',
+      ),
+      findsOneWidget,
+    );
+  });
+
   testWidgets('challenge cards keep readable text width on narrow screens', (
     tester,
   ) async {

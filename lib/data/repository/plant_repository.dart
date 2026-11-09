@@ -307,6 +307,10 @@ class PlantInfo {
   final List<PlantTag> tags;
   final String? icon;
 
+  /// Gameplay tags from `PlantTypes.json` (`objdata.Attribute.Tags`).
+  /// These are intentionally separate from the editor's display/filter tags.
+  final Set<String> attributeTags;
+
   /// Internal tags (e.g. _internal_no42, _internal_mausoleum) used for module gating.
   final List<String> internalTags;
 
@@ -316,9 +320,12 @@ class PlantInfo {
     required this.tags,
     this.icon,
     this.internalTags = const [],
-  });
+    Set<String> attributeTags = const <String>{},
+  }) : attributeTags = Set<String>.unmodifiable(attributeTags);
 
   bool hasInternalTag(String tag) => internalTags.contains(tag);
+
+  bool hasAttributeTag(String tag) => attributeTags.contains(tag.toLowerCase());
 
   String? get iconAssetPath {
     if (id == 'coming_soon') return _kToBeContinuedIconPath;
@@ -338,6 +345,7 @@ class PlantRepository {
   bool _isLoaded = false;
   final Set<String> _uiConfiguredAliases = {};
   final Map<PlantTag, List<String>> _worldPlantOrder = {};
+  final Map<String, Set<String>> _attributeTagsByAlias = {};
 
   List<PlantInfo> get allPlants => _allPlants;
   List<String> get favoriteIds => _favoriteIds;
@@ -380,11 +388,56 @@ class PlantRepository {
     return byPlantId;
   }
 
+  Future<void> _loadAttributeTags() async {
+    _attributeTagsByAlias.clear();
+    try {
+      final jsonString = await loadJsonString(
+        'assets/reference/PlantTypes.json',
+      );
+      final decoded = json.decode(jsonString) as Map<String, dynamic>;
+      final objects = decoded['objects'] as List<dynamic>? ?? const [];
+      for (final rawObject in objects) {
+        if (rawObject is! Map) continue;
+        final objData = rawObject['objdata'];
+        if (objData is! Map) continue;
+        final attribute = objData['Attribute'];
+        if (attribute is! Map) continue;
+        final rawTags = attribute['Tags'];
+        if (rawTags is! List) continue;
+        final tags = rawTags
+            .whereType<String>()
+            .map((tag) => tag.toLowerCase())
+            .toSet();
+        if (tags.isEmpty) continue;
+
+        final aliases = <String>{};
+        final typeName = objData['TypeName'];
+        if (typeName is String && typeName.isNotEmpty) aliases.add(typeName);
+        final rawAliases = rawObject['aliases'];
+        if (rawAliases is List) {
+          aliases.addAll(
+            rawAliases.whereType<String>().where((alias) => alias.isNotEmpty),
+          );
+        }
+        for (final alias in aliases) {
+          for (final key in {alias, alias.toLowerCase()}) {
+            _attributeTagsByAlias
+                .putIfAbsent(key, () => <String>{})
+                .addAll(tags);
+          }
+        }
+      }
+    } catch (e) {
+      debugPrint('Error loading plant attribute tags: $e');
+    }
+  }
+
   Future<void> init() async {
     if (_isLoaded) return;
     await _loadFavorites();
     try {
       final worldAssignments = await _loadWorldAssignments();
+      await _loadAttributeTags();
       final jsonString = await loadJsonString('assets/resources/Plants.json');
       final List<dynamic> jsonList = json.decode(jsonString);
 
@@ -423,6 +476,10 @@ class PlantRepository {
             icon: icon,
             tags: tags.isEmpty ? [PlantTag.all] : tags,
             internalTags: internalTags,
+            attributeTags:
+                _attributeTagsByAlias[id] ??
+                _attributeTagsByAlias[id.toLowerCase()] ??
+                const <String>{},
           ),
         );
       }
@@ -457,6 +514,14 @@ class PlantRepository {
     } catch (_) {
       return null;
     }
+  }
+
+  /// Checks the authoritative gameplay attributes, accepting either a plant's
+  /// TypeName or any alias declared by `PlantTypes.json`.
+  bool hasPlantAttributeTag(String id, String tag) {
+    final tags =
+        _attributeTagsByAlias[id] ?? _attributeTagsByAlias[id.toLowerCase()];
+    return tags?.contains(tag.toLowerCase()) ?? false;
   }
 
   bool isFavorite(String id) => _favoriteIds.contains(id);

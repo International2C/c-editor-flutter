@@ -61,11 +61,7 @@ Widget _app({
       theme: ThemeData(platform: platform),
       builder: (context, child) {
         final scale = uiScale * (physicalSize.shortestSide < 600 ? 0.85 : 1);
-        return AppUiScaler(
-          scale: scale,
-          wrapMessenger: false,
-          child: child!,
-        );
+        return AppUiScaler(scale: scale, wrapMessenger: false, child: child!);
       },
       home: Scaffold(
         body: Builder(
@@ -82,14 +78,14 @@ Widget _app({
                 return localWidth == null
                     ? dialog
                     : Align(
-                      child: SizedBox(width: localWidth, child: dialog),
-                    );
-            },
+                        child: SizedBox(width: localWidth, child: dialog),
+                      );
+              },
+            ),
+            child: const Text('Open overview'),
           ),
-          child: const Text('Open overview'),
         ),
       ),
-    ),
     ),
   );
 }
@@ -114,6 +110,21 @@ void _expectFullWrapping(
   );
   final lineTops = boxes.map((box) => box.top).toSet();
   expect(lineTops.length, greaterThanOrEqualTo(minimumLines), reason: value);
+  // Check visible text rather than trailing spaces at a wrap boundary: a
+  // clipped, single-line paragraph can otherwise have a bounded widget rect.
+  for (final word in RegExp(r'\S+').allMatches(value)) {
+    final wordBoxes = paragraph.getBoxesForSelection(
+      TextSelection(baseOffset: word.start, extentOffset: word.end),
+    );
+    for (final box in wordBoxes) {
+      expect(box.left, greaterThanOrEqualTo(-0.5), reason: word.group(0));
+      expect(
+        box.right,
+        lessThanOrEqualTo(paragraph.size.width + 0.5),
+        reason: word.group(0),
+      );
+    }
+  }
   final lastCharacter = paragraph.getBoxesForSelection(
     TextSelection(baseOffset: value.length - 1, extentOffset: value.length),
   );
@@ -261,7 +272,9 @@ void main() {
               widget is Text &&
               (widget.data?.startsWith('${l10n.overviewLawn}: ') ?? false),
         );
-        _expectFullWrapping(tester, lawn, dialogRect, minimumLines: 2);
+        // This short label fits on one line in wider logical allocations.
+        // Its glyph bounds and final character must still remain complete.
+        _expectFullWrapping(tester, lawn, dialogRect, minimumLines: 1);
         final scroll = find.byKey(const ValueKey('levelOverviewScroll'));
         final scrollable = find
             .descendant(of: scroll, matching: find.byType(Scrollable))

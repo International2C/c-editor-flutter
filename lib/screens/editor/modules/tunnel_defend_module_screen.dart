@@ -967,6 +967,110 @@ class _TunnelDefendModuleScreenState extends State<TunnelDefendModuleScreen> {
                 ),
               ),
             ),
+            if (!_isExpedition) ...[
+              const SizedBox(height: 16),
+              Card(
+                color: gridBg,
+                child: Padding(
+                  padding: const EdgeInsets.all(12),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        l10n?.tunnelDefendSelectComponent ?? 'Select component',
+                        style: theme.textTheme.titleMedium?.copyWith(
+                          fontWeight: FontWeight.bold,
+                          color: accentColor,
+                        ),
+                      ),
+                      const SizedBox(height: 10),
+                      GridView.builder(
+                        key: const ValueKey('tunnelComponentGrid'),
+                        shrinkWrap: true,
+                        primary: false,
+                        physics: const NeverScrollableScrollPhysics(),
+                        gridDelegate:
+                            const SliverGridDelegateWithMaxCrossAxisExtent(
+                              maxCrossAxisExtent: 88,
+                              childAspectRatio: 0.75,
+                              crossAxisSpacing: 12,
+                              mainAxisSpacing: 12,
+                            ),
+                        itemCount: _availableAssets.length,
+                        itemBuilder: (context, i) {
+                          final asset = _availableAssets[i];
+                          final isSelected = _selectedImg == asset;
+                          return GestureDetector(
+                            key: ValueKey('tunnelComponent_$i'),
+                            onTap: () {
+                              HapticFeedback.selectionClick();
+                              setState(() => _selectedImg = asset);
+                            },
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: isSelected
+                                    ? accentColor.withValues(alpha: 0.15)
+                                    : Colors.transparent,
+                                borderRadius: BorderRadius.circular(8),
+                                border: Border.all(
+                                  color: isSelected
+                                      ? accentColor
+                                      : Colors.transparent,
+                                  width: 2,
+                                ),
+                              ),
+                              padding: const EdgeInsets.symmetric(
+                                vertical: 12,
+                                horizontal: 4,
+                              ),
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Expanded(
+                                    flex: 3,
+                                    child: AssetImageWidget(
+                                      assetPath:
+                                          'assets/images/tunnels/$asset.webp',
+                                      altCandidates: imageAltCandidates(
+                                        'assets/images/tunnels/$asset.webp',
+                                      ),
+                                      fit: BoxFit.contain,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 4),
+                                  Flexible(
+                                    flex: 1,
+                                    child: FittedBox(
+                                      fit: BoxFit.scaleDown,
+                                      alignment: Alignment.center,
+                                      child: Text(
+                                        asset.replaceAll(
+                                          'IMAGE_UI_MAUSOLEUM_TUNNEL_',
+                                          '',
+                                        ),
+                                        style: theme.textTheme.labelMedium
+                                            ?.copyWith(
+                                              color: isSelected
+                                                  ? accentColor
+                                                  : theme.colorScheme.onSurface,
+                                            ),
+                                        maxLines: 2,
+                                        overflow: TextOverflow.ellipsis,
+                                        textAlign: TextAlign.center,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
             const SizedBox(height: 16),
             Card(
               color: gridBg,
@@ -1041,125 +1145,6 @@ class _TunnelDefendModuleScreenState extends State<TunnelDefendModuleScreen> {
                             overflow: TextOverflow.ellipsis,
                           ),
                         ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ],
-            if (!_isExpedition) ...[
-              const SizedBox(height: 16),
-              Card(
-                color: gridBg,
-                child: Padding(
-                  padding: const EdgeInsets.all(12),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        l10n?.tunnelDefendSelectComponent ?? 'Select component',
-                        style: theme.textTheme.titleMedium?.copyWith(
-                          fontWeight: FontWeight.bold,
-                          color: accentColor,
-                        ),
-                      ),
-                      const SizedBox(height: 10),
-                      LayoutBuilder(
-                        builder: (context, constraints) {
-                          final cellWidth = 88.0;
-                          const spacing = 12.0;
-                          final cols =
-                              (constraints.maxWidth / (cellWidth + spacing))
-                                  .floor()
-                                  .clamp(1, 999);
-                          final rows = (_availableAssets.length / cols).ceil();
-                          final heightNeeded = rows * _assetHeight;
-                          final height =
-                              (heightNeeded < 420 ? heightNeeded : 420.0)
-                                  .toDouble();
-                          return SizedBox(
-                            height: height,
-                            child: GridView.builder(
-                              gridDelegate:
-                                  const SliverGridDelegateWithMaxCrossAxisExtent(
-                                    maxCrossAxisExtent: 88,
-                                    childAspectRatio: 0.75,
-                                    crossAxisSpacing: 12,
-                                    mainAxisSpacing: 12,
-                                  ),
-                              itemCount: _availableAssets.length,
-                              itemBuilder: (context, i) {
-                                final asset = _availableAssets[i];
-                                final isSelected = _selectedImg == asset;
-                                return GestureDetector(
-                                  onTap: () {
-                                    HapticFeedback.selectionClick();
-                                    setState(() => _selectedImg = asset);
-                                  },
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                      color: isSelected
-                                          ? accentColor.withValues(alpha: 0.15)
-                                          : Colors.transparent,
-                                      borderRadius: BorderRadius.circular(8),
-                                      border: Border.all(
-                                        color: isSelected
-                                            ? accentColor
-                                            : Colors.transparent,
-                                        width: 2,
-                                      ),
-                                    ),
-                                    padding: const EdgeInsets.symmetric(
-                                      vertical: 12,
-                                      horizontal: 4,
-                                    ),
-                                    child: Column(
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [
-                                        Expanded(
-                                          flex: 3,
-                                          child: AssetImageWidget(
-                                            assetPath:
-                                                'assets/images/tunnels/$asset.webp',
-                                            altCandidates: imageAltCandidates(
-                                              'assets/images/tunnels/$asset.webp',
-                                            ),
-                                            fit: BoxFit.contain,
-                                          ),
-                                        ),
-                                        const SizedBox(height: 4),
-                                        Flexible(
-                                          flex: 1,
-                                          child: FittedBox(
-                                            fit: BoxFit.scaleDown,
-                                            alignment: Alignment.center,
-                                            child: Text(
-                                              asset.replaceAll(
-                                                'IMAGE_UI_MAUSOLEUM_TUNNEL_',
-                                                '',
-                                              ),
-                                              style: theme.textTheme.labelMedium
-                                                  ?.copyWith(
-                                                    color: isSelected
-                                                        ? accentColor
-                                                        : theme
-                                                              .colorScheme
-                                                              .onSurface,
-                                                  ),
-                                              maxLines: 2,
-                                              overflow: TextOverflow.ellipsis,
-                                              textAlign: TextAlign.center,
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                );
-                              },
-                            ),
-                          );
-                        },
                       ),
                     ],
                   ),

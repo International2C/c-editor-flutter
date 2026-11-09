@@ -40,6 +40,7 @@ List<PopupMenuEntry<String>> pluginOverflowMenuItems({
   required BuildContext context,
   required String slot,
   required String valuePrefix,
+  Set<String> excludedElementKeys = const {},
 }) {
   if (!PluginManager.isInitialized) return const [];
   final registry = PluginManager.instance.screenRegistry;
@@ -58,14 +59,15 @@ List<PopupMenuEntry<String>> pluginOverflowMenuItems({
         ),
       ),
     for (final element in elements)
-      PopupMenuItem<String>(
-        value: '$valuePrefix${element.key}',
-        child: EditorPopupMenuTile(
-          leading: Icon(element.icon),
-          title: Text(element.resolvedTitle(context)),
-          contentPadding: EdgeInsets.zero,
+      if (!excludedElementKeys.contains(element.key))
+        PopupMenuItem<String>(
+          value: '$valuePrefix${element.key}',
+          child: EditorPopupMenuTile(
+            leading: Icon(element.icon),
+            title: Text(element.resolvedTitle(context)),
+            contentPadding: EdgeInsets.zero,
+          ),
         ),
-      ),
   ];
 }
 

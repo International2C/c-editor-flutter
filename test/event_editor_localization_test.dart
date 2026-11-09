@@ -6,6 +6,7 @@ import 'package:c_editor/l10n/app_localizations.dart';
 import 'package:c_editor/l10n/resource_names.dart';
 import 'package:c_editor/screens/editor/events/fairy_tale_fog_event_screen.dart';
 import 'package:c_editor/screens/editor/events/fairy_tale_wind_event_screen.dart';
+import 'package:c_editor/screens/editor/events/parachute_rain_event_screen.dart';
 import 'package:c_editor/screens/editor/events/raiding_party_event_screen.dart';
 import 'package:c_editor/screens/editor/modules/wave_generator_module_screen.dart';
 import 'package:c_editor/widgets/editor_components.dart';
@@ -59,8 +60,8 @@ void main() {
       final template = keys('en');
       for (final locale in ['zh', 'ru']) {
         expect(
-          template.difference(keys(locale)),
-          isEmpty,
+          keys(locale),
+          unorderedEquals(template),
           reason: '$folder/$locale',
         );
       }
@@ -173,6 +174,132 @@ void main() {
       expect(find.text(label), findsWidgets);
     }
     expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('Ninjimp Airstrike help uses the shared airstrike logic', (
+    tester,
+  ) async {
+    final l10n = lookupAppLocalizations(const Locale('zh'));
+    await tester.pumpWidget(
+      _app(
+        ParachuteRainEventScreen(
+          rtid: 'RTID(HeianNinjaEvent@CurrentLevel)',
+          levelFile: PvzLevelFile(objects: []),
+          onChanged: () {},
+          onBack: () {},
+          eventSubtitle: l10n.eventTitle_HeianNinjaZombieSpawnerProps,
+          eventObjClass: 'HeianNinjaZombieSpawnerProps',
+          onRequestZombieSelection: (_) {},
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+    await tester.tap(find.byIcon(Icons.help_outline));
+    await tester.pumpAndSettle();
+
+    expect(find.text(l10n.eventHelpHeianNinjaRainBody), findsOneWidget);
+    expect(find.text(l10n.eventHelpParachuteRainLogic), findsOneWidget);
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('Bass rain confirms before replacing an imported zombie', (
+    tester,
+  ) async {
+    const zombieId = 'custom_airdrop_zombie';
+    const objClass = 'BassRainZombieSpawnerProps';
+    final event = PvzObject(
+      aliases: ['BassRainEvent'],
+      objClass: objClass,
+      objData: {'SpiderZombieName': zombieId},
+    );
+    final l10n = lookupAppLocalizations(const Locale('zh'));
+    var changes = 0;
+    await tester.pumpWidget(
+      _app(
+        ParachuteRainEventScreen(
+          rtid: 'RTID(BassRainEvent@CurrentLevel)',
+          levelFile: PvzLevelFile(objects: [event]),
+          onChanged: () => changes++,
+          onBack: () {},
+          eventSubtitle: l10n.eventTitle_BassRainZombieSpawnerProps,
+          eventObjClass: objClass,
+          onRequestZombieSelection: (_) => fail('Zombie picker opened'),
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    final field = find.byType(DropdownButtonFormField<String>);
+    DropdownButton<String> dropdown() => tester.widget(
+      find.descendant(of: field, matching: find.byType(DropdownButton<String>)),
+    );
+    Future<void> chooseZombie(String id) async {
+      await tester.ensureVisible(field);
+      await tester.tap(field);
+      await tester.pumpAndSettle();
+      await tester.tap(
+        find
+            .byWidgetPredicate(
+              (widget) =>
+                  widget is DropdownMenuItem<String> && widget.value == id,
+            )
+            .hitTestable(),
+      );
+      await tester.pumpAndSettle();
+    }
+
+    expect(find.text('空降僵尸 (SpiderZombieName)'), findsOneWidget);
+    expect(find.text(zombieId), findsOneWidget);
+    expect(dropdown().value, zombieId);
+    expect(dropdown().items!.map((item) => item.value), contains(zombieId));
+    expect(changes, 0);
+
+    final message = find.byKey(const ValueKey('waveStartMessageField'));
+    await tester.ensureVisible(message);
+    await tester.enterText(message, 'WARNING');
+    await tester.pumpAndSettle();
+
+    expect((event.objData as Map)['SpiderZombieName'], zombieId);
+    expect((event.objData as Map)['WaveStartMessage'], 'WARNING');
+    expect(changes, 1);
+
+    const replacement = 'eighties_bass';
+    final dialog = find.byType(AlertDialog);
+    await chooseZombie(replacement);
+    expect(find.text(l10n.airdropZombieReplaceWarning), findsOneWidget);
+    expect(dropdown().value, zombieId);
+    expect((event.objData as Map)['SpiderZombieName'], zombieId);
+
+    await tester.tap(find.widgetWithText(TextButton, l10n.cancel));
+    await tester.pumpAndSettle();
+    expect(dialog, findsNothing);
+    expect(dropdown().value, zombieId);
+    expect(changes, 1);
+
+    await chooseZombie(replacement);
+    await tester.tapAt(const Offset(10, 10));
+    await tester.pumpAndSettle();
+    expect(dialog, findsNothing);
+    expect(dropdown().value, zombieId);
+    expect(changes, 1);
+
+    await chooseZombie(replacement);
+    await tester.tap(find.widgetWithText(FilledButton, l10n.continueAnyway));
+    await tester.pumpAndSettle();
+    expect(dialog, findsNothing);
+    expect(dropdown().value, replacement);
+    expect(
+      dropdown().items!.map((item) => item.value),
+      isNot(contains(zombieId)),
+    );
+    expect((event.objData as Map)['SpiderZombieName'], replacement);
+    expect((event.objData as Map)['WaveStartMessage'], 'WARNING');
+    expect(changes, 2);
+
+    await chooseZombie('future_jetpack');
+    expect(dialog, findsNothing);
+    expect((event.objData as Map)['SpiderZombieName'], 'future_jetpack');
+    expect(changes, 3);
   });
 
   testWidgets('rise mode hides column bounds and writes fixed defaults', (

@@ -15,6 +15,7 @@ import 'package:c_editor/data/zomboss_mech_action_utils.dart';
 import 'package:c_editor/data/zomboss_mech_l10n.dart';
 import 'package:c_editor/l10n/app_localizations.dart';
 import 'package:c_editor/screens/editor/others/zomboss_mech_action_selection_screen.dart';
+import 'package:c_editor/widgets/alias_input_validation.dart';
 import 'package:c_editor/widgets/alias_rename_dialog.dart';
 import 'package:c_editor/widgets/editor_components.dart';
 import 'package:c_editor/widgets/separated_option_picker_field.dart';
@@ -56,6 +57,7 @@ class _CustomZombossMechActionEditorScreenState
   late String _baseActionAlias;
   late TextEditingController _aliasCtrl;
   late bool _aliasManuallyEdited;
+  String? _aliasErrorText;
   late final PvzLevelFile _initialLevelSnapshot;
   late final Map<String, dynamic>? _initialPropsSnapshot;
   late final Map<String, dynamic> _initialDataSnapshot;
@@ -459,6 +461,14 @@ class _CustomZombossMechActionEditorScreenState
     String newAlias, {
     bool confirmRename = true,
   }) async {
+    final characterError = aliasCharacterValidationError(
+      AppLocalizations.of(context),
+      newAlias,
+    );
+    if (characterError != null) {
+      if (mounted) setState(() => _aliasErrorText = characterError);
+      return false;
+    }
     final trimmed = newAlias.trim();
     if (trimmed.isEmpty) return false;
     if (trimmed == _alias) {
@@ -507,6 +517,7 @@ class _CustomZombossMechActionEditorScreenState
     setState(() {
       _alias = trimmed;
       _aliasCtrl.text = trimmed;
+      _aliasErrorText = null;
       _syncObject();
     });
     return true;
@@ -703,7 +714,16 @@ class _CustomZombossMechActionEditorScreenState
 
   Future<String?> _saveAction() async {
     if (widget.existingRtid == null && _obj == null) {
-      final trimmed = _aliasCtrl.text.trim();
+      final raw = _aliasCtrl.text;
+      final characterError = aliasCharacterValidationError(
+        AppLocalizations.of(context),
+        raw,
+      );
+      if (characterError != null) {
+        setState(() => _aliasErrorText = characterError);
+        return null;
+      }
+      final trimmed = raw.trim();
       if (trimmed.isEmpty) return null;
       if (!ZombossMechActionUtils.isAliasAvailable(widget.levelFile, trimmed)) {
         await showAliasAlreadyTakenDialog(context);
@@ -946,8 +966,17 @@ class _CustomZombossMechActionEditorScreenState
                 ),
                 builder: (context, decoration) => TextFormField(
                   controller: _aliasCtrl,
-                  decoration: decoration,
-                  onChanged: (_) => _aliasManuallyEdited = true,
+                  decoration: decoration.copyWith(errorText: _aliasErrorText),
+                  onChanged: (value) {
+                    _aliasManuallyEdited = true;
+                    final nextError = aliasCharacterValidationError(
+                      l10n,
+                      value,
+                    );
+                    if (nextError != _aliasErrorText) {
+                      setState(() => _aliasErrorText = nextError);
+                    }
+                  },
                   onFieldSubmitted: _applyAlias,
                 ),
               ),

@@ -90,6 +90,7 @@ class PreviewDocumentSnapshot {
       layer.showChrome,
       layer.lawnRows,
       layer.lawnCols,
+      layer.initialLawnJson,
       ..._items(layer.items),
       layer.sections.length,
       for (final section in layer.sections) ...[

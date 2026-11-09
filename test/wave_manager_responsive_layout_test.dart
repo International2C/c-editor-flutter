@@ -125,4 +125,75 @@ void main() {
     );
     expect(tester.takeException(), isNull);
   });
+
+  testWidgets('runner-only wave manager warns when point spawning is enabled', (
+    tester,
+  ) async {
+    tester.view.devicePixelRatio = 1;
+    tester.view.physicalSize = const Size(500, 900);
+    addTearDown(tester.view.reset);
+
+    final level = PvzLevelFile(
+      objects: [
+        PvzObject(
+          aliases: const ['LevelDefinition'],
+          objClass: 'LevelDefinition',
+          objData: LevelDefinitionData(
+            modules: const [
+              'RTID(LevelEscalation@CurrentLevel)',
+              'RTID(NewWaves@CurrentLevel)',
+            ],
+          ).toJson(),
+        ),
+        PvzObject(
+          aliases: const ['LevelEscalation'],
+          objClass: 'LevelEscalationModuleProperties',
+          objData: LevelEscalationModuleData(
+            waveManagerProps: 'RTID(WaveManagerProps@CurrentLevel)',
+          ).toJson(),
+        ),
+        PvzObject(
+          aliases: const ['NewWaves'],
+          objClass: 'WaveManagerModuleProperties',
+          objData: WaveManagerModuleData().toJson(),
+        ),
+        PvzObject(
+          aliases: const ['WaveManagerProps'],
+          objClass: 'WaveManagerProperties',
+          objData: WaveManagerData(waves: [<String>[]]).toJson(),
+        ),
+      ],
+    );
+
+    await tester.pumpWidget(_app(level: level, themeMode: ThemeMode.light));
+    await tester.pumpAndSettle();
+
+    expect(
+      find.textContaining('provided by Escalation Spawning'),
+      findsOneWidget,
+    );
+    expect(
+      find.byKey(const ValueKey('waveManagerPropsFixButton')),
+      findsNothing,
+    );
+    final l10n = lookupAppLocalizations(const Locale('en'));
+    final warning = find.text(l10n.waveManagerPointsOverriddenByEscalation);
+    final toggle = find.byType(Switch);
+    expect(warning, findsNothing);
+
+    await tester.ensureVisible(toggle);
+    await tester.tap(toggle);
+    await tester.pumpAndSettle();
+    expect(warning, findsOneWidget);
+    expect(find.text(l10n.pointSpawningEnabledDesc), findsNothing);
+    expect(
+      tester.getTopLeft(warning).dy,
+      greaterThan(tester.getBottomLeft(toggle).dy),
+    );
+
+    await tester.tap(toggle);
+    await tester.pumpAndSettle();
+    expect(warning, findsNothing);
+    expect(tester.takeException(), isNull);
+  });
 }

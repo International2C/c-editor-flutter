@@ -6,6 +6,7 @@ import 'package:c_editor/utils/selection_search.dart';
 import 'package:c_editor/utils/selection_view_memory.dart';
 import 'package:c_editor/widgets/editor_components.dart';
 import 'package:c_editor/widgets/rift_theme_widgets.dart';
+import 'package:c_editor/widgets/selection_list_confirmation.dart';
 
 /// Multi-select picker for rift themes. Tap to toggle; confirm with the check button.
 class RiftThemeSelectionScreen extends StatefulWidget {
@@ -132,97 +133,103 @@ class _RiftThemeSelectionScreenState extends State<RiftThemeSelectionScreen> {
           onClear: () => _setSearchQuery(''),
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () =>
-            widget.onThemesConfirmed(List<String>.from(_selectedIds)),
-        backgroundColor: widget.accentColor,
-        foregroundColor: Colors.white,
-        tooltip: l10n?.confirm ?? 'Confirm',
-        child: const Icon(Icons.check),
-      ),
-      body: themes.isEmpty
-          ? Center(
-              child: Padding(
-                padding: const EdgeInsets.all(24),
-                child: Text(
-                  l10n?.riftThemeNoSearchResults ?? 'No matching themes',
-                  style: theme.textTheme.bodyLarge?.copyWith(
-                    color: theme.colorScheme.onSurfaceVariant,
+      body: SelectionListConfirmation(
+        controller: _scrollController,
+        itemCount: themes.length,
+        confirmation: FloatingActionButton(
+          onPressed: () =>
+              widget.onThemesConfirmed(List<String>.from(_selectedIds)),
+          backgroundColor: widget.accentColor,
+          foregroundColor: Colors.white,
+          tooltip: l10n?.confirm ?? 'Confirm',
+          child: const Icon(Icons.check),
+        ),
+        builder: (context, listPadding, lastItemKey) => themes.isEmpty
+            ? Center(
+                child: Padding(
+                  padding: const EdgeInsets.all(24),
+                  child: Text(
+                    l10n?.riftThemeNoSearchResults ?? 'No matching themes',
+                    style: theme.textTheme.bodyLarge?.copyWith(
+                      color: theme.colorScheme.onSurfaceVariant,
+                    ),
+                    textAlign: TextAlign.center,
                   ),
-                  textAlign: TextAlign.center,
                 ),
-              ),
-            )
-          : ListView.builder(
-              controller: _scrollController,
-              padding: const EdgeInsets.all(16),
-              itemCount: themes.length,
-              itemBuilder: (context, index) {
-                final id = themes[index];
-                final isSelected = _selectedIds.contains(id);
-                final displayName = _themeLabel(id);
+              )
+            : ListView.builder(
+                controller: _scrollController,
+                padding: listPadding,
+                itemCount: themes.length,
+                itemBuilder: (context, index) {
+                  final id = themes[index];
+                  final isSelected = _selectedIds.contains(id);
+                  final displayName = _themeLabel(id);
 
-                return Card(
-                  margin: const EdgeInsets.only(bottom: 8),
-                  color: isSelected
-                      ? widget.accentColor.withValues(alpha: 0.08)
-                      : null,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                    side: BorderSide(
-                      color: isSelected
-                          ? widget.accentColor
-                          : theme.dividerColor.withValues(alpha: 0.3),
-                      width: isSelected ? 2 : 1,
-                    ),
-                  ),
-                  child: InkWell(
-                    onTap: () => _toggle(id),
-                    onLongPress: () => showRiftThemeDetailsDialog(context, id),
-                    onSecondaryTap: () =>
-                        showRiftThemeDetailsDialog(context, id),
-                    borderRadius: BorderRadius.circular(12),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 16,
-                        vertical: 12,
+                  return Card(
+                    key: index == themes.length - 1 ? lastItemKey : null,
+                    margin: const EdgeInsets.only(bottom: 8),
+                    color: isSelected
+                        ? widget.accentColor.withValues(alpha: 0.08)
+                        : null,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      side: BorderSide(
+                        color: isSelected
+                            ? widget.accentColor
+                            : theme.dividerColor.withValues(alpha: 0.3),
+                        width: isSelected ? 2 : 1,
                       ),
-                      child: Row(
-                        children: [
-                          RiftThemeIcon(themeId: id),
-                          const SizedBox(width: 16),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  displayName,
-                                  style: theme.textTheme.titleSmall?.copyWith(
-                                    fontWeight: FontWeight.bold,
+                    ),
+                    child: InkWell(
+                      onTap: () => _toggle(id),
+                      onLongPress: () =>
+                          showRiftThemeDetailsDialog(context, id),
+                      onSecondaryTap: () =>
+                          showRiftThemeDetailsDialog(context, id),
+                      borderRadius: BorderRadius.circular(12),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 16,
+                          vertical: 12,
+                        ),
+                        child: Row(
+                          children: [
+                            RiftThemeIcon(themeId: id),
+                            const SizedBox(width: 16),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    displayName,
+                                    style: theme.textTheme.titleSmall?.copyWith(
+                                      fontWeight: FontWeight.bold,
+                                    ),
                                   ),
-                                ),
-                                const SizedBox(height: 2),
-                                Text(
-                                  id,
-                                  style: theme.textTheme.bodySmall?.copyWith(
-                                    color: theme.colorScheme.onSurfaceVariant,
+                                  const SizedBox(height: 2),
+                                  Text(
+                                    id,
+                                    style: theme.textTheme.bodySmall?.copyWith(
+                                      color: theme.colorScheme.onSurfaceVariant,
+                                    ),
                                   ),
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
-                          ),
-                          Checkbox(
-                            value: isSelected,
-                            activeColor: widget.accentColor,
-                            onChanged: (_) => _toggle(id),
-                          ),
-                        ],
+                            Checkbox(
+                              value: isSelected,
+                              activeColor: widget.accentColor,
+                              onChanged: (_) => _toggle(id),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-                );
-              },
-            ),
+                  );
+                },
+              ),
+      ),
     );
   }
 }

@@ -1,5 +1,6 @@
 import 'package:c_editor/data/custom_stage_level_utils.dart';
 import 'package:c_editor/data/music_suffix_catalog.dart';
+import 'package:c_editor/data/music_type_catalog.dart';
 import 'package:c_editor/data/pvz_models.dart';
 import 'package:c_editor/data/repository/custom_stage_preset_repository.dart';
 import 'package:c_editor/data/repository/stage_catalog_repository.dart';
@@ -50,6 +51,70 @@ void main() {
     expect(MusicSuffixCatalog.orderedCodes, isNot(contains('circus')));
   });
 
+  test('music suffixes use guide casing and omit the empty default option', () {
+    final codes = MusicSuffixCatalog.orderedCodes;
+    expect(codes, isNot(contains('')));
+    expect(codes, containsAll(const ['modern', 'Mausoleum', 'Ghostdom']));
+    expect(codes, isNot(contains('Modern')));
+    expect(codes, isNot(contains('mausoleum')));
+    expect(codes, isNot(contains('ghostdom')));
+    expect(
+      codes.where((code) => MusicTypeCatalog.forSuffix(code) == null),
+      isEmpty,
+    );
+    expect(MusicSuffixCatalog.canonicalCode('Modern'), 'modern');
+    expect(MusicSuffixCatalog.canonicalCode('mausoleum'), 'Mausoleum');
+    expect(MusicSuffixCatalog.canonicalCode('GHOSTDOM'), 'Ghostdom');
+    expect(MusicSuffixCatalog.resourceKey(''), isEmpty);
+    expect(
+      MusicSuffixCatalog.resourceKey('mausoleum'),
+      'musicSuffix_Mausoleum',
+    );
+    expect(
+      MusicSuffixCatalog.iconAsset('ghostdom'),
+      'assets/images/round_icons/Stage_Underground.webp',
+    );
+  });
+
+  for (final casing in const [
+    (legacy: 'Modern', canonical: 'modern'),
+    (legacy: 'mausoleum', canonical: 'Mausoleum'),
+    (legacy: 'ghostdom', canonical: 'Ghostdom'),
+  ]) {
+    testWidgets(
+      'legacy ${casing.legacy} casing highlights the canonical tile',
+      (tester) async {
+        await tester.pumpWidget(
+          MaterialApp(
+            home: MusicSuffixSelectionScreen(
+              stateBucketId: 'legacy-${casing.legacy}',
+              currentCodename: casing.legacy,
+              onCodenameSelected: (_) {},
+              onBack: () {},
+            ),
+          ),
+        );
+        await tester.pump();
+
+        await tester.enterText(find.byType(TextField), casing.canonical);
+        await tester.pump();
+        final tileCodeFinder = find.descendant(
+          of: find.byType(Card),
+          matching: find.text(casing.canonical),
+        );
+        final cardFinder = find.ancestor(
+          of: tileCodeFinder,
+          matching: find.byType(Card),
+        );
+        expect(cardFinder, findsOneWidget);
+        final card = tester.widget<Card>(cardFinder);
+        final theme = Theme.of(tester.element(cardFinder));
+        expect(card.color, theme.colorScheme.primaryContainer);
+        expect(tester.takeException(), isNull);
+      },
+    );
+  }
+
   test('Roman music entries use the requested order and their own icons', () {
     final codes = MusicSuffixCatalog.orderedCodes;
     expect(codes[codes.indexOf('TeamBoss') + 1], 'TeamBossRoman');
@@ -91,6 +156,7 @@ void main() {
       ),
     );
     await tester.pump();
+    expect(find.text('—'), findsNothing);
     expect(tester.takeException(), isNull);
   });
 

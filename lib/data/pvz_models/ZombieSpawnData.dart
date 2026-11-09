@@ -13,8 +13,15 @@ class ZombieSpawnData extends PvzModel {
   int? level;
   int? row;
 
-  /// Direction zombie comes from: "left" or "right". Null = right (game default).
+  /// Spawn side shared by ordinary and underwater spawners: right (default),
+  /// left, or random (chosen independently for each zombie at creation).
   String? direction;
+
+  static bool entersFromLeft(String? direction) => direction == 'left';
+
+  /// Omit the default right side; random is a real string, not editor RNG.
+  static String? directionForEntrySide(bool fromLeft, {bool random = false}) =>
+      random ? 'random' : (fromLeft ? 'left' : null);
 
   /// Ztalemate Escape perk aliases (e.g. ZTSpeed1, ZTAttack1).
   List<String>? titles;
@@ -37,7 +44,8 @@ class ZombieSpawnData extends PvzModel {
       direction: clearDirection ? null : (direction ?? this.direction),
       titles: clearTitles
           ? null
-          : (titles ?? (this.titles == null ? null : List<String>.from(this.titles!))),
+          : (titles ??
+                (this.titles == null ? null : List<String>.from(this.titles!))),
     );
   }
 

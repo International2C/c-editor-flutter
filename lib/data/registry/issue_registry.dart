@@ -19,6 +19,9 @@ import 'package:c_editor/l10n/resource_names.dart';
 /// the yellow [EditorWarningBanner] styling.
 enum LevelIssueSeverity { warning, error }
 
+/// Stable issue id for the Pea Symbiosis recommendation.
+const kPeaSymbiosisDisableRecommendedIssueId = 'peaSymbiosisDisableRecommended';
+
 /// One entry of `LevelDefinition.Modules`, resolved to its object class.
 class LevelModuleRef {
   const LevelModuleRef({
@@ -129,6 +132,7 @@ class LevelIssueContext {
 
   Set<String>? _plantIds;
   Map<String, List<String>>? _plantsNeedingMissingModules;
+  Set<String>? _enabledPeaPlantIds;
 
   LevelDefinitionData? get levelDef => parsed.levelDef;
 
@@ -152,6 +156,15 @@ class LevelIssueContext {
       RtidParser.parse(levelDef?.stageModule ?? '')?.alias ?? '';
 
   Set<String> get plantIds => _plantIds ??= _collectPlantIds();
+
+  /// Whether any plant card carrying the authoritative `pea` gameplay tag can
+  /// actually be used through the currently mounted module graph.
+  bool get hasEnabledPeaPlant => enabledPeaPlantIds.isNotEmpty;
+
+  /// Plant ids carrying the authoritative `pea` gameplay tag that can
+  /// actually be used through the currently mounted module graph.
+  Set<String> get enabledPeaPlantIds =>
+      _enabledPeaPlantIds ??= _computeEnabledPeaPlantIds();
 
   /// Missing companion modules required by plants in the level
   /// (module objClass → plant ids).
@@ -180,6 +193,192 @@ class LevelIssueContext {
       }
     }
     return warnings.map((k, v) => MapEntry(k, v.toList()..sort()));
+  }
+
+  Set<String> _computeEnabledPeaPlantIds() {
+    final repo = PlantRepository();
+    if (!repo.isLoaded) return <String>{};
+    final enabled = <String>{};
+
+    final objectsByAlias = <String, PvzObject>{};
+    for (final object in levelFile.objects) {
+      for (final alias in object.aliases ?? const <String>[]) {
+        objectsByAlias[alias] = object;
+      }
+    }
+
+    final queue = <({String key, String objClass, dynamic objData})>[
+      for (final module in modules)
+        (
+          key:
+              '${module.isCurrentLevel ? 'CurrentLevel' : 'LevelModules'}:'
+              '${module.alias}',
+          objClass: module.objClass,
+          objData: module.objData,
+        ),
+    ];
+    final visited = <String>{};
+    for (var index = 0; index < queue.length; index++) {
+      final node = queue[index];
+      if (!visited.add(node.key)) continue;
+
+      if (node.objClass == 'SeedBankProperties') {
+        enabled.addAll(_seedBankPeaPlants(node.objData, repo));
+      } else {
+        enabled.addAll(
+          _moduleDataPlayablePeaPlants(node.objClass, node.objData, repo),
+        );
+      }
+
+      final referencedAliases = <String>{};
+      _collectCurrentLevelAliases(node.objData, referencedAliases);
+      for (final alias in referencedAliases) {
+        final object = objectsByAlias[alias];
+        if (object == null) continue;
+        queue.add((
+          key: 'CurrentLevel:$alias',
+          objClass: object.objClass,
+          objData: object.objData,
+        ));
+      }
+    }
+    return enabled;
+  }
+
+  static Set<String> _seedBankPeaPlants(dynamic rawData, PlantRepository repo) {
+    if (rawData is! Map) return <String>{};
+    final data = SeedBankData.fromJson(Map<String, dynamic>.from(rawData));
+    final isLegacyGridItemMode = data.presetPlantList.any(
+      kSeedBankGridItemIds.contains,
+    );
+    if (data.zombieMode == true ||
+        data.gridItemMode == true ||
+        isLegacyGridItemMode) {
+      return <String>{};
+    }
+
+    final blacklist = data.plantBlackList
+        .map(_normalizePlantId)
+        .whereType<String>()
+        .map((id) => id.toLowerCase())
+        .toSet();
+    String? allowedPeaId(String rawId) {
+      final id = _normalizePlantId(rawId);
+      if (id == null ||
+          blacklist.contains(id.toLowerCase()) ||
+          !repo.hasPlantAttributeTag(id, 'pea')) {
+        return null;
+      }
+      return id;
+    }
+
+    if (data.selectionMethod.toLowerCase() == 'preset') {
+      return data.presetPlantList.map(allowedPeaId).whereType<String>().toSet();
+    }
+    if (data.plantWhiteList.isNotEmpty) {
+      return data.plantWhiteList.map(allowedPeaId).whereType<String>().toSet();
+    }
+    return {
+      for (final plant in repo.allPlants)
+        if (plant.hasAttributeTag('pea') &&
+            !blacklist.contains(plant.id.toLowerCase()))
+          plant.id,
+    };
+  }
+
+  static Set<String> _moduleDataPlayablePeaPlants(
+    String objClass,
+    dynamic data,
+    PlantRepository repo,
+  ) {
+    final plantIds = <String>{};
+    _collectPlayablePlantIds(objClass, data, plantIds);
+    return {
+      for (final id in plantIds)
+        if (repo.hasPlantAttributeTag(id, 'pea')) id,
+    };
+  }
+
+  static void _collectPlayablePlantIds(
+    String objClass,
+    dynamic data,
+    Set<String> out,
+  ) {
+    if (data is List) {
+      for (final value in data) {
+        _collectPlayablePlantIds(objClass, value, out);
+      }
+      return;
+    }
+    if (data is! Map) return;
+
+    for (final entry in data.entries) {
+      final key = entry.key;
+      final value = entry.value;
+      if (key == 'InitialPlantList' && value is List) {
+        for (final item in value.whereType<Map>()) {
+          _addPlantId(item['PlantType'], out);
+        }
+      } else if (key == 'SeedRains' && value is List) {
+        for (final item in value.whereType<Map>()) {
+          _addPlantId(item['PlantTypeName'], out);
+        }
+      } else if (key == 'SpawnPlantName') {
+        _addPlantId(value, out);
+      } else if (objClass == 'ModifyConveyorWaveActionProps' &&
+          key == 'Add' &&
+          value is List) {
+        for (final item in value.whereType<Map>()) {
+          _addPlantId(item['Type'], out, requirePlantTypeRtid: true);
+        }
+      }
+      _collectPlayablePlantIds(objClass, value, out);
+    }
+  }
+
+  static void _addPlantId(
+    dynamic value,
+    Set<String> out, {
+    bool requirePlantTypeRtid = false,
+  }) {
+    if (value is List) {
+      for (final item in value) {
+        _addPlantId(item, out, requirePlantTypeRtid: requirePlantTypeRtid);
+      }
+      return;
+    }
+    if (value is! String || value.trim().isEmpty) return;
+    final info = RtidParser.parse(value);
+    if (requirePlantTypeRtid && info != null && info.source != 'PlantTypes') {
+      return;
+    }
+    final id = _normalizePlantId(value);
+    if (id != null) out.add(id);
+  }
+
+  static String? _normalizePlantId(String raw) {
+    final value = raw.trim();
+    if (value.isEmpty) return null;
+    final info = RtidParser.parse(value);
+    if (info == null) return value;
+    return info.source == 'PlantTypes' ? info.alias : null;
+  }
+
+  static void _collectCurrentLevelAliases(dynamic data, Set<String> out) {
+    if (data is String) {
+      final info = RtidParser.parse(data);
+      if (info?.source == 'CurrentLevel') out.add(info!.alias);
+      return;
+    }
+    if (data is Map) {
+      for (final value in data.values) {
+        _collectCurrentLevelAliases(value, out);
+      }
+    } else if (data is List) {
+      for (final value in data) {
+        _collectCurrentLevelAliases(value, out);
+      }
+    }
   }
 
   static void _collectPlantIdsFromDynamic(dynamic data, Set<String> out) {
@@ -345,6 +544,7 @@ class LevelIssueRegistry {
   static const zombossBattleModule = 'ZombossBattleModuleProperties';
   static const seeingStarsModule = 'PVZ1SeeingStarsModuleProperties';
   static const statueMazeModule = 'StatueMazeModuleProperties';
+  static const zombieWinCondition = 'ZombiesAteYourBrainsProperties';
   static const zombiesDeadWinCon = 'ZombiesDeadWinConProperties';
   static const bronzeDeadWinCon = 'BronzeDeadWinConProperties';
 
@@ -466,6 +666,13 @@ class LevelIssueRegistry {
       conflictingClasses: {'WaveGeneratorProperties', 'WaveManagerProperties'},
       descriptionKey: 'conflictDesc_WaveGeneratorWaveManager',
     ),
+    ModuleConflictRule(
+      conflictingClasses: {
+        'WaveGeneratorProperties',
+        'LevelEscalationModuleProperties',
+      },
+      descriptionKey: 'conflictDesc_WaveGeneratorLevelEscalation',
+    ),
   ];
 
   static final List<LevelIssueRule> rules = [
@@ -537,6 +744,37 @@ class LevelIssueRegistry {
     ),
 
     // --- Advisories ---
+    LevelIssueRule(
+      id: kPeaSymbiosisDisableRecommendedIssueId,
+      isActive: (ctx) =>
+          ctx.levelDef?.disablePeavine != true && ctx.hasEnabledPeaPlant,
+      title: (_, l10n) => l10n.peaSymbiosisWarningTitle,
+      message: (_, l10n) => l10n.peaSymbiosisWarning,
+      bulletPoints: (context, l10n, ctx) {
+        final repo = PlantRepository();
+        final enabled = ctx.enabledPeaPlantIds;
+        final ordered = [
+          for (final plant in repo.allPlants)
+            if (enabled.contains(plant.id)) plant.id,
+          ...enabled.where((id) => !repo.allPlants.any((p) => p.id == id)),
+        ];
+        final names = ordered
+            .map((id) => _plantDisplayName(context, repo, id))
+            .toSet()
+            .toList();
+        final languageCode = Localizations.localeOf(context).languageCode;
+        final separator = languageCode == 'zh' ? '、' : ', ';
+        return [l10n.peaSymbiosisAffectedPlants(names.join(separator))];
+      },
+    ),
+    LevelIssueRule(
+      id: 'underwaterZombieWinConditionWarning',
+      isActive: (ctx) =>
+          ctx.hasModule(zombieWinCondition) &&
+          LevelParser.usesDeepSeaBackground(ctx.levelDef, ctx.levelFile),
+      title: (_, l10n) => l10n.underwaterZombieWinConditionWarningTitle,
+      message: (_, l10n) => l10n.underwaterZombieWinConditionWarning,
+    ),
     LevelIssueRule(
       id: 'camelMinigameChooserConflict',
       severity: LevelIssueSeverity.error,
@@ -718,6 +956,14 @@ class LevelIssueRegistry {
       message: (_, l10n) => l10n.tunnelExpeditionCompatibilityWarningBody,
     ),
     LevelIssueRule(
+      id: 'speedUpTileCompatibilityWarning',
+      isActive: (ctx) =>
+          ctx.hasModule('SpeedUpTileModuleProperties') &&
+          (ctx.hasTunnelDefend || ctx.hasExpeditionTiles),
+      title: (_, l10n) => l10n.tunnelExpeditionCompatibilityWarningTitle,
+      message: (_, l10n) => l10n.speedUpTileCompatibilityWarning,
+    ),
+    LevelIssueRule(
       id: 'expeditionTilesUnderwaterMismatch',
       severity: LevelIssueSeverity.error,
       isActive: (ctx) =>
@@ -875,13 +1121,19 @@ class LevelIssueRegistry {
     );
     final isEvilDave = existing.contains('EvilDaveProperties');
     final isSeeingStars = existing.contains(seeingStarsModule);
+    final usesUnderwaterWorldAppearance = LevelParser.usesDeepSeaBackground(
+      ctx.levelDef,
+      ctx.levelFile,
+    );
 
     final missing = <String>[];
     if (!existing.contains('CustomLevelModuleProperties')) {
       missing.add('CustomLevelModuleProperties');
     }
-    if (!existing.contains('ZombiesAteYourBrainsProperties') && !isEvilDave) {
-      missing.add('ZombiesAteYourBrainsProperties');
+    if (!existing.contains(zombieWinCondition) &&
+        !isEvilDave &&
+        !usesUnderwaterWorldAppearance) {
+      missing.add(zombieWinCondition);
     }
     if (!existing.any((cls) => cls.endsWith('WinConProperties')) &&
         !isEvilDave &&
@@ -993,6 +1245,8 @@ class LevelIssueRegistry {
         return l10n.conflictDesc_WaveGeneratorWaveManagerModule;
       case 'conflictDesc_WaveGeneratorWaveManager':
         return l10n.conflictDesc_WaveGeneratorWaveManager;
+      case 'conflictDesc_WaveGeneratorLevelEscalation':
+        return l10n.conflictDesc_WaveGeneratorLevelEscalation;
       default:
         return key;
     }

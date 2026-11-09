@@ -12,6 +12,8 @@ class StartupLoadingScreen extends StatelessWidget {
     required this.locale,
     required this.themeMode,
     this.loadingCategory,
+    this.pluginResourcesCompleted,
+    this.pluginResourcesTotal,
   });
 
   final double progress;
@@ -19,9 +21,14 @@ class StartupLoadingScreen extends StatelessWidget {
   final ThemeMode themeMode;
   final BootstrapLoadingCategory? loadingCategory;
 
+  final int? pluginResourcesCompleted;
+  final int? pluginResourcesTotal;
+
   static const _barHeight = 6.0;
   static const _labelGap = 8.0;
-  static const _labelReserve = 40.0;
+  /// Widest percent strings we expect with [toStringAsFixed(2)]; used so the
+  /// bar width stays fixed while the live label text changes during load.
+  static const _percentWidthSamples = ['100.00%', '88.88%', '00.00%'];
 
   @override
   Widget build(BuildContext context) {
@@ -40,27 +47,29 @@ class StartupLoadingScreen extends StatelessWidget {
           final isDark = theme.brightness == Brightness.dark;
           final accent = isDark ? pvzGreenDark : pvzGreenLight;
           final clamped = progress.clamp(0.0, 1.0);
-          final percentLabel = '${(clamped * 100).round()}%';
+          final percentLabel = '${(clamped * 100).toStringAsFixed(2)}%';
           final labelStyle = TextStyle(
             fontWeight: FontWeight.w600,
             fontSize: 13,
             color: accent,
           );
           final rowHeight = math.max(20.0, labelStyle.fontSize! + 8);
-          final barTop = (rowHeight - _barHeight) / 2;
-          final categoryLabel = loadingCategory?.loadingLabel(l10n);
+          final categoryLabel =
+              loadingCategory == BootstrapLoadingCategory.plugins &&
+                  pluginResourcesCompleted != null &&
+                  pluginResourcesTotal != null
+              ? l10n.startupPluginResources(
+                  pluginResourcesCompleted!,
+                  pluginResourcesTotal!,
+                )
+              : loadingCategory?.loadingLabel(l10n);
 
           return Scaffold(
             body: Center(
               child: ConstrainedBox(
                 constraints: const BoxConstraints(maxWidth: 320),
                 child: Padding(
-                  padding: const EdgeInsets.fromLTRB(
-                    24,
-                    24,
-                    24 + _labelReserve,
-                    24,
-                  ),
+                  padding: const EdgeInsets.all(24),
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.center,
@@ -86,37 +95,58 @@ class StartupLoadingScreen extends StatelessWidget {
                       const SizedBox(height: 24),
                       LayoutBuilder(
                         builder: (context, constraints) {
-                          final barWidth = constraints.maxWidth;
+                          final textDirection = Directionality.of(context);
+                          final textScaler = MediaQuery.textScalerOf(context);
+                          var labelWidth = 0.0;
+                          for (final sample in _percentWidthSamples) {
+                            final painter = TextPainter(
+                              text: TextSpan(text: sample, style: labelStyle),
+                              textDirection: textDirection,
+                              textScaler: textScaler,
+                            )..layout();
+                            labelWidth = math.max(labelWidth, painter.width);
+                          }
+                          // Balance the trailing percent with an equal leading
+                          // gap so the bar stays centered under the logo.
+                          // Clamp when large text scale would otherwise crush
+                          // the bar to zero width.
+                          const minBarWidth = 32.0;
+                          final maxSide =
+                              ((constraints.maxWidth -
+                                          (2 * _labelGap) -
+                                          minBarWidth) /
+                                      2)
+                                  .clamp(0.0, double.infinity);
+                          final side = math.min(labelWidth, maxSide);
 
-                          return SizedBox(
-                            width: barWidth,
-                            height: rowHeight,
-                            child: Stack(
-                              clipBehavior: Clip.none,
+                          return ConstrainedBox(
+                            constraints: BoxConstraints(minHeight: rowHeight),
+                            child: Row(
                               children: [
-                                Positioned(
-                                  left: 0,
-                                  width: barWidth,
-                                  top: barTop,
-                                  height: _barHeight,
+                                SizedBox(width: side),
+                                const SizedBox(width: _labelGap),
+                                Expanded(
                                   child: LinearProgressIndicator(
                                     value: progress > 0 ? clamped : null,
                                     minHeight: _barHeight,
                                     borderRadius: BorderRadius.circular(999),
                                     color: accent,
-                                    backgroundColor:
-                                        accent.withValues(alpha: 0.18),
+                                    backgroundColor: accent.withValues(
+                                      alpha: 0.18,
+                                    ),
                                   ),
                                 ),
-                                Positioned(
-                                  left: barWidth + _labelGap,
-                                  top: 0,
-                                  height: rowHeight,
-                                  child: Align(
-                                    alignment: Alignment.centerLeft,
+                                const SizedBox(width: _labelGap),
+                                SizedBox(
+                                  width: side,
+                                  child: FittedBox(
+                                    fit: BoxFit.scaleDown,
+                                    alignment: Alignment.centerRight,
                                     child: Text(
                                       percentLabel,
                                       style: labelStyle,
+                                      maxLines: 1,
+                                      softWrap: false,
                                     ),
                                   ),
                                 ),

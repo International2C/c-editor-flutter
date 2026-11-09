@@ -6,7 +6,7 @@ Level Editor for Plants vs. Zombies 2 Chinese
 
 ## Downloads
 
-Release builds are published on [GitHub Releases](https://github.com/CyberSteve777/c-editor-flutter/releases). Beta builds are available as workflow artifacts in [GitHub Actions](https://github.com/CyberSteve777/c-editor-flutter/actions).
+Release builds are published on [GitHub Releases](https://github.com/International2C/c-editor-flutter/releases). Beta builds are available as workflow artifacts in [GitHub Actions](https://github.com/International2C/c-editor-flutter/actions).
 
 C-Editor can also be accessed from web:
 
@@ -27,7 +27,7 @@ C-Editor can also be accessed from web:
 4. Clone this repo and install dependencies:
 
 ```bash
-git clone https://github.com/CyberSteve777/c-editor-flutter.git
+git clone https://github.com/International2C/c-editor-flutter.git
 cd c-editor-flutter
 flutter pub get
 ```

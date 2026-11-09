@@ -131,6 +131,48 @@ abstract final class StageCatalogRepository {
     return out;
   }
 
+  /// Resolve split background textures, including defaults from the source
+  /// stage's schema rather than retaining textures from the previous lawn.
+  static Map<String, dynamic> backgroundTextures(String group, String prefix) {
+    const keys = [
+      'BackgroundImageLeft',
+      'BackgroundImageMiddle',
+      'BackgroundImageRight',
+    ];
+    for (final section in _sections) {
+      for (final stage in section.implementations) {
+        final effective = {
+          for (final field in section.fields) field.name: field.defaultValue,
+          ...stage.objdata,
+        };
+        if (effective['BackgroundResourceGroup'] != group ||
+            (prefix.isNotEmpty &&
+                (effective['BackgroundImagePrefix'] ?? '') != prefix)) {
+          continue;
+        }
+        return {
+          for (final key in keys)
+            key:
+                stage.objdata[key] ??
+                section.fields
+                    .where((f) => f.name == key)
+                    .firstOrNull
+                    ?.defaultValue ??
+                (key == 'BackgroundImageLeft'
+                    ? 'TEXTURE_LEFT'
+                    : key == 'BackgroundImageRight'
+                    ? 'TEXTURE_RIGHT'
+                    : 'TEXTURE'),
+        };
+      }
+    }
+    return {
+      'BackgroundImageLeft': 'TEXTURE_LEFT',
+      'BackgroundImageMiddle': 'TEXTURE',
+      'BackgroundImageRight': 'TEXTURE_RIGHT',
+    };
+  }
+
   static StageBaseOption? stageBaseOptionForObjdata({
     required String objclass,
     required Map<String, dynamic> objdata,

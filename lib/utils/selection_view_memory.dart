@@ -9,6 +9,7 @@ class SelectionViewMemory {
   double scrollOffset = 0;
   double tagScrollOffset = 0;
   final Map<String, Object?> filters = <String, Object?>{};
+  final Map<String, double> scrollOffsets = <String, double>{};
 }
 
 abstract final class SelectionViewMemoryStore {

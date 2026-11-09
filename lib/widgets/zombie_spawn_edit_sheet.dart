@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:c_editor/l10n/app_localizations.dart';
 import 'package:c_editor/widgets/editor_components.dart';
 import 'package:c_editor/widgets/zombie_ztalemate_perks_editor.dart';
+import 'package:c_editor/widgets/zombie_entry_side_fields.dart';
 
 /// Which fields appear in a zombie spawn configuration bottom sheet.
 class ZombieSpawnEditSheetOptions {
@@ -36,8 +37,8 @@ Future<void> showZombieSpawnEditSheet({
   ValueChanged<int>? onRowChanged,
   int levelValue = 0,
   ValueChanged<int>? onLevelChanged,
-  bool fromLeft = false,
-  ValueChanged<bool>? onDirectionChanged,
+  String? direction,
+  ValueChanged<String?>? onDirectionChanged,
   List<String> titles = const [],
   ValueChanged<List<String>>? onTitlesChanged,
   VoidCallback? onCopy,
@@ -52,7 +53,7 @@ Future<void> showZombieSpawnEditSheet({
     builder: (sheetContext) {
       var localRow = rowValue;
       var localLevel = levelValue;
-      var localFromLeft = fromLeft;
+      var localDirection = direction;
       var localTitles = List<String>.from(titles);
 
       return StatefulBuilder(
@@ -164,11 +165,11 @@ Future<void> showZombieSpawnEditSheet({
                   ],
                   if (options.showDirection && onDirectionChanged != null) ...[
                     const SizedBox(height: 12),
-                    SwitchListTile(
-                      title: Text(l10n?.zombieFromLeft ?? 'From left'),
-                      value: localFromLeft,
+                    ZombieEntrySideFields(
+                      key: const ValueKey('zombieEntrySide'),
+                      direction: localDirection,
                       onChanged: (v) {
-                        setModalState(() => localFromLeft = v);
+                        setModalState(() => localDirection = v);
                         onDirectionChanged(v);
                       },
                     ),
@@ -208,8 +209,9 @@ Future<void> showZombieSpawnEditSheet({
                           Expanded(
                             child: FilledButton.icon(
                               style: FilledButton.styleFrom(
-                                backgroundColor:
-                                    Theme.of(context).colorScheme.error,
+                                backgroundColor: Theme.of(
+                                  context,
+                                ).colorScheme.error,
                               ),
                               onPressed: () => onDelete(sheetContext),
                               icon: const Icon(Icons.delete),

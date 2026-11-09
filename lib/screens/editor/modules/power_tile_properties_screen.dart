@@ -679,6 +679,7 @@ class _CellEditDialogState extends State<_CellEditDialog> {
     final accent = theme.colorScheme.primary;
 
     return AlertDialog(
+    constraints: const BoxConstraints.tightFor(width: 560),
       title: Text(l10n?.powerTileDialogEditCell ?? 'Edit cell'),
       content: SingleChildScrollView(
         child: Column(

@@ -4,6 +4,7 @@
       "objclass": "LevelDefinition",
       "objdata": {
         "Description": "本关为自选卡示例关",
+        "DisablePeavine": true,
         "LevelNumber": 2,
         "Loot": "RTID(DefaultLoot@LevelModules)",
         "Modules": [

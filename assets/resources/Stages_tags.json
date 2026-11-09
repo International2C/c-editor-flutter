@@ -51,8 +51,7 @@
   { "alias": "SpringNightStage", "type": "seasons", "iconName": "Stage_SpringNight.webp" },
   { "alias": "SummerDaylightStage", "type": "seasons", "iconName": "Stage_SummerDaylight.webp" },
   { "alias": "SummerNightStage", "type": "seasons", "iconName": "Stage_SummerNight.webp" },
-  { "alias": "AutumnEarlyStage", "type": "seasons", "iconName": "Stage_Autumn.webp" },
-  { "alias": "AutumnLateStage", "type": "seasons", "iconName": "Stage_Autumn.webp" },
+  { "alias": "AutumnLateStage", "type": "seasons", "iconName": "Stage_AutumnLate.webp" },
   { "alias": "SnowModernStage", "type": "seasons", "iconName": "Stage_SnowModern.webp" },
   { "alias": "SnowNightStage", "type": "seasons", "iconName": "Stage_SnowNight.webp" },
   { "alias": "SnowRoofStage", "type": "seasons", "iconName": "Stage_SnowRoof.webp" },
@@ -70,6 +69,6 @@
   { "alias": "WhackAMoleStage", "type": "special", "iconName": "Stage_WhackAMole.webp" },
   { "alias": "OverwhelmStage", "type": "special", "iconName": "Stage_CLYSE.webp" },
   { "alias": "OverwhelmSnowModernStage", "type": "special", "iconName": "Stage_SnowModern.webp" },
-  { "alias": "OverwhelmSnowRoofStage", "type": "special", "iconName": "Stage_SnowRoof.webp" },
-  { "alias": "OverwhelmSnowNightStage", "type": "special", "iconName": "Stage_SnowNight.webp" }
+  { "alias": "OverwhelmSnowNightStage", "type": "special", "iconName": "Stage_SnowNight.webp" },
+  { "alias": "OverwhelmSnowRoofStage", "type": "special", "iconName": "Stage_SnowRoof.webp" }
 ]

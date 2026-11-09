@@ -186,6 +186,95 @@ void main() {
     });
 
     testWidgets(
+      '$language: Underwater World appearance reverses loss-condition advice',
+      (tester) async {
+        await _withContext(tester, language, (context) {
+          final l10n = AppLocalizations.of(context)!;
+          const essentialsWithoutLossCondition = {
+            'CustomLevelModuleProperties',
+            'ZombiesDeadWinConProperties',
+            'StandardLevelIntroProperties',
+          };
+
+          expect(
+            _recommendations(context, _level(essentialsWithoutLossCondition)),
+            contains(l10n.moduleTitle_ZombiesAteYourBrainsProperties),
+            reason: 'Ordinary lawns should still recommend a loss condition.',
+          );
+
+          for (final stage in ['DeepseaStage', 'DeepseaLandStage']) {
+            final withoutLossCondition = _level(
+              essentialsWithoutLossCondition,
+              stage: stage,
+            );
+            expect(
+              _recommendations(context, withoutLossCondition),
+              isEmpty,
+              reason:
+                  '$stage follows the official Underwater World module layout.',
+            );
+            expect(
+              _issueIds(context, withoutLossCondition),
+              isNot(contains('underwaterZombieWinConditionWarning')),
+            );
+
+            final withLossCondition = _level({
+              ...essentialsWithoutLossCondition,
+              'ZombiesAteYourBrainsProperties',
+            }, stage: stage);
+            final warning =
+                LevelIssueRegistry.forLevel(
+                  context,
+                  withLossCondition,
+                ).singleWhere(
+                  (issue) => issue.id == 'underwaterZombieWinConditionWarning',
+                );
+            expect(warning.severity, LevelIssueSeverity.warning);
+            expect(
+              warning.title,
+              l10n.underwaterZombieWinConditionWarningTitle,
+            );
+            expect(warning.message, l10n.underwaterZombieWinConditionWarning);
+          }
+
+          PvzLevelFile customUnderwaterLevel({
+            required bool withLossCondition,
+          }) {
+            final level = _level({
+              ...essentialsWithoutLossCondition,
+              if (withLossCondition) 'ZombiesAteYourBrainsProperties',
+            });
+            level.objects.first.objData['StageModule'] =
+                'RTID(CustomUnderwaterStage@CurrentLevel)';
+            level.objects.add(
+              PvzObject(
+                aliases: ['CustomUnderwaterStage'],
+                objClass: 'StageModuleProperties',
+                objData: {'BackgroundImagePrefix': 'IMAGE_BACKGROUNDS_DEEPSEA'},
+              ),
+            );
+            return level;
+          }
+
+          expect(
+            _recommendations(
+              context,
+              customUnderwaterLevel(withLossCondition: false),
+            ),
+            isEmpty,
+            reason:
+                'The selected appearance, rather than the stage class, '
+                'controls the recommendation.',
+          );
+          expect(
+            _issueIds(context, customUnderwaterLevel(withLossCondition: true)),
+            contains('underwaterZombieWinConditionWarning'),
+          );
+        });
+      },
+    );
+
+    testWidgets(
       '$language: special intros and inactive objects are distinguished',
       (tester) async {
         await _withContext(tester, language, (context) {

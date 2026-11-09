@@ -22,6 +22,7 @@ class GlacierModuleScreen extends StatefulWidget {
     required this.onChanged,
     required this.onBack,
     required this.onRequestZombieSelection,
+    this.onRequestZombieMultiSelection,
   });
 
   final String rtid;
@@ -30,6 +31,8 @@ class GlacierModuleScreen extends StatefulWidget {
   final VoidCallback onBack;
   final void Function(void Function(String) onSelected)
   onRequestZombieSelection;
+  final void Function(void Function(String) onSelected)?
+  onRequestZombieMultiSelection;
 
   @override
   State<GlacierModuleScreen> createState() => _GlacierModuleScreenState();
@@ -143,7 +146,9 @@ class _GlacierModuleScreenState extends State<GlacierModuleScreen> {
       return;
     }
 
-    widget.onRequestZombieSelection((id) {
+    (widget.onRequestZombieMultiSelection ?? widget.onRequestZombieSelection)((
+      id,
+    ) {
       if (!mounted) return;
       final column = _data.zombieSpawnData[columnIndex];
       _updateColumn(

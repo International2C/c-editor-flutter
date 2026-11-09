@@ -55,7 +55,9 @@ class _LawnMowerPropertiesScreenState extends State<LawnMowerPropertiesScreen> {
     'RunningSubwayMowers',
     'MausoleumMowers',
     'QinGhostMowers',
+    'RomanMowers',
     'RomanMowers2',
+    'HalloweenMowers',
   ];
 
   static final _targetAliases = _mowerAliases.toSet();
@@ -63,7 +65,7 @@ class _LawnMowerPropertiesScreenState extends State<LawnMowerPropertiesScreen> {
   String _mowerLabel(BuildContext context, String alias) {
     final key = 'lawnMower_$alias';
     final localized = ResourceNames.lookup(context, key);
-    return localized != key ? localized : alias;
+    return localized != key ? '$localized ($alias)' : alias;
   }
 
   void _selectOption(String newAlias) {

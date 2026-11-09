@@ -3,6 +3,7 @@ import 'package:c_editor/data/challenge_resource_l10n.dart';
 import 'package:c_editor/data/condition_l10n.dart';
 import 'package:c_editor/data/pvz_models/PvzLevelFile.dart';
 import 'package:c_editor/data/pvz_models/PvzObject.dart';
+import 'package:c_editor/data/repository/challenge_repository.dart';
 import 'package:c_editor/data/repository/grid_item_repository.dart';
 import 'package:c_editor/data/repository/plant_repository.dart';
 import 'package:c_editor/data/repository/zombie_properties_repository.dart';
@@ -474,7 +475,10 @@ class _PlantDefeatZombieChallengeEditorState
   void initState() {
     super.initState();
     _data = Map<String, dynamic>.from(widget.object.objData as Map);
-    _data.putIfAbsent('Description', () => '');
+    _data.putIfAbsent(
+      'Description',
+      () => kPlantDefeatZombieDefaultDescription,
+    );
     _data.putIfAbsent('NumZombiesToKill', () => 12);
     _data.putIfAbsent('PlantTypeName', () => 'peashooter');
   }
@@ -528,7 +532,7 @@ class _PlantDefeatZombieChallengeEditorState
             _objClass,
             'Description',
           ),
-          hint: l10n?.starChallengeChineseUnsupportedHint,
+          hint: l10n?.plantDefeatZombieDescriptionHint,
           value: _data['Description'] as String? ?? '',
           onChanged: (v) {
             setState(() {

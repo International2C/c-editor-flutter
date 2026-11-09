@@ -1,4 +1,5 @@
 import 'dart:math' as math;
+import 'dart:convert';
 import 'dart:ui' as ui;
 
 import 'package:flutter/gestures.dart';
@@ -12,6 +13,9 @@ import 'package:c_editor/bundled_plugins/preview_img_cplugin/lib/src/preview/pre
 import 'package:c_editor/screens/common/level_preview_grid_helpers.dart';
 import 'package:c_editor/widgets/asset_image.dart';
 import 'package:c_editor/widgets/lawn_grid.dart';
+import 'package:c_editor/data/pvz_models.dart';
+import 'package:c_editor/data/level_parser.dart';
+import 'package:c_editor/screens/level_overview/level_overview_dialog.dart';
 
 enum _BoxHandle { nw, n, ne, e, se, s, sw, w, rotate }
 
@@ -528,6 +532,7 @@ Rect _growIconGridBoundsIfNeeded(
     sourceLabelStyle: layer.sourceLabelStyle,
     lawnRows: layer.lawnRows,
     lawnCols: layer.lawnCols,
+    hasInitialLawn: layer.initialLawnJson != null,
     iconAlign: layer.iconAlign,
   );
   final maxHeight = ((1.0 - proposed.top) / layer.scale.clamp(0.25, 4.0))
@@ -1034,9 +1039,26 @@ class _LayerWidgetState extends State<_LayerWidget> {
         layer.lawnCols != null &&
         layer.lawnRows! > 0 &&
         layer.lawnCols! > 0 &&
-        sections.any((s) => s.items.any((i) => i.hasCell));
+        (layer.initialLawnJson != null ||
+            sections.any((s) => s.items.any((i) => i.hasCell)));
 
     Widget sectionBody(int sectionIndex, PreviewIconSection section) {
+      if (layer.initialLawnJson != null) {
+        final level = PvzLevelFile.fromJson(
+          jsonDecode(layer.initialLawnJson!) as Map<String, dynamic>,
+        );
+        return SizedBox(
+          width: rowWidth,
+          child: LevelOverviewDialog(
+            key: ValueKey(layer.initialLawnJson),
+            initialLawnOnly: true,
+            levelFile: level,
+            parsed: LevelParser.parseLevel(level),
+            fileName: '',
+            onClose: () {},
+          ),
+        );
+      }
       if (useLawn) {
         return _buildMiniLawn(
           width: rowWidth,
@@ -1574,7 +1596,7 @@ class _LayerWidgetState extends State<_LayerWidget> {
         );
       } else {
         img = Image.asset(
-          layer.imageAsset!,
+          canonicalImageAssetPath(layer.imageAsset!),
           fit: BoxFit.contain,
           width: width,
           height: height,

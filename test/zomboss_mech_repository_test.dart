@@ -49,9 +49,7 @@ void main() {
       'ZombieZombossMech_PVZ1_Robot',
     ]);
     expect(
-      ZombossMechRepository.getBase(
-        'ZombieZombossMech_Egypt',
-      )!.variations.take(5),
+      ZombossMechRepository.getBase('ZombieZombossMech_Egypt')!.variations,
       [
         'zombossmech_egypt',
         'zombossmech_modern_egypt',

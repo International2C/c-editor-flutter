@@ -11588,7 +11588,7 @@
           "RailcartDefaultTypeName": "railcart_egypt",
           "GravestoneDefaultTypeName": "gravestone_tutorial",
           "DirtSpawnEffectName": "POPANIM_EFFECTS_DIRT_SPAWN_MODERN",
-          "MusicSuffix": "Modern",
+          "MusicSuffix": "modern",
           "DisabledStreetCells": [
             {
               "mX": 0,
@@ -16876,8 +16876,8 @@
             "Game_Tombstones_Dynamic",
             "AudioEgypt"
           ],
-          "StagePrefix": "arenas",
-          "BackgroundImagePrefix": "IMAGE_BACKGROUNDS_ARENALAWN",
+          "StagePrefix": "festival_level_four",
+          "BackgroundImagePrefix": "IMAGE_BACKGROUNDS_FRONTLAWN",
           "BackgroundImageLeft": "TEXTURE_LEFT",
           "BackgroundImageMiddle": "TEXTURE",
           "BackgroundImageRight": "TEXTURE_RIGHT",
@@ -17293,7 +17293,7 @@
             }
           ]
         },
-        "image": "Stage_Autumn.webp",
+        "image": "Stage_AutumnLate.webp",
         "tag": "seasons"
       },
       {
@@ -17476,7 +17476,7 @@
             }
           ]
         },
-        "image": "Stage_Autumn.webp",
+        "image": "Stage_AutumnLate.webp",
         "tag": "seasons"
       },
       {
@@ -17863,7 +17863,7 @@
           "FlagZombieTypeName": "childrensday_flag",
           "Armor1ZombieTypeName": "childrensday_armor1",
           "Armor2ZombieTypeName": "childrensday_armor2",
-          "MusicSuffix": "Modern",
+          "MusicSuffix": "modern",
           "RailcartDefaultTypeName": "railcart_egypt",
           "DirtSpawnEffectName": "POPANIM_EFFECTS_TOMB_DIRT",
           "ZombieEventType": "sandstorm",
@@ -19768,7 +19768,7 @@
           "FlagZombieTypeName": "halloween_flag",
           "Armor1ZombieTypeName": "halloween_armor1",
           "Armor2ZombieTypeName": "halloween_armor2",
-          "MusicSuffix": "Twister",
+          "MusicSuffix": "Halloween",
           "AmbientAudioSuffix": "Amb_Tutorial_Garden_BG_LP",
           "RailcartDefaultTypeName": "railcart_tutotial",
           "GravestoneDefaultTypeName": "gravestone_tutorial",
@@ -20613,7 +20613,7 @@
           "FlagZombieTypeName": "tutorial_flag",
           "Armor1ZombieTypeName": "tutorial_armor1",
           "Armor2ZombieTypeName": "tutorial_armor2",
-          "MusicSuffix": "Modern",
+          "MusicSuffix": "modern",
           "AmbientAudioSuffix": "Amb_Tutorial_Garden_BG_LP",
           "RailcartDefaultTypeName": "railcart_tutotial",
           "GravestoneDefaultTypeName": "gravestone_tutorial",
@@ -21588,7 +21588,7 @@
           "RailcartDefaultTypeName": "railcart_egypt",
           "GravestoneDefaultTypeName": "gravestone_tutorial",
           "DirtSpawnEffectName": "POPANIM_EFFECTS_TOMB_DIRT",
-          "MusicSuffix": "Modern",
+          "MusicSuffix": "modern",
           "DisabledStreetCells": [
             {
               "mX": 0,
@@ -22003,7 +22003,7 @@
           "FlagZombieTypeName": "christmas_flag",
           "Armor1ZombieTypeName": "christmas_armor1",
           "Armor2ZombieTypeName": "christmas_armor2",
-          "MusicSuffix": "Modern",
+          "MusicSuffix": "modern",
           "AmbientAudioSuffix": "Amb_Tutorial_Garden_BG_LP",
           "RailcartDefaultTypeName": "railcart_tutotial",
           "GravestoneDefaultTypeName": "gravestone_tutorial",
@@ -22186,7 +22186,7 @@
           "FlagZombieTypeName": "christmas_flag",
           "Armor1ZombieTypeName": "christmas_armor1",
           "Armor2ZombieTypeName": "christmas_armor2",
-          "MusicSuffix": "Modern",
+          "MusicSuffix": "modern",
           "AmbientAudioSuffix": "Amb_Tutorial_Garden_BG_LP",
           "RailcartDefaultTypeName": "railcart_tutotial",
           "GravestoneDefaultTypeName": "gravestone_tutorial",
@@ -22377,7 +22377,7 @@
           "RailcartDefaultTypeName": "railcart_worldcup",
           "GravestoneDefaultTypeName": "gravestone_tutorial",
           "DirtSpawnEffectName": "POPANIM_EFFECTS_DIRT_SPAWN_MODERN",
-          "MusicSuffix": "Modern",
+          "MusicSuffix": "modern",
           "DisabledStreetCells": [
             {
               "mX": 0,
@@ -24068,7 +24068,7 @@
           "FlagZombieTypeName": "tutorial_flag",
           "Armor1ZombieTypeName": "tutorial_armor1",
           "Armor2ZombieTypeName": "tutorial_armor2",
-          "MusicSuffix": "Modern",
+          "MusicSuffix": "modern",
           "AmbientAudioSuffix": "Amb_Tutorial_Garden_BG_LP",
           "RailcartDefaultTypeName": "railcart_tutotial",
           "GravestoneDefaultTypeName": "gravestone_tutorial",
@@ -26319,7 +26319,7 @@
           "RailcartDefaultTypeName": "railcart_egypt",
           "GravestoneDefaultTypeName": "gravestone_tutorial",
           "DirtSpawnEffectName": "POPANIM_EFFECTS_DIRT_SPAWN_MODERN",
-          "MusicSuffix": "Modern",
+          "MusicSuffix": "modern",
           "DisabledStreetCells": [
             {
               "mX": 0,

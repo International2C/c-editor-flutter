@@ -4,6 +4,8 @@ import 'dart:io';
 import 'package:nice_downloader/nice_downloader.dart';
 import 'package:path/path.dart' as p;
 
+import 'releases_api.dart';
+
 /// User cancelled an in-progress download.
 class DownloadCanceledException implements Exception {
   @override
@@ -12,10 +14,8 @@ class DownloadCanceledException implements Exception {
 
 /// Active segmented download that can be cancelled.
 class NiceDownloadSession {
-  NiceDownloadSession._({
-    required DownloadTask task,
-    required this.completed,
-  }) : _task = task;
+  NiceDownloadSession._({required DownloadTask task, required this.completed})
+    : _task = task;
 
   final DownloadTask _task;
 
@@ -109,6 +109,12 @@ Future<NiceDownloadSession> startNiceDownload({
 enum DownloadErrorKind {
   noConnection,
   connectionLost,
+  timeout,
+  rateLimited,
+  accessDenied,
+  notFound,
+  invalidResponse,
+  storage,
   server,
   canceled,
   other,
@@ -121,10 +127,23 @@ DownloadErrorKind classifyDownloadError(Object error) {
     return DownloadErrorKind.connectionLost;
   }
   if (error is SocketException) return DownloadErrorKind.noConnection;
-  if (error is TimeoutException) return DownloadErrorKind.connectionLost;
-  if (error is ServerException) return DownloadErrorKind.server;
+  if (error is TimeoutException) return DownloadErrorKind.timeout;
+  if (error is FileSystemException) return DownloadErrorKind.storage;
+  if (error is FormatException) return DownloadErrorKind.invalidResponse;
+  if (error is DynamicReleaseRequestException && error.rateLimited) {
+    return DownloadErrorKind.rateLimited;
+  }
+  final statusCode = serverStatusCode(error);
+  if (statusCode == 429) return DownloadErrorKind.rateLimited;
+  if (statusCode == 401 || statusCode == 403) {
+    return DownloadErrorKind.accessDenied;
+  }
+  if (statusCode == 404) return DownloadErrorKind.notFound;
+  if (statusCode != null) return DownloadErrorKind.server;
   final text = '$error'.toLowerCase();
   if (text.contains('socket') ||
+      text.contains('clientexception') ||
+      text.contains('failed to fetch') ||
       text.contains('failed host lookup') ||
       text.contains('network is unreachable') ||
       text.contains('connection refused')) {
@@ -141,5 +160,6 @@ DownloadErrorKind classifyDownloadError(Object error) {
 
 int? serverStatusCode(Object error) {
   if (error is ServerException) return error.statusCode;
+  if (error is DynamicReleaseRequestException) return error.statusCode;
   return null;
 }

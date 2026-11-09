@@ -4,5 +4,9 @@
   "PvZDiscordInviteLink": "https://discord.gg/FBasnrE",
   "CEditorInviteLink": "https://discord.gg/J4QGwGatxE",
   "recommendedLevels": "https://pvz2.ditwan.cn/#/cyty",
-  "levelUpload": "https://pvz2.hrgame.com.cn/diy"
+  "levelUpload": "https://pvz2.hrgame.com.cn/diy",
+  "releasesApi": "https://api.github.com/repos/International2C/c-editor-flutter/releases/latest",
+  "releases": "https://github.com/International2C/c-editor-flutter/releases",
+  "baiduDownload": "https://pan.baidu.com/s/1yPKqbBqHsJqL7iKauwE5Uw?pwd=mqhs",
+  "updateBilibili": "https://www.bilibili.com/opus/1248647014171803671"
 }

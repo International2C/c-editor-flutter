@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import 'package:flutter/services.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:dart_eval/dart_eval.dart';
@@ -39,7 +40,10 @@ class PluginManager extends ChangeNotifier {
 
   static bool get isInitialized => _instance != null;
 
-  static Future<PluginManager> init(SharedPreferences prefs) async {
+  static Future<PluginManager> init(
+    SharedPreferences prefs, {
+    void Function(int completed, int total)? onResourceProgress,
+  }) async {
     if (_instance != null) return _instance!;
     final manager = PluginManager._(
       storage: createPluginStorage(prefs),
@@ -47,7 +51,7 @@ class PluginManager extends ChangeNotifier {
       screenRegistry: PluginScreenRegistry(),
     );
     _instance = manager;
-    await manager.reload();
+    await manager.reload(onResourceProgress: onResourceProgress);
     if (kCpluginDebugPathDefine.trim().isNotEmpty) {
       try {
         final path = kCpluginDebugPathDefine.trim();
@@ -85,7 +89,9 @@ class PluginManager extends ChangeNotifier {
     await _prefs.setStringList(_prefsDisabledKey, ids.toList()..sort());
   }
 
-  Future<void> reload() async {
+  Future<void> reload({
+    void Function(int completed, int total)? onResourceProgress,
+  }) async {
     screenRegistry.clearAll();
     _runtimes.clear();
     PluginHostHooks.openPreviewImageGenerator = null;
@@ -94,6 +100,20 @@ class PluginManager extends ChangeNotifier {
     final disabled = _disabledIds();
     final records = <InstalledPluginRecord>[];
 
+    final assetPaths = onResourceProgress == null
+        ? null
+        : (await AssetManifest.loadFromAssetBundle(rootBundle)).listAssets();
+    final totalResources =
+        assetPaths
+            ?.where(
+              (path) => bundledPlugins.any(
+                (plugin) => path.startsWith(plugin.assetsFlutterRoot + '/'),
+              ),
+            )
+            .length ??
+        0;
+    var completedResources = 0;
+    onResourceProgress?.call(0, totalResources);
     for (final bundled in bundledPlugins) {
       final enabled = !disabled.contains(bundled.id);
       try {
@@ -108,6 +128,10 @@ class PluginManager extends ChangeNotifier {
         }
         final assets = await loadPluginAssetsFromFlutter(
           bundled.assetsFlutterRoot,
+          assetPaths: assetPaths,
+          onAssetLoaded: () {
+            onResourceProgress?.call(++completedResources, totalResources);
+          },
         );
         records.add(
           bundledPluginRecord(

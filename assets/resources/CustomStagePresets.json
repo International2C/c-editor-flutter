@@ -391,7 +391,40 @@
       "RailcartDefaultTypeName": "railcart_egypt",
       "GravestoneDefaultTypeName": "gravestone_tutorial",
       "DirtSpawnEffectName": "POPANIM_EFFECTS_DIRT_SPAWN_MODERN",
-      "MusicSuffix": "Modern"
+      "MusicSuffix": "modern"
+    }
+  },
+  {
+    "id": "pvz1_s31_30_autumn_early",
+    "alias": "AutumnEarlyStageCustom",
+    "nameKey": "customStagePreset_autumnEarly",
+    "sourceKey": "customStagePresetSource_memoryLaneS30Week4Level6",
+    "iconName": "Stage_AutumnEarly.webp",
+    "objclass": "StageModuleProperties",
+    "objdata": {
+      "ResourceGroupNames": [
+        "Egypt_Gravestone",
+        "Game_Tombstones_Dynamic",
+        "Tombstone_Dark_Effects",
+        "DelayLoad_Background_Autumn_Early",
+        "AudioTutorial"
+      ],
+      "GroupsToUnloadForAds": [
+        "DelayLoad_Background_Autumn_Early"
+      ],
+      "StagePrefix": "Autumn_Late",
+      "BackgroundResourceGroup": "DelayLoad_Background_Autumn_Early",
+      "BackgroundImagePrefix": "IMAGE_BACKGROUNDS_AUTUMN_EARLY",
+      "LevelPowerupSet": "LevelPowerupsDefault",
+      "BasicZombieTypeName": "tutorial",
+      "FlagZombieTypeName": "tutorial_flag",
+      "Armor1ZombieTypeName": "tutorial_armor1",
+      "Armor2ZombieTypeName": "tutorial_armor2",
+      "MusicSuffix": "Modern",
+      "AmbientAudioSuffix": "Amb_Tutorial_Garden_BG_LP",
+      "RailcartDefaultTypeName": "railcart_tutotial",
+      "GravestoneDefaultTypeName": "gravestone_tutorial",
+      "DisabledStreetCells": []
     }
   },
   {

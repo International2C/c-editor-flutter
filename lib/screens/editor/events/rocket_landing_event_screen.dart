@@ -140,6 +140,10 @@ class _RocketLandingEventScreenState extends State<RocketLandingEventScreen> {
                   body: l10n?.rocketLandingHelpOverview ?? '',
                 ),
                 HelpSectionData(
+                  title: l10n?.logic ?? 'Logic',
+                  body: l10n?.rocketLandingHelpLogic ?? '',
+                ),
+                HelpSectionData(
                   title:
                       l10n?.rocketLandingHelpPlantsTitle ??
                       'Plants take control',

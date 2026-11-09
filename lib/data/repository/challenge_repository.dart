@@ -4,6 +4,8 @@ import 'package:c_editor/data/rtid_parser.dart';
 import 'package:c_editor/data/challenge_resource_l10n.dart';
 import 'package:c_editor/utils/selection_search.dart';
 
+const kPlantDefeatZombieDefaultDescription = '[KILL_DESC]';
+
 /// Challenge type metadata. Ported from Z-Editor-master ChallengeRepository.kt
 class ChallengeTypeInfo {
   const ChallengeTypeInfo({
@@ -142,7 +144,7 @@ class ChallengeRepository {
       defaultAlias: 'DefeatZombie',
       icon: Icons.pest_control,
       initialDataFactory: () => {
-        'Description': '',
+        'Description': kPlantDefeatZombieDefaultDescription,
         'NumZombiesToKill': 12,
         'PlantTypeName': 'peashooter',
       },

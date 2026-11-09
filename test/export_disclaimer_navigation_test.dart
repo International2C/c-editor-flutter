@@ -45,6 +45,12 @@ class _FakeExportEngine implements ExportEngine {
 
   @override
   void cancelExport() {}
+
+  @override
+  void resetExportState() {}
+
+  @override
+  bool get isCancelledByUser => false;
 }
 
 void main() {

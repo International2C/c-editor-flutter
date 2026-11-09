@@ -146,7 +146,7 @@ class _PlantSelectionScreenState extends State<PlantSelectionScreen> {
     PlantRepository().init().then((_) {
       if (mounted) {
         setState(() {
-          _removeChooserBlockedSelections();
+          _removeBlockedSelections();
           _isLoaded = true;
         });
       }
@@ -286,11 +286,14 @@ class _PlantSelectionScreenState extends State<PlantSelectionScreen> {
     return null;
   }
 
-  _PlantBlockedReason? _chooserBlockedReasonForPlantId(String id) {
+  _PlantBlockedReason? _plantBlockedReasonForId(
+    String id,
+    Set<String> levelModules,
+  ) {
     if (_isComingSoonPlantId(id)) return _PlantBlockedReason.comingSoon;
     final plant = PlantRepository().getPlantInfoById(id);
     if (plant == null) return null;
-    return _chooserBlockedReasonForPlant(plant);
+    return _plantBlockedReason(plant, levelModules);
   }
 
   _PlantBlockedReason? _plantBlockedReason(
@@ -309,15 +312,25 @@ class _PlantSelectionScreenState extends State<PlantSelectionScreen> {
     return null;
   }
 
-  void _removeChooserBlockedSelections() {
-    bool isBlocked(String id) => _chooserBlockedReasonForPlantId(id) != null;
+  void _removeBlockedSelections() {
+    final levelModules = _levelModuleObjClasses();
+    final excluded = widget.excludeIds.toSet();
+    bool isBlocked(String id) =>
+        excluded.contains(id) ||
+        _plantBlockedReasonForId(id, levelModules) != null;
     _selectedIds.removeWhere(isBlocked);
     _selectedIdsWithDuplicates.removeWhere(isBlocked);
   }
 
-  List<String> _filterChooserSelectablePlantIds(List<String> ids) {
+  List<String> _filterSelectablePlantIds(List<String> ids) {
+    final levelModules = _levelModuleObjClasses();
+    final excluded = widget.excludeIds.toSet();
     return ids
-        .where((id) => _chooserBlockedReasonForPlantId(id) == null)
+        .where(
+          (id) =>
+              !excluded.contains(id) &&
+              _plantBlockedReasonForId(id, levelModules) == null,
+        )
         .toList();
   }
 
@@ -497,16 +510,7 @@ class _PlantSelectionScreenState extends State<PlantSelectionScreen> {
     });
   }
 
-  void _selectAllVisible(
-    List<PlantInfo> plants,
-    Set<String> levelModuleObjClasses,
-  ) {
-    final selectableIds = plants
-        .where(
-          (plant) => _plantBlockedReason(plant, levelModuleObjClasses) == null,
-        )
-        .map((plant) => plant.id)
-        .toList(growable: false);
+  void _toggleAllVisible(List<String> selectableIds) {
     if (selectableIds.isEmpty) return;
 
     setState(() {
@@ -597,13 +601,24 @@ class _PlantSelectionScreenState extends State<PlantSelectionScreen> {
     );
     final fabBackground = theme.colorScheme.primaryContainer;
     final fabForeground = theme.colorScheme.onPrimaryContainer;
+    final selectableIds = plants
+        .where(
+          (plant) => _plantBlockedReason(plant, levelModuleObjClasses) == null,
+        )
+        .map((plant) => plant.id)
+        .toList(growable: false);
+    final selectedIds = widget.allowDuplicateSelection
+        ? _selectedIdsWithDuplicates.toSet()
+        : _selectedIds;
+    final allVisibleSelected =
+        selectableIds.isNotEmpty && selectableIds.every(selectedIds.contains);
     final confirmation = widget.isMultiSelect
         ? FloatingActionButton(
             backgroundColor: fabBackground,
             foregroundColor: fabForeground,
             onPressed: _isLoaded
                 ? () {
-                    final ids = _filterChooserSelectablePlantIds(
+                    final ids = _filterSelectablePlantIds(
                       widget.allowDuplicateSelection
                           ? List<String>.from(_selectedIdsWithDuplicates)
                           : _selectedIds.toList(),
@@ -616,11 +631,13 @@ class _PlantSelectionScreenState extends State<PlantSelectionScreen> {
         : null;
     final selectAll = widget.isMultiSelect
         ? SelectionGridSelectAllButton(
-            label: l10n?.selectAll ?? 'Select ALL',
+            label: allVisibleSelected
+                ? (l10n?.deselectAll ?? 'Deselect ALL')
+                : (l10n?.selectAll ?? 'Select ALL'),
             backgroundColor: fabBackground,
             foregroundColor: fabForeground,
-            onPressed: _isLoaded && plants.isNotEmpty
-                ? () => _selectAllVisible(plants, levelModuleObjClasses)
+            onPressed: _isLoaded && selectableIds.isNotEmpty
+                ? () => _toggleAllVisible(selectableIds)
                 : null,
           )
         : null;

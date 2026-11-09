@@ -22,6 +22,7 @@ class ZombieTentWaveEventScreen extends StatefulWidget {
     required this.onChanged,
     required this.onBack,
     required this.onRequestZombieSelection,
+    this.onRequestZombieMultiSelection,
   });
 
   final String rtid;
@@ -30,6 +31,8 @@ class ZombieTentWaveEventScreen extends StatefulWidget {
   final VoidCallback onBack;
   final void Function(void Function(String) onSelected)
   onRequestZombieSelection;
+  final void Function(void Function(String) onSelected)?
+  onRequestZombieMultiSelection;
 
   @override
   State<ZombieTentWaveEventScreen> createState() =>
@@ -122,7 +125,9 @@ class _ZombieTentWaveEventScreenState extends State<ZombieTentWaveEventScreen> {
   }
 
   void _addZombie(int tentIndex) {
-    widget.onRequestZombieSelection((id) {
+    (widget.onRequestZombieMultiSelection ?? widget.onRequestZombieSelection)((
+      id,
+    ) {
       final tent = _data.zombieTents[tentIndex];
       _updateTent(
         tentIndex,

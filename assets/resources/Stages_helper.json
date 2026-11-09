@@ -17,10 +17,16 @@
       "nameKey": "stage_AtlantisStage"
     }
   },
+  "DelayLoad_Background_Autumn_Early": {
+    "IMAGE_BACKGROUNDS_AUTUMN_EARLY": {
+      "image": "Stage_AutumnEarly.webp",
+      "nameKey": "customStagePreset_autumnEarly"
+    }
+  },
   "DelayLoad_Background_Autumn_Late": {
     "IMAGE_BACKGROUNDS_AUTUMN_LATE": {
-      "image": "Stage_Autumn.webp",
-      "nameKey": "stage_AutumnEarlyStage"
+      "image": "Stage_AutumnLate.webp",
+      "nameKey": "stage_AutumnLateStage"
     }
   },
   "DelayLoad_Background_Beach_Compressed": {

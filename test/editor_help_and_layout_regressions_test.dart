@@ -15,6 +15,7 @@ import 'package:c_editor/screens/editor/modules/roof_properties_screen.dart';
 import 'package:c_editor/screens/editor/modules/seed_bank_properties_screen.dart';
 import 'package:c_editor/screens/editor/modules/tunnel_defend_module_screen.dart';
 import 'package:c_editor/widgets/editor_components.dart';
+import 'package:c_editor/widgets/app_message.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -88,6 +89,12 @@ void main() {
         ),
         (
           locale: const Locale('zh'),
+          title: '事件：泡泡雨',
+          isEvent: true,
+          expected: '泡泡雨事件说明',
+        ),
+        (
+          locale: const Locale('zh'),
           title: '复兴时代模块',
           isEvent: false,
           expected: '复兴时代模块说明',
@@ -117,6 +124,11 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(find.text(testCase.expected), findsOneWidget);
+      expect(
+        tester.widget<Text>(find.text(testCase.expected)).textAlign,
+        TextAlign.start,
+      );
+      expect(tester.widget<Text>(find.text('Body')).textAlign, TextAlign.start);
       expect(tester.takeException(), isNull);
     });
   }
@@ -1043,6 +1055,7 @@ void main() {
 
     expect(find.textContaining('after'), findsOneWidget);
     expect(find.textContaining('before'), findsNothing);
+    AppMessage.hide();
     expect(tester.takeException(), isNull);
   });
 }

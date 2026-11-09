@@ -234,6 +234,7 @@ class _StarChallengeModuleScreenState extends State<StarChallengeModuleScreen> {
       title: l10n?.addChallenge ?? 'Add Challenge',
       objClass: info.objClass,
       levelFile: widget.levelFile,
+      forCreation: true,
     );
     if (alias == null || !mounted) return;
 

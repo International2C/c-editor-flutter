@@ -5,7 +5,6 @@ import 'package:c_editor/data/repository/grid_item_repository.dart';
 import 'package:c_editor/l10n/app_localizations.dart';
 import 'package:c_editor/l10n/resource_names.dart';
 import 'package:c_editor/screens/select/grid_item_module_prompt.dart';
-import 'package:c_editor/theme/app_theme.dart' show pvzBrownDark, pvzBrownLight;
 import 'package:c_editor/utils/selection_search.dart';
 import 'package:c_editor/utils/selection_view_memory.dart';
 import 'package:c_editor/widgets/editor_components.dart';
@@ -112,6 +111,9 @@ class _GridItemSelectionScreenState extends State<GridItemSelectionScreen> {
     };
 
     return baseList.where((item) {
+      // Cauldrons require their dedicated module; their metadata remains
+      // available to icons and existing level previews.
+      if (item.actualTypeName == 'wizard_crucible') return false;
       final isModeMatched = switch (widget.filterMode) {
         GridItemFilterMode.all => true,
         GridItemFilterMode.restricted => item.tag == GridItemTag.normal,
@@ -131,8 +133,6 @@ class _GridItemSelectionScreenState extends State<GridItemSelectionScreen> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
     final theme = Theme.of(context);
-    final isDark = theme.brightness == Brightness.dark;
-    final themeColor = isDark ? pvzBrownDark : pvzBrownLight;
     final displayList = _displayList;
 
     return GestureDetector(
@@ -143,9 +143,7 @@ class _GridItemSelectionScreenState extends State<GridItemSelectionScreen> {
             icon: const Icon(Icons.arrow_back),
             onPressed: widget.onBack,
           ),
-          backgroundColor: themeColor,
-          foregroundColor: Colors.white,
-          title: AppBarSearchField(
+          title: SelectionSearchField(
             hintText: l10n?.searchGridItems ?? 'Search grid items',
             query: _searchQuery,
             onChanged: _setSearchQuery,
@@ -154,14 +152,13 @@ class _GridItemSelectionScreenState extends State<GridItemSelectionScreen> {
         ),
         body: Column(
           children: [
-            Container(
-              color: themeColor,
+            Material(
+              color:
+                  theme.appBarTheme.backgroundColor ??
+                  theme.colorScheme.surface,
               child: HorizontalTagScroller(
                 onAccentBar: true,
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 16,
-                  vertical: 8,
-                ),
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
                 initialScrollOffset: _memory.tagScrollOffset,
                 onScrollOffsetChanged: (offset) {
                   _memory.tagScrollOffset = offset;
@@ -171,6 +168,7 @@ class _GridItemSelectionScreenState extends State<GridItemSelectionScreen> {
                     label: _categoryLabel(cat, l10n),
                     selected: _selectedCategory == cat,
                     onSelected: (_) => _setCategory(cat),
+                    padding: const EdgeInsets.symmetric(horizontal: 4),
                   );
                 }).toList(),
               ),

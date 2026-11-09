@@ -207,7 +207,7 @@ jobs:
           section: utils
           priority: optional
           desc: Level Editor for Plants vs. Zombies 2 Chinese
-          homepage: https://github.com/CyberSteve777/c-editor-flutter
+          homepage: https://github.com/International2C/c-editor-flutter
 
       - name: Stage Linux .deb
         id: deb

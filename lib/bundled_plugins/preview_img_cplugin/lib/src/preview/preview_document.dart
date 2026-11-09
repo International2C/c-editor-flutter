@@ -378,6 +378,7 @@ Size previewIconGridIntrinsicSize({
   PreviewTextStyleData? sourceLabelStyle,
   int? lawnRows,
   int? lawnCols,
+  bool hasInitialLawn = false,
   TextAlign iconAlign = TextAlign.left,
 }) {
   const pad = kPreviewIconGridChromeInset / 2;
@@ -449,13 +450,13 @@ Size previewIconGridIntrinsicSize({
       lawnCols != null &&
       lawnRows > 0 &&
       lawnCols > 0 &&
-      sections.any((s) => s.items.any((i) => i.hasCell));
+      (hasInitialLawn || sections.any((s) => s.items.any((i) => i.hasCell)));
 
   if (useLawn) {
     final lawnH = innerMax / ((lawnCols / lawnRows) * 1.0);
     for (var i = 0; i < sections.length; i++) {
       final section = sections[i];
-      if (section.items.isEmpty) continue;
+      if (section.items.isEmpty && !hasInitialLawn) continue;
       if (contentH > 0 && (i > 0 || showChrome)) contentH += sectionGap;
       if (section.title != null && section.title!.isNotEmpty) {
         final titleSize = section.iconSize >= 64 ? 15.0 : 13.0;
@@ -717,6 +718,7 @@ class PreviewLayer {
     this.showChrome = true,
     this.lawnRows,
     this.lawnCols,
+    this.initialLawnJson,
     List<PreviewItem>? items,
     List<PreviewIconSection>? sections,
     this.imagePath,
@@ -774,6 +776,9 @@ class PreviewLayer {
   /// When set with [lawnCols], icon-grid content is painted as a mini lawn.
   int? lawnRows;
   int? lawnCols;
+
+  /// Immutable level snapshot; drawing is shared with the level overview.
+  String? initialLawnJson;
   List<PreviewItem> items;
   List<PreviewIconSection> sections;
 
@@ -1022,6 +1027,7 @@ class PreviewLayer {
     showChrome: showChrome,
     lawnRows: lawnRows,
     lawnCols: lawnCols,
+    initialLawnJson: initialLawnJson,
     items: items.map((e) => e.copy()).toList(),
     sections: sections.map((e) => e.copy()).toList(),
     imagePath: imagePath,

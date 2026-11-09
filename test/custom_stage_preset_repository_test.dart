@@ -1,6 +1,7 @@
 import 'package:c_editor/data/custom_stage_level_utils.dart';
 import 'package:c_editor/data/pvz_models.dart';
 import 'package:c_editor/data/repository/custom_stage_preset_repository.dart';
+import 'package:c_editor/data/repository/stage_catalog_repository.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
@@ -77,7 +78,7 @@ void main() {
     );
   });
 
-  test('Modern Graveyard preset is ordered before Lost Volcano', () {
+  test('Early Autumn sits between Modern Graveyard and Lost Volcano', () {
     final presets = CustomStagePresetRepository.presets;
     final aliases = presets.map((preset) => preset.alias).toList();
     final modern = presets.firstWhere(
@@ -89,12 +90,58 @@ void main() {
       lessThan(aliases.indexOf('ModernGraveyardCustom')),
     );
     expect(
-      aliases.indexOf('ModernGraveyardCustom'),
-      lessThan(aliases.indexOf('LostVolcanoCustom')),
+      aliases.indexOf('ModernGraveyardCustom') + 1,
+      aliases.indexOf('AutumnEarlyStageCustom'),
+    );
+    expect(
+      aliases.indexOf('AutumnEarlyStageCustom') + 1,
+      aliases.indexOf('LostVolcanoCustom'),
     );
     expect(modern.objclass, 'ModernStageProperties');
     expect(modern.objdata['ResourceGroupNames'], contains('Modern_Gravestone'));
   });
+
+  test(
+    'Early Autumn preset exports its source configuration and appearance',
+    () async {
+      await StageCatalogRepository.init();
+      final preset = CustomStagePresetRepository.presets.singleWhere(
+        (preset) => preset.alias == 'AutumnEarlyStageCustom',
+      );
+      final level = PvzLevelFile(objects: []);
+      final rtid = CustomStageLevelUtils.createCustomStageFromTemplate(
+        levelFile: level,
+        alias: preset.alias,
+        objclass: preset.objclass,
+        objdata: preset.objdata,
+      );
+      final exported = PvzLevelFile.fromJson(level.toJson()).objects.single;
+      expect(rtid, 'RTID(AutumnEarlyStageCustom@CurrentLevel)');
+      expect(exported.objClass, 'StageModuleProperties');
+      expect(exported.objData, preset.objdata);
+      expect(preset.objdata['StagePrefix'], 'Autumn_Late');
+      expect(preset.objdata['MusicSuffix'], 'Modern');
+      expect(preset.objdata['DisabledStreetCells'], isEmpty);
+      expect(
+        StageCatalogRepository.stageBaseOptions().map((option) => option.alias),
+        isNot(contains('AutumnEarlyStage')),
+      );
+      expect(
+        CustomStageLevelUtils.displayLawnAppearanceIconFileName(
+          objclass: exported.objClass,
+          objdata: Map<String, dynamic>.from(exported.objData as Map),
+        ),
+        'Stage_AutumnEarly.webp',
+      );
+      expect(
+        CustomStageLevelUtils.displayLawnAppearanceNameKey(
+          objclass: exported.objClass,
+          objdata: Map<String, dynamic>.from(exported.objData as Map),
+        ),
+        'customStagePreset_autumnEarly',
+      );
+    },
+  );
 
   test('collects resource groups from every custom lawn preset', () {
     final expected = <String>{};

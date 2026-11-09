@@ -39,9 +39,19 @@ class ZombossMechRobotSpawnListEditor extends StatelessWidget {
       context,
       MaterialPageRoute(
         builder: (ctx) => ZombieSelectionScreen(
+          multiSelect: true,
+          levelFile: levelFile,
           onZombieSelected: (id) {
             Navigator.pop(ctx);
             onChanged([...entries, ZombossRobotSpawnEntry(zombieTypeName: id)]);
+          },
+          onMultiZombieSelected: (ids) {
+            Navigator.pop(ctx);
+            if (ids.isEmpty) return;
+            onChanged([
+              ...entries,
+              for (final id in ids) ZombossRobotSpawnEntry(zombieTypeName: id),
+            ]);
           },
           onBack: () => Navigator.pop(ctx),
         ),

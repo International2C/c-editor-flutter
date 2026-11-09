@@ -2,6 +2,17 @@ import 'dart:convert';
 
 import 'package:http/http.dart' as http;
 
+/// Keeps service diagnostics out of user-facing download errors.
+class DynamicReleaseRequestException implements Exception {
+  const DynamicReleaseRequestException({
+    required this.statusCode,
+    this.rateLimited = false,
+  });
+
+  final int statusCode;
+  final bool rateLimited;
+}
+
 /// One downloadable `dynamic.rsb.smf` (or similar) from a GitHub release.
 class DynamicReleaseOption {
   const DynamicReleaseOption({
@@ -40,19 +51,26 @@ class Pvz2cDynamicReleases {
   };
 
   Future<List<DynamicReleaseOption>> list({int perPage = 30}) async {
-    final uri = Uri.parse(repoApi).replace(
-      queryParameters: {'per_page': '$perPage'},
-    );
-    final response = await _client.get(uri, headers: _headers);
+    final uri = Uri.parse(
+      repoApi,
+    ).replace(queryParameters: {'per_page': '$perPage'});
+    final response = await _client
+        .get(uri, headers: _headers)
+        .timeout(const Duration(seconds: 20));
     if (response.statusCode < 200 || response.statusCode >= 300) {
-      throw Exception(
-        'GitHub releases failed (${response.statusCode}): ${response.body}',
+      throw DynamicReleaseRequestException(
+        statusCode: response.statusCode,
+        rateLimited:
+            response.statusCode == 429 ||
+            (response.statusCode == 403 &&
+                (response.headers['x-ratelimit-remaining'] == '0' ||
+                    response.body.toLowerCase().contains('rate limit'))),
       );
     }
 
     final decoded = jsonDecode(response.body);
     if (decoded is! List) {
-      throw Exception('Unexpected GitHub releases payload');
+      throw const FormatException('Unexpected GitHub releases payload');
     }
 
     final options = <DynamicReleaseOption>[];

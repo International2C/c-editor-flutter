@@ -4423,6 +4423,20 @@
     {
       "objclass": "LawnMowerProperties",
       "aliases": [
+        "HalloweenMowers"
+      ],
+      "objdata": {
+        "ResourceGroupNames": [
+          "HalloweenMowerGroup"
+        ],
+        "MowerEntryAnimDuration": 2.5,
+        "MowerActivatedAudioEvent": "Play_Egypt_Lawnmower",
+        "MowerPopAnim": "POPANIM_MOWERS_MOWER_HALLOWEEN"
+      }
+    },
+    {
+      "objclass": "LawnMowerProperties",
+      "aliases": [
         "FairyTaleMowers"
       ],
       "objdata": {
@@ -13082,7 +13096,7 @@
             "mY": 9
           }
         ],
-        "CosmicPlantfoodFillSeconds": 50.0
+        "CosmicPlantfoodFillSeconds": 50
       }
     },
     {
@@ -13092,8 +13106,8 @@
       "objclass": "MoonLifeSupportSystemProperties",
       "objdata": {
         "InitialCapacity": 10,
-        "BufferOverloadRatio": 2.0,
-        "PenaltyCountdown": 5.0,
+        "BufferOverloadRatio": 2,
+        "PenaltyCountdown": 5,
         "PlantImmunityList": {
           "List": [
             "lilypad",
@@ -17269,36 +17283,28 @@
       "aliases": [
         "PVZ1ModeOutro"
       ],
-      "objdata": {
-
-      }
+      "objdata": {}
     },
     {
       "objclass": "PlantWarsOutroProperties",
       "aliases": [
         "PlantWarsOutro"
       ],
-      "objdata": {
-
-      }
+      "objdata": {}
     },
     {
       "objclass": "ZombieRushOutroProperties",
       "aliases": [
         "ZombieRushOutro"
       ],
-      "objdata": {
-
-      }
+      "objdata": {}
     },
     {
       "objclass": "TrainingOutroProperties",
       "aliases": [
         "TrainingOutro"
       ],
-      "objdata": {
-
-      }
+      "objdata": {}
     },
     {
       "objclass": "MausoleumOutroProperties",
@@ -17316,18 +17322,14 @@
       "aliases": [
         "SpaceTimeTearOutro"
       ],
-      "objdata": {
-
-      }
+      "objdata": {}
     },
     {
       "objclass": "MiniGameCollectionOutroProperties",
       "aliases": [
         "MiniGameCollectionOutro"
       ],
-      "objdata": {
-
-      }
+      "objdata": {}
     },
     {
       "objclass": "CardGameOutroProperties",
@@ -17354,9 +17356,7 @@
       "aliases": [
         "NewPVPGameOutro"
       ],
-      "objdata": {
-
-      }
+      "objdata": {}
     },
     {
       "objclass": "PVZ2UnchartedModeOutroProperties",
@@ -17757,94 +17757,6 @@
     {
       "objclass": "PVZ2UnchartedModeOutroProperties",
       "aliases": [
-        "PVZ2UnchartedModeOutroPUMPKINHALLOWEEN7"
-      ],
-      "objdata": {
-        "Modes": [
-          "PUMPKINHALLOWEEN7"
-        ]
-      }
-    },
-    {
-      "objclass": "PVZ2UnchartedModeOutroProperties",
-      "aliases": [
-        "PVZ2UnchartedModeOutroPUMPKINHALLOWEEN8"
-      ],
-      "objdata": {
-        "Modes": [
-          "PUMPKINHALLOWEEN8"
-        ]
-      }
-    },
-    {
-      "objclass": "PVZ2UnchartedModeOutroProperties",
-      "aliases": [
-        "PVZ2UnchartedModeOutroPUMPKINHALLOWEEN9"
-      ],
-      "objdata": {
-        "Modes": [
-          "PUMPKINHALLOWEEN9"
-        ]
-      }
-    },
-    {
-      "objclass": "PVZ2UnchartedModeOutroProperties",
-      "aliases": [
-        "PVZ2UnchartedModeOutroPUMPKINHALLOWEEN10"
-      ],
-      "objdata": {
-        "Modes": [
-          "PUMPKINHALLOWEEN10"
-        ]
-      }
-    },
-    {
-      "objclass": "PVZ2UnchartedModeOutroProperties",
-      "aliases": [
-        "PVZ2UnchartedModeOutroPUMPKINHALLOWEEN11"
-      ],
-      "objdata": {
-        "Modes": [
-          "PUMPKINHALLOWEEN11"
-        ]
-      }
-    },
-    {
-      "objclass": "PVZ2UnchartedModeOutroProperties",
-      "aliases": [
-        "PVZ2UnchartedModeOutroPUMPKINHALLOWEEN12"
-      ],
-      "objdata": {
-        "Modes": [
-          "PUMPKINHALLOWEEN12"
-        ]
-      }
-    },
-    {
-      "objclass": "PVZ2UnchartedModeOutroProperties",
-      "aliases": [
-        "PVZ2UnchartedModeOutroPUMPKINHALLOWEEN13"
-      ],
-      "objdata": {
-        "Modes": [
-          "PUMPKINHALLOWEEN13"
-        ]
-      }
-    },
-    {
-      "objclass": "PVZ2UnchartedModeOutroProperties",
-      "aliases": [
-        "PVZ2UnchartedModeOutroPUMPKINHALLOWEEN14"
-      ],
-      "objdata": {
-        "Modes": [
-          "PUMPKINHALLOWEEN14"
-        ]
-      }
-    },
-    {
-      "objclass": "PVZ2UnchartedModeOutroProperties",
-      "aliases": [
         "PVZ2UnchartedModeOutroAquila"
       ],
       "objdata": {
@@ -17964,6 +17876,13 @@
       }
     },
     {
+      "objclass": "PVZ1AchievementStatsModuleProperties",
+      "aliases": [
+        "PVZ1AchievementStats"
+      ],
+      "objdata": {}
+    },
+    {
       "objclass": "TimeEnergyModuleProperties",
       "aliases": [
         "TimeEnergy"
@@ -17973,19 +17892,17 @@
         "TimeEnergyTriggers": [
           {
             "TriggerRange": {
-              "Min": 0.69999999999999996,
-              "Max": 0.80000000000000004
+              "Min": 0.7,
+              "Max": 0.8
             },
             "Cooldown": 15,
             "TriggerType": "wormhole",
-            "WormHoleProperty": {
-
-            }
+            "WormHoleProperty": {}
           },
           {
             "TriggerRange": {
-              "Min": 0.68000000000000005,
-              "Max": 0.69999999999999996
+              "Min": 0.68,
+              "Max": 0.7
             },
             "Cooldown": 8,
             "TriggerType": "portal",
@@ -18001,8 +17918,8 @@
           },
           {
             "TriggerRange": {
-              "Min": 0.66000000000000003,
-              "Max": 0.68000000000000005
+              "Min": 0.66,
+              "Max": 0.68
             },
             "Cooldown": 8,
             "TriggerType": "portal",
@@ -18018,19 +17935,17 @@
           },
           {
             "TriggerRange": {
-              "Min": 0.20000000000000001,
-              "Max": 0.66000000000000003
+              "Min": 0.2,
+              "Max": 0.66
             },
             "Cooldown": 30,
             "TriggerType": "wormhole",
-            "WormHoleProperty": {
-
-            }
+            "WormHoleProperty": {}
           },
           {
             "TriggerRange": {
               "Min": 0,
-              "Max": 0.20000000000000001
+              "Max": 0.2
             },
             "Cooldown": 60,
             "TriggerType": "blackhole",
@@ -18052,19 +17967,17 @@
         "TimeEnergyTriggers": [
           {
             "TriggerRange": {
-              "Min": 0.59999999999999998,
-              "Max": 0.80000000000000004
+              "Min": 0.6,
+              "Max": 0.8
             },
             "Cooldown": 15,
             "TriggerType": "wormhole",
-            "WormHoleProperty": {
-
-            }
+            "WormHoleProperty": {}
           },
           {
             "TriggerRange": {
-              "Min": 0.57999999999999996,
-              "Max": 0.59999999999999998
+              "Min": 0.58,
+              "Max": 0.6
             },
             "Cooldown": 8,
             "TriggerType": "portal",
@@ -18080,8 +17993,8 @@
           },
           {
             "TriggerRange": {
-              "Min": 0.56000000000000005,
-              "Max": 0.57999999999999996
+              "Min": 0.56,
+              "Max": 0.58
             },
             "Cooldown": 8,
             "TriggerType": "portal",
@@ -18097,19 +18010,17 @@
           },
           {
             "TriggerRange": {
-              "Min": 0.20000000000000001,
-              "Max": 0.56000000000000005
+              "Min": 0.2,
+              "Max": 0.56
             },
             "Cooldown": 30,
             "TriggerType": "wormhole",
-            "WormHoleProperty": {
-
-            }
+            "WormHoleProperty": {}
           },
           {
             "TriggerRange": {
               "Min": 0,
-              "Max": 0.20000000000000001
+              "Max": 0.2
             },
             "Cooldown": 60,
             "TriggerType": "blackhole",
@@ -18132,13 +18043,11 @@
           {
             "TriggerRange": {
               "Min": 0,
-              "Max": 0.10000000000000001
+              "Max": 0.1
             },
             "Cooldown": 9999,
             "TriggerType": "wormhole",
-            "WormHoleProperty": {
-
-            }
+            "WormHoleProperty": {}
           }
         ]
       }
@@ -18244,7 +18153,7 @@
         "InitialSunDropDelay": 2,
         "SunCountdownBase": 4.25,
         "SunCountdownRange": 2.75,
-        "SunCountdownIncreasePerSun": 0.10000000000000001,
+        "SunCountdownIncreasePerSun": 0.1,
         "SunCountdownMax": 9.5
       }
     },
@@ -18253,9 +18162,7 @@
       "aliases": [
         "DefaultCustomLevel"
       ],
-      "objdata": {
-
-      }
+      "objdata": {}
     },
     {
       "objclass": "CustomLevelEncourageModuleProperties",
@@ -18273,18 +18180,14 @@
       "aliases": [
         "DefaultPennyClassroom"
       ],
-      "objdata": {
-
-      }
+      "objdata": {}
     },
     {
       "objclass": "BoardTimerProperties",
       "aliases": [
         "DefaultBoardTimer"
       ],
-      "objdata": {
-
-      }
+      "objdata": {}
     },
     {
       "aliases": [
@@ -18473,7 +18376,7 @@
         "InitialDarkDelay": 2,
         "DarkCountdownBase": 4.25,
         "DarkCountdownRange": 2.75,
-        "DarkCountdownIncreasePerDark": 0.10000000000000001,
+        "DarkCountdownIncreasePerDark": 0.1,
         "DarkCountdownMax": 9.5
       }
     },
@@ -18489,7 +18392,7 @@
         "InitialDarkDelay": 2,
         "DarkCountdownBase": 4.25,
         "DarkCountdownRange": 2.75,
-        "DarkCountdownIncreasePerDark": 0.10000000000000001,
+        "DarkCountdownIncreasePerDark": 0.1,
         "DarkCountdownMax": 9.5,
         "Dark": false
       }
@@ -18506,7 +18409,7 @@
         "InitialDarkDelay": 2,
         "DarkCountdownBase": 4.25,
         "DarkCountdownRange": 2.75,
-        "DarkCountdownIncreasePerDark": 0.10000000000000001,
+        "DarkCountdownIncreasePerDark": 0.1,
         "DarkCountdownMax": 9.5,
         "Dark": false,
         "Snow": true,
@@ -18519,18 +18422,14 @@
       "aliases": [
         "DefaultGoldRoad"
       ],
-      "objdata": {
-
-      }
+      "objdata": {}
     },
     {
       "objclass": "HardLevelProperties",
       "aliases": [
         "HardLevelProps"
       ],
-      "objdata": {
-
-      }
+      "objdata": {}
     },
     {
       "objclass": "RiftThemeModuleProperties",
@@ -18814,36 +18713,28 @@
       "aliases": [
         "RiftTimerModuleProps"
       ],
-      "objdata": {
-
-      }
+      "objdata": {}
     },
     {
       "objclass": "UnchartedBoostModuleProperties",
       "aliases": [
         "UnchartedBoostModuleProps"
       ],
-      "objdata": {
-
-      }
+      "objdata": {}
     },
     {
       "objclass": "TeslaModuleProperties",
       "aliases": [
         "TeslaModuleProps"
       ],
-      "objdata": {
-
-      }
+      "objdata": {}
     },
     {
       "objclass": "IZombieModuleProperties",
       "aliases": [
         "IZombieModuleProps"
       ],
-      "objdata": {
-
-      }
+      "objdata": {}
     },
     {
       "objclass": "MiniGamePerksModuleProperties",
@@ -18977,7 +18868,7 @@
         "NewPVPGameModuleProps"
       ],
       "objdata": {
-        "BoardEntityScale": 0.69999999999999996
+        "BoardEntityScale": 0.7
       }
     },
     {
@@ -18986,7 +18877,7 @@
         "DeepseaGameModuleProps"
       ],
       "objdata": {
-        "BoardEntityScale": 0.90000000000000002,
+        "BoardEntityScale": 0.9,
         "IgnoreGridItems": true,
         "IgnorePopAnims": true,
         "IgnorePlants": true,
@@ -19300,63 +19191,49 @@
       "aliases": [
         "HeroPlantIntroModuleProps"
       ],
-      "objdata": {
-
-      }
+      "objdata": {}
     },
     {
       "objclass": "ZombiesDeadWinConProperties",
       "aliases": [
         "ZombiesDeadWinCon"
       ],
-      "objdata": {
-
-      }
+      "objdata": {}
     },
     {
       "objclass": "CardGameZombiesDeadWinConProperties",
       "aliases": [
         "CardGameZombiesDeadWinCon"
       ],
-      "objdata": {
-
-      }
+      "objdata": {}
     },
     {
       "objclass": "PlantWarsZombiesDeadWinConProperties",
       "aliases": [
         "PlantWarsZombiesDeadWinCon"
       ],
-      "objdata": {
-
-      }
+      "objdata": {}
     },
     {
       "objclass": "BronzeDeadWinConProperties",
       "aliases": [
         "BronzeDeadWinCon"
       ],
-      "objdata": {
-
-      }
+      "objdata": {}
     },
     {
       "objclass": "TutorialPeashooterDeathProperties",
       "aliases": [
         "TutorialPeashooterDeath"
       ],
-      "objdata": {
-
-      }
+      "objdata": {}
     },
     {
       "objclass": "DangerRoomModuleProperties",
       "aliases": [
         "DangerRoomModule"
       ],
-      "objdata": {
-
-      }
+      "objdata": {}
     },
     {
       "objclass": "ZombiesAteYourBrainsProperties",
@@ -19494,9 +19371,7 @@
       "aliases": [
         "ZombiesAteYourBrainsOutro"
       ],
-      "objdata": {
-
-      }
+      "objdata": {}
     },
     {
       "objclass": "MoonEndingLossOutroProperties",
@@ -19504,10 +19379,7 @@
         "MoonEndingLossOutro"
       ],
       "objdata": {
-        "ResourceGroupNames": [
-          "MoonEndingComic",
-          "AudioMoon"
-        ],
+        "ResourceGroupNames": [],
         "AnimationPAM": "POPANIM_EFFECTS_MOON_ENDING_LOSS",
         "AnimationLabel": "animation",
         "ComicAudioEvent": "Play_UI_FinaleComic_ZombieVictory",
@@ -19537,17 +19409,17 @@
         "HugeCoinSpawnTime": 0.5,
         "CoinsPerMower": 1,
         "CoinShowerStartTime": 1,
-        "CoinShowerDelayBetweenMowers": 0.050000000000000003,
+        "CoinShowerDelayBetweenMowers": 0.05,
         "CoinInitialHeight": 40,
         "CoinHorizontalMovement": 60,
         "CoinRiseHeight": 100,
-        "CoinRiseTime": 0.40000000000000002,
-        "CoinCollectTime": 0.29999999999999999,
+        "CoinRiseTime": 0.4,
+        "CoinCollectTime": 0.3,
         "AdditionalEndingDelay": 2,
         "HugeCoinInitialScale": 0.5,
         "HugeCoinFullScale": 1.2,
-        "HugeCoinCollectAdditionalBumpScale": 0.050000000000000003,
-        "HugeCoinCollectBumpDuration": 0.20000000000000001
+        "HugeCoinCollectAdditionalBumpScale": 0.05,
+        "HugeCoinCollectBumpDuration": 0.2
       }
     },
     {
@@ -19557,7 +19429,8 @@
       ],
       "objdata": {
         "ResourceGroupNames": [
-          "GravityGenerator"
+          "GravityGenerator",
+          "MoonEndingComic"
         ]
       }
     },
@@ -19567,10 +19440,7 @@
         "MoonEndingVictoryOutro"
       ],
       "objdata": {
-        "ResourceGroupNames": [
-          "MoonEndingComic",
-          "AudioMoon"
-        ],
+        "ResourceGroupNames": [],
         "AnimationPAM": "POPANIM_EFFECTS_MOON_ENDING_VICTORY",
         "AnimationLabel": "animation",
         "ComicAudioEvent": "Play_UI_FinaleComic_PlantVictory",
@@ -19600,17 +19470,17 @@
         "HugeCoinSpawnTime": 0.5,
         "CoinsPerMower": 1,
         "CoinShowerStartTime": 1,
-        "CoinShowerDelayBetweenMowers": 0.050000000000000003,
+        "CoinShowerDelayBetweenMowers": 0.05,
         "CoinInitialHeight": 40,
         "CoinHorizontalMovement": 60,
         "CoinRiseHeight": 100,
-        "CoinRiseTime": 0.40000000000000002,
-        "CoinCollectTime": 0.29999999999999999,
+        "CoinRiseTime": 0.4,
+        "CoinCollectTime": 0.3,
         "AdditionalEndingDelay": 2,
         "HugeCoinInitialScale": 0.5,
         "HugeCoinFullScale": 1.2,
-        "HugeCoinCollectAdditionalBumpScale": 0.050000000000000003,
-        "HugeCoinCollectBumpDuration": 0.20000000000000001
+        "HugeCoinCollectAdditionalBumpScale": 0.05,
+        "HugeCoinCollectBumpDuration": 0.2
       }
     },
     {
@@ -19623,17 +19493,17 @@
         "HugeCoinSpawnTime": 0.5,
         "CoinsPerMower": 1,
         "CoinShowerStartTime": 1,
-        "CoinShowerDelayBetweenMowers": 0.050000000000000003,
+        "CoinShowerDelayBetweenMowers": 0.05,
         "CoinInitialHeight": 40,
         "CoinHorizontalMovement": 60,
         "CoinRiseHeight": 100,
-        "CoinRiseTime": 0.40000000000000002,
-        "CoinCollectTime": 0.29999999999999999,
+        "CoinRiseTime": 0.4,
+        "CoinCollectTime": 0.3,
         "AdditionalEndingDelay": 2,
         "HugeCoinInitialScale": 0.5,
         "HugeCoinFullScale": 1.2,
-        "HugeCoinCollectAdditionalBumpScale": 0.050000000000000003,
-        "HugeCoinCollectBumpDuration": 0.20000000000000001
+        "HugeCoinCollectAdditionalBumpScale": 0.05,
+        "HugeCoinCollectBumpDuration": 0.2
       }
     },
     {
@@ -19646,17 +19516,17 @@
         "HugeCoinSpawnTime": 0.5,
         "CoinsPerMower": 1,
         "CoinShowerStartTime": 1,
-        "CoinShowerDelayBetweenMowers": 0.050000000000000003,
+        "CoinShowerDelayBetweenMowers": 0.05,
         "CoinInitialHeight": 40,
         "CoinHorizontalMovement": 60,
         "CoinRiseHeight": 100,
-        "CoinRiseTime": 0.40000000000000002,
-        "CoinCollectTime": 0.29999999999999999,
+        "CoinRiseTime": 0.4,
+        "CoinCollectTime": 0.3,
         "AdditionalEndingDelay": 2,
         "HugeCoinInitialScale": 0.5,
         "HugeCoinFullScale": 1.2,
-        "HugeCoinCollectAdditionalBumpScale": 0.050000000000000003,
-        "HugeCoinCollectBumpDuration": 0.20000000000000001
+        "HugeCoinCollectAdditionalBumpScale": 0.05,
+        "HugeCoinCollectBumpDuration": 0.2
       }
     },
     {
@@ -19669,17 +19539,17 @@
         "HugeCoinSpawnTime": 0.5,
         "CoinsPerMower": 1,
         "CoinShowerStartTime": 1,
-        "CoinShowerDelayBetweenMowers": 0.050000000000000003,
+        "CoinShowerDelayBetweenMowers": 0.05,
         "CoinInitialHeight": 40,
         "CoinHorizontalMovement": 60,
         "CoinRiseHeight": 100,
-        "CoinRiseTime": 0.40000000000000002,
-        "CoinCollectTime": 0.29999999999999999,
+        "CoinRiseTime": 0.4,
+        "CoinCollectTime": 0.3,
         "AdditionalEndingDelay": 2,
         "HugeCoinInitialScale": 0.5,
         "HugeCoinFullScale": 1.2,
-        "HugeCoinCollectAdditionalBumpScale": 0.050000000000000003,
-        "HugeCoinCollectBumpDuration": 0.20000000000000001
+        "HugeCoinCollectAdditionalBumpScale": 0.05,
+        "HugeCoinCollectBumpDuration": 0.2
       }
     },
     {
@@ -19687,27 +19557,21 @@
         "SaveMowers"
       ],
       "objclass": "StarChallengeSaveMowersProps",
-      "objdata": {
-
-      }
+      "objdata": {}
     },
     {
       "aliases": [
         "SaveBombs"
       ],
       "objclass": "StarChallengeSaveBombsProps",
-      "objdata": {
-
-      }
+      "objdata": {}
     },
     {
       "objclass": "LevelOfTheDayOutroPropeties",
       "aliases": [
         "LevelOfTheDayOutro"
       ],
-      "objdata": {
-
-      }
+      "objdata": {}
     },
     {
       "objclass": "BeghouledIntroProperties",
@@ -19762,9 +19626,7 @@
       "aliases": [
         "IntroCinemaModule"
       ],
-      "objdata": {
-
-      }
+      "objdata": {}
     },
     {
       "objclass": "LootConfig",
@@ -20017,72 +19879,56 @@
       "aliases": [
         "VaseBreakerFlow"
       ],
-      "objdata": {
-
-      }
+      "objdata": {}
     },
     {
       "objclass": "VaseBreakerArcadeModuleProperties",
       "aliases": [
         "VaseBreakerArcade"
       ],
-      "objdata": {
-
-      }
+      "objdata": {}
     },
     {
       "objclass": "SoccerGameWinOutroProps",
       "aliases": [
         "SoccerGameWinOutro"
       ],
-      "objdata": {
-
-      }
+      "objdata": {}
     },
     {
       "objclass": "SoccerGameLossOutroProps",
       "aliases": [
         "SoccerLoseOutro"
       ],
-      "objdata": {
-
-      }
+      "objdata": {}
     },
     {
       "objclass": "BeghouledArcadeModuleProperties",
       "aliases": [
         "BeghouledArcade"
       ],
-      "objdata": {
-
-      }
+      "objdata": {}
     },
     {
       "objclass": "WhackAMoleWinOutroProps",
       "aliases": [
         "WhackAMoleWinOutro"
       ],
-      "objdata": {
-
-      }
+      "objdata": {}
     },
     {
       "objclass": "WhackAMoleLossOutroProps",
       "aliases": [
         "WhackAMoleLoseOutro"
       ],
-      "objdata": {
-
-      }
+      "objdata": {}
     },
     {
       "objclass": "VaseBreakerMiniGameArcadeModuleProperties",
       "aliases": [
         "VaseBreakerMiniGameArcade"
       ],
-      "objdata": {
-
-      }
+      "objdata": {}
     },
     {
       "objclass": "StageModuleProperties",
@@ -21452,7 +21298,7 @@
         "FlagZombieTypeName": "halloween_flag",
         "Armor1ZombieTypeName": "halloween_armor1",
         "Armor2ZombieTypeName": "halloween_armor2",
-        "MusicSuffix": "Twister",
+        "MusicSuffix": "Halloween",
         "AmbientAudioSuffix": "Amb_Tutorial_Garden_BG_LP",
         "RailcartDefaultTypeName": "railcart_tutotial",
         "GravestoneDefaultTypeName": "gravestone_tutorial",
@@ -23464,18 +23310,14 @@
         "JoustOutro"
       ],
       "objclass": "JoustOutroProperties",
-      "objdata": {
-
-      }
+      "objdata": {}
     },
     {
       "aliases": [
         "RiftOutro"
       ],
       "objclass": "RiftOutroProperties",
-      "objdata": {
-
-      }
+      "objdata": {}
     },
     {
       "aliases": [
@@ -23514,9 +23356,7 @@
       "aliases": [
         "UnchartedModeSpringFestivalModule"
       ],
-      "objdata": {
-
-      }
+      "objdata": {}
     },
     {
       "objclass": "UnchartedModeNo42UniverseModuleProperties",
@@ -23550,9 +23390,7 @@
       "aliases": [
         "SantaModule"
       ],
-      "objdata": {
-
-      }
+      "objdata": {}
     },
     {
       "objclass": "IncreasedCostModuleProperties",
@@ -23609,7 +23447,7 @@
         "WitchModule"
       ],
       "objdata": {
-        "WitchSpawnInterval": 20
+        "WitchSpawnInterval": 25
       }
     },
     {
@@ -23617,9 +23455,7 @@
         "SouDaCheOutro"
       ],
       "objclass": "SouDaCheOutroModuleProperties",
-      "objdata": {
-
-      }
+      "objdata": {}
     },
     {
       "aliases": [
@@ -26089,7 +25925,7 @@
       "objclass": "SouDaCheLevelModuleProperties",
       "objdata": {
         "m_soudacheEnergyRecoverAmount": 1,
-        "m_soudacheEnergyRecoverInterval": 0.45000000000000001
+        "m_soudacheEnergyRecoverInterval": 0.45
       }
     },
     {
@@ -26109,19 +25945,19 @@
           2
         ],
         "DragonBond": {
-          "FireDragonChance": 0.40000000000000002,
+          "FireDragonChance": 0.4,
           "FireDragonDamage": 3600,
-          "IceDragonChance": 0.20000000000000001,
+          "IceDragonChance": 0.2,
           "IceDragonDamage": 3000,
           "IceDragonFreezeDuration": 2,
-          "ThunderDragonChance": 0.29999999999999999,
+          "ThunderDragonChance": 0.3,
           "ThunderDragonDamage": 3200,
           "ThunderDragonStunDuration": 1,
           "GreedyDragonDuration": 8,
           "GreedyDragonFireballDamage": 800
         },
         "ShroomBond": {
-          "SporeChance": 0.59999999999999998,
+          "SporeChance": 0.6,
           "MaxSporesPerBattle": 2,
           "SporeGridItemType": "soudache_spore",
           "SpecialShroom1": "glaciershroom",
@@ -26144,14 +25980,14 @@
           "ExplosionRadius": 3
         },
         "PhysicalBond": {
-          "AttackBonusPerPlant": 0.29999999999999999,
-          "GlobalAttackBonus": 0.34999999999999998,
-          "GlobalAttackBonus2": 0.40000000000000002,
-          "AttackSpeedBonus": 0.050000000000000003
+          "AttackBonusPerPlant": 0.3,
+          "GlobalAttackBonus": 0.35,
+          "GlobalAttackBonus2": 0.4,
+          "AttackSpeedBonus": 0.05
         },
         "ResilientBond": {
-          "HPBonus": 1.0,
-          "GlobalHPBonus": 3.0,
+          "HPBonus": 1,
+          "GlobalHPBonus": 3,
           "ReviveHPPercent": 0.5
         },
         "AbyssBond": {
@@ -26188,15 +26024,15 @@
           ]
         },
         "PoisonBond": {
-          "Probability": 0.14999999999999999,
+          "Probability": 0.15,
           "Duration": 6,
-          "DpsPercentage": 0.050000000000000003,
+          "DpsPercentage": 0.05,
           "SpeedReduction": 0.5
         },
         "MagicBond": {
           "Probability": 0.5,
           "Duration": 3,
-          "DamageBonus": 0.29999999999999999
+          "DamageBonus": 0.3
         }
       }
     },
@@ -26220,11 +26056,11 @@
           }
         ],
         "RareAttributeScale": [
-          1.0,
+          1,
           1.5,
-          2.0,
+          2,
           2.5,
-          3.0
+          3
         ],
         "StarUpgradeBlacklist": [
           "minishroom"
@@ -26308,9 +26144,7 @@
       "aliases": [
         "MiniGameCollectionModule"
       ],
-      "objdata": {
-
-      }
+      "objdata": {}
     },
     {
       "objclass": "UnchartedModeSpringFestivalSeedBankProperties",
@@ -26358,19 +26192,17 @@
         "TimeEnergyTriggers": [
           {
             "TriggerRange": {
-              "Min": 0.69999999999999996,
-              "Max": 0.80000000000000004
+              "Min": 0.7,
+              "Max": 0.8
             },
             "Cooldown": 15,
             "TriggerType": "wormhole",
-            "WormHoleProperty": {
-
-            }
+            "WormHoleProperty": {}
           },
           {
             "TriggerRange": {
-              "Min": 0.68000000000000005,
-              "Max": 0.69999999999999996
+              "Min": 0.68,
+              "Max": 0.7
             },
             "Cooldown": 8,
             "TriggerType": "portal",
@@ -26386,8 +26218,8 @@
           },
           {
             "TriggerRange": {
-              "Min": 0.66000000000000003,
-              "Max": 0.68000000000000005
+              "Min": 0.66,
+              "Max": 0.68
             },
             "Cooldown": 8,
             "TriggerType": "portal",
@@ -26403,19 +26235,17 @@
           },
           {
             "TriggerRange": {
-              "Min": 0.20000000000000001,
-              "Max": 0.66000000000000003
+              "Min": 0.2,
+              "Max": 0.66
             },
             "Cooldown": 30,
             "TriggerType": "wormhole",
-            "WormHoleProperty": {
-
-            }
+            "WormHoleProperty": {}
           },
           {
             "TriggerRange": {
               "Min": 0,
-              "Max": 0.20000000000000001
+              "Max": 0.2
             },
             "Cooldown": 60,
             "TriggerType": "blackhole",
@@ -26437,19 +26267,17 @@
         "TimeEnergyTriggers": [
           {
             "TriggerRange": {
-              "Min": 0.69999999999999996,
-              "Max": 0.80000000000000004
+              "Min": 0.7,
+              "Max": 0.8
             },
             "Cooldown": 15,
             "TriggerType": "wormhole",
-            "WormHoleProperty": {
-
-            }
+            "WormHoleProperty": {}
           },
           {
             "TriggerRange": {
-              "Min": 0.68000000000000005,
-              "Max": 0.69999999999999996
+              "Min": 0.68,
+              "Max": 0.7
             },
             "Cooldown": 8,
             "TriggerType": "portal",
@@ -26465,8 +26293,8 @@
           },
           {
             "TriggerRange": {
-              "Min": 0.66000000000000003,
-              "Max": 0.68000000000000005
+              "Min": 0.66,
+              "Max": 0.68
             },
             "Cooldown": 8,
             "TriggerType": "portal",
@@ -26482,19 +26310,17 @@
           },
           {
             "TriggerRange": {
-              "Min": 0.20000000000000001,
-              "Max": 0.66000000000000003
+              "Min": 0.2,
+              "Max": 0.66
             },
             "Cooldown": 30,
             "TriggerType": "wormhole",
-            "WormHoleProperty": {
-
-            }
+            "WormHoleProperty": {}
           },
           {
             "TriggerRange": {
               "Min": 0,
-              "Max": 0.20000000000000001
+              "Max": 0.2
             },
             "Cooldown": 60,
             "TriggerType": "blackhole",
@@ -26550,7 +26376,7 @@
       "objclass": "TunnelDefendModuleProperties",
       "objdata": {
         "Roads": [],
-        "TunnelSequenceInterval": 0.40000000000000002
+        "TunnelSequenceInterval": 0.4
       }
     },
     {
@@ -26561,7 +26387,7 @@
       "objdata": {
         "BrickMapIndex": 2,
         "Roads": [],
-        "TunnelSequenceInterval": 0.40000000000000002
+        "TunnelSequenceInterval": 0.4
       }
     },
     {
@@ -29071,6 +28897,221 @@
     },
     {
       "aliases": [
+        "DangerRoomTunnelDefendDefault"
+      ],
+      "objclass": "TunnelDefendModuleProperties",
+      "objdata": {
+        "Roads": [
+          {
+            "GridX": 0,
+            "GridY": 1,
+            "Img": "IMAGE_UI_MAUSOLEUM_TUNNEL_LEFT"
+          },
+          {
+            "GridX": 1,
+            "GridY": 1,
+            "Img": "IMAGE_UI_MAUSOLEUM_TUNNEL_LEFT_3"
+          },
+          {
+            "GridX": 1,
+            "GridY": 0,
+            "Img": "IMAGE_UI_MAUSOLEUM_TUNNEL_DOWN_2"
+          },
+          {
+            "GridX": 2,
+            "GridY": 0,
+            "Img": "IMAGE_UI_MAUSOLEUM_TUNNEL_LEFT"
+          },
+          {
+            "GridX": 3,
+            "GridY": 0,
+            "Img": "IMAGE_UI_MAUSOLEUM_TUNNEL_LEFT_2"
+          },
+          {
+            "GridX": 3,
+            "GridY": 1,
+            "Img": "IMAGE_UI_MAUSOLEUM_TUNNEL_UP"
+          },
+          {
+            "GridX": 0,
+            "GridY": 3,
+            "Img": "IMAGE_UI_MAUSOLEUM_TUNNEL_LEFT"
+          },
+          {
+            "GridX": 1,
+            "GridY": 3,
+            "Img": "IMAGE_UI_MAUSOLEUM_TUNNEL_LEFT_2"
+          },
+          {
+            "GridX": 1,
+            "GridY": 4,
+            "Img": "IMAGE_UI_MAUSOLEUM_TUNNEL_UP_2"
+          },
+          {
+            "GridX": 2,
+            "GridY": 4,
+            "Img": "IMAGE_UI_MAUSOLEUM_TUNNEL_LEFT"
+          },
+          {
+            "GridX": 3,
+            "GridY": 4,
+            "Img": "IMAGE_UI_MAUSOLEUM_TUNNEL_LEFT_3"
+          },
+          {
+            "GridX": 3,
+            "GridY": 3,
+            "Img": "IMAGE_UI_MAUSOLEUM_TUNNEL_DOWN"
+          },
+          {
+            "GridX": 3,
+            "GridY": 2,
+            "Img": "IMAGE_UI_MAUSOLEUM_TUNNEL_UP_DOWN_2"
+          },
+          {
+            "GridX": 4,
+            "GridY": 2,
+            "Img": "IMAGE_UI_MAUSOLEUM_TUNNEL_LEFT"
+          },
+          {
+            "GridX": 5,
+            "GridY": 2,
+            "Img": "IMAGE_UI_MAUSOLEUM_TUNNEL_LEFT_6"
+          },
+          {
+            "GridX": 5,
+            "GridY": 1,
+            "Img": "IMAGE_UI_MAUSOLEUM_TUNNEL_DOWN_2"
+          },
+          {
+            "GridX": 5,
+            "GridY": 3,
+            "Img": "IMAGE_UI_MAUSOLEUM_TUNNEL_UP_2"
+          },
+          {
+            "GridX": 6,
+            "GridY": 1,
+            "Img": "IMAGE_UI_MAUSOLEUM_TUNNEL_LEFT"
+          },
+          {
+            "GridX": 6,
+            "GridY": 3,
+            "Img": "IMAGE_UI_MAUSOLEUM_TUNNEL_LEFT"
+          },
+          {
+            "GridX": 7,
+            "GridY": 1,
+            "Img": "IMAGE_UI_MAUSOLEUM_TUNNEL_LEFT_6"
+          },
+          {
+            "GridX": 7,
+            "GridY": 3,
+            "Img": "IMAGE_UI_MAUSOLEUM_TUNNEL_LEFT_6"
+          },
+          {
+            "GridX": 7,
+            "GridY": 0,
+            "Img": "IMAGE_UI_MAUSOLEUM_TUNNEL_DOWN_2"
+          },
+          {
+            "GridX": 7,
+            "GridY": 4,
+            "Img": "IMAGE_UI_MAUSOLEUM_TUNNEL_UP_2"
+          },
+          {
+            "GridX": 7,
+            "GridY": 2,
+            "Img": "IMAGE_UI_MAUSOLEUM_TUNNEL_UP_DOWN"
+          },
+          {
+            "GridX": 8,
+            "GridY": 0,
+            "Img": "IMAGE_UI_MAUSOLEUM_TUNNEL_LEFT"
+          },
+          {
+            "GridX": 8,
+            "GridY": 4,
+            "Img": "IMAGE_UI_MAUSOLEUM_TUNNEL_LEFT"
+          }
+        ]
+      }
+    },
+    {
+      "aliases": [
+        "DangerRoomBossTunnelDefendDefault"
+      ],
+      "objclass": "TunnelDefendModuleProperties",
+      "objdata": {
+        "Roads": [
+          {
+            "GridX": 0,
+            "GridY": 1,
+            "Img": "IMAGE_UI_MAUSOLEUM_TUNNEL_LEFT"
+          },
+          {
+            "GridX": 1,
+            "GridY": 1,
+            "Img": "IMAGE_UI_MAUSOLEUM_TUNNEL_LEFT_3"
+          },
+          {
+            "GridX": 1,
+            "GridY": 0,
+            "Img": "IMAGE_UI_MAUSOLEUM_TUNNEL_DOWN_2"
+          },
+          {
+            "GridX": 2,
+            "GridY": 0,
+            "Img": "IMAGE_UI_MAUSOLEUM_TUNNEL_LEFT"
+          },
+          {
+            "GridX": 3,
+            "GridY": 0,
+            "Img": "IMAGE_UI_MAUSOLEUM_TUNNEL_LEFT_2"
+          },
+          {
+            "GridX": 3,
+            "GridY": 1,
+            "Img": "IMAGE_UI_MAUSOLEUM_TUNNEL_UP"
+          },
+          {
+            "GridX": 0,
+            "GridY": 3,
+            "Img": "IMAGE_UI_MAUSOLEUM_TUNNEL_LEFT"
+          },
+          {
+            "GridX": 1,
+            "GridY": 3,
+            "Img": "IMAGE_UI_MAUSOLEUM_TUNNEL_LEFT_2"
+          },
+          {
+            "GridX": 1,
+            "GridY": 4,
+            "Img": "IMAGE_UI_MAUSOLEUM_TUNNEL_UP_2"
+          },
+          {
+            "GridX": 2,
+            "GridY": 4,
+            "Img": "IMAGE_UI_MAUSOLEUM_TUNNEL_LEFT"
+          },
+          {
+            "GridX": 3,
+            "GridY": 4,
+            "Img": "IMAGE_UI_MAUSOLEUM_TUNNEL_LEFT_3"
+          },
+          {
+            "GridX": 3,
+            "GridY": 3,
+            "Img": "IMAGE_UI_MAUSOLEUM_TUNNEL_DOWN"
+          },
+          {
+            "GridX": 3,
+            "GridY": 2,
+            "Img": "IMAGE_UI_MAUSOLEUM_TUNNEL_UP_DOWN"
+          }
+        ]
+      }
+    },
+    {
+      "aliases": [
         "TunnelDefendTestDefault"
       ],
       "objclass": "TunnelDefendModuleProperties",
@@ -29761,77 +29802,77 @@
           ]
         },
         "ShipPosition": {
-          "x": 400.0,
-          "y": 570.0
+          "x": 400,
+          "y": 570
         },
         "ShipArtCenter": {
-          "x": 98.0,
-          "y": 110.0
+          "x": 98,
+          "y": 110
         },
         "ShipScale": 1.3,
         "ShipPopAnimName": "POPANIM_EFFECTS_GRAPPLE_CONSOLE",
         "HookPositionOffset": {
-          "x": 0.0,
-          "y": -43.0
+          "x": 0,
+          "y": -43
         },
         "HookPopAnimName": "POPANIM_EFFECTS_GRAPPLE_HOOK",
         "HookArtCenter": {
-          "x": 98.0,
-          "y": 90.0
+          "x": 98,
+          "y": 90
         },
         "HookScale": 1.3,
         "HookBodyPopAnimName": "POPANIM_EFFECTS_GRAPPLE_HOOK_BODY",
         "HookBodyAnimationLabel": "idle",
         "HookBodyOriginOffset": {
-          "x": 0.0,
-          "y": 20.0
+          "x": 0,
+          "y": 20
         },
         "HookBodyStartArtOffset": {
-          "x": 0.0,
+          "x": 0,
           "y": 99.5
         },
         "HookBodyEndArtOffset": {
-          "x": 198.0,
+          "x": 198,
           "y": 99.5
         },
-        "HookBodyScaleY": 1.0,
+        "HookBodyScaleY": 1,
         "AimLinePopAnimName": "POPANIM_EFFECTS_GRAPPLE_HOOK_BODY",
         "AimLineAnimationLabel": "guide_idle",
         "AimLineStartArtOffset": {
           "x": 1.5,
-          "y": 97.0
+          "y": 97
         },
         "AimLineEndArtOffset": {
           "x": 198.5,
-          "y": 97.0
+          "y": 97
         },
-        "AimLineScaleY": 1.0,
-        "MinimumHookDistance": 80.0,
-        "MaximumHookDistance": 430.0,
-        "FiringArcDegrees": 130.0,
-        "LaunchSpeed": 520.0,
-        "EmptyReturnSpeed": 600.0,
-        "LoadedReturnSpeed": 420.0,
-        "HookCollisionRadius": 12.0,
+        "AimLineScaleY": 1,
+        "MinimumHookDistance": 80,
+        "MaximumHookDistance": 430,
+        "FiringArcDegrees": 130,
+        "LaunchSpeed": 520,
+        "EmptyReturnSpeed": 600,
+        "LoadedReturnSpeed": 420,
+        "HookCollisionRadius": 12,
         "CollisionDebugDraw": false,
         "LaneY": [
-          180.0,
-          270.0,
-          360.0
+          180,
+          270,
+          360
         ],
-        "SpawnLeftX": -80.0,
-        "SpawnRightX": 880.0,
-        "FormationSpacing": 75.0,
-        "FormationYOffset": 35.0,
+        "SpawnLeftX": -80,
+        "SpawnRightX": 880,
+        "FormationSpacing": 75,
+        "FormationYOffset": 35,
         "Rounds": [
           {
-            "Duration": 60.0,
+            "Duration": 60,
             "TargetScore": 650,
             "SpawnThreshold": 4,
-            "InitialSpawnDelay": 4.0,
+            "InitialSpawnDelay": 4,
             "SpawnInterval": 2.5,
-            "MinimumSpeed": 95.0,
-            "MaximumSpeed": 125.0,
+            "MinimumSpeed": 95,
+            "MaximumSpeed": 125,
             "LeftToRightChance": 0.5,
             "MinimumFormationSize": 2,
             "MaximumFormationSize": 3,
@@ -29840,13 +29881,13 @@
                 "Type": "SmallCrystal",
                 "PopAnimName": "POPANIM_EFFECTS_GRAPPLE_SMALL_CRYSTAL",
                 "AnimationLabel": "idle",
-                "SpawnWeight": 0.55000000000000004,
-                "ReturnSpeedFactor": 1.0,
+                "SpawnWeight": 0.55,
+                "ReturnSpeedFactor": 1,
                 "Score": 25,
                 "Experience": 2,
-                "CollisionRadius": 20.0,
+                "CollisionRadius": 20,
                 "Scale": 1.3,
-                "RotationSpeed": 90.0,
+                "RotationSpeed": 90,
                 "AttachedPAMOffset": {
                   "x": -98.5,
                   "y": -100.5
@@ -29857,12 +29898,12 @@
                 "PopAnimName": "POPANIM_EFFECTS_GRAPPLE_LARGE_ORE",
                 "AnimationLabel": "idle",
                 "SpawnWeight": 0.25,
-                "ReturnSpeedFactor": 0.20000000000000001,
+                "ReturnSpeedFactor": 0.2,
                 "Score": 90,
                 "Experience": 4,
-                "CollisionRadius": 35.0,
+                "CollisionRadius": 35,
                 "Scale": 1.3,
-                "RotationSpeed": 90.0,
+                "RotationSpeed": 90,
                 "AttachedPAMOffset": {
                   "x": -95.5,
                   "y": -103.5
@@ -29874,29 +29915,29 @@
                 "AnimationLabel": "idle",
                 "AlternatePopAnimName": "POPANIM_EFFECTS_GRAPPLE_ROCK_RARE",
                 "AlternateAnimationLabel": "idle",
-                "SpawnWeight": 0.20000000000000001,
-                "ReturnSpeedFactor": 1.0,
+                "SpawnWeight": 0.2,
+                "ReturnSpeedFactor": 1,
                 "Score": 0,
                 "Experience": 1,
-                "CollisionRadius": 33.0,
+                "CollisionRadius": 33,
                 "Scale": 1.3,
-                "RotationSpeed": 90.0,
+                "RotationSpeed": 90,
                 "AttachedPAMOffset": {
-                  "x": -95.0,
-                  "y": -97.0
+                  "x": -95,
+                  "y": -97
                 }
               },
               {
                 "Type": "Chest",
                 "PopAnimName": "POPANIM_EFFECTS_GRAPPLE_CHEST",
                 "AnimationLabel": "idle",
-                "SpawnWeight": 0.0,
-                "ReturnSpeedFactor": 0.20000000000000001,
+                "SpawnWeight": 0,
+                "ReturnSpeedFactor": 0.2,
                 "Score": 160,
                 "Experience": 6,
-                "CollisionRadius": 34.0,
+                "CollisionRadius": 34,
                 "Scale": 1.8,
-                "RotationSpeed": 90.0,
+                "RotationSpeed": 90,
                 "AttachedPAMOffset": {
                   "x": -95.5,
                   "y": -97.5
@@ -29906,11 +29947,11 @@
                 "Type": "MeteorFlower",
                 "PopAnimName": "POPANIM_EFFECTS_GRAPPLE_METEORFLOWER",
                 "AnimationLabel": "idle",
-                "SpawnWeight": 0.0,
-                "ReturnSpeedFactor": 0.69999999999999996,
+                "SpawnWeight": 0,
+                "ReturnSpeedFactor": 0.7,
                 "Score": 50,
                 "Experience": 4,
-                "CollisionRadius": 28.0,
+                "CollisionRadius": 28,
                 "AttachedPAMOffset": {
                   "x": -112.5,
                   "y": -111.5
@@ -29919,13 +29960,13 @@
             ]
           },
           {
-            "Duration": 60.0,
+            "Duration": 60,
             "TargetScore": 950,
             "SpawnThreshold": 5,
-            "InitialSpawnDelay": 5.0,
-            "SpawnInterval": 2.2000000000000002,
-            "MinimumSpeed": 125.0,
-            "MaximumSpeed": 165.0,
+            "InitialSpawnDelay": 5,
+            "SpawnInterval": 2.2,
+            "MinimumSpeed": 125,
+            "MaximumSpeed": 165,
             "LeftToRightChance": 0.5,
             "MinimumFormationSize": 2,
             "MaximumFormationSize": 3,
@@ -29934,13 +29975,13 @@
                 "Type": "SmallCrystal",
                 "PopAnimName": "POPANIM_EFFECTS_GRAPPLE_SMALL_CRYSTAL",
                 "AnimationLabel": "animation",
-                "SpawnWeight": 0.45000000000000001,
-                "ReturnSpeedFactor": 1.0,
+                "SpawnWeight": 0.45,
+                "ReturnSpeedFactor": 1,
                 "Score": 25,
                 "Experience": 2,
-                "CollisionRadius": 20.0,
+                "CollisionRadius": 20,
                 "Scale": 1.3,
-                "RotationSpeed": 90.0,
+                "RotationSpeed": 90,
                 "AttachedPAMOffset": {
                   "x": -98.5,
                   "y": -100.5
@@ -29950,13 +29991,13 @@
                 "Type": "LargeOre",
                 "PopAnimName": "POPANIM_EFFECTS_GRAPPLE_LARGE_ORE",
                 "AnimationLabel": "animation",
-                "SpawnWeight": 0.29999999999999999,
-                "ReturnSpeedFactor": 0.20000000000000001,
+                "SpawnWeight": 0.3,
+                "ReturnSpeedFactor": 0.2,
                 "Score": 90,
                 "Experience": 4,
-                "CollisionRadius": 35.0,
+                "CollisionRadius": 35,
                 "Scale": 1.3,
-                "RotationSpeed": 90.0,
+                "RotationSpeed": 90,
                 "AttachedPAMOffset": {
                   "x": -95.5,
                   "y": -103.5
@@ -29968,29 +30009,29 @@
                 "AnimationLabel": "animation",
                 "AlternatePopAnimName": "POPANIM_EFFECTS_GRAPPLE_ROCK_RARE",
                 "AlternateAnimationLabel": "idle",
-                "SpawnWeight": 0.20000000000000001,
-                "ReturnSpeedFactor": 1.0,
+                "SpawnWeight": 0.2,
+                "ReturnSpeedFactor": 1,
                 "Score": 0,
                 "Experience": 1,
-                "CollisionRadius": 33.0,
+                "CollisionRadius": 33,
                 "Scale": 1.3,
-                "RotationSpeed": 90.0,
+                "RotationSpeed": 90,
                 "AttachedPAMOffset": {
-                  "x": -95.0,
-                  "y": -97.0
+                  "x": -95,
+                  "y": -97
                 }
               },
               {
                 "Type": "Chest",
                 "PopAnimName": "POPANIM_EFFECTS_GRAPPLE_CHEST",
                 "AnimationLabel": "animation",
-                "SpawnWeight": 0.050000000000000003,
-                "ReturnSpeedFactor": 0.20000000000000001,
+                "SpawnWeight": 0.05,
+                "ReturnSpeedFactor": 0.2,
                 "Score": 160,
                 "Experience": 6,
-                "CollisionRadius": 34.0,
+                "CollisionRadius": 34,
                 "Scale": 1.8,
-                "RotationSpeed": 90.0,
+                "RotationSpeed": 90,
                 "AttachedPAMOffset": {
                   "x": -95.5,
                   "y": -97.5
@@ -30000,11 +30041,11 @@
                 "Type": "MeteorFlower",
                 "PopAnimName": "POPANIM_EFFECTS_GRAPPLE_METEORFLOWER",
                 "AnimationLabel": "idle",
-                "SpawnWeight": 0.0,
-                "ReturnSpeedFactor": 0.69999999999999996,
+                "SpawnWeight": 0,
+                "ReturnSpeedFactor": 0.7,
                 "Score": 50,
                 "Experience": 4,
-                "CollisionRadius": 28.0,
+                "CollisionRadius": 28,
                 "AttachedPAMOffset": {
                   "x": -112.5,
                   "y": -111.5
@@ -30013,13 +30054,13 @@
             ]
           },
           {
-            "Duration": 60.0,
+            "Duration": 60,
             "TargetScore": 1300,
             "SpawnThreshold": 6,
-            "InitialSpawnDelay": 6.0,
-            "SpawnInterval": 1.8999999999999999,
-            "MinimumSpeed": 155.0,
-            "MaximumSpeed": 205.0,
+            "InitialSpawnDelay": 6,
+            "SpawnInterval": 1.9,
+            "MinimumSpeed": 155,
+            "MaximumSpeed": 205,
             "LeftToRightChance": 0.5,
             "MinimumFormationSize": 2,
             "MaximumFormationSize": 3,
@@ -30028,13 +30069,13 @@
                 "Type": "SmallCrystal",
                 "PopAnimName": "POPANIM_EFFECTS_GRAPPLE_SMALL_CRYSTAL",
                 "AnimationLabel": "animation",
-                "SpawnWeight": 0.40000000000000002,
-                "ReturnSpeedFactor": 1.0,
+                "SpawnWeight": 0.4,
+                "ReturnSpeedFactor": 1,
                 "Score": 25,
                 "Experience": 2,
-                "CollisionRadius": 20.0,
+                "CollisionRadius": 20,
                 "Scale": 1.3,
-                "RotationSpeed": 90.0,
+                "RotationSpeed": 90,
                 "AttachedPAMOffset": {
                   "x": -98.5,
                   "y": -100.5
@@ -30044,13 +30085,13 @@
                 "Type": "LargeOre",
                 "PopAnimName": "POPANIM_EFFECTS_GRAPPLE_LARGE_ORE",
                 "AnimationLabel": "animation",
-                "SpawnWeight": 0.34999999999999998,
-                "ReturnSpeedFactor": 0.20000000000000001,
+                "SpawnWeight": 0.35,
+                "ReturnSpeedFactor": 0.2,
                 "Score": 90,
                 "Experience": 4,
-                "CollisionRadius": 35.0,
+                "CollisionRadius": 35,
                 "Scale": 1.3,
-                "RotationSpeed": 90.0,
+                "RotationSpeed": 90,
                 "AttachedPAMOffset": {
                   "x": -95.5,
                   "y": -103.5
@@ -30062,29 +30103,29 @@
                 "AnimationLabel": "animation",
                 "AlternatePopAnimName": "POPANIM_EFFECTS_GRAPPLE_ROCK_RARE",
                 "AlternateAnimationLabel": "idle",
-                "SpawnWeight": 0.17999999999999999,
-                "ReturnSpeedFactor": 1.0,
+                "SpawnWeight": 0.18,
+                "ReturnSpeedFactor": 1,
                 "Score": 0,
                 "Experience": 1,
-                "CollisionRadius": 33.0,
+                "CollisionRadius": 33,
                 "Scale": 1.3,
-                "RotationSpeed": 90.0,
+                "RotationSpeed": 90,
                 "AttachedPAMOffset": {
-                  "x": -95.0,
-                  "y": -97.0
+                  "x": -95,
+                  "y": -97
                 }
               },
               {
                 "Type": "Chest",
                 "PopAnimName": "POPANIM_EFFECTS_GRAPPLE_CHEST",
                 "AnimationLabel": "animation",
-                "SpawnWeight": 0.070000000000000007,
-                "ReturnSpeedFactor": 0.20000000000000001,
+                "SpawnWeight": 0.07,
+                "ReturnSpeedFactor": 0.2,
                 "Score": 160,
                 "Experience": 6,
-                "CollisionRadius": 34.0,
+                "CollisionRadius": 34,
                 "Scale": 1.8,
-                "RotationSpeed": 90.0,
+                "RotationSpeed": 90,
                 "AttachedPAMOffset": {
                   "x": -95.5,
                   "y": -97.5
@@ -30094,11 +30135,11 @@
                 "Type": "MeteorFlower",
                 "PopAnimName": "POPANIM_EFFECTS_GRAPPLE_METEORFLOWER",
                 "AnimationLabel": "idle",
-                "SpawnWeight": 0.0,
-                "ReturnSpeedFactor": 0.69999999999999996,
+                "SpawnWeight": 0,
+                "ReturnSpeedFactor": 0.7,
                 "Score": 50,
                 "Experience": 4,
-                "CollisionRadius": 28.0,
+                "CollisionRadius": 28,
                 "AttachedPAMOffset": {
                   "x": -112.5,
                   "y": -111.5
@@ -30108,43 +30149,43 @@
           }
         ],
         "FeverCombo": 10,
-        "FeverDuration": 6.0,
+        "FeverDuration": 6,
         "FeverExtraItems": 2,
-        "FeverMinimumSpawnInterval": 0.80000000000000004,
-        "FeverHookSpeedMultiplier": 2.0,
-        "MeteorFlowerSpeed": 260.0,
-        "MeteorShowerDuration": 8.0,
-        "MeteorShowerScoreMultiplier": 2.0,
-        "BackgroundMinimumInterval": 12.0,
-        "BackgroundMaximumInterval": 25.0,
+        "FeverMinimumSpawnInterval": 0.8,
+        "FeverHookSpeedMultiplier": 2,
+        "MeteorFlowerSpeed": 260,
+        "MeteorShowerDuration": 8,
+        "MeteorShowerScoreMultiplier": 2,
+        "BackgroundMinimumInterval": 12,
+        "BackgroundMaximumInterval": 25,
         "BackgroundSpawnChance": 0.25,
         "BackgroundObjects": [
           {
             "PopAnimName": "POPANIM_EFFECTS_GRAPPLE_JACKFRUIT",
             "ArtCenter": {
-              "x": 97.0,
-              "y": 119.0
+              "x": 97,
+              "y": 119
             },
-            "Speed": 30.0,
-            "Opacity": 0.59999999999999998
+            "Speed": 30,
+            "Opacity": 0.6
           },
           {
             "PopAnimName": "POPANIM_EFFECTS_GRAPPLE_SAUCER",
             "ArtCenter": {
-              "x": 97.0,
-              "y": 105.0
+              "x": 97,
+              "y": 105
             },
-            "Speed": 120.0,
-            "Opacity": 0.59999999999999998
+            "Speed": 120,
+            "Opacity": 0.6
           },
           {
             "PopAnimName": "POPANIM_EFFECTS_GRAPPLE_DUCKPEAR",
             "ArtCenter": {
-              "x": 99.0,
-              "y": 110.0
+              "x": 99,
+              "y": 110
             },
-            "Speed": 30.0,
-            "Opacity": 0.59999999999999998
+            "Speed": 30,
+            "Opacity": 0.6
           }
         ],
         "ExperienceRequirements": [
@@ -30161,33 +30202,33 @@
           41,
           47
         ],
-        "ExperienceBarFillDuration": 0.80000000000000004,
-        "CannotFireTipDuration": 2.0,
-        "CannotFireTipFadeDuration": 1.0,
+        "ExperienceBarFillDuration": 0.8,
+        "CannotFireTipDuration": 2,
+        "CannotFireTipFadeDuration": 1,
         "WinchBonuses": [
-          0.34999999999999998,
-          0.69999999999999996,
-          1.1000000000000001
+          0.35,
+          0.7,
+          1.1
         ],
         "WinchHeavySlowdownReduction": 0.25,
         "LauncherLaunchBonuses": [
-          0.34999999999999998,
-          0.69999999999999996,
-          1.1000000000000001
+          0.35,
+          0.7,
+          1.1
         ],
         "LauncherReturnBonuses": [
-          0.20000000000000001,
+          0.2,
           0.5,
-          0.90000000000000002
+          0.9
         ],
         "MagnetRadii": [
-          70.0,
-          105.0,
-          140.0
+          70,
+          105,
+          140
         ],
         "MagnetPullSpeeds": [
-          1.0,
-          1.3500000000000001,
+          1,
+          1.35,
           1.7
         ],
         "MagnetCapacities": [
@@ -30196,20 +30237,20 @@
           2
         ],
         "DoubleHookSpeedFactors": [
-          0.69999999999999996,
-          0.90000000000000002,
-          1.0
+          0.7,
+          0.9,
+          1
         ],
-        "DoubleHookIdleAngleDegrees": 30.0,
+        "DoubleHookIdleAngleDegrees": 30,
         "BountyIntervals": [
-          12.0,
-          10.0,
-          10.0
+          12,
+          10,
+          10
         ],
         "BountyScoreBonuses": [
           0.5,
-          1.0,
-          1.0
+          1,
+          1
         ]
       }
     },
@@ -30245,77 +30286,77 @@
           ]
         },
         "ShipPosition": {
-          "x": 400.0,
-          "y": 570.0
+          "x": 400,
+          "y": 570
         },
         "ShipArtCenter": {
-          "x": 98.0,
-          "y": 110.0
+          "x": 98,
+          "y": 110
         },
         "ShipScale": 1.3,
         "ShipPopAnimName": "POPANIM_EFFECTS_GRAPPLE_CONSOLE",
         "HookPositionOffset": {
-          "x": 0.0,
-          "y": -43.0
+          "x": 0,
+          "y": -43
         },
         "HookPopAnimName": "POPANIM_EFFECTS_GRAPPLE_HOOK",
         "HookArtCenter": {
-          "x": 98.0,
-          "y": 90.0
+          "x": 98,
+          "y": 90
         },
         "HookScale": 1.3,
         "HookBodyPopAnimName": "POPANIM_EFFECTS_GRAPPLE_HOOK_BODY",
         "HookBodyAnimationLabel": "idle",
         "HookBodyOriginOffset": {
-          "x": 0.0,
-          "y": 20.0
+          "x": 0,
+          "y": 20
         },
         "HookBodyStartArtOffset": {
-          "x": 0.0,
+          "x": 0,
           "y": 99.5
         },
         "HookBodyEndArtOffset": {
-          "x": 198.0,
+          "x": 198,
           "y": 99.5
         },
-        "HookBodyScaleY": 1.0,
+        "HookBodyScaleY": 1,
         "AimLinePopAnimName": "POPANIM_EFFECTS_GRAPPLE_HOOK_BODY",
         "AimLineAnimationLabel": "guide_idle",
         "AimLineStartArtOffset": {
           "x": 1.5,
-          "y": 97.0
+          "y": 97
         },
         "AimLineEndArtOffset": {
           "x": 198.5,
-          "y": 97.0
+          "y": 97
         },
-        "AimLineScaleY": 1.0,
-        "MinimumHookDistance": 80.0,
-        "MaximumHookDistance": 430.0,
-        "FiringArcDegrees": 130.0,
-        "LaunchSpeed": 520.0,
-        "EmptyReturnSpeed": 600.0,
-        "LoadedReturnSpeed": 420.0,
-        "HookCollisionRadius": 12.0,
+        "AimLineScaleY": 1,
+        "MinimumHookDistance": 80,
+        "MaximumHookDistance": 430,
+        "FiringArcDegrees": 130,
+        "LaunchSpeed": 520,
+        "EmptyReturnSpeed": 600,
+        "LoadedReturnSpeed": 420,
+        "HookCollisionRadius": 12,
         "CollisionDebugDraw": false,
         "LaneY": [
-          180.0,
-          270.0,
-          360.0
+          180,
+          270,
+          360
         ],
-        "SpawnLeftX": -80.0,
-        "SpawnRightX": 880.0,
-        "FormationSpacing": 75.0,
-        "FormationYOffset": 35.0,
+        "SpawnLeftX": -80,
+        "SpawnRightX": 880,
+        "FormationSpacing": 75,
+        "FormationYOffset": 35,
         "Rounds": [
           {
-            "Duration": 60.0,
+            "Duration": 60,
             "TargetScore": 900,
             "SpawnThreshold": 4,
-            "InitialSpawnDelay": 4.0,
-            "SpawnInterval": 2.3999999999999999,
-            "MinimumSpeed": 100.0,
-            "MaximumSpeed": 130.0,
+            "InitialSpawnDelay": 4,
+            "SpawnInterval": 2.4,
+            "MinimumSpeed": 100,
+            "MaximumSpeed": 130,
             "LeftToRightChance": 0.5,
             "MinimumFormationSize": 2,
             "MaximumFormationSize": 3,
@@ -30324,13 +30365,13 @@
                 "Type": "SmallCrystal",
                 "PopAnimName": "POPANIM_EFFECTS_GRAPPLE_SMALL_CRYSTAL",
                 "AnimationLabel": "idle",
-                "SpawnWeight": 0.55000000000000004,
-                "ReturnSpeedFactor": 1.0,
+                "SpawnWeight": 0.55,
+                "ReturnSpeedFactor": 1,
                 "Score": 25,
                 "Experience": 2,
-                "CollisionRadius": 20.0,
+                "CollisionRadius": 20,
                 "Scale": 1.3,
-                "RotationSpeed": 90.0,
+                "RotationSpeed": 90,
                 "AttachedPAMOffset": {
                   "x": -98.5,
                   "y": -100.5
@@ -30341,12 +30382,12 @@
                 "PopAnimName": "POPANIM_EFFECTS_GRAPPLE_LARGE_ORE",
                 "AnimationLabel": "idle",
                 "SpawnWeight": 0.25,
-                "ReturnSpeedFactor": 0.20000000000000001,
+                "ReturnSpeedFactor": 0.2,
                 "Score": 90,
                 "Experience": 4,
-                "CollisionRadius": 35.0,
+                "CollisionRadius": 35,
                 "Scale": 1.3,
-                "RotationSpeed": 90.0,
+                "RotationSpeed": 90,
                 "AttachedPAMOffset": {
                   "x": -95.5,
                   "y": -103.5
@@ -30358,29 +30399,29 @@
                 "AnimationLabel": "idle",
                 "AlternatePopAnimName": "POPANIM_EFFECTS_GRAPPLE_ROCK_RARE",
                 "AlternateAnimationLabel": "idle",
-                "SpawnWeight": 0.20000000000000001,
-                "ReturnSpeedFactor": 1.0,
+                "SpawnWeight": 0.2,
+                "ReturnSpeedFactor": 1,
                 "Score": 0,
                 "Experience": 1,
-                "CollisionRadius": 33.0,
+                "CollisionRadius": 33,
                 "Scale": 1.3,
-                "RotationSpeed": 90.0,
+                "RotationSpeed": 90,
                 "AttachedPAMOffset": {
-                  "x": -95.0,
-                  "y": -97.0
+                  "x": -95,
+                  "y": -97
                 }
               },
               {
                 "Type": "Chest",
                 "PopAnimName": "POPANIM_EFFECTS_GRAPPLE_CHEST",
                 "AnimationLabel": "idle",
-                "SpawnWeight": 0.0,
-                "ReturnSpeedFactor": 0.20000000000000001,
+                "SpawnWeight": 0,
+                "ReturnSpeedFactor": 0.2,
                 "Score": 160,
                 "Experience": 6,
-                "CollisionRadius": 34.0,
+                "CollisionRadius": 34,
                 "Scale": 1.8,
-                "RotationSpeed": 90.0,
+                "RotationSpeed": 90,
                 "AttachedPAMOffset": {
                   "x": -95.5,
                   "y": -97.5
@@ -30390,11 +30431,11 @@
                 "Type": "MeteorFlower",
                 "PopAnimName": "POPANIM_EFFECTS_GRAPPLE_METEORFLOWER",
                 "AnimationLabel": "idle",
-                "SpawnWeight": 0.0,
-                "ReturnSpeedFactor": 0.69999999999999996,
+                "SpawnWeight": 0,
+                "ReturnSpeedFactor": 0.7,
                 "Score": 50,
                 "Experience": 4,
-                "CollisionRadius": 28.0,
+                "CollisionRadius": 28,
                 "AttachedPAMOffset": {
                   "x": -112.5,
                   "y": -111.5
@@ -30403,13 +30444,13 @@
             ]
           },
           {
-            "Duration": 60.0,
+            "Duration": 60,
             "TargetScore": 1300,
             "SpawnThreshold": 5,
-            "InitialSpawnDelay": 5.0,
-            "SpawnInterval": 2.1000000000000001,
-            "MinimumSpeed": 130.0,
-            "MaximumSpeed": 175.0,
+            "InitialSpawnDelay": 5,
+            "SpawnInterval": 2.1,
+            "MinimumSpeed": 130,
+            "MaximumSpeed": 175,
             "LeftToRightChance": 0.5,
             "MinimumFormationSize": 2,
             "MaximumFormationSize": 3,
@@ -30418,13 +30459,13 @@
                 "Type": "SmallCrystal",
                 "PopAnimName": "POPANIM_EFFECTS_GRAPPLE_SMALL_CRYSTAL",
                 "AnimationLabel": "animation",
-                "SpawnWeight": 0.45000000000000001,
-                "ReturnSpeedFactor": 1.0,
+                "SpawnWeight": 0.45,
+                "ReturnSpeedFactor": 1,
                 "Score": 25,
                 "Experience": 2,
-                "CollisionRadius": 20.0,
+                "CollisionRadius": 20,
                 "Scale": 1.3,
-                "RotationSpeed": 90.0,
+                "RotationSpeed": 90,
                 "AttachedPAMOffset": {
                   "x": -98.5,
                   "y": -100.5
@@ -30434,13 +30475,13 @@
                 "Type": "LargeOre",
                 "PopAnimName": "POPANIM_EFFECTS_GRAPPLE_LARGE_ORE",
                 "AnimationLabel": "animation",
-                "SpawnWeight": 0.29999999999999999,
-                "ReturnSpeedFactor": 0.20000000000000001,
+                "SpawnWeight": 0.3,
+                "ReturnSpeedFactor": 0.2,
                 "Score": 90,
                 "Experience": 4,
-                "CollisionRadius": 35.0,
+                "CollisionRadius": 35,
                 "Scale": 1.3,
-                "RotationSpeed": 90.0,
+                "RotationSpeed": 90,
                 "AttachedPAMOffset": {
                   "x": -95.5,
                   "y": -103.5
@@ -30452,29 +30493,29 @@
                 "AnimationLabel": "animation",
                 "AlternatePopAnimName": "POPANIM_EFFECTS_GRAPPLE_ROCK_RARE",
                 "AlternateAnimationLabel": "idle",
-                "SpawnWeight": 0.20000000000000001,
-                "ReturnSpeedFactor": 1.0,
+                "SpawnWeight": 0.2,
+                "ReturnSpeedFactor": 1,
                 "Score": 0,
                 "Experience": 1,
-                "CollisionRadius": 33.0,
+                "CollisionRadius": 33,
                 "Scale": 1.3,
-                "RotationSpeed": 90.0,
+                "RotationSpeed": 90,
                 "AttachedPAMOffset": {
-                  "x": -95.0,
-                  "y": -97.0
+                  "x": -95,
+                  "y": -97
                 }
               },
               {
                 "Type": "Chest",
                 "PopAnimName": "POPANIM_EFFECTS_GRAPPLE_CHEST",
                 "AnimationLabel": "animation",
-                "SpawnWeight": 0.050000000000000003,
-                "ReturnSpeedFactor": 0.20000000000000001,
+                "SpawnWeight": 0.05,
+                "ReturnSpeedFactor": 0.2,
                 "Score": 160,
                 "Experience": 6,
-                "CollisionRadius": 34.0,
+                "CollisionRadius": 34,
                 "Scale": 1.8,
-                "RotationSpeed": 90.0,
+                "RotationSpeed": 90,
                 "AttachedPAMOffset": {
                   "x": -95.5,
                   "y": -97.5
@@ -30484,11 +30525,11 @@
                 "Type": "MeteorFlower",
                 "PopAnimName": "POPANIM_EFFECTS_GRAPPLE_METEORFLOWER",
                 "AnimationLabel": "idle",
-                "SpawnWeight": 0.0,
-                "ReturnSpeedFactor": 0.69999999999999996,
+                "SpawnWeight": 0,
+                "ReturnSpeedFactor": 0.7,
                 "Score": 50,
                 "Experience": 4,
-                "CollisionRadius": 28.0,
+                "CollisionRadius": 28,
                 "AttachedPAMOffset": {
                   "x": -112.5,
                   "y": -111.5
@@ -30497,13 +30538,13 @@
             ]
           },
           {
-            "Duration": 60.0,
+            "Duration": 60,
             "TargetScore": 1750,
             "SpawnThreshold": 6,
-            "InitialSpawnDelay": 6.0,
+            "InitialSpawnDelay": 6,
             "SpawnInterval": 1.8,
-            "MinimumSpeed": 165.0,
-            "MaximumSpeed": 215.0,
+            "MinimumSpeed": 165,
+            "MaximumSpeed": 215,
             "LeftToRightChance": 0.5,
             "MinimumFormationSize": 2,
             "MaximumFormationSize": 3,
@@ -30512,13 +30553,13 @@
                 "Type": "SmallCrystal",
                 "PopAnimName": "POPANIM_EFFECTS_GRAPPLE_SMALL_CRYSTAL",
                 "AnimationLabel": "animation",
-                "SpawnWeight": 0.40000000000000002,
-                "ReturnSpeedFactor": 1.0,
+                "SpawnWeight": 0.4,
+                "ReturnSpeedFactor": 1,
                 "Score": 25,
                 "Experience": 2,
-                "CollisionRadius": 20.0,
+                "CollisionRadius": 20,
                 "Scale": 1.3,
-                "RotationSpeed": 90.0,
+                "RotationSpeed": 90,
                 "AttachedPAMOffset": {
                   "x": -98.5,
                   "y": -100.5
@@ -30528,13 +30569,13 @@
                 "Type": "LargeOre",
                 "PopAnimName": "POPANIM_EFFECTS_GRAPPLE_LARGE_ORE",
                 "AnimationLabel": "animation",
-                "SpawnWeight": 0.34999999999999998,
-                "ReturnSpeedFactor": 0.20000000000000001,
+                "SpawnWeight": 0.35,
+                "ReturnSpeedFactor": 0.2,
                 "Score": 90,
                 "Experience": 4,
-                "CollisionRadius": 35.0,
+                "CollisionRadius": 35,
                 "Scale": 1.3,
-                "RotationSpeed": 90.0,
+                "RotationSpeed": 90,
                 "AttachedPAMOffset": {
                   "x": -95.5,
                   "y": -103.5
@@ -30546,29 +30587,29 @@
                 "AnimationLabel": "animation",
                 "AlternatePopAnimName": "POPANIM_EFFECTS_GRAPPLE_ROCK_RARE",
                 "AlternateAnimationLabel": "idle",
-                "SpawnWeight": 0.17999999999999999,
-                "ReturnSpeedFactor": 1.0,
+                "SpawnWeight": 0.18,
+                "ReturnSpeedFactor": 1,
                 "Score": 0,
                 "Experience": 1,
-                "CollisionRadius": 33.0,
+                "CollisionRadius": 33,
                 "Scale": 1.3,
-                "RotationSpeed": 90.0,
+                "RotationSpeed": 90,
                 "AttachedPAMOffset": {
-                  "x": -95.0,
-                  "y": -97.0
+                  "x": -95,
+                  "y": -97
                 }
               },
               {
                 "Type": "Chest",
                 "PopAnimName": "POPANIM_EFFECTS_GRAPPLE_CHEST",
                 "AnimationLabel": "animation",
-                "SpawnWeight": 0.070000000000000007,
-                "ReturnSpeedFactor": 0.20000000000000001,
+                "SpawnWeight": 0.07,
+                "ReturnSpeedFactor": 0.2,
                 "Score": 160,
                 "Experience": 6,
-                "CollisionRadius": 34.0,
+                "CollisionRadius": 34,
                 "Scale": 1.8,
-                "RotationSpeed": 90.0,
+                "RotationSpeed": 90,
                 "AttachedPAMOffset": {
                   "x": -95.5,
                   "y": -97.5
@@ -30578,11 +30619,11 @@
                 "Type": "MeteorFlower",
                 "PopAnimName": "POPANIM_EFFECTS_GRAPPLE_METEORFLOWER",
                 "AnimationLabel": "idle",
-                "SpawnWeight": 0.0,
-                "ReturnSpeedFactor": 0.69999999999999996,
+                "SpawnWeight": 0,
+                "ReturnSpeedFactor": 0.7,
                 "Score": 50,
                 "Experience": 4,
-                "CollisionRadius": 28.0,
+                "CollisionRadius": 28,
                 "AttachedPAMOffset": {
                   "x": -112.5,
                   "y": -111.5
@@ -30592,43 +30633,43 @@
           }
         ],
         "FeverCombo": 10,
-        "FeverDuration": 6.0,
+        "FeverDuration": 6,
         "FeverExtraItems": 2,
-        "FeverMinimumSpawnInterval": 0.80000000000000004,
-        "FeverHookSpeedMultiplier": 2.0,
-        "MeteorFlowerSpeed": 260.0,
-        "MeteorShowerDuration": 8.0,
-        "MeteorShowerScoreMultiplier": 2.0,
-        "BackgroundMinimumInterval": 12.0,
-        "BackgroundMaximumInterval": 25.0,
+        "FeverMinimumSpawnInterval": 0.8,
+        "FeverHookSpeedMultiplier": 2,
+        "MeteorFlowerSpeed": 260,
+        "MeteorShowerDuration": 8,
+        "MeteorShowerScoreMultiplier": 2,
+        "BackgroundMinimumInterval": 12,
+        "BackgroundMaximumInterval": 25,
         "BackgroundSpawnChance": 0.25,
         "BackgroundObjects": [
           {
             "PopAnimName": "POPANIM_EFFECTS_GRAPPLE_JACKFRUIT",
             "ArtCenter": {
-              "x": 97.0,
-              "y": 119.0
+              "x": 97,
+              "y": 119
             },
-            "Speed": 30.0,
-            "Opacity": 0.59999999999999998
+            "Speed": 30,
+            "Opacity": 0.6
           },
           {
             "PopAnimName": "POPANIM_EFFECTS_GRAPPLE_SAUCER",
             "ArtCenter": {
-              "x": 97.0,
-              "y": 105.0
+              "x": 97,
+              "y": 105
             },
-            "Speed": 120.0,
-            "Opacity": 0.59999999999999998
+            "Speed": 120,
+            "Opacity": 0.6
           },
           {
             "PopAnimName": "POPANIM_EFFECTS_GRAPPLE_DUCKPEAR",
             "ArtCenter": {
-              "x": 99.0,
-              "y": 110.0
+              "x": 99,
+              "y": 110
             },
-            "Speed": 30.0,
-            "Opacity": 0.59999999999999998
+            "Speed": 30,
+            "Opacity": 0.6
           }
         ],
         "ExperienceRequirements": [
@@ -30645,33 +30686,33 @@
           41,
           47
         ],
-        "ExperienceBarFillDuration": 0.80000000000000004,
-        "CannotFireTipDuration": 2.0,
-        "CannotFireTipFadeDuration": 1.0,
+        "ExperienceBarFillDuration": 0.8,
+        "CannotFireTipDuration": 2,
+        "CannotFireTipFadeDuration": 1,
         "WinchBonuses": [
-          0.34999999999999998,
-          0.69999999999999996,
-          1.1000000000000001
+          0.35,
+          0.7,
+          1.1
         ],
         "WinchHeavySlowdownReduction": 0.25,
         "LauncherLaunchBonuses": [
-          0.34999999999999998,
-          0.69999999999999996,
-          1.1000000000000001
+          0.35,
+          0.7,
+          1.1
         ],
         "LauncherReturnBonuses": [
-          0.20000000000000001,
+          0.2,
           0.5,
-          0.90000000000000002
+          0.9
         ],
         "MagnetRadii": [
-          70.0,
-          105.0,
-          140.0
+          70,
+          105,
+          140
         ],
         "MagnetPullSpeeds": [
-          1.0,
-          1.3500000000000001,
+          1,
+          1.35,
           1.7
         ],
         "MagnetCapacities": [
@@ -30680,20 +30721,20 @@
           2
         ],
         "DoubleHookSpeedFactors": [
-          0.69999999999999996,
-          0.90000000000000002,
-          1.0
+          0.7,
+          0.9,
+          1
         ],
-        "DoubleHookIdleAngleDegrees": 30.0,
+        "DoubleHookIdleAngleDegrees": 30,
         "BountyIntervals": [
-          12.0,
-          10.0,
-          10.0
+          12,
+          10,
+          10
         ],
         "BountyScoreBonuses": [
           0.5,
-          1.0,
-          1.0
+          1,
+          1
         ]
       }
     }

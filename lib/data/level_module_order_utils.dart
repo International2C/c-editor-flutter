@@ -43,6 +43,7 @@ abstract final class LevelModuleOrderUtils {
     return indices;
   }
 
+  /// [newIndex] is the final index within the section, as in onReorderItem.
   static void reorderModuleSection({
     required LevelDefinitionData levelDef,
     required PvzLevelFile levelFile,
@@ -60,10 +61,10 @@ abstract final class LevelModuleOrderUtils {
     if (oldIndex < 0 ||
         oldIndex >= sectionIndices.length ||
         newIndex < 0 ||
-        newIndex > sectionIndices.length) {
+        newIndex >= sectionIndices.length ||
+        oldIndex == newIndex) {
       return;
     }
-    if (newIndex > oldIndex) newIndex--;
 
     final fromGlobal = sectionIndices[oldIndex];
     final rtid = modules.removeAt(fromGlobal);

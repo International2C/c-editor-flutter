@@ -18,20 +18,21 @@
       "path": { "type": "String" }
     }
   },
-  "dynamicFetchError": "下载失败：{error}",
-  "@dynamicFetchError": {
-    "placeholders": {
-      "error": { "type": "String" }
-    }
-  },
+  "dynamicFetchError": "无法下载数据包。请检查网络、工作区写入权限和可用空间后重试。",
+  "dynamicTimeout": "连接超时。请检查网络和代理设置后重试；当前网络可能需要使用代理才能访问 GitHub。",
+  "dynamicRateLimited": "GitHub 暂时限制了当前网络的请求次数。请稍后再试，或切换网络。",
+  "dynamicAccessDenied": "GitHub 拒绝了此次请求。请检查网络或代理设置，稍后再试。",
+  "dynamicNotFound": "此版本或下载文件已不可用。请刷新版本列表，选择其他版本。",
+  "dynamicInvalidResponse": "服务器返回的数据不符合预期。请检查网络或代理是否拦截了 GitHub 请求，稍后重试。",
+  "dynamicStorageError": "无法保存数据包。请检查工作区的写入权限和可用空间后重试。",
   "dynamicCancelTitle": "取消下载？",
   "dynamicCancelBody": "停止下载并删除未完成的文件？",
   "dynamicCancelConfirm": "取消下载",
   "dynamicCancelKeep": "继续下载",
   "dynamicCanceling": "正在取消…",
   "dynamicCanceled": "下载已取消。",
-  "dynamicNoConnection": "无网络连接。请检查网络后重试。",
-  "dynamicConnectionLost": "下载过程中连接中断，请重试。",
+  "dynamicNoConnection": "无法连接 GitHub。请检查网络和代理设置后重试；当前网络可能需要使用代理才能访问 GitHub。",
+  "dynamicConnectionLost": "下载连接中断。请检查网络和代理设置后重试。",
   "dynamicServerError": "服务器错误（{code}）。请稍后再试。",
   "@dynamicServerError": {
     "placeholders": {
@@ -64,9 +65,9 @@
   },
   "dynamicWebOpen": "打开下载",
   "dynamicWebOpenAgain": "重新打开链接",
-  "dynamicWebOpenFailed": "无法打开下载链接。请从GitHub Releases页面复制链接，或重试。",
+  "dynamicWebOpenFailed": "无法打开下载链接。请允许浏览器打开新窗口，或从 GitHub Releases 页面手动下载；当前网络可能需要使用代理。",
   "dynamicWebPick": "选择文件",
   "dynamicWebPickTitle": "选择已下载的 dynamic.rsb.smf",
-  "dynamicWebPickEmpty": "无法读取所选文件。请重试。",
-  "dynamicWebImportFailed": "无法将文件保存到工作区。"
+  "dynamicWebPickEmpty": "无法读取所选文件。请确认下载已完成，并重新选择可读取的 .rsb.smf 文件。",
+  "dynamicWebImportFailed": "无法将文件保存到工作区。请检查可用空间，并确认浏览器允许使用本地存储后重试。"
 }

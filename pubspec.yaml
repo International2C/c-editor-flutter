@@ -5,7 +5,7 @@ description: "Level Editor for Plants vs. Zombies 2 Chinese"
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
 
-version: 1.1.0
+version: 1.2.0
 
 environment:
   sdk: ^3.12.0
@@ -71,6 +71,9 @@ flutter:
     - assets/l10n/resource_en.json
     - assets/l10n/resource_zh.json
     - assets/l10n/resource_ru.json
+    - assets/l10n/narrative_zh.json
+    - assets/l10n/narrative_en.json
+    - assets/l10n/narrative_ru.json
     - assets/images/
     - assets/images/plants/
     - assets/images/zombies/
@@ -88,6 +91,7 @@ flutter:
     - assets/images/ztalemate_perks/
     - assets/images/fishes/
     - assets/images/tunnels/
+    - assets/images/npcs/
     - lib/bundled_plugins/preview_img_cplugin/manifest.json
     - lib/bundled_plugins/preview_img_cplugin/assets/icon.png
     - lib/bundled_plugins/preview_img_cplugin/assets/stage_banners.json

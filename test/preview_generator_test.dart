@@ -9,9 +9,66 @@ import 'package:c_editor/bundled_plugins/preview_img_cplugin/lib/src/preview/pre
 import 'package:c_editor/bundled_plugins/preview_img_cplugin/lib/src/preview/preview_rich_text_controller.dart';
 import 'package:c_editor/bundled_plugins/preview_img_cplugin/lib/src/preview/stage_banner_resolver.dart';
 import 'package:c_editor/data/pvz_models.dart';
+import 'package:c_editor/data/level_parser.dart';
+import 'package:c_editor/data/custom_stage_level_utils.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
+  testWidgets('composer follows the Moon appearance part of a custom lawn', (
+    tester,
+  ) async {
+    SharedPreferences.setMockInitialValues({});
+    final banners = (await tester.runAsync(StageBannerResolver.load))!;
+    for (final objclass in ['MoonStageProperties', 'EgyptStageProperties']) {
+      final stage = PvzObject(
+        aliases: const ['CustomMoon'],
+        objClass: objclass,
+        objData: {'BackgroundImagePrefix': 'IMAGE_BACKGROUNDS_MOON'},
+      );
+      final level = PvzLevelFile(
+        objects: [
+          PvzObject(
+            objClass: 'LevelDefinition',
+            objData: {'StageModule': 'RTID(CustomMoon@CurrentLevel)'},
+          ),
+          stage,
+        ],
+      );
+      for (final secondPart in [false, true, false]) {
+        CustomStageLevelUtils.applyMoonPart2Appearance(
+          stage.objData as Map<String, dynamic>,
+          enabled: secondPart,
+        );
+        final document = (await tester.runAsync(
+          () => PreviewAutoComposer(
+            levelFile: level,
+            parsed: LevelParser.parseLevel(level),
+            fileName: 'moon.json',
+            banners: banners,
+            featureGroups: PreviewFeatureGroups.forTest(groups: const []),
+          ).compose(),
+        ))!;
+        expect(document.banner.stem, secondPart ? 'Moon2' : 'Moon');
+        expect(
+          document.banner.assetPath,
+          banners.assetPathForStem(secondPart ? 'Moon2' : 'Moon'),
+        );
+      }
+    }
+    expect(banners.resolveStem('MoonStage'), 'Moon');
+    expect(
+      banners.resolveStem(
+        'MoonGrappleStage',
+        stageObjdata: {
+          'BackgroundImagePrefix': 'IMAGE_BACKGROUNDS_MOONGRAPPLE',
+          'BackgroundImageMiddle': 'MOONPART2',
+          'BackgroundImageRight': 'MOONPART2_RIGHT',
+        },
+      ),
+      'MoonGrapple',
+    );
+  });
+
   group('preview generator available width', () {
     test('uses the actual width threshold', () {
       expect(

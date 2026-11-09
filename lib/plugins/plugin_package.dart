@@ -41,21 +41,23 @@ class CPluginPackageSpec {
 /// Loads [CPluginManifest] from a Flutter asset path.
 Future<CPluginManifest> loadPluginManifestAsset(String assetPath) async {
   final raw = await rootBundle.loadString(assetPath);
-  return CPluginManifest.fromJson(
-    jsonDecode(raw) as Map<String, dynamic>,
-  );
+  return CPluginManifest.fromJson(jsonDecode(raw) as Map<String, dynamic>);
 }
 
 /// Loads plugin `assets/` files registered under [assetsFlutterRoot].
 Future<Map<String, Uint8List>> loadPluginAssetsFromFlutter(
-  String assetsFlutterRoot,
-) async {
+  String assetsFlutterRoot, {
+  List<String>? assetPaths,
+  void Function()? onAssetLoaded,
+}) async {
   final prefix = assetsFlutterRoot.endsWith('/')
       ? assetsFlutterRoot
       : '$assetsFlutterRoot/';
-  final manifest = await AssetManifest.loadFromAssetBundle(rootBundle);
+  final paths =
+      assetPaths ??
+      (await AssetManifest.loadFromAssetBundle(rootBundle)).listAssets();
   final out = <String, Uint8List>{};
-  for (final key in manifest.listAssets()) {
+  for (final key in paths) {
     if (!key.startsWith(prefix)) continue;
     final relative = key.substring(prefix.length);
     if (relative.isEmpty) continue;
@@ -64,6 +66,7 @@ Future<Map<String, Uint8List>> loadPluginAssetsFromFlutter(
       data.offsetInBytes,
       data.lengthInBytes,
     );
+    onAssetLoaded?.call();
   }
   return out;
 }

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:c_editor/data/registry/module_registry.dart';
+import 'package:c_editor/data/level_parser.dart';
+import 'package:c_editor/data/pvz_models.dart';
 import 'package:c_editor/l10n/app_localizations.dart';
 import 'package:c_editor/utils/selection_search.dart';
 import 'package:c_editor/widgets/asset_image.dart';
@@ -37,10 +39,14 @@ class ModuleSelectionScreen extends StatefulWidget {
     super.key,
     required this.existingObjClasses,
     this.stateBucketId,
+    this.levelFile,
+    this.onSelectStage,
   });
 
   final Set<String> existingObjClasses;
   final String? stateBucketId;
+  final PvzLevelFile? levelFile;
+  final Future<void> Function()? onSelectStage;
 
   @override
   State<ModuleSelectionScreen> createState() => _ModuleSelectionScreenState();
@@ -50,6 +56,16 @@ class _ModuleSelectionScreenState extends State<ModuleSelectionScreen> {
   String _searchQuery = '';
   ModuleCategory? _selectedCategory;
   late final ScrollController _listScrollController;
+
+  bool _requiresKongfuStage(ModuleMetadata metadata) =>
+      metadata.objClass == 'MechanismPlankProperties' &&
+      LevelParser.resolveStagePropertiesObjclass(
+            widget.levelFile == null
+                ? null
+                : LevelParser.parseLevel(widget.levelFile!).levelDef,
+            widget.levelFile,
+          ) !=
+          'KongFuStageProperties';
 
   String get _viewStateKey => widget.stateBucketId?.isNotEmpty == true
       ? widget.stateBucketId!
@@ -262,18 +278,20 @@ class _ModuleSelectionScreenState extends State<ModuleSelectionScreen> {
                         )
                     ? 'ConveyorSeedBankProperties'
                     : meta.objClass == 'OakTrainIntroProperties' &&
-                            !widget.existingObjClasses.contains(
-                              'OakTrainProperties',
-                            )
-                        ? 'OakTrainProperties'
-                        : null;
+                          !widget.existingObjClasses.contains(
+                            'OakTrainProperties',
+                          )
+                    ? 'OakTrainProperties'
+                    : null;
                 return Padding(
                   padding: const EdgeInsets.only(bottom: 12),
                   child: _ModuleSelectionCard(
                     meta: meta,
                     isAlreadyAdded: isAlreadyAdded,
                     isEnabled: isEnabled,
-                    isDependencyMissing: requiredModuleObjClass != null,
+                    isDependencyMissing:
+                        requiredModuleObjClass != null ||
+                        _requiresKongfuStage(meta),
                     onTap: () => _handleModuleTap(
                       meta,
                       isEnabled: isEnabled,
@@ -292,6 +310,32 @@ class _ModuleSelectionScreenState extends State<ModuleSelectionScreen> {
     required String? requiredModuleObjClass,
   }) async {
     if (!isEnabled) return;
+    if (_requiresKongfuStage(metadata)) {
+      final l10n = AppLocalizations.of(context)!;
+      final selectStage = await showDialog<bool>(
+        context: context,
+        builder: (dialogContext) => AlertDialog(
+          contentPadding: const EdgeInsets.fromLTRB(24, 16, 24, 24),
+          content: Text(l10n.mechanismPlankStageRequiredMessage),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(dialogContext, false),
+              child: Text(l10n.cancel),
+            ),
+            if (widget.onSelectStage != null)
+              FilledButton(
+                onPressed: () => Navigator.pop(dialogContext, true),
+                child: Text(l10n.switchStage),
+              ),
+          ],
+        ),
+      );
+      if (selectStage == true && mounted) {
+        await widget.onSelectStage?.call();
+        if (mounted) setState(() {});
+      }
+      return;
+    }
     if (requiredModuleObjClass == null) {
       Navigator.pop(context, ModuleSelectionResult(metadata: metadata));
       return;

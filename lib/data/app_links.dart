@@ -11,6 +11,10 @@ class AppLinks {
     required this.cEditorInviteLink,
     required this.recommendedLevels,
     required this.levelUpload,
+    this.releasesApi = '',
+    this.releases = '',
+    this.baiduDownload = '',
+    this.updateBilibili = '',
   });
 
   static const assetPath = 'assets/meta/links.json';
@@ -21,6 +25,10 @@ class AppLinks {
   final String cEditorInviteLink;
   final String recommendedLevels;
   final String levelUpload;
+  final String releasesApi;
+  final String releases;
+  final String baiduDownload;
+  final String updateBilibili;
 
   static AppLinks? _cached;
 
@@ -36,6 +44,10 @@ class AppLinks {
       recommendedLevels:
           (raw['recommendedLevels'] ?? raw['levelPlaza']) as String,
       levelUpload: raw['levelUpload'] as String,
+      releasesApi: raw['releasesApi'] as String? ?? '',
+      releases: raw['releases'] as String? ?? '',
+      baiduDownload: raw['baiduDownload'] as String? ?? '',
+      updateBilibili: raw['updateBilibili'] as String? ?? '',
     );
     return _cached!;
   }

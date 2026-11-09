@@ -13,6 +13,7 @@ import 'package:c_editor/l10n/app_localizations.dart';
 import 'package:c_editor/l10n/resource_names.dart';
 import 'package:c_editor/theme/app_theme.dart';
 import 'package:c_editor/widgets/local_scrollbar_region.dart';
+import 'package:c_editor/widgets/persistent_scrollbar_scroll_behavior.dart';
 import 'package:c_editor/widgets/asset_image.dart'
     show AssetImageWidget, imageAltCandidates;
 
@@ -2387,11 +2388,13 @@ void showEditorHelpDialog(
             Expanded(
               child: Text(
                 displayTitle,
+                textAlign: TextAlign.start,
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
-                style: const TextStyle(
+                style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 20,
+                  color: themeColor ?? Theme.of(ctx).colorScheme.primary,
                 ),
               ),
             ),
@@ -2424,6 +2427,7 @@ void showEditorHelpDialog(
                           padding: const EdgeInsets.only(left: 12),
                           child: Text(
                             s.body,
+                            textAlign: TextAlign.start,
                             style: TextStyle(
                               fontSize: 13,
                               color: Theme.of(ctx).colorScheme.onSurfaceVariant,
@@ -2465,7 +2469,7 @@ String _standardizeEditorHelpTitle(
   switch (languageCode) {
     case 'zh':
       base = base
-          .replaceFirst(RegExp(r'^事件类型\s*[：:]\s*'), '')
+          .replaceFirst(RegExp(r'^事件(?:类型)?\s*[：:]\s*'), '')
           .replaceFirst(RegExp(r'(模块说明|事件说明|模块|事件|说明|帮助)$'), '')
           .trim();
       return '$base${isEvent ? '事件说明' : '模块说明'}';
@@ -3616,7 +3620,7 @@ class _SelectionSearchFieldState extends State<SelectionSearchField> {
   }
 }
 
-class MouseDragScrollBehavior extends MaterialScrollBehavior {
+class MouseDragScrollBehavior extends PersistentScrollbarScrollBehavior {
   const MouseDragScrollBehavior();
 
   @override

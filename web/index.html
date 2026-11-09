@@ -46,6 +46,24 @@
       overscroll-behavior: none;
       position: fixed;
       inset: 0;
+      /* Match dark canvas so resize/paste layout gaps never flash white. */
+      background-color: #121212;
+    }
+
+    /* Flutter web's invisible text-editing overlay can briefly paint opaque
+       after large pastes; keep it transparent so it never shows as a bar. */
+    .flt-text-editing,
+    .flt-text-editing *,
+    textarea.flt-text-editing,
+    input.flt-text-editing,
+    .transparentTextEditing {
+      background: transparent !important;
+      background-color: transparent !important;
+      caret-color: transparent !important;
+      color: transparent !important;
+      outline: none !important;
+      border: none !important;
+      box-shadow: none !important;
     }
   </style>
 </head>

@@ -14,7 +14,7 @@ class ZombieHorizontalLaneRow extends StatefulWidget {
     required this.rowValue,
     required this.items,
     required this.highlighted,
-    required this.labelSide,
+    this.labelSide,
     this.addButton,
     required this.onTap,
     required this.onDragStarted,
@@ -31,7 +31,7 @@ class ZombieHorizontalLaneRow extends StatefulWidget {
   final int rowValue;
   final List<ZombieLaneIconData> items;
   final bool highlighted;
-  final Widget labelSide;
+  final Widget? labelSide;
   final Widget? addButton;
   final void Function(int listIndex) onTap;
   final void Function(Object identity) onDragStarted;
@@ -47,7 +47,8 @@ class ZombieHorizontalLaneRow extends StatefulWidget {
   static const labelColumnBreakpoint = 200.0;
 
   @override
-  State<ZombieHorizontalLaneRow> createState() => _ZombieHorizontalLaneRowState();
+  State<ZombieHorizontalLaneRow> createState() =>
+      _ZombieHorizontalLaneRowState();
 }
 
 class _ZombieHorizontalLaneRowState extends State<ZombieHorizontalLaneRow> {
@@ -145,9 +146,10 @@ class _ZombieHorizontalLaneRowState extends State<ZombieHorizontalLaneRow> {
             else ...[
               for (var i = 0; i < visible.length; i++)
                 AnimatedPositioned(
-                  key: ValueKey<(Object, int)>(
-                    (visible[i].identity, visible[i].rowValue),
-                  ),
+                  key: ValueKey<(Object, int)>((
+                    visible[i].identity,
+                    visible[i].rowValue,
+                  )),
                   duration: shiftDuration,
                   curve: zombieLaneShiftCurve,
                   left: wrapCardRect(
@@ -199,12 +201,14 @@ class _ZombieHorizontalLaneRowState extends State<ZombieHorizontalLaneRow> {
                 AnimatedPositioned(
                   duration: shiftDuration,
                   curve: zombieLaneShiftCurve,
-                  left: wrapLaneSlotRects(contentWidth, visible.length + 1)
-                      .last
-                      .left,
-                  top: wrapLaneSlotRects(contentWidth, visible.length + 1)
-                      .last
-                      .top,
+                  left: wrapLaneSlotRects(
+                    contentWidth,
+                    visible.length + 1,
+                  ).last.left,
+                  top: wrapLaneSlotRects(
+                    contentWidth,
+                    visible.length + 1,
+                  ).last.top,
                   width: zombieLaneCardSize,
                   height: zombieLaneCardSize,
                   child: widget.addButton!,
@@ -242,9 +246,11 @@ class _ZombieHorizontalLaneRowState extends State<ZombieHorizontalLaneRow> {
     return LayoutBuilder(
       builder: (context, constraints) {
         final maxWidth = constraints.maxWidth;
+        final hasLabel = widget.labelSide != null;
         final stackLabel =
+            hasLabel &&
             maxWidth < ZombieHorizontalLaneRow.labelColumnBreakpoint;
-        final laneWidth = stackLabel
+        final laneWidth = !hasLabel || stackLabel
             ? maxWidth
             : math.max(0.0, maxWidth - 84);
 
@@ -256,21 +262,19 @@ class _ZombieHorizontalLaneRowState extends State<ZombieHorizontalLaneRow> {
           laneWidth: laneWidth,
         );
 
+        if (!hasLabel) return lane;
+
         if (stackLabel) {
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              widget.labelSide,
-              const SizedBox(height: 8),
-              lane,
-            ],
+            children: [widget.labelSide!, const SizedBox(height: 8), lane],
           );
         }
 
         return Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            widget.labelSide,
+            widget.labelSide!,
             Expanded(child: lane),
           ],
         );

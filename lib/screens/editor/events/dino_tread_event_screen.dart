@@ -319,11 +319,13 @@ class _DinoTreadEventScreenState extends State<DinoTreadEventScreen> {
                       ),
                       const SizedBox(height: 8),
                       TextField(
+                        key: const ValueKey('waveStartMessageField'),
                         controller: _waveStartMessageCtrl,
                         decoration: InputDecoration(
-                          hintText:
+                          helperText:
                               l10n?.optionalWarningText ??
-                              'Optional warning text before spawn',
+                              'Optional red warning text shown at the center of the screen when the event begins; Chinese is not supported',
+                          helperMaxLines: 3,
                           border: const OutlineInputBorder(),
                         ),
                         onChanged: (v) {

@@ -48,16 +48,24 @@ class ExportEngineWeb implements ExportEngine {
     }
   }
 
-  String _relKey(String path) =>
-      path.startsWith(_webPathPrefix) ? path.substring(_webPathPrefix.length) : path;
+  @override
+  void resetExportState() => _cancelled = false;
+
+  @override
+  bool get isCancelledByUser => _cancelled;
+
+  String _relKey(String path) => path.startsWith(_webPathPrefix)
+      ? path.substring(_webPathPrefix.length)
+      : path;
 
   @override
   Future<bool> hasEligibleArchive(String rootPath) async {
     final index = await _store.indexFilesWithSizes();
     for (final key in index.keys) {
       if (!key.toLowerCase().endsWith('.rsb.smf')) continue;
-      final underReserved =
-          key.split('/').any((seg) => isReservedLibraryFolderName(seg));
+      final underReserved = key
+          .split('/')
+          .any((seg) => isReservedLibraryFolderName(seg));
       if (!underReserved) return true;
     }
     return false;
@@ -72,11 +80,9 @@ class ExportEngineWeb implements ExportEngine {
     final result = <ExportEntry>[];
     for (final item in contents) {
       if (item.isDirectory) {
-        result.add(ExportEntry(
-          name: item.name,
-          path: item.path,
-          isDirectory: true,
-        ));
+        result.add(
+          ExportEntry(name: item.name, path: item.path, isDirectory: true),
+        );
         continue;
       }
       final lower = item.name.toLowerCase();
@@ -84,11 +90,9 @@ class ExportEngineWeb implements ExportEngine {
           ? lower.endsWith('.rsb.smf')
           : (lower.endsWith('.json') || lower.endsWith('.rton'));
       if (eligible) {
-        result.add(ExportEntry(
-          name: item.name,
-          path: item.path,
-          isDirectory: false,
-        ));
+        result.add(
+          ExportEntry(name: item.name, path: item.path, isDirectory: false),
+        );
       }
     }
     return result;
@@ -121,8 +125,11 @@ class ExportEngineWeb implements ExportEngine {
     // responsive. Falls back to the main isolate if the worker is unavailable.
     // Cancellation surfaces here as an [ExportCancelledException] thrown from
     // [_packInWorker].
-    Uint8List? output =
-        await _packInWorker(archiveBytes, rtonLevels, onProgress);
+    Uint8List? output = await _packInWorker(
+      archiveBytes,
+      rtonLevels,
+      onProgress,
+    );
     output ??= runRsbInjectPipeline(
       archiveBytes: archiveBytes,
       rtonLevels: rtonLevels,

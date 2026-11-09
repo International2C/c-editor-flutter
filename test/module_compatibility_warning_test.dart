@@ -7,6 +7,7 @@ import 'package:c_editor/data/registry/issue_registry.dart';
 import 'package:c_editor/l10n/app_localizations.dart';
 import 'package:c_editor/screens/editor/modules/gladiator_row_module_screen.dart';
 import 'package:c_editor/screens/editor/modules/wave_generator_module_screen.dart';
+import 'package:c_editor/screens/editor/tabs/level_settings_tab.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -75,6 +76,132 @@ void main() {
   ];
 
   for (final locale in const [Locale('zh'), Locale('en'), Locale('ru')]) {
+    testWidgets(
+      '${locale.languageCode}: Speed-Up Tiles warn only with active conflicting tile modules',
+      (tester) async {
+        await _withContext(tester, locale, (context) {
+          final l10n = AppLocalizations.of(context)!;
+          for (final classes in [
+            {'SpeedUpTileModuleProperties'},
+            {'TunnelDefendModuleProperties'},
+            {'SpeedUpTileModuleProperties', 'TunnelDefendModuleProperties'},
+          ]) {
+            for (final brickMapIndex in [0, 3]) {
+              final level = _levelWithModules(classes);
+              for (final object in level.objects) {
+                if (object.objClass == 'TunnelDefendModuleProperties') {
+                  object.objData['BrickMapIndex'] = brickMapIndex;
+                }
+              }
+              final original = jsonEncode(level.toJson());
+              final issues = LevelIssueRegistry.forLevel(
+                context,
+                level,
+              ).where((issue) => issue.id == 'speedUpTileCompatibilityWarning');
+              final incompatible =
+                  classes.contains('SpeedUpTileModuleProperties') &&
+                  classes.contains('TunnelDefendModuleProperties');
+              expect(issues, hasLength(incompatible ? 1 : 0));
+              if (incompatible) {
+                expect(issues.single.isError, isFalse);
+                expect(
+                  issues.single.message,
+                  l10n.speedUpTileCompatibilityWarning,
+                );
+              }
+              expect(jsonEncode(level.toJson()), original);
+
+              if (incompatible) {
+                // Existing objects are not active modules after their references are removed.
+                for (final retained in [null, 0, 1]) {
+                  level.objects.first.objData['Modules'] = [
+                    if (retained != null) 'RTID(Module$retained@CurrentLevel)',
+                  ];
+                  expect(
+                    LevelIssueRegistry.forLevel(context, level).where(
+                      (issue) => issue.id == 'speedUpTileCompatibilityWarning',
+                    ),
+                    isEmpty,
+                  );
+                }
+              }
+            }
+          }
+        });
+      },
+    );
+
+    testWidgets(
+      '${locale.languageCode}: level settings follows active Speed-Up Tiles conflicts',
+      (tester) async {
+        tester.view.physicalSize = const Size(600, 1200);
+        tester.view.devicePixelRatio = 1;
+        addTearDown(tester.view.reset);
+        final l10n = lookupAppLocalizations(locale);
+        final banner = find.byKey(
+          const ValueKey('speedUpTileCompatibilityWarning'),
+        );
+        for (final brickMapIndex in [0, 3]) {
+          final level = _levelWithModules({
+            'SpeedUpTileModuleProperties',
+            'TunnelDefendModuleProperties',
+          });
+          level.objects[1].objData = {'Roads': []};
+          level.objects[2].objData = {'BrickMapIndex': brickMapIndex};
+          final definition = level.objects.first;
+          Widget app() => MaterialApp(
+            locale: locale,
+            localizationsDelegates: AppLocalizations.localizationsDelegates,
+            supportedLocales: AppLocalizations.supportedLocales,
+            home: Scaffold(
+              body: LevelSettingsTab(
+                levelDef: LevelDefinitionData.fromJson(
+                  Map<String, dynamic>.from(definition.objData as Map),
+                ),
+                objectMap: {
+                  for (final object in level.objects)
+                    for (final alias in object.aliases ?? const <String>[])
+                      alias: object,
+                },
+                onEditBasicInfo: () {},
+                onEditModule: (_) {},
+                onRemoveModule: (_) {},
+                onReorderModules:
+                    ({
+                      required isCoreSection,
+                      required oldIndex,
+                      required newIndex,
+                    }) {},
+                onNavigateToAddModule: () {},
+              ),
+            ),
+          );
+
+          await tester.pumpWidget(app());
+          await tester.pumpAndSettle();
+          expect(banner, findsOneWidget);
+          expect(
+            find.descendant(
+              of: banner,
+              matching: find.text(l10n.speedUpTileCompatibilityWarning),
+            ),
+            findsOneWidget,
+          );
+
+          for (final retained in [0, 1]) {
+            definition.objData['Modules'] = [
+              'RTID(Module$retained@CurrentLevel)',
+            ];
+            await tester.pumpWidget(app());
+            await tester.pumpAndSettle();
+            expect(banner, findsNothing);
+            expect(tester.takeException(), isNull);
+          }
+          await tester.pumpWidget(const SizedBox.shrink());
+        }
+      },
+    );
+
     testWidgets(
       '${locale.languageCode}: Gladiatorial Row warns only with an active Wave Generator',
       (tester) async {
@@ -242,6 +369,47 @@ void main() {
             ).where((issue) => issue.isError).map((issue) => issue.message),
             unorderedEquals(expected),
           );
+        });
+      },
+    );
+
+    testWidgets(
+      '${locale.languageCode}: Wave Generator conflicts with Level Escalation',
+      (tester) async {
+        await _withContext(tester, locale, (context) {
+          final l10n = AppLocalizations.of(context)!;
+          const classes = {
+            'WaveGeneratorProperties',
+            'LevelEscalationModuleProperties',
+          };
+          expect(
+            ConflictRegistry.getActiveConflicts(
+              context,
+              classes,
+            ).map((pair) => pair.second),
+            [l10n.conflictDesc_WaveGeneratorLevelEscalation],
+          );
+          expect(
+            LevelValidator.validate(
+              context,
+              _levelWithModules(classes),
+            ).where((issue) => issue.isError).map((issue) => issue.message),
+            [l10n.conflictDesc_WaveGeneratorLevelEscalation],
+          );
+          // Level Escalation alone or with Wave Manager stays conflict-free.
+          for (final alone in [
+            {'LevelEscalationModuleProperties'},
+            {
+              'LevelEscalationModuleProperties',
+              'WaveManagerModuleProperties',
+              'WaveManagerProperties',
+            },
+          ]) {
+            expect(
+              ConflictRegistry.getActiveConflicts(context, alone),
+              isEmpty,
+            );
+          }
         });
       },
     );

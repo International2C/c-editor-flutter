@@ -1,19 +1,26 @@
 import 'package:flutter/material.dart';
+import 'package:c_editor/data/level_escalation_point_analysis.dart';
+import 'package:c_editor/data/level_escalation_runtime.dart';
 import 'package:c_editor/data/pvz_models.dart';
+import 'package:c_editor/data/rtid_parser.dart';
 import 'package:c_editor/l10n/app_localizations.dart';
 import 'package:c_editor/widgets/editor_components.dart';
+import 'package:c_editor/widgets/level_jam_picker.dart';
+import 'package:c_editor/widgets/wave_flag_strip.dart';
 
 /// Wave manager settings. Ported from Z-Editor-master WaveManagerPropertiesEP.kt
 class WaveManagerSettingsScreen extends StatefulWidget {
   const WaveManagerSettingsScreen({
     super.key,
     required this.levelFile,
+    this.waveManagerAlias,
     required this.hasConveyor,
     required this.onChanged,
     required this.onBack,
   });
 
   final PvzLevelFile levelFile;
+  final String? waveManagerAlias;
   final bool hasConveyor;
   final VoidCallback onChanged;
   final VoidCallback onBack;
@@ -44,7 +51,10 @@ class _WaveManagerSettingsScreenState extends State<WaveManagerSettingsScreen> {
 
   void _loadData() {
     _wmObj = widget.levelFile.objects.firstWhere(
-      (o) => o.objClass == 'WaveManagerProperties',
+      (o) =>
+          o.objClass == 'WaveManagerProperties' &&
+          (widget.waveManagerAlias == null ||
+              o.aliases?.contains(widget.waveManagerAlias) == true),
       orElse: () => PvzObject(
         aliases: ['WaveManager'],
         objClass: 'WaveManagerProperties',
@@ -82,6 +92,7 @@ class _WaveManagerSettingsScreenState extends State<WaveManagerSettingsScreen> {
     if (n != null && n > 0) {
       _wm.flagWaveInterval = n;
       _save();
+      setState(() {});
     }
   }
 
@@ -123,18 +134,66 @@ class _WaveManagerSettingsScreenState extends State<WaveManagerSettingsScreen> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
     final theme = Theme.of(context);
+    final escalation = LevelEscalationRuntime.resolve(widget.levelFile);
+    final runtimeProps = RtidParser.parse(
+      escalation.effectiveWaveManagerProps ?? '',
+    );
+    final usesEscalation =
+        escalation.isEffective &&
+        runtimeProps != null &&
+        runtimeProps.source == 'CurrentLevel' &&
+        _wmObj.aliases?.contains(runtimeProps.alias) == true &&
+        widget.levelFile.objects.contains(_wmObj);
+    final escalationInterval = usesEscalation
+        ? LevelEscalationPointAnalysis.flagInterval(escalation.data!)
+        : null;
+    final interval =
+        escalationInterval ??
+        (_wm.flagWaveInterval <= 0 ? 10 : _wm.flagWaveInterval);
+    final waveCount = usesEscalation
+        ? escalation.effectiveWaveCount(_wm)
+        : _wm.waves.length;
     // Use secondary (blue) to match Kotlin WaveManagerPropertiesEP PvzBlueLight/Dark
     final themeColor = theme.colorScheme.secondary;
-    final jamOptions = [
-      (null, l10n?.jamNone ?? 'None'),
-      ('jam_pop', l10n?.jamPop ?? 'Pop'),
-      ('jam_rap', l10n?.jamRap ?? 'Rap'),
-      ('jam_metal', l10n?.jamMetal ?? 'Metal'),
-      ('jam_punk', l10n?.jamPunk ?? 'Punk'),
-      ('jam_8bit', l10n?.jam8Bit ?? '8-Bit'),
-    ];
-
-    return Scaffold(
+    final onAccent = theme.colorScheme.onPrimary;
+    // Drive TextField focus, switches, and other accents from the AppBar color
+    // instead of the app-wide primary (green).
+    final screenTheme = theme.copyWith(
+      colorScheme: theme.colorScheme.copyWith(primary: themeColor),
+      inputDecorationTheme: theme.inputDecorationTheme.copyWith(
+        focusedBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: themeColor, width: 2),
+        ),
+        floatingLabelStyle: WidgetStateTextStyle.resolveWith((states) {
+          if (states.contains(WidgetState.focused)) {
+            return TextStyle(color: themeColor);
+          }
+          return TextStyle(color: theme.colorScheme.onSurface);
+        }),
+        focusColor: themeColor,
+      ),
+      textSelectionTheme: theme.textSelectionTheme.copyWith(
+        cursorColor: themeColor,
+        selectionHandleColor: themeColor,
+      ),
+      switchTheme: theme.switchTheme.copyWith(
+        thumbColor: WidgetStateProperty.resolveWith((states) {
+          if (states.contains(WidgetState.selected)) return onAccent;
+          return theme.colorScheme.outline;
+        }),
+        trackColor: WidgetStateProperty.resolveWith((states) {
+          if (states.contains(WidgetState.selected)) return themeColor;
+          return theme.colorScheme.surfaceContainerHighest;
+        }),
+        trackOutlineColor: WidgetStateProperty.resolveWith((states) {
+          if (states.contains(WidgetState.selected)) return themeColor;
+          return theme.colorScheme.outline;
+        }),
+      ),
+    );
+    return Theme(
+      data: screenTheme,
+      child: Scaffold(
       appBar: AppBar(
         title: Text(l10n?.waveManagerSettings ?? 'Wave manager settings'),
         leading: IconButton(
@@ -142,7 +201,7 @@ class _WaveManagerSettingsScreenState extends State<WaveManagerSettingsScreen> {
           onPressed: widget.onBack,
         ),
         backgroundColor: themeColor,
-        foregroundColor: theme.colorScheme.onPrimary,
+        foregroundColor: onAccent,
         actions: [
           IconButton(
             icon: const Icon(Icons.help_outline),
@@ -196,7 +255,16 @@ class _WaveManagerSettingsScreenState extends State<WaveManagerSettingsScreen> {
                 color: themeColor,
               ),
             ),
-            const SizedBox(height: 12),
+            if (waveCount > 0) ...[
+              WaveFlagStrip(
+                color: themeColor,
+                waveCount: waveCount,
+                isFlagWave: (w) =>
+                    w % interval == 0 || (!usesEscalation && w == waveCount),
+              ),
+              const SizedBox(height: 24),
+            ] else
+              const SizedBox(height: 12),
             EditorResponsiveInputField(
               label: l10n?.flagInterval ?? 'Flag interval (FlagWaveInterval)',
               builder: (context, decoration) => TextField(
@@ -206,6 +274,16 @@ class _WaveManagerSettingsScreenState extends State<WaveManagerSettingsScreen> {
                 onChanged: _updateFlagInterval,
               ),
             ),
+            if (escalationInterval != null) ...[
+              const SizedBox(height: 8),
+              EditorWarningBanner(
+                margin: EdgeInsets.zero,
+                message:
+                    l10n?.waveManagerFlagIntervalOverridden(escalationInterval) ??
+                    'Escalation Spawning uses Waves per flag at runtime. '
+                    'The effective flag interval is $escalationInterval waves.',
+              ),
+            ],
             const SizedBox(height: 16),
             EditorResponsiveFieldRow(
               children: [
@@ -371,30 +449,15 @@ class _WaveManagerSettingsScreenState extends State<WaveManagerSettingsScreen> {
               ),
             ),
             const SizedBox(height: 16),
-            EditorResponsiveInputField(
-              label: l10n?.waveManagerLevelJam ?? 'Level Jam',
-              decoration: InputDecoration(
-                prefixIcon: const Icon(Icons.music_note),
-                border: const OutlineInputBorder(),
-              ),
-              builder: (context, decoration) =>
-                  DropdownButtonFormField<String?>(
-                    isExpanded: true,
-                    initialValue: _wm.levelJam,
-                    decoration: decoration,
-                    items: jamOptions.map((e) {
-                      return DropdownMenuItem<String?>(
-                        value: e.$1,
-                        child: Text(e.$2),
-                      );
-                    }).toList(),
-                    onChanged: (v) {
-                      setState(() {
-                        _wm.levelJam = v;
-                        _save();
-                      });
-                    },
-                  ),
+            LevelJamPickerField(
+              labelText: l10n?.waveManagerLevelJam ?? 'Level Jam',
+              value: _wm.levelJam,
+              onChanged: (v) {
+                setState(() {
+                  _wm.levelJam = v;
+                  _save();
+                });
+              },
             ),
             const SizedBox(height: 6),
             Text(
@@ -406,6 +469,7 @@ class _WaveManagerSettingsScreenState extends State<WaveManagerSettingsScreen> {
             ),
           ],
         ),
+      ),
       ),
     );
   }

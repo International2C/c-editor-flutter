@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:c_editor/data/pvz_models.dart';
 import 'package:c_editor/l10n/app_localizations.dart';
@@ -15,6 +17,7 @@ class JitteredEventScreen extends StatelessWidget {
     this.onRequestPlantSelection,
     this.onEditCustomZombie,
     this.onInjectCustomZombie,
+    this.onOpenReferencedEvent,
   });
 
   final String rtid;
@@ -25,8 +28,9 @@ class JitteredEventScreen extends StatelessWidget {
   onRequestZombieSelection;
   final void Function(void Function(String) onSelected)?
   onRequestPlantSelection;
-  final void Function(String rtid)? onEditCustomZombie;
+  final FutureOr<void> Function(String rtid)? onEditCustomZombie;
   final String? Function(String alias)? onInjectCustomZombie;
+  final Future<void> Function(String rtid)? onOpenReferencedEvent;
 
   @override
   Widget build(BuildContext context) {
@@ -38,12 +42,13 @@ class JitteredEventScreen extends StatelessWidget {
       onBack: onBack,
       eventSubtitle:
           l10n?.eventTitle_SpawnZombiesJitteredWaveActionProps ??
-          'Jittered Event',
+          'Basic Spawner',
       isGroundSpawner: false,
       onRequestZombieSelection: onRequestZombieSelection,
       onRequestPlantSelection: onRequestPlantSelection,
       onEditCustomZombie: onEditCustomZombie,
       onInjectCustomZombie: onInjectCustomZombie,
+      onOpenReferencedEvent: onOpenReferencedEvent,
     );
   }
 }

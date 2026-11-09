@@ -5,10 +5,8 @@ import 'package:flutter/services.dart';
 import 'package:c_editor/data/bootstrap_loading_category.dart';
 import 'package:c_editor/widgets/asset_image.dart';
 
-typedef AssetPreloadProgressCallback = void Function(
-  double progress,
-  BootstrapLoadingCategory? category,
-);
+typedef AssetPreloadProgressCallback =
+    void Function(double progress, BootstrapLoadingCategory? category);
 
 /// Preloads image assets listed in the Flutter asset manifest.
 abstract final class AssetImagePreloader {
@@ -24,11 +22,9 @@ abstract final class AssetImagePreloader {
     if (_complete) return;
 
     final manifest = await AssetManifest.loadFromAssetBundle(rootBundle);
-    final assets = manifest
-        .listAssets()
-        .where(_isImageAsset)
-        .toList(growable: false)
-      ..sort();
+    final assets =
+        manifest.listAssets().where(_isImageAsset).toList(growable: false)
+          ..sort();
 
     if (assets.isEmpty) {
       _complete = true;
@@ -60,8 +56,14 @@ abstract final class AssetImagePreloader {
         if (index >= total) return;
 
         final path = assets[index];
-        await rootBundle.load(path);
+        // Manifest membership must not depend on a successful preload request.
         AssetImageWidget.registerManifestPath(path);
+        try {
+          await rootBundle.load(path).timeout(const Duration(seconds: 20));
+        } catch (error) {
+          // Preloading is optional; Image.asset can retry when displayed.
+          debugPrint('Image preload skipped: $path ($error)');
+        }
         completed++;
         onProgress?.call(completed / total, BootstrapLoadingCategory.images);
       }

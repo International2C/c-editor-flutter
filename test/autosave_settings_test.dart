@@ -61,7 +61,10 @@ void main() {
               home: Builder(
                 builder: (context) => Scaffold(
                   body: TextButton(
-                    onPressed: () => showAutosaveSettingsDialog(context),
+                    onPressed: () => showAutosaveSettingsDialog(
+                      context,
+                      previewImagePluginEnabledOverride: true,
+                    ),
                     child: const Text('Open'),
                   ),
                 ),
@@ -110,4 +113,65 @@ void main() {
       },
     );
   }
+
+  testWidgets(
+    'preview autosave follows plugin availability and preserves hidden value',
+    (tester) async {
+      SharedPreferences.setMockInitialValues({
+        AutosaveTarget.previewImage.preferenceKey: true,
+      });
+      final cubit = SettingsCubit(await SharedPreferences.getInstance());
+      addTearDown(cubit.close);
+      var previewPluginEnabled = false;
+
+      await tester.pumpWidget(
+        BlocProvider.value(
+          value: cubit,
+          child: MaterialApp(
+            localizationsDelegates: AppLocalizations.localizationsDelegates,
+            supportedLocales: AppLocalizations.supportedLocales,
+            home: Builder(
+              builder: (context) => Scaffold(
+                body: TextButton(
+                  onPressed: () => showAutosaveSettingsDialog(
+                    context,
+                    previewImagePluginEnabledOverride: previewPluginEnabled,
+                  ),
+                  child: const Text('Open'),
+                ),
+              ),
+            ),
+          ),
+        ),
+      );
+
+      await tester.tap(find.text('Open'));
+      await tester.pumpAndSettle();
+      expect(
+        find.byKey(const ValueKey('autosave_previewImage')),
+        findsNothing,
+      );
+      await tester.tap(find.byKey(const ValueKey('autosaveSelectAll')));
+      await tester.pump();
+      await tester.tap(find.widgetWithText(FilledButton, 'Confirm'));
+      await tester.pumpAndSettle();
+      expect(cubit.state.autosaveTargets, AutosaveTarget.values.toSet());
+
+      previewPluginEnabled = true;
+      await tester.tap(find.text('Open'));
+      await tester.pumpAndSettle();
+      final preview = find.byKey(const ValueKey('autosave_previewImage'));
+      expect(preview, findsOneWidget);
+      expect(tester.widget<CheckboxListTile>(preview).value, isTrue);
+      expect(
+        tester.widget<CheckboxListTile>(
+          find.byKey(const ValueKey('autosaveSelectAll')),
+        ).value,
+        isTrue,
+      );
+      await tester.tap(find.widgetWithText(TextButton, 'Exit'));
+      await tester.pumpAndSettle();
+      expect(tester.takeException(), isNull);
+    },
+  );
 }

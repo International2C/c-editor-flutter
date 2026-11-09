@@ -9,6 +9,8 @@ Future<void> _openSheet(
   WidgetTester tester, {
   required Size size,
   int eventCount = 10,
+  List<String?>? eventClasses,
+  Locale locale = const Locale('en'),
   double textScale = 1,
   double bottomSafeArea = 0,
   ThemeData? theme,
@@ -20,28 +22,29 @@ Future<void> _openSheet(
   addTearDown(tester.view.resetDevicePixelRatio);
   final notifier = ValueNotifier<({int waveIndex, String? rtid})?>(null);
   addTearDown(notifier.dispose);
-  final events = List.generate(
-    eventCount,
-    (i) => PvzObject(
-      aliases: ['Wave1Event$i'],
-      objClass: 'SpawnZombiesJitteredWaveActionProps',
-      objData: const <String, dynamic>{'Zombies': <dynamic>[]},
-    ),
+  final aliases = List.generate(
+    eventClasses?.length ?? eventCount,
+    (i) => 'Wave1Event$i',
   );
+  final events = [
+    for (final (i, alias) in aliases.indexed)
+      if (eventClasses == null || eventClasses[i] != null)
+        PvzObject(
+          aliases: [alias],
+          objClass: eventClasses?[i] ?? 'SpawnZombiesJitteredWaveActionProps',
+          objData: const <String, dynamic>{'Zombies': <dynamic>[]},
+        ),
+  ];
   final wm = WaveManagerData(
     waveCount: 1,
     waves: [
-      events
-          .map(
-            (event) => RtidParser.build(event.aliases!.first, 'CurrentLevel'),
-          )
-          .toList(),
+      aliases.map((alias) => RtidParser.build(alias, 'CurrentLevel')).toList(),
     ],
   );
   await tester.pumpWidget(
     MaterialApp(
       theme: theme,
-      locale: const Locale('en'),
+      locale: locale,
       supportedLocales: AppLocalizations.supportedLocales,
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       builder: (context, child) => MediaQuery(
@@ -76,6 +79,26 @@ Future<void> _openSheet(
 }
 
 void main() {
+  testWidgets('wave sheet localizes known, unknown, and missing events', (
+    tester,
+  ) async {
+    await _openSheet(
+      tester,
+      size: const Size(420, 900),
+      locale: const Locale('zh'),
+      eventClasses: const [
+        'SpawnZombiesJitteredWaveActionProps',
+        'UnsupportedWaveActionProps',
+        null,
+      ],
+    );
+    expect(find.text('普通出怪'), findsOneWidget);
+    expect(find.text('未知事件'), findsOneWidget);
+    expect(find.text('无效事件'), findsOneWidget);
+    expect(find.text('Unknown event'), findsNothing);
+    expect(tester.takeException(), isNull);
+  });
+
   testWidgets('portrait sheet starts with two complete events and can expand', (
     tester,
   ) async {
@@ -249,6 +272,58 @@ void main() {
       closeTo(0, 1),
     );
     expect(delete.hitTestable(), findsOneWidget);
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('short delete confirmation keeps its buttons reachable', (
+    tester,
+  ) async {
+    const locale = Locale('ru');
+    final l10n = lookupAppLocalizations(locale);
+    await _openSheet(
+      tester,
+      size: const Size(360, 300),
+      eventCount: 2,
+      locale: locale,
+      textScale: 1.8,
+    );
+    final sheetScroll = find.byKey(const ValueKey('waveManageSheetScroll'));
+    await tester.drag(sheetScroll, const Offset(0, -1000));
+    await tester.pumpAndSettle();
+    await tester.tap(find.byKey(const ValueKey('waveManageDeleteWaveButton')));
+    await tester.pumpAndSettle();
+
+    expect(tester.takeException(), isNull);
+    final dialog = find.byType(AlertDialog);
+    final checkbox = find.descendant(
+      of: dialog,
+      matching: find.byType(Checkbox),
+    );
+    final viewport = find.descendant(
+      of: dialog,
+      matching: find.byType(SingleChildScrollView),
+    );
+    final cancel = find.widgetWithText(TextButton, l10n.cancel);
+    final confirm = find.widgetWithText(FilledButton, l10n.delete);
+    expect(cancel.hitTestable(), findsOneWidget);
+    expect(tester.widget<FilledButton>(confirm).onPressed, isNull);
+    final confirmPosition = tester.getRect(confirm);
+    expect(
+      tester.getRect(viewport).bottom,
+      lessThanOrEqualTo(confirmPosition.top),
+    );
+
+    await tester.ensureVisible(checkbox);
+    await tester.pumpAndSettle();
+    await tester.tap(checkbox);
+    await tester.pumpAndSettle();
+    expect(confirm.hitTestable(), findsOneWidget);
+    expect(tester.widget<FilledButton>(confirm).onPressed, isNotNull);
+    expect(tester.getRect(confirm), confirmPosition);
+
+    await tester.tap(cancel);
+    await tester.pumpAndSettle();
+    expect(dialog, findsNothing);
     expect(tester.takeException(), isNull);
   });
 

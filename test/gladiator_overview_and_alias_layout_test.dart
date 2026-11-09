@@ -193,7 +193,7 @@ void main() {
       await tester.tap(find.text('Open'));
       await tester.pumpAndSettle();
       final l10n = AppLocalizations.of(
-        tester.element(find.byType(AlertDialog)),
+        tester.element(find.byType(Dialog)),
       )!;
       final label = find.text(l10n.aliasLabel);
       expect(label, findsOneWidget);

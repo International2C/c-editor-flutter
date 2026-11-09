@@ -27,10 +27,12 @@ class InitialPlantListData extends PvzModel {
       plantType.startsWith('tool_') && !plantType.startsWith('RTID(');
 
   factory InitialPlantListData.fromJson(Map<String, dynamic> json) {
-    final tool = json['ToolType'] as String?;
     final plant = json['PlantType'] as String?;
+    final tool = json['ToolType'] as String?;
     return InitialPlantListData(
-      plantType: tool ?? plant ?? '',
+      // InitialPlantList uses PlantType for every card, including tool_*.
+      // Keep ToolType as a fallback for files saved by older editor builds.
+      plantType: plant ?? tool ?? '',
       iLevel: json['iLevel'] as int?,
       iAvatar: json['iAvatar'] as bool?,
       weight: json['Weight'] as int? ?? 100,
@@ -41,6 +43,7 @@ class InitialPlantListData extends PvzModel {
     );
   }
 
+  @override
   Map<String, dynamic> toJson() {
     final m = <String, dynamic>{
       'Weight': weight,
@@ -49,10 +52,10 @@ class InitialPlantListData extends PvzModel {
       'MinCount': minCount,
       'MinWeightFactor': minWeightFactor,
     };
-    if (isToolEntry) {
-      m['ToolType'] = plantType;
-    } else {
-      m['PlantType'] = plantType;
+    // ConveyorSeedBankProperties.InitialPlantList always uses PlantType.
+    // ToolType is only part of the separate ModifyConveyor action schema.
+    m['PlantType'] = plantType;
+    if (!isToolEntry) {
       if (iLevel != null) m['iLevel'] = iLevel;
       if (iAvatar != null) m['iAvatar'] = iAvatar;
     }

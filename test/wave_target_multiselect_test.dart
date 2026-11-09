@@ -1,13 +1,16 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:c_editor/bloc/settings/settings_cubit.dart';
 import 'package:c_editor/data/pvz_models.dart';
 import 'package:c_editor/data/rtid_parser.dart';
 import 'package:c_editor/l10n/app_localizations.dart';
 import 'package:c_editor/screens/editor/tabs/wave_timeline_tab.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 const _alias = 'SharedEvent';
 
@@ -43,8 +46,9 @@ class _Fixture {
     Locale locale = const Locale('en'),
     double textScale = 1,
     bool scaleTimeline = true,
+    SettingsCubit? settings,
   }) {
-    return MaterialApp(
+    final app = MaterialApp(
       locale: locale,
       supportedLocales: AppLocalizations.supportedLocales,
       localizationsDelegates: AppLocalizations.localizationsDelegates,
@@ -76,6 +80,9 @@ class _Fixture {
         ),
       ),
     );
+    return settings == null
+        ? app
+        : BlocProvider<SettingsCubit>.value(value: settings, child: app);
   }
 }
 
@@ -327,9 +334,10 @@ void main() {
       await _openCopy(tester);
       await tester.tap(find.text('Deep copy'));
       await tester.pumpAndSettle();
-      expect(find.text('New name'), findsOneWidget);
+      final l10n = lookupAppLocalizations(const Locale('en'));
+      expect(find.text(l10n.aliasLabel), findsWidgets);
       final nameDialog = find.ancestor(
-        of: find.text('New name'),
+        of: find.text(l10n.aliasLabel),
         matching: find.byType(AlertDialog),
       );
       await tester.enterText(
@@ -375,6 +383,53 @@ void main() {
       expect(copies.last.objData['Nested'], [1]);
       expect(fixture.waveManager.waves.first.first, rtid);
       expect(fixture.waveManager.waves.last.first, rtid);
+    },
+  );
+
+  testWidgets(
+    'deep copy uses its generated alias when creation prompts are disabled',
+    (tester) async {
+      _setSize(tester, const Size(900, 1200));
+      SharedPreferences.setMockInitialValues({
+        'locale': 'en',
+        'theme_mode': 'light',
+      });
+      final preferences = await SharedPreferences.getInstance();
+      final settings = SettingsCubit(preferences);
+      addTearDown(settings.close);
+      final rtid = RtidParser.build(_alias, 'CurrentLevel');
+      final fixture = _Fixture([
+        [rtid],
+        <String>[],
+      ]);
+
+      await tester.pumpWidget(fixture.build(settings: settings));
+      await tester.pumpAndSettle();
+      await _openCopy(tester);
+      await tester.tap(find.text('Deep copy'));
+      await tester.pumpAndSettle();
+
+      final l10n = lookupAppLocalizations(const Locale('en'));
+      expect(
+        find.ancestor(
+          of: find.text(l10n.aliasLabel),
+          matching: find.byType(AlertDialog),
+        ),
+        findsNothing,
+      );
+      expect(find.text('Select target waves'), findsOneWidget);
+      await tester.tap(_target(2));
+      await tester.pump();
+      await tester.tap(_confirm);
+      await tester.pumpAndSettle();
+
+      expect(
+        fixture.level.objects.any(
+          (object) => object.aliases?.first == '${_alias}_copy',
+        ),
+        isTrue,
+      );
+      expect(tester.takeException(), isNull);
     },
   );
 

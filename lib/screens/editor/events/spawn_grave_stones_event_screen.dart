@@ -36,6 +36,10 @@ class SpawnGraveStonesEventScreen extends StatefulWidget {
 class _SpawnGraveStonesEventScreenState
     extends State<SpawnGraveStonesEventScreen> {
   static const _objClass = 'SpawnGravestonesWaveActionProps';
+  static const _crashProneGridItemTypeNames = <String>{
+    'heavy_shield',
+    'cavalrygun',
+  };
 
   late PvzObject _moduleObj;
   late SpawnGraveStonesData _data;
@@ -97,6 +101,11 @@ class _SpawnGraveStonesEventScreenState
 
   void _addItem() {
     widget.onRequestGridItemSelection((typeName) {
+      if (_resolveCrashProneGridItemType(typeName) != null) {
+        _showCrashProneGridItemBlockedDialog();
+        return;
+      }
+
       final fullRtid = GridItemRepository.buildGridItemTypeRtid(
         typeName,
         widget.levelFile,
@@ -115,6 +124,77 @@ class _SpawnGraveStonesEventScreenState
       }
       _sync();
     });
+  }
+
+  String? _resolveCrashProneGridItemType(String typeName) {
+    final parsed = RtidParser.parse(typeName);
+    final alias = parsed?.alias ?? typeName;
+    final actualTypeName =
+        GridItemRepository.getByTypeName(alias)?.actualTypeName ?? alias;
+    if (_crashProneGridItemTypeNames.contains(actualTypeName)) {
+      return actualTypeName;
+    }
+
+    if (parsed?.source != 'CurrentLevel') return null;
+    for (final object in widget.levelFile.objects) {
+      if (object.objClass != 'GridItemType' ||
+          object.aliases?.contains(alias) != true) {
+        continue;
+      }
+      final objData = object.objData;
+      final localTypeName = objData is Map ? objData['TypeName'] : null;
+      if (localTypeName is String &&
+          _crashProneGridItemTypeNames.contains(localTypeName)) {
+        return localTypeName;
+      }
+    }
+    return null;
+  }
+
+  bool get _levelHasCrashProneGridItem {
+    if (_data.gravestonePool.any(
+      (item) => _resolveCrashProneGridItemType(item.type) != null,
+    )) {
+      return true;
+    }
+
+    return widget.levelFile.objects.any((object) {
+      if (identical(object, _moduleObj) || object.objClass != _objClass) {
+        return false;
+      }
+      final objData = object.objData;
+      if (objData is! Map) return false;
+      final pool = objData['GravestonePool'];
+      if (pool is! List) return false;
+      return pool.any((entry) {
+        if (entry is! Map) return false;
+        final typeName = entry['Type'];
+        return typeName is String &&
+            _resolveCrashProneGridItemType(typeName) != null;
+      });
+    });
+  }
+
+  void _showCrashProneGridItemBlockedDialog() {
+    if (!mounted) return;
+    final l10n = AppLocalizations.of(context);
+    showDialog<void>(
+      context: context,
+      builder: (dialogContext) => AlertDialog(
+        scrollable: true,
+        title: Text(l10n?.warning ?? 'Warning'),
+        content: Text(
+          l10n?.spawnGravestonesCrashProneItemsWarning ??
+              'Spawning Heavy Shield or Cavalry Lance through the "Grid Item Spawn" event causes the level to crash. Please spawn it another way.',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(dialogContext),
+            child: Text(l10n?.ok ?? 'OK'),
+          ),
+        ],
+      ),
+    );
   }
 
   void _removeItem(int index) {
@@ -205,6 +285,10 @@ class _SpawnGraveStonesEventScreenState
                 onChanged: widget.onChanged,
               ),
               const SizedBox(height: 16),
+              if (_levelHasCrashProneGridItem) ...[
+                _buildCrashProneGridItemWarning(theme, l10n),
+                const SizedBox(height: 16),
+              ],
               _buildPositionPoolCard(theme, l10n),
               const SizedBox(height: 16),
               _buildInfoCard(theme, l10n),
@@ -226,6 +310,37 @@ class _SpawnGraveStonesEventScreenState
               const SizedBox(height: 32),
             ],
           ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildCrashProneGridItemWarning(
+    ThemeData theme,
+    AppLocalizations? l10n,
+  ) {
+    return Card(
+      key: const ValueKey('spawnGravestonesCrashProneItemWarning'),
+      color: theme.colorScheme.errorContainer,
+      shape: RoundedRectangleBorder(
+        side: BorderSide(color: theme.colorScheme.error),
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Icon(editorErrorIcon, color: theme.colorScheme.error),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Text(
+                l10n?.spawnGravestonesCrashProneItemsWarning ??
+                    'Spawning Heavy Shield or Cavalry Lance through the "Grid Item Spawn" event causes the level to crash. Please spawn it another way.',
+                style: TextStyle(color: theme.colorScheme.error),
+              ),
+            ),
+          ],
         ),
       ),
     );

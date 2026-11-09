@@ -728,7 +728,7 @@ class _PlantDetailDialogState extends State<_PlantDetailDialog> {
         const SizedBox(height: 16),
         if (isTool)
           _NumberField(
-            label: l10n?.initialWeight ?? 'Initial weight',
+            label: l10n?.initialWeight ?? 'Initial weight (Weight)',
             value: _weight,
             onChanged: (v) => setState(() => _weight = v),
           )
@@ -737,7 +737,7 @@ class _PlantDetailDialogState extends State<_PlantDetailDialog> {
             children: [
               Expanded(
                 child: _NumberField(
-                  label: l10n?.initialWeight ?? 'Initial weight',
+                  label: l10n?.initialWeight ?? 'Initial weight (Weight)',
                   value: _weight,
                   onChanged: (v) => setState(() => _weight = v),
                 ),
@@ -745,7 +745,11 @@ class _PlantDetailDialogState extends State<_PlantDetailDialog> {
               const SizedBox(width: 8),
               Expanded(
                 child: _NumberField(
-                  label: l10n?.plantLevelLabel ?? 'Plant level',
+                  label: localizedPropertyLabel(
+                    context,
+                    l10n?.plantLevelLabel ?? 'Plant level',
+                    'iLevel',
+                  ),
                   value: _level,
                   onChanged: (v) => setState(() => _level = v.clamp(0, 5)),
                 ),
@@ -793,7 +797,8 @@ class _PlantDetailDialogState extends State<_PlantDetailDialog> {
           children: [
             Expanded(
               child: _NumberField(
-                label: l10n?.maxCountThreshold ?? 'Max count threshold',
+                label:
+                    l10n?.maxCountThreshold ?? 'Max count threshold (MaxCount)',
                 value: _maxCount,
                 onChanged: (v) => setState(() => _maxCount = v),
               ),
@@ -801,7 +806,11 @@ class _PlantDetailDialogState extends State<_PlantDetailDialog> {
             const SizedBox(width: 8),
             Expanded(
               child: _DoubleField(
-                label: l10n?.weightFactor ?? 'Weight factor',
+                label: localizedPropertyLabel(
+                  context,
+                  l10n?.weightFactor ?? 'Weight factor',
+                  'MaxWeightFactor',
+                ),
                 value: _maxWeightFactor,
                 onChanged: (v) => setState(() => _maxWeightFactor = v),
               ),
@@ -820,7 +829,8 @@ class _PlantDetailDialogState extends State<_PlantDetailDialog> {
           children: [
             Expanded(
               child: _NumberField(
-                label: l10n?.minCountThreshold ?? 'Min count threshold',
+                label:
+                    l10n?.minCountThreshold ?? 'Min count threshold (MinCount)',
                 value: _minCount,
                 onChanged: (v) => setState(() => _minCount = v),
               ),
@@ -828,7 +838,11 @@ class _PlantDetailDialogState extends State<_PlantDetailDialog> {
             const SizedBox(width: 8),
             Expanded(
               child: _DoubleField(
-                label: l10n?.weightFactor ?? 'Weight factor',
+                label: localizedPropertyLabel(
+                  context,
+                  l10n?.weightFactor ?? 'Weight factor',
+                  'MinWeightFactor',
+                ),
                 value: _minWeightFactor,
                 onChanged: (v) => setState(() => _minWeightFactor = v),
               ),

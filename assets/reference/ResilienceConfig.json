@@ -8,12 +8,12 @@
         "ResilienceFire1"
       ],
       "objdata": {
-        "Amount": 300.0,
+        "Amount": 300,
         "WeakType": 6,
-        "RecoverSpeed": 25.0,
-        "DamageThresholdPerSecond": 1500.0,
-        "ResilienceBaseDamageThreshold": 40.0,
-        "ResilienceExtraDamageThreshold": 60.0,
+        "RecoverSpeed": 25,
+        "DamageThresholdPerSecond": 1500,
+        "ResilienceBaseDamageThreshold": 40,
+        "ResilienceExtraDamageThreshold": 60,
         "AnimLabels": [
           "break_enter",
           "break_loop",
@@ -27,12 +27,12 @@
         "ResilienceFire2"
       ],
       "objdata": {
-        "Amount": 400.0,
+        "Amount": 400,
         "WeakType": 6,
-        "RecoverSpeed": 40.0,
-        "DamageThresholdPerSecond": 1500.0,
-        "ResilienceBaseDamageThreshold": 40.0,
-        "ResilienceExtraDamageThreshold": 60.0,
+        "RecoverSpeed": 40,
+        "DamageThresholdPerSecond": 1500,
+        "ResilienceBaseDamageThreshold": 40,
+        "ResilienceExtraDamageThreshold": 60,
         "AnimLabels": [
           "break_enter",
           "break_loop",
@@ -46,12 +46,12 @@
         "ResilienceFire3"
       ],
       "objdata": {
-        "Amount": 500.0,
+        "Amount": 500,
         "WeakType": 6,
-        "RecoverSpeed": 80.0,
-        "DamageThresholdPerSecond": 1500.0,
-        "ResilienceBaseDamageThreshold": 40.0,
-        "ResilienceExtraDamageThreshold": 60.0,
+        "RecoverSpeed": 80,
+        "DamageThresholdPerSecond": 1500,
+        "ResilienceBaseDamageThreshold": 40,
+        "ResilienceExtraDamageThreshold": 60,
         "AnimLabels": [
           "break_enter",
           "break_loop",
@@ -65,12 +65,12 @@
         "ResilienceFire10"
       ],
       "objdata": {
-        "Amount": 300.0,
+        "Amount": 300,
         "WeakType": 6,
-        "RecoverSpeed": 25.0,
-        "DamageThresholdPerSecond": 1500.0,
-        "ResilienceBaseDamageThreshold": 40.0,
-        "ResilienceExtraDamageThreshold": 60.0,
+        "RecoverSpeed": 25,
+        "DamageThresholdPerSecond": 1500,
+        "ResilienceBaseDamageThreshold": 40,
+        "ResilienceExtraDamageThreshold": 60,
         "AnimLabels": [
           "break_enter",
           "break_loop",
@@ -84,12 +84,12 @@
         "ResiliencePoison1"
       ],
       "objdata": {
-        "Amount": 500.0,
+        "Amount": 500,
         "WeakType": 2,
-        "RecoverSpeed": 100.0,
-        "DamageThresholdPerSecond": 1500.0,
-        "ResilienceBaseDamageThreshold": 40.0,
-        "ResilienceExtraDamageThreshold": 60.0,
+        "RecoverSpeed": 100,
+        "DamageThresholdPerSecond": 1500,
+        "ResilienceBaseDamageThreshold": 40,
+        "ResilienceExtraDamageThreshold": 60,
         "AnimLabels": [
           "break_enter",
           "break_loop",
@@ -103,12 +103,12 @@
         "ResilienceCold1"
       ],
       "objdata": {
-        "Amount": 500.0,
+        "Amount": 500,
         "WeakType": 5,
-        "RecoverSpeed": 100.0,
-        "DamageThresholdPerSecond": 1500.0,
-        "ResilienceBaseDamageThreshold": 40.0,
-        "ResilienceExtraDamageThreshold": 60.0,
+        "RecoverSpeed": 100,
+        "DamageThresholdPerSecond": 1500,
+        "ResilienceBaseDamageThreshold": 40,
+        "ResilienceExtraDamageThreshold": 60,
         "AnimLabels": [
           "break_enter",
           "break_loop",
@@ -122,12 +122,12 @@
         "ResilienceFire4"
       ],
       "objdata": {
-        "Amount": 2500.0,
+        "Amount": 2500,
         "WeakType": 6,
-        "RecoverSpeed": 250.0,
-        "DamageThresholdPerSecond": 1500.0,
-        "ResilienceBaseDamageThreshold": 40.0,
-        "ResilienceExtraDamageThreshold": 60.0,
+        "RecoverSpeed": 250,
+        "DamageThresholdPerSecond": 1500,
+        "ResilienceBaseDamageThreshold": 40,
+        "ResilienceExtraDamageThreshold": 60,
         "AnimLabels": [
           "break_enter",
           "break_loop",
@@ -141,12 +141,12 @@
         "ResilienceLightning1"
       ],
       "objdata": {
-        "Amount": 300.0,
+        "Amount": 300,
         "WeakType": 3,
-        "RecoverSpeed": 40.0,
-        "DamageThresholdPerSecond": 1500.0,
-        "ResilienceBaseDamageThreshold": 40.0,
-        "ResilienceExtraDamageThreshold": 60.0,
+        "RecoverSpeed": 40,
+        "DamageThresholdPerSecond": 1500,
+        "ResilienceBaseDamageThreshold": 40,
+        "ResilienceExtraDamageThreshold": 60,
         "AnimLabels": [
           "break_enter",
           "break_loop",
@@ -160,12 +160,12 @@
         "ResilienceLightning4"
       ],
       "objdata": {
-        "Amount": 200.0,
+        "Amount": 200,
         "WeakType": 3,
-        "RecoverSpeed": 40.0,
-        "DamageThresholdPerSecond": 1500.0,
-        "ResilienceBaseDamageThreshold": 40.0,
-        "ResilienceExtraDamageThreshold": 60.0,
+        "RecoverSpeed": 40,
+        "DamageThresholdPerSecond": 1500,
+        "ResilienceBaseDamageThreshold": 40,
+        "ResilienceExtraDamageThreshold": 60,
         "AnimLabels": [
           "break_enter",
           "break_loop",
@@ -179,12 +179,12 @@
         "ResilienceMagic1"
       ],
       "objdata": {
-        "Amount": 300.0,
+        "Amount": 300,
         "WeakType": 1,
-        "RecoverSpeed": 250.0,
-        "DamageThresholdPerSecond": 1500.0,
-        "ResilienceBaseDamageThreshold": 40.0,
-        "ResilienceExtraDamageThreshold": 60.0,
+        "RecoverSpeed": 250,
+        "DamageThresholdPerSecond": 1500,
+        "ResilienceBaseDamageThreshold": 40,
+        "ResilienceExtraDamageThreshold": 60,
         "AnimLabels": [
           "break_enter",
           "break_loop",
@@ -198,12 +198,12 @@
         "ResilienceMagic12th"
       ],
       "objdata": {
-        "Amount": 200.0,
+        "Amount": 200,
         "WeakType": 1,
-        "RecoverSpeed": 40.0,
-        "DamageThresholdPerSecond": 1500.0,
-        "ResilienceBaseDamageThreshold": 40.0,
-        "ResilienceExtraDamageThreshold": 60.0,
+        "RecoverSpeed": 40,
+        "DamageThresholdPerSecond": 1500,
+        "ResilienceBaseDamageThreshold": 40,
+        "ResilienceExtraDamageThreshold": 60,
         "AnimLabels": [
           "break_enter",
           "break_loop",
@@ -217,12 +217,12 @@
         "Resiliencefire11"
       ],
       "objdata": {
-        "Amount": 200.0,
+        "Amount": 200,
         "WeakType": 6,
-        "RecoverSpeed": 250.0,
-        "DamageThresholdPerSecond": 1500.0,
-        "ResilienceBaseDamageThreshold": 40.0,
-        "ResilienceExtraDamageThreshold": 60.0,
+        "RecoverSpeed": 250,
+        "DamageThresholdPerSecond": 1500,
+        "ResilienceBaseDamageThreshold": 40,
+        "ResilienceExtraDamageThreshold": 60,
         "AnimLabels": [
           "break_enter",
           "break_loop",
@@ -236,12 +236,12 @@
         "Resilienceice1"
       ],
       "objdata": {
-        "Amount": 200.0,
+        "Amount": 200,
         "WeakType": 5,
-        "RecoverSpeed": 250.0,
-        "DamageThresholdPerSecond": 1500.0,
-        "ResilienceBaseDamageThreshold": 40.0,
-        "ResilienceExtraDamageThreshold": 60.0,
+        "RecoverSpeed": 250,
+        "DamageThresholdPerSecond": 1500,
+        "ResilienceBaseDamageThreshold": 40,
+        "ResilienceExtraDamageThreshold": 60,
         "AnimLabels": [
           "break_enter",
           "break_loop",
@@ -255,12 +255,12 @@
         "ResilienceMagic2"
       ],
       "objdata": {
-        "Amount": 300.0,
+        "Amount": 300,
         "WeakType": 1,
-        "RecoverSpeed": 30.0,
-        "DamageThresholdPerSecond": 1500.0,
-        "ResilienceBaseDamageThreshold": 40.0,
-        "ResilienceExtraDamageThreshold": 60.0,
+        "RecoverSpeed": 30,
+        "DamageThresholdPerSecond": 1500,
+        "ResilienceBaseDamageThreshold": 40,
+        "ResilienceExtraDamageThreshold": 60,
         "AnimLabels": [
           "break_enter",
           "break_loop",
@@ -274,12 +274,12 @@
         "ResilienceMagic3"
       ],
       "objdata": {
-        "Amount": 200.0,
+        "Amount": 200,
         "WeakType": 1,
-        "RecoverSpeed": 20.0,
-        "DamageThresholdPerSecond": 1500.0,
-        "ResilienceBaseDamageThreshold": 40.0,
-        "ResilienceExtraDamageThreshold": 60.0,
+        "RecoverSpeed": 20,
+        "DamageThresholdPerSecond": 1500,
+        "ResilienceBaseDamageThreshold": 40,
+        "ResilienceExtraDamageThreshold": 60,
         "AnimLabels": [
           "break_enter",
           "break_loop",
@@ -293,12 +293,12 @@
         "ResilienceMagic4"
       ],
       "objdata": {
-        "Amount": 200.0,
+        "Amount": 200,
         "WeakType": 1,
-        "RecoverSpeed": 15.0,
-        "DamageThresholdPerSecond": 1500.0,
-        "ResilienceBaseDamageThreshold": 40.0,
-        "ResilienceExtraDamageThreshold": 60.0,
+        "RecoverSpeed": 15,
+        "DamageThresholdPerSecond": 1500,
+        "ResilienceBaseDamageThreshold": 40,
+        "ResilienceExtraDamageThreshold": 60,
         "AnimLabels": [
           "break_enter",
           "break_loop",
@@ -312,12 +312,12 @@
         "ResilienceMagic5"
       ],
       "objdata": {
-        "Amount": 500.0,
+        "Amount": 500,
         "WeakType": 4,
-        "RecoverSpeed": 75.0,
-        "DamageThresholdPerSecond": 1500.0,
-        "ResilienceBaseDamageThreshold": 40.0,
-        "ResilienceExtraDamageThreshold": 60.0,
+        "RecoverSpeed": 75,
+        "DamageThresholdPerSecond": 1500,
+        "ResilienceBaseDamageThreshold": 40,
+        "ResilienceExtraDamageThreshold": 60,
         "AnimLabels": [
           "break_enter",
           "break_loop",
@@ -331,12 +331,12 @@
         "ResilienceLightning2"
       ],
       "objdata": {
-        "Amount": 400.0,
+        "Amount": 400,
         "WeakType": 3,
-        "RecoverSpeed": 40.0,
-        "DamageThresholdPerSecond": 1500.0,
-        "ResilienceBaseDamageThreshold": 40.0,
-        "ResilienceExtraDamageThreshold": 60.0,
+        "RecoverSpeed": 40,
+        "DamageThresholdPerSecond": 1500,
+        "ResilienceBaseDamageThreshold": 40,
+        "ResilienceExtraDamageThreshold": 60,
         "AnimLabels": [
           "break_enter",
           "break_loop",
@@ -350,12 +350,12 @@
         "ResilienceFire5"
       ],
       "objdata": {
-        "Amount": 200.0,
+        "Amount": 200,
         "WeakType": 6,
         "RecoverSpeed": 7,
-        "DamageThresholdPerSecond": 1500.0,
-        "ResilienceBaseDamageThreshold": 40.0,
-        "ResilienceExtraDamageThreshold": 60.0,
+        "DamageThresholdPerSecond": 1500,
+        "ResilienceBaseDamageThreshold": 40,
+        "ResilienceExtraDamageThreshold": 60,
         "AnimLabels": [
           "break_enter",
           "break_loop",
@@ -369,12 +369,12 @@
         "ResilienceFire6"
       ],
       "objdata": {
-        "Amount": 200.0,
+        "Amount": 200,
         "WeakType": 6,
         "RecoverSpeed": 7,
-        "DamageThresholdPerSecond": 1500.0,
-        "ResilienceBaseDamageThreshold": 40.0,
-        "ResilienceExtraDamageThreshold": 60.0,
+        "DamageThresholdPerSecond": 1500,
+        "ResilienceBaseDamageThreshold": 40,
+        "ResilienceExtraDamageThreshold": 60,
         "AnimLabels": [
           "break_enter",
           "break_loop",
@@ -388,12 +388,12 @@
         "ResilienceLightning3"
       ],
       "objdata": {
-        "Amount": 200.0,
+        "Amount": 200,
         "WeakType": 3,
         "RecoverSpeed": 7,
-        "DamageThresholdPerSecond": 1500.0,
-        "ResilienceBaseDamageThreshold": 40.0,
-        "ResilienceExtraDamageThreshold": 60.0,
+        "DamageThresholdPerSecond": 1500,
+        "ResilienceBaseDamageThreshold": 40,
+        "ResilienceExtraDamageThreshold": 60,
         "AnimLabels": [
           "break_enter",
           "break_loop",
@@ -407,12 +407,12 @@
         "ResilienceFire7"
       ],
       "objdata": {
-        "Amount": 300.0,
+        "Amount": 300,
         "WeakType": 6,
         "RecoverSpeed": 10,
-        "DamageThresholdPerSecond": 1500.0,
-        "ResilienceBaseDamageThreshold": 40.0,
-        "ResilienceExtraDamageThreshold": 60.0,
+        "DamageThresholdPerSecond": 1500,
+        "ResilienceBaseDamageThreshold": 40,
+        "ResilienceExtraDamageThreshold": 60,
         "AnimLabels": [
           "break_enter",
           "break_loop",
@@ -426,12 +426,12 @@
         "ResilienceFire8"
       ],
       "objdata": {
-        "Amount": 300.0,
+        "Amount": 300,
         "WeakType": 6,
         "RecoverSpeed": 10,
-        "DamageThresholdPerSecond": 1500.0,
-        "ResilienceBaseDamageThreshold": 40.0,
-        "ResilienceExtraDamageThreshold": 60.0,
+        "DamageThresholdPerSecond": 1500,
+        "ResilienceBaseDamageThreshold": 40,
+        "ResilienceExtraDamageThreshold": 60,
         "AnimLabels": [
           "break_enter",
           "break_loop",
@@ -445,12 +445,12 @@
         "ResilienceHamlet"
       ],
       "objdata": {
-        "Amount": 500.0,
+        "Amount": 500,
         "WeakType": 2,
-        "RecoverSpeed": 100.0,
-        "DamageThresholdPerSecond": 1500.0,
-        "ResilienceBaseDamageThreshold": 40.0,
-        "ResilienceExtraDamageThreshold": 60.0,
+        "RecoverSpeed": 100,
+        "DamageThresholdPerSecond": 1500,
+        "ResilienceBaseDamageThreshold": 40,
+        "ResilienceExtraDamageThreshold": 60,
         "AnimLabels": [
           "break_enter",
           "break_loop",
@@ -464,12 +464,12 @@
         "ResilienceRemeo"
       ],
       "objdata": {
-        "Amount": 500.0,
+        "Amount": 500,
         "WeakType": 2,
-        "RecoverSpeed": 100.0,
-        "DamageThresholdPerSecond": 1500.0,
-        "ResilienceBaseDamageThreshold": 40.0,
-        "ResilienceExtraDamageThreshold": 60.0,
+        "RecoverSpeed": 100,
+        "DamageThresholdPerSecond": 1500,
+        "ResilienceBaseDamageThreshold": 40,
+        "ResilienceExtraDamageThreshold": 60,
         "AnimLabels": [
           "break_enter",
           "break_loop",
@@ -483,12 +483,12 @@
         "ResilienceJuliet"
       ],
       "objdata": {
-        "Amount": 500.0,
+        "Amount": 500,
         "WeakType": 1,
-        "RecoverSpeed": 100.0,
-        "DamageThresholdPerSecond": 1500.0,
-        "ResilienceBaseDamageThreshold": 40.0,
-        "ResilienceExtraDamageThreshold": 60.0,
+        "RecoverSpeed": 100,
+        "DamageThresholdPerSecond": 1500,
+        "ResilienceBaseDamageThreshold": 40,
+        "ResilienceExtraDamageThreshold": 60,
         "AnimLabels": [
           "break_enter",
           "break_loop",
@@ -502,12 +502,12 @@
         "ResilienceFairyTaleImp"
       ],
       "objdata": {
-        "Amount": 600.0,
+        "Amount": 600,
         "WeakType": 2,
-        "RecoverSpeed": 66.0,
-        "DamageThresholdPerSecond": 1500.0,
-        "ResilienceBaseDamageThreshold": 40.0,
-        "ResilienceExtraDamageThreshold": 60.0,
+        "RecoverSpeed": 66,
+        "DamageThresholdPerSecond": 1500,
+        "ResilienceBaseDamageThreshold": 40,
+        "ResilienceExtraDamageThreshold": 60,
         "AnimLabels": [
           "break_enter",
           "break_loop",
@@ -521,12 +521,12 @@
         "ResilienceJuggler"
       ],
       "objdata": {
-        "Amount": 1000.0,
+        "Amount": 1000,
         "WeakType": 1,
-        "RecoverSpeed": 80.0,
-        "DamageThresholdPerSecond": 1500.0,
-        "ResilienceBaseDamageThreshold": 40.0,
-        "ResilienceExtraDamageThreshold": 60.0,
+        "RecoverSpeed": 80,
+        "DamageThresholdPerSecond": 1500,
+        "ResilienceBaseDamageThreshold": 40,
+        "ResilienceExtraDamageThreshold": 60,
         "AnimLabels": [
           "break_enter",
           "break_loop",
@@ -540,12 +540,50 @@
         "ResilienceTeamBossFire"
       ],
       "objdata": {
-        "Amount": 500.0,
+        "Amount": 500,
         "WeakType": 6,
-        "RecoverSpeed": 25.0,
-        "DamageThresholdPerSecond": 10000.0,
-        "ResilienceBaseDamageThreshold": 40.0,
-        "ResilienceExtraDamageThreshold": 60.0,
+        "RecoverSpeed": 25,
+        "DamageThresholdPerSecond": 10000,
+        "ResilienceBaseDamageThreshold": 40,
+        "ResilienceExtraDamageThreshold": 60,
+        "AnimLabels": [
+          "break_enter",
+          "break_loop",
+          "break_recover"
+        ]
+      }
+    },
+    {
+      "objclass": "ZombieResilience",
+      "aliases": [
+        "ResilienceMagic200"
+      ],
+      "objdata": {
+        "Amount": 200,
+        "WeakType": 4,
+        "RecoverSpeed": 75,
+        "DamageThresholdPerSecond": 1500,
+        "ResilienceBaseDamageThreshold": 40,
+        "ResilienceExtraDamageThreshold": 60,
+        "AnimLabels": [
+          "break_enter",
+          "break_loop",
+          "break_recover"
+        ]
+      }
+    },
+    {
+      "objclass": "ZombieResilience",
+      "aliases": [
+        "ResiliencePhysical200"
+      ],
+      "objdata": {
+        "Amount": 200,
+        "WeakType": 1,
+        "RecoverSpeed": 75,
+        "DamageThresholdPerSecond": 1500,
+        "ResilienceBaseDamageThreshold": 40,
+        "ResilienceExtraDamageThreshold": 60,
         "AnimLabels": [
           "break_enter",
           "break_loop",

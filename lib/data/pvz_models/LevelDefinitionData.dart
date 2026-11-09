@@ -12,6 +12,8 @@ class LevelDefinitionData extends PvzModel {
     this.musicType = 'MainPath',
     this.musicSuffix = '',
     this.ambientAudioSuffix = '',
+    this.firstIntroNarrative,
+    this.firstOutroNarrative,
     this.disablePeavine,
     this.isArtifactDisabled,
     this.boardType,
@@ -29,6 +31,11 @@ class LevelDefinitionData extends PvzModel {
   String musicType;
   String musicSuffix;
   String ambientAudioSuffix;
+
+  /// Dialogue identifiers are strings in current levels, while some legacy
+  /// levels use numeric identifiers. Keep the JSON value unchanged.
+  Object? firstIntroNarrative;
+  Object? firstOutroNarrative;
   bool? disablePeavine;
   bool? isArtifactDisabled;
 
@@ -38,6 +45,12 @@ class LevelDefinitionData extends PvzModel {
 
   /// Fields that this editor version does not expose must survive edits.
   final Map<String, dynamic> extraFields;
+
+  static Object? _parseNarrativeValue(dynamic value) =>
+      value is String || value is int ? value : null;
+
+  static bool _isValidNarrativeValue(Object? value) =>
+      value is String || value is int;
 
   factory LevelDefinitionData.fromJson(Map<String, dynamic> json) {
     final mods = json['Modules'] as List<dynamic>? ?? [];
@@ -54,6 +67,8 @@ class LevelDefinitionData extends PvzModel {
       ..remove('MusicType')
       ..remove('MusicSuffix')
       ..remove('AmbientAudioSuffix')
+      ..remove('FirstIntroNarrative')
+      ..remove('FirstOutroNarrative')
       ..remove('DisablePeavine')
       ..remove('IsArtifactDisabled')
       ..remove('BoardType')
@@ -72,6 +87,8 @@ class LevelDefinitionData extends PvzModel {
           : rawMusicType,
       musicSuffix: json['MusicSuffix'] as String? ?? '',
       ambientAudioSuffix: json['AmbientAudioSuffix'] as String? ?? '',
+      firstIntroNarrative: _parseNarrativeValue(json['FirstIntroNarrative']),
+      firstOutroNarrative: _parseNarrativeValue(json['FirstOutroNarrative']),
       disablePeavine: json['DisablePeavine'] as bool?,
       isArtifactDisabled: json['IsArtifactDisabled'] as bool?,
       boardType: (rawBoardType == null || rawBoardType.isEmpty)
@@ -95,6 +112,10 @@ class LevelDefinitionData extends PvzModel {
     'MusicType': musicType,
     if (musicSuffix.isNotEmpty) 'MusicSuffix': musicSuffix,
     if (ambientAudioSuffix.isNotEmpty) 'AmbientAudioSuffix': ambientAudioSuffix,
+    if (_isValidNarrativeValue(firstIntroNarrative))
+      'FirstIntroNarrative': firstIntroNarrative,
+    if (_isValidNarrativeValue(firstOutroNarrative))
+      'FirstOutroNarrative': firstOutroNarrative,
     if (disablePeavine != null) 'DisablePeavine': disablePeavine,
     if (isArtifactDisabled != null) 'IsArtifactDisabled': isArtifactDisabled,
     if (boardType != null && boardType!.isNotEmpty) 'BoardType': boardType,

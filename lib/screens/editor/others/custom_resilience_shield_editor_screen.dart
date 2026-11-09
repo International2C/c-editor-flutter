@@ -13,6 +13,8 @@ import 'package:c_editor/data/rtid_parser.dart';
 
 import 'package:c_editor/l10n/app_localizations.dart';
 
+import 'package:c_editor/widgets/alias_input_validation.dart';
+
 import 'package:c_editor/widgets/alias_rename_dialog.dart';
 
 import 'package:c_editor/widgets/editor_components.dart';
@@ -52,6 +54,8 @@ class _CustomResilienceShieldEditorScreenState
   late String _alias;
 
   late TextEditingController _codenameCtrl;
+
+  String? _aliasErrorText;
 
   late TextEditingController _amountCtrl;
 
@@ -144,6 +148,17 @@ class _CustomResilienceShieldEditorScreenState
   }
 
   Future<bool> _tryApplyAlias(String newAlias) async {
+    final characterError = aliasCharacterValidationError(
+      AppLocalizations.of(context),
+      newAlias,
+    );
+
+    if (characterError != null) {
+      if (mounted) setState(() => _aliasErrorText = characterError);
+
+      return false;
+    }
+
     final trimmed = newAlias.trim();
 
     if (trimmed.isEmpty) return false;
@@ -194,13 +209,29 @@ class _CustomResilienceShieldEditorScreenState
       widget.onChanged?.call();
     }
 
-    setState(() => _alias = trimmed);
+    setState(() {
+      _alias = trimmed;
+      _aliasErrorText = null;
+    });
 
     return true;
   }
 
   Future<String?> _saveShield() async {
-    final codename = _codenameCtrl.text.trim();
+    final rawCodename = _codenameCtrl.text;
+
+    final characterError = aliasCharacterValidationError(
+      AppLocalizations.of(context),
+      rawCodename,
+    );
+
+    if (characterError != null) {
+      setState(() => _aliasErrorText = characterError);
+
+      return null;
+    }
+
+    final codename = rawCodename.trim();
 
     if (codename.isEmpty) return null;
 
@@ -408,7 +439,13 @@ class _CustomResilienceShieldEditorScreenState
               ),
               builder: (context, decoration) => TextFormField(
                 controller: _codenameCtrl,
-                decoration: decoration,
+                decoration: decoration.copyWith(errorText: _aliasErrorText),
+                onChanged: (value) {
+                  final nextError = aliasCharacterValidationError(l10n, value);
+                  if (nextError != _aliasErrorText) {
+                    setState(() => _aliasErrorText = nextError);
+                  }
+                },
                 onFieldSubmitted: _tryApplyAlias,
                 onEditingComplete: () => _tryApplyAlias(_codenameCtrl.text),
               ),

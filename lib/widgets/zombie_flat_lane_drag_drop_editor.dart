@@ -5,7 +5,8 @@ import 'package:c_editor/widgets/zombie_horizontal_drag_list.dart';
 import 'package:c_editor/widgets/zombie_lane_drag_widgets.dart';
 import 'package:c_editor/widgets/zombie_lane_editor_common.dart';
 
-export 'package:c_editor/widgets/zombie_lane_drag_widgets.dart' show ZombieLaneIconData;
+export 'package:c_editor/widgets/zombie_lane_drag_widgets.dart'
+    show ZombieLaneIconData;
 
 /// Flat zombie list with horizontal drag-reorder (no row lanes).
 class ZombieFlatLaneDragDropEditor extends StatefulWidget {
@@ -85,8 +86,7 @@ class _ZombieFlatLaneDragDropEditorState
     final source = _itemByIdentity(identity);
     if (source == null) return;
 
-    final sameSlot =
-        commitInsert == _visibleInsertIndexForIdentity(identity);
+    final sameSlot = commitInsert == _visibleInsertIndexForIdentity(identity);
     if (sameSlot) return;
 
     widget.onMove(source.listIndex, commitInsert);
@@ -121,13 +121,9 @@ class _ZombieFlatLaneDragDropEditorState
           rowValue: _flatRowValue,
           items: widget.items,
           highlighted: _dragging && _commitInsertIndex != null,
-          labelSide: const SizedBox.shrink(),
           addButton: _dragging
               ? null
-              : PvzAddButton(
-                  onPressed: widget.onAdd,
-                  size: zombieLaneCardSize,
-                ),
+              : PvzAddButton(onPressed: widget.onAdd, size: zombieLaneCardSize),
           onTap: widget.onTap,
           onDragStarted: _onDragStarted,
           onDragEnded: _onDragEnded,

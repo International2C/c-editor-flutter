@@ -382,9 +382,7 @@ class _LevelSettingsTabState extends State<LevelSettingsTab> {
   }
 
   PvzLevelFile _levelFileWithDefinition() {
-    final objects = <PvzObject>[
-      ...widget.objectMap.values,
-    ];
+    final objects = <PvzObject>[...widget.objectMap.values];
     if (widget.levelDef != null &&
         !objects.any((o) => o.objClass == 'LevelDefinition')) {
       objects.insert(
@@ -500,7 +498,7 @@ class _ReorderableModuleList extends StatelessWidget {
           onReorderItem: onReorder,
           itemBuilder: (context, index) {
             final item = modules[index];
-            return _ReorderableModuleTile(
+            return LevelSettingsModuleTile(
               key: ValueKey(item.rtid),
               info: item,
               isCore: isCore,
@@ -516,8 +514,8 @@ class _ReorderableModuleList extends StatelessWidget {
   }
 }
 
-class _ReorderableModuleTile extends StatelessWidget {
-  const _ReorderableModuleTile({
+class LevelSettingsModuleTile extends StatelessWidget {
+  const LevelSettingsModuleTile({
     super.key,
     required this.info,
     required this.isCore,
@@ -525,6 +523,7 @@ class _ReorderableModuleTile extends StatelessWidget {
     required this.removeTooltip,
     this.onClick,
     required this.onDelete,
+    this.preview = false,
   });
 
   final ModuleUIInfo info;
@@ -533,6 +532,7 @@ class _ReorderableModuleTile extends StatelessWidget {
   final String removeTooltip;
   final VoidCallback? onClick;
   final VoidCallback onDelete;
+  final bool preview;
 
   @override
   Widget build(BuildContext context) {
@@ -545,73 +545,99 @@ class _ReorderableModuleTile extends StatelessWidget {
         ? const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)
         : const TextStyle(color: Colors.grey);
 
+    Widget buildHandle({double extent = 40}) => ReorderableDragStartListener(
+      index: reorderIndex,
+      enabled: !preview,
+      child: SizedBox(
+        width: extent,
+        height: extent,
+        child: Center(child: Icon(Icons.drag_indicator, color: handleColor)),
+      ),
+    );
+
+    final moduleIcon = info.assetIconPath != null
+        ? SizedBox(
+            width: isCore ? 28 : 20,
+            height: isCore ? 28 : 20,
+            child: AssetImageWidget(
+              assetPath: info.assetIconPath!,
+              fit: BoxFit.contain,
+              altCandidates: imageAltCandidates(info.assetIconPath!),
+            ),
+          )
+        : Icon(info.icon, color: iconColor, size: isCore ? 28 : 20);
+    final removeButton = IconButton(
+      icon: Icon(Icons.close, size: isCore ? 24 : 16, color: iconColor),
+      tooltip: removeTooltip,
+      onPressed: preview ? null : onDelete,
+    );
+
+    Widget buildDetails({required bool compact}) => Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          isCore ? info.friendlyName : '${info.friendlyName} (${info.alias})',
+          style: titleStyle,
+          maxLines: compact ? 2 : null,
+          overflow: compact ? TextOverflow.ellipsis : null,
+        ),
+        if (isCore) ...[
+          Tooltip(
+            message: info.description,
+            child: Text(
+              info.description,
+              maxLines: compact ? 2 : 1,
+              overflow: TextOverflow.ellipsis,
+              style: theme.textTheme.bodySmall,
+            ),
+          ),
+          Text(
+            info.alias,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: theme.textTheme.bodySmall,
+          ),
+        ],
+      ],
+    );
+
     return Material(
       color: Colors.transparent,
       child: InkWell(
         onTap: onClick,
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 6),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              ReorderableDragStartListener(
-                index: reorderIndex,
-                child: SizedBox(
-                  width: 40,
-                  height: 40,
-                  child: Center(
-                    child: Icon(Icons.drag_indicator, color: handleColor),
-                  ),
-                ),
-              ),
-              if (info.assetIconPath != null)
-                SizedBox(
-                  width: isCore ? 28 : 20,
-                  height: isCore ? 28 : 20,
-                  child: AssetImageWidget(
-                    assetPath: info.assetIconPath!,
-                    fit: BoxFit.contain,
-                    altCandidates: imageAltCandidates(info.assetIconPath!),
-                  ),
-                )
-              else
-                Icon(info.icon, color: iconColor, size: isCore ? 28 : 20),
-              const SizedBox(width: 12),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+          child: LayoutBuilder(
+            builder: (context, constraints) {
+              if (constraints.maxWidth < 300) {
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    Text(
-                      isCore
-                          ? info.friendlyName
-                          : '${info.friendlyName} (${info.alias})',
-                      style: titleStyle,
+                    Wrap(
+                      alignment: WrapAlignment.spaceBetween,
+                      crossAxisAlignment: WrapCrossAlignment.center,
+                      spacing: 8,
+                      children: [
+                        buildHandle(extent: 32),
+                        moduleIcon,
+                        removeButton,
+                      ],
                     ),
-                    if (isCore) ...[
-                      Tooltip(
-                        message: info.description,
-                        child: Text(
-                          info.description,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: theme.textTheme.bodySmall,
-                        ),
-                      ),
-                      Text(info.alias, style: theme.textTheme.bodySmall),
-                    ],
+                    const SizedBox(height: 4),
+                    buildDetails(compact: true),
                   ],
-                ),
-              ),
-              IconButton(
-                icon: Icon(
-                  Icons.close,
-                  size: isCore ? 24 : 16,
-                  color: iconColor,
-                ),
-                tooltip: removeTooltip,
-                onPressed: onDelete,
-              ),
-            ],
+                );
+              }
+              return Row(
+                children: [
+                  buildHandle(),
+                  moduleIcon,
+                  const SizedBox(width: 12),
+                  Expanded(child: buildDetails(compact: false)),
+                  removeButton,
+                ],
+              );
+            },
           ),
         ),
       ),

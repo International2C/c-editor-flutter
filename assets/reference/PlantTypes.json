@@ -782,16 +782,19 @@
           "PlantDraftodilAudio"
         ],
         "Properties": "RTID(DraftodilDefault@PropertySheets)",
-        "AnimRigClass": "PlantAnimRig",
+        "AnimRigClass": "PlantAnimRig_Draftodil",
         "Rare": 3,
         "PopAnim": "POPANIM_PLANT_DRAFTODIL",
         "Premium": true,
         "HomeWorld": "gacha",
         "AvatarEnabled": true,
+        "SecondPopAnimRare": [
+          "rare1"
+        ],
         "PlantPieceImageName": "IMAGE_UI_FRAGMENT_PIECES_PACKETS_DRAFTODIL",
         "AvatarPieceImageName": "IMAGE_UI_FRAGMENT_AVATAR_AVATAR_DRAFTODIL",
-        "SeedChooserBigVerticalOffset": 0.45000000000000001,
-        "SeedChooserBigHorizontalOffset": 0.0,
+        "SeedChooserBigVerticalOffset": 0.45,
+        "SeedChooserBigHorizontalOffset": 0,
         "SeedChooserBigScale": 1.3,
         "Avatars": [
           {
@@ -811,6 +814,10 @@
             "AvatarLayers": [
               "custom_03"
             ]
+          },
+          {
+            "AvatarType": "normal",
+            "AvatarLayers": []
           }
         ],
         "AdventureFlags": [
@@ -875,7 +882,7 @@
         "AvatarPieceImageName": "IMAGE_UI_FRAGMENT_AVATAR_AVATAR_HEATHSEEKER",
         "HomeWorld": "fairy_tale",
         "AlmanacBackdropName": "warp",
-        "SeedChooserBigVerticalOffset": 0.45000000000000001,
+        "SeedChooserBigVerticalOffset": 0.45,
         "SeedChooserBigHorizontalOffset": 0.02,
         "SeedChooserBigScale": 1.25,
         "Avatars": [
@@ -1208,6 +1215,14 @@
             "AvatarType": "normal",
             "AvatarLayers": [
               "custom_02"
+            ]
+          },
+          {
+            "AvatarType": "normal",
+            "AvatarLayers": [
+              "custom_04",
+              "custom_04a",
+              "custom_04b"
             ]
           }
         ]
@@ -4639,6 +4654,12 @@
               "custom_4b",
               "custom_4c"
             ]
+          },
+          {
+            "AvatarType": "normal",
+            "AvatarLayers": [
+              "custom_5"
+            ]
           }
         ]
       }
@@ -6357,6 +6378,12 @@
             "AvatarLayers": [
               "custom_01"
             ]
+          },
+          {
+            "AvatarType": "normal",
+            "AvatarLayers": [
+              "custom_02"
+            ]
           }
         ]
       }
@@ -7305,6 +7332,12 @@
             "AvatarLayers": [
               "custom_02a",
               "custom_02b"
+            ]
+          },
+          {
+            "AvatarType": "normal",
+            "AvatarLayers": [
+              "custom_03"
             ]
           }
         ]
@@ -10467,7 +10500,7 @@
         "Properties": "RTID(ToadstoolDefault@PropertySheets)",
         "AnimRigClass": "PlantAnimRig_Toadstool",
         "PopAnim": "POPANIM_PLANT_TOADSTOOL",
-        "SeedChooserVerticalOffset": 0.69999999999999996,
+        "SeedChooserVerticalOffset": 0.7,
         "AlmanacBackdropName": "premium",
         "HomeWorld": "lostcity",
         "PlantPieceImageName": "IMAGE_UI_FRAGMENT_PIECES_PACKETS_TOADSTOOL",
@@ -10548,7 +10581,7 @@
         "Properties": "RTID(FishhookgrassDefault@PropertySheets)",
         "AnimRigClass": "PlantAnimRig_Fishhookgrass",
         "PopAnim": "POPANIM_PLANT_FISHHOOKGRASS",
-        "SeedChooserVerticalOffset": 0.69999999999999996,
+        "SeedChooserVerticalOffset": 0.7,
         "AlmanacBackdropName": "premium",
         "HomeWorld": "gacha",
         "PlantPieceImageName": "IMAGE_UI_FRAGMENT_PIECES_PACKETS_FISHHOOKGRASS",
@@ -11101,6 +11134,7 @@
         "PlantFramework": "PlantMatchFlower",
         "Rare": 3,
         "PlantResourceGroups": [
+          "Effects_Artifact",
           "PlantBonkchoyAudio",
           "FrostbiteHeatGroup",
           "PlantMatchFlowerAudio"
@@ -11545,7 +11579,7 @@
         "Properties": "RTID(PhatBeetDefault@PropertySheets)",
         "AnimRigClass": "PlantAnimRig_PhatBeet",
         "PopAnim": "POPANIM_PLANT_PHATBEET",
-        "SeedChooserBigVerticalOffset": 0.34999999999999998,
+        "SeedChooserBigVerticalOffset": 0.35,
         "HomeWorld": "eighties",
         "PlantPieceImageName": "IMAGE_UI_FRAGMENT_PIECES_PACKETS_PHATBEET",
         "AvatarPieceImageName": "IMAGE_UI_FRAGMENT_AVATAR_AVATAR_PHATBEET",
@@ -11618,7 +11652,7 @@
         "Properties": "RTID(UnchartedPhatBeetDefault@PropertySheets)",
         "AnimRigClass": "PlantAnimRig_UnchartedPhatBeet",
         "PopAnim": "POPANIM_PLANT_PHATBEET",
-        "SeedChooserBigVerticalOffset": 0.34999999999999998,
+        "SeedChooserBigVerticalOffset": 0.35,
         "HomeWorld": "eighties",
         "PlantPieceImageName": "IMAGE_UI_FRAGMENT_PIECES_PACKETS_PHATBEET",
         "AvatarPieceImageName": "IMAGE_UI_FRAGMENT_AVATAR_AVATAR_PHATBEET",
@@ -11834,7 +11868,7 @@
         "Properties": "RTID(SporeshroomDefault@PropertySheets)",
         "AnimRigClass": "PlantAnimRig",
         "PopAnim": "POPANIM_PLANT_SPORESHROOM",
-        "SeedChooserBigHorizontalOffset": -0.029999999999999999,
+        "SeedChooserBigHorizontalOffset": -0.03,
         "HomeWorld": "eighties",
         "PlantPieceImageName": "IMAGE_UI_FRAGMENT_PIECES_PACKETS_SPORESHROOM",
         "AvatarPieceImageName": "IMAGE_UI_FRAGMENT_AVATAR_AVATAR_SPORESHROOM",
@@ -11908,8 +11942,8 @@
         ],
         "Properties": "RTID(GarlicDefault@PropertySheets)",
         "AnimRigClass": "PlantAnimRig_Garlic",
-        "SeedChooserBigVerticalOffset": 0.40000000000000002,
-        "SeedChooserBigHorizontalOffset": 0.050000000000000003,
+        "SeedChooserBigVerticalOffset": 0.4,
+        "SeedChooserBigHorizontalOffset": 0.05,
         "PopAnim": "POPANIM_PLANT_GARLIC",
         "HomeWorld": "eighties",
         "PlantPieceImageName": "IMAGE_UI_FRAGMENT_PIECES_PACKETS_GARLIC",
@@ -11990,7 +12024,7 @@
         "Properties": "RTID(IntensiveCarrotDefault@PropertySheets)",
         "AnimRigClass": "PlantAnimRig",
         "PopAnim": "POPANIM_PLANT_INTENSIVECARROT",
-        "SeedChooserBigVerticalOffset": 0.59999999999999998,
+        "SeedChooserBigVerticalOffset": 0.6,
         "SeedChooserBigScale": 1.3,
         "HomeWorld": "eighties",
         "PlantPieceImageName": "IMAGE_UI_FRAGMENT_PIECES_PACKETS_INTENSIVECARROT",
@@ -12059,7 +12093,7 @@
         "Properties": "RTID(MorningGloryDefault@PropertySheets)",
         "AnimRigClass": "PlantAnimRig_MorningGlory",
         "PopAnim": "POPANIM_PLANT_MORNINGGLORY",
-        "SeedChooserBigVerticalOffset": 0.59999999999999998,
+        "SeedChooserBigVerticalOffset": 0.6,
         "SeedChooserBigScale": 1.3,
         "HomeWorld": "eighties",
         "PlantPieceImageName": "IMAGE_UI_FRAGMENT_PIECES_PACKETS_MORNINGGLORY",
@@ -12138,9 +12172,9 @@
         "Properties": "RTID(CactusDefault@PropertySheets)",
         "AnimRigClass": "PlantAnimRig_Cactus",
         "PopAnim": "POPANIM_PLANT_CACTUS",
-        "SeedChooserBigVerticalOffset": 0.72499999999999998,
-        "SeedChooserBigHorizontalOffset": -0.029999999999999999,
-        "SeedChooserBigScale": 1.1000000000000001,
+        "SeedChooserBigVerticalOffset": 0.725,
+        "SeedChooserBigHorizontalOffset": -0.03,
+        "SeedChooserBigScale": 1.1,
         "HomeWorld": "tutorial",
         "PlantPieceImageName": "IMAGE_UI_FRAGMENT_PIECES_PACKETS_CACTUS",
         "AvatarPieceImageName": "IMAGE_UI_FRAGMENT_AVATAR_AVATAR_CACTUS",
@@ -12297,7 +12331,7 @@
         "Properties": "RTID(PrimalPeashooterDefault@PropertySheets)",
         "AnimRigClass": "PlantAnimRig_PrimalPeashooter",
         "PopAnim": "POPANIM_PLANT_PRIMALPEASHOOTER",
-        "SeedChooserBigVerticalOffset": 0.40000000000000002,
+        "SeedChooserBigVerticalOffset": 0.4,
         "HomeWorld": "dino",
         "PlantPieceImageName": "IMAGE_UI_FRAGMENT_PIECES_PACKETS_PRIMALPEASHOOTER",
         "AvatarPieceImageName": "IMAGE_UI_FRAGMENT_AVATAR_AVATAR_PRIMALPEASHOOTER",
@@ -12422,7 +12456,7 @@
         "Properties": "RTID(PrimalWallnutDefault@PropertySheets)",
         "AnimRigClass": "PlantAnimRig_PrimalWallnut",
         "PopAnim": "POPANIM_PLANT_PRIMALWALLNUT",
-        "SeedChooserBigVerticalOffset": 0.55000000000000004,
+        "SeedChooserBigVerticalOffset": 0.55,
         "SeedChooserBigScale": 1.3,
         "HomeWorld": "dino",
         "PlantPieceImageName": "IMAGE_UI_FRAGMENT_PIECES_PACKETS_PRIMALWALLNUT",
@@ -12570,7 +12604,7 @@
         "Properties": "RTID(PrimalSunflowerDefault@PropertySheets)",
         "AnimRigClass": "PlantAnimRig_PrimalSunflower",
         "PopAnim": "POPANIM_PLANT_PRIMALSUNFLOWER",
-        "SeedChooserBigVerticalOffset": 0.53000000000000003,
+        "SeedChooserBigVerticalOffset": 0.53,
         "PlantPieceImageName": "IMAGE_UI_FRAGMENT_PIECES_PACKETS_PRIMALSUNFLOWER",
         "AvatarPieceImageName": "IMAGE_UI_FRAGMENT_AVATAR_AVATAR_PRIMALSUNFLOWER",
         "AdventureFlags": [
@@ -12658,7 +12692,7 @@
         ],
         "Properties": "RTID(PrimalPotatomineDefault@PropertySheets)",
         "AnimRigClass": "PlantAnimRig_PotatoMine",
-        "SeedChooserBigVerticalOffset": 0.40000000000000002,
+        "SeedChooserBigVerticalOffset": 0.4,
         "PopAnim": "POPANIM_PLANT_PRIMALPOTATOMINE",
         "HomeWorld": "dino",
         "PlantPieceImageName": "IMAGE_UI_FRAGMENT_PIECES_PACKETS_PRIMALPOTATOMINE",
@@ -12738,6 +12772,7 @@
         "Rare": 1,
         "ExchangeAvatarCost": 400,
         "PlantResourceGroups": [
+          "Effects_Artifact",
           "PlantGravitree",
           "PlantGravitreeAudio"
         ],
@@ -12960,7 +12995,7 @@
         "AnimRigClass": "PlantAnimRig",
         "PopAnim": "POPANIM_PLANT_GRAPESHOT",
         "AlmanacBackdropName": "premium",
-        "SeedChooserBigVerticalOffset": 0.59999999999999998,
+        "SeedChooserBigVerticalOffset": 0.6,
         "SeedChooserBigHorizontalOffset": 0.02,
         "SeedChooserBigScale": 1.25,
         "HomeWorld": "dino",
@@ -13054,7 +13089,7 @@
         "Properties": "RTID(ColdSnapdragonDefault@PropertySheets)",
         "AnimRigClass": "PlantAnimRig_ColdSnapdragon",
         "PopAnim": "POPANIM_PLANT_COLDSNAPDRAGON",
-        "SeedChooserBigVerticalOffset": 0.80000000000000004,
+        "SeedChooserBigVerticalOffset": 0.8,
         "SeedChooserBigHorizontalOffset": 0,
         "SeedChooserBigScale": 1.05,
         "AlmanacBackdropName": "premium",
@@ -13221,7 +13256,7 @@
         "Properties": "RTID(DragonRoarDefault@PropertySheets)",
         "AnimRigClass": "PlantAnimRig_DragonRoar",
         "PopAnim": "POPANIM_PLANT_DRAGONROAR",
-        "SeedChooserBigVerticalOffset": 0.53000000000000003,
+        "SeedChooserBigVerticalOffset": 0.53,
         "PlantPieceImageName": "IMAGE_UI_FRAGMENT_PIECES_PACKETS_DRAGONROAR",
         "AvatarPieceImageName": "IMAGE_UI_FRAGMENT_AVATAR_AVATAR_DRAGONROAR",
         "AdventureFlags": [
@@ -13292,7 +13327,7 @@
         "AnimRigClass": "PlantAnimRig_Bramble",
         "PopAnim": "POPANIM_PLANT_BRAMBLE",
         "AvatarEnabled": true,
-        "SeedChooserBigVerticalOffset": 0.53000000000000003,
+        "SeedChooserBigVerticalOffset": 0.53,
         "PlantPieceImageName": "IMAGE_UI_FRAGMENT_PIECES_PACKETS_BRAMBLE",
         "AvatarPieceImageName": "IMAGE_UI_FRAGMENT_AVATAR_AVATAR_BRAMBLE",
         "AdventureFlags": [
@@ -13429,7 +13464,7 @@
         "Properties": "RTID(DragonCaneDefault@PropertySheets)",
         "AnimRigClass": "PlantAnimRig_DragonCane",
         "PopAnim": "POPANIM_PLANT_DRAGONCANE",
-        "SeedChooserBigVerticalOffset": 0.53000000000000003,
+        "SeedChooserBigVerticalOffset": 0.53,
         "PlantPieceImageName": "IMAGE_UI_FRAGMENT_PIECES_PACKETS_DRAGONCANE",
         "AvatarPieceImageName": "IMAGE_UI_FRAGMENT_AVATAR_AVATAR_DRAGONCANE",
         "AdventureFlags": [
@@ -13597,7 +13632,7 @@
         "Properties": "RTID(AppleMortarDefault@PropertySheets)",
         "AnimRigClass": "PlantAnimRig_AppleMortar",
         "PopAnim": "POPANIM_PLANT_APPLEMORTAR",
-        "SeedChooserBigVerticalOffset": 0.47999999999999998,
+        "SeedChooserBigVerticalOffset": 0.48,
         "PlantPieceImageName": "IMAGE_UI_FRAGMENT_PIECES_PACKETS_APPLEMORTAR",
         "AvatarPieceImageName": "IMAGE_UI_FRAGMENT_AVATAR_AVATAR_APPLEMORTAR",
         "AdventureFlags": [
@@ -13704,7 +13739,7 @@
         "Properties": "RTID(FirecrackerFlowerDefault@PropertySheets)",
         "AnimRigClass": "PlantAnimRig_FirecrackerFlower",
         "PopAnim": "POPANIM_PLANT_FIRECRACKERFLOWER",
-        "SeedChooserBigVerticalOffset": 0.47999999999999998,
+        "SeedChooserBigVerticalOffset": 0.48,
         "PlantPieceImageName": "IMAGE_UI_FRAGMENT_PIECES_PACKETS_FIRECRACKERFLOWER",
         "AvatarPieceImageName": "IMAGE_UI_FRAGMENT_AVATAR_AVATAR_FIRECRACKERFLOWER",
         "AdventureFlags": [
@@ -13856,7 +13891,7 @@
         "Properties": "RTID(EscapeRootDefault@PropertySheets)",
         "AnimRigClass": "PlantAnimRig_EscapeRoot",
         "PopAnim": "POPANIM_PLANT_ESCAPEROOT",
-        "SeedChooserBigVerticalOffset": 0.20000000000000001,
+        "SeedChooserBigVerticalOffset": 0.2,
         "PlantPieceImageName": "IMAGE_UI_FRAGMENT_PIECES_PACKETS_ESCAPEROOT",
         "AvatarPieceImageName": "IMAGE_UI_FRAGMENT_AVATAR_AVATAR_ESCAPEROOT",
         "AdventureFlags": [
@@ -13942,7 +13977,7 @@
         "Properties": "RTID(ElectricCurrantDefault@PropertySheets)",
         "AnimRigClass": "PlantAnimRig_ElectricCurrant",
         "PopAnim": "POPANIM_PLANT_ELECTRICCURRANT",
-        "SeedChooserBigVerticalOffset": 0.28000000000000003,
+        "SeedChooserBigVerticalOffset": 0.28,
         "PlantPieceImageName": "IMAGE_UI_FRAGMENT_PIECES_PACKETS_ELECTRICCURRANT",
         "AvatarPieceImageName": "IMAGE_UI_FRAGMENT_AVATAR_AVATAR_ELECTRICCURRANT",
         "AdventureFlags": [
@@ -14022,7 +14057,7 @@
         "Properties": "RTID(WhiteMelonDefault@PropertySheets)",
         "AnimRigClass": "PlantAnimRig_WhiteMelon",
         "PopAnim": "POPANIM_PLANT_WHITEMELON",
-        "SeedChooserBigVerticalOffset": 0.28000000000000003,
+        "SeedChooserBigVerticalOffset": 0.28,
         "PlantPieceImageName": "IMAGE_UI_FRAGMENT_PIECES_PACKETS_WHITEMELON",
         "AvatarPieceImageName": "IMAGE_UI_FRAGMENT_AVATAR_AVATAR_WHITEMELON",
         "AdventureFlags": [
@@ -14104,7 +14139,7 @@
         "AnimRigClass": "PlantAnimRig_Caulipower",
         "PopAnim": "POPANIM_PLANT_CAULIPOWER",
         "SeedChooserBigVerticalOffset": 0.12,
-        "SeedChooserBigHorizontalOffset": 0.0,
+        "SeedChooserBigHorizontalOffset": 0,
         "SeedChooserBigScale": 1.7,
         "AlmanacBackdropName": "premium",
         "PlantPieceImageName": "IMAGE_UI_FRAGMENT_PIECES_PACKETS_CAULIPOWER",
@@ -14189,7 +14224,7 @@
         "AnimRigClass": "PlantAnimRig_Dusklobber",
         "PopAnim": "POPANIM_PLANT_DUSKLOBBER",
         "SeedChooserBigScale": 1.45,
-        "SeedChooserBigVerticalOffset": 0.34000000000000002,
+        "SeedChooserBigVerticalOffset": 0.34,
         "SeedChooserBigHorizontalOffset": 0,
         "PlantPieceImageName": "IMAGE_UI_FRAGMENT_PIECES_PACKETS_DUSKLOBBER",
         "AvatarPieceImageName": "IMAGE_UI_FRAGMENT_AVATAR_AVATAR_DUSKLOBBER",
@@ -14427,8 +14462,8 @@
         "AnimRigClass": "PlantAnimRig_MoonFlower",
         "PopAnim": "POPANIM_PLANT_MOONFLOWER",
         "HomeWorld": "modern",
-        "SeedChooserBigVerticalOffset": 0.41999999999999998,
-        "SeedChooserBigHorizontalOffset": 0.029999999999999999,
+        "SeedChooserBigVerticalOffset": 0.42,
+        "SeedChooserBigHorizontalOffset": 0.03,
         "SeedChooserBigScale": 1.2,
         "PlantPieceImageName": "IMAGE_UI_FRAGMENT_PIECES_PACKETS_MOONFLOWER",
         "AvatarPieceImageName": "IMAGE_UI_FRAGMENT_AVATAR_AVATAR_MOONFLOWER",
@@ -14504,7 +14539,7 @@
         "AnimRigClass": "PlantAnimRig_ExplodeONut",
         "PopAnim": "POPANIM_PLANT_EXPLODEONUT",
         "Enabled": true,
-        "SeedChooserBigVerticalOffset": 0.34000000000000002,
+        "SeedChooserBigVerticalOffset": 0.34,
         "AlmanacBackdropName": "premium",
         "PlantPieceImageName": "IMAGE_UI_FRAGMENT_PIECES_PACKETS_EXPLODEONUT",
         "AvatarPieceImageName": "IMAGE_UI_FRAGMENT_AVATAR_AVATAR_EXPLODEONUT",
@@ -14604,7 +14639,7 @@
         "PopAnim": "POPANIM_PLANT_NIGHTSHADE",
         "Properties": "RTID(NightshadeDefault@PropertySheets)",
         "HomeWorld": "modern",
-        "SeedChooserBigVerticalOffset": 0.42999999999999999,
+        "SeedChooserBigVerticalOffset": 0.43,
         "SeedChooserBigScale": 1.25,
         "PlantPieceImageName": "IMAGE_UI_FRAGMENT_PIECES_PACKETS_NIGHTSHADE",
         "AvatarPieceImageName": "IMAGE_UI_FRAGMENT_AVATAR_AVATAR_NIGHTSHADE",
@@ -14670,8 +14705,8 @@
         "Properties": "RTID(BloomingHeartsDefault@PropertySheets)",
         "AnimRigClass": "PlantAnimRig_BloomingHearts",
         "PopAnim": "POPANIM_PLANT_BLOOMINGHEARTS",
-        "SeedChooserBigVerticalOffset": 0.32000000000000001,
-        "SeedChooserBigHorizontalOffset": -0.10000000000000001,
+        "SeedChooserBigVerticalOffset": 0.32,
+        "SeedChooserBigHorizontalOffset": -0.1,
         "PlantPieceImageName": "IMAGE_UI_FRAGMENT_PIECES_PACKETS_BLOOMINGHEARTS",
         "AvatarPieceImageName": "IMAGE_UI_FRAGMENT_AVATAR_AVATAR_BLOOMINGHEARTS",
         "AlmanacBackdropName": "premium",
@@ -14748,9 +14783,9 @@
         "Properties": "RTID(GrimroseDefault@PropertySheets)",
         "AnimRigClass": "PlantAnimRig_Grimrose",
         "PopAnim": "POPANIM_PLANT_GRIMROSE",
-        "SeedChooserBigVerticalOffset": 0.45000000000000001,
-        "SeedChooserBigHorizontalOffset": 0.0,
-        "SeedChooserBigScale": 1.1499999999999999,
+        "SeedChooserBigVerticalOffset": 0.45,
+        "SeedChooserBigHorizontalOffset": 0,
+        "SeedChooserBigScale": 1.15,
         "PlantPieceImageName": "IMAGE_UI_FRAGMENT_PIECES_PACKETS_GRIMROSE",
         "AvatarPieceImageName": "IMAGE_UI_FRAGMENT_AVATAR_AVATAR_GRIMROSE",
         "Rare": 3,
@@ -14833,8 +14868,8 @@
         "AnimRigClass": "PlantAnimRig_WasabiWhip",
         "PopAnim": "POPANIM_PLANT_WASABIWHIP",
         "AlmanacBackdropName": "premium",
-        "SeedChooserBigVerticalOffset": 0.41999999999999998,
-        "SeedChooserBigHorizontalOffset": -0.17000000000000001,
+        "SeedChooserBigVerticalOffset": 0.42,
+        "SeedChooserBigHorizontalOffset": -0.17,
         "SeedChooserBigScale": 1.25,
         "PlantPieceImageName": "IMAGE_UI_FRAGMENT_PIECES_PACKETS_WASABIWHIP",
         "AvatarPieceImageName": "IMAGE_UI_FRAGMENT_AVATAR_AVATAR_WASABIWHIP",
@@ -14904,7 +14939,7 @@
         "AnimRigClass": "PlantAnimRig_Parsnip",
         "PopAnim": "POPANIM_PLANT_PARSNIP",
         "AlmanacBackdropName": "premium",
-        "SeedChooserBigVerticalOffset": 0.41999999999999998,
+        "SeedChooserBigVerticalOffset": 0.42,
         "SeedChooserBigHorizontalOffset": 0,
         "SeedChooserBigScale": 1.3,
         "PlantPieceImageName": "IMAGE_UI_FRAGMENT_PIECES_PACKETS_PARSNIP",
@@ -14983,8 +15018,8 @@
         "Properties": "RTID(MissileToeDefault@PropertySheets)",
         "AnimRigClass": "PlantAnimRig_MissileToe",
         "PopAnim": "POPANIM_PLANT_MISSILETOE",
-        "SeedChooserBigVerticalOffset": 0.35999999999999999,
-        "SeedChooserBigHorizontalOffset": 0.050000000000000003,
+        "SeedChooserBigVerticalOffset": 0.36,
+        "SeedChooserBigHorizontalOffset": 0.05,
         "SeedChooserBigScale": 1.3,
         "PlantPieceImageName": "IMAGE_UI_FRAGMENT_PIECES_PACKETS_MISSILETOE",
         "AvatarPieceImageName": "IMAGE_UI_FRAGMENT_AVATAR_AVATAR_MISSILETOE",
@@ -15098,7 +15133,7 @@
         "Properties": "RTID(KiwiBeastDefault@PropertySheets)",
         "AnimRigClass": "PlantAnimRig_KiwiBeast",
         "PopAnim": "POPANIM_PLANT_KIWIBEAST",
-        "SeedChooserBigVerticalOffset": 0.34000000000000002,
+        "SeedChooserBigVerticalOffset": 0.34,
         "AlmanacBackdropName": "premium",
         "PlantPieceImageName": "IMAGE_UI_FRAGMENT_PIECES_PACKETS_KIWIBEAST",
         "AvatarPieceImageName": "IMAGE_UI_FRAGMENT_AVATAR_AVATAR_KIWIBEAST",
@@ -15771,7 +15806,7 @@
         ],
         "Properties": "RTID(ImpPearDefault@PropertySheets)",
         "AnimRigClass": "PlantAnimRig",
-        "SeedChooserBigVerticalOffset": 0.29999999999999999,
+        "SeedChooserBigVerticalOffset": 0.3,
         "PopAnim": "POPANIM_PLANT_IMPPEAR",
         "SeedChooserBigScale": 1.2,
         "SeedChooserBigVerticalOffset": 0.5,
@@ -16422,7 +16457,7 @@
         "Properties": "RTID(TurkeypultDefault@PropertySheets)",
         "AnimRigClass": "PlantAnimRig_Turkeypult",
         "PopAnim": "POPANIM_PLANT_TURKEYPULT",
-        "SeedChooserBigVerticalOffset": 0.46000000000000002,
+        "SeedChooserBigVerticalOffset": 0.46,
         "SeedChooserBigScale": 1.2,
         "Premium": true,
         "AlmanacBackdropName": "warp",
@@ -16623,9 +16658,9 @@
         "HomeWorld": "gacha",
         "Rare": 4,
         "ExchangeAvatarCost": 800,
-        "SeedChooserVerticalOffset": 0.20000000000000001,
-        "SeedChooserBigVerticalOffset": 0.20000000000000001,
-        "SeasonsVerticalOffset": -55.0,
+        "SeedChooserVerticalOffset": 0.2,
+        "SeedChooserBigVerticalOffset": 0.2,
+        "SeasonsVerticalOffset": -55,
         "Premium": true,
         "AlmanacBackdropName": "warp",
         "PlantPieceImageName": "IMAGE_UI_FRAGMENT_PIECES_PACKETS_INFERNO",
@@ -16730,6 +16765,13 @@
             "AvatarType": "normal",
             "AvatarLayers": [
               "custom_01"
+            ]
+          },
+          {
+            "AvatarType": "normal",
+            "AvatarLayers": [
+              "custom_02",
+              "custom_02a"
             ]
           }
         ],
@@ -17847,7 +17889,7 @@
         "Properties": "RTID(AlarmSagittifoliaDefault@PropertySheets)",
         "AnimRigClass": "PlantAnimRig_AlarmSagittifolia",
         "PopAnim": "POPANIM_PLANT_ALARMSAGITTIFOLIA",
-        "SeedChooserBigVerticalOffset": 0.28000000000000003,
+        "SeedChooserBigVerticalOffset": 0.28,
         "PlantPieceImageName": "IMAGE_UI_FRAGMENT_PIECES_PACKETS_ALARMSAGITTIFOLIA",
         "AvatarPieceImageName": "IMAGE_UI_FRAGMENT_AVATAR_AVATAR_ALARMSAGITTIFOLIA",
         "AdventureFlags": [
@@ -18061,7 +18103,7 @@
         "AnimRigClass": "PlantAnimRig",
         "PopAnim": "POPANIM_PLANT_ELECTRICPEASHOOTER",
         "SeedChooserBigVerticalOffset": 0.12,
-        "SeedChooserBigHorizontalOffset": 0.0,
+        "SeedChooserBigHorizontalOffset": 0,
         "SeedChooserBigScale": 1.7,
         "AlmanacBackdropName": "premium",
         "PlantPieceImageName": "IMAGE_UI_FRAGMENT_PIECES_PACKETS_ELECTRICPEASHOOTER",
@@ -18153,7 +18195,7 @@
         "AnimRigClass": "PlantAnimRig_TulipTrumpeter",
         "PopAnim": "POPANIM_PLANT_TULIPTRUMPETER",
         "SeedChooserBigVerticalOffset": 0.12,
-        "SeedChooserBigHorizontalOffset": 0.0,
+        "SeedChooserBigHorizontalOffset": 0,
         "SeedChooserBigScale": 1.7,
         "AlmanacBackdropName": "premium",
         "PlantPieceImageName": "IMAGE_UI_FRAGMENT_PIECES_PACKETS_TULIPTRUMPETER",
@@ -18227,7 +18269,7 @@
         "Properties": "RTID(HotDateDefault@PropertySheets)",
         "AnimRigClass": "PlantAnimRig_HotDate",
         "PopAnim": "POPANIM_PLANT_HOTDATE",
-        "SeedChooserBigVerticalOffset": 0.34999999999999998,
+        "SeedChooserBigVerticalOffset": 0.35,
         "AlmanacBackdropName": "premium",
         "Rare": 3,
         "PlantPieceImageName": "IMAGE_UI_FRAGMENT_PIECES_PACKETS_HOTDATE",
@@ -18546,8 +18588,8 @@
         "Properties": "RTID(vanillaDefault@PropertySheets)",
         "AnimRigClass": "PlantAnimRig_Vanilla",
         "PopAnim": "POPANIM_PLANT_VANILLA",
-        "SeedChooserBigVerticalOffset": 0.41999999999999998,
-        "SeedChooserBigHorizontalOffset": 0.050000000000000003,
+        "SeedChooserBigVerticalOffset": 0.42,
+        "SeedChooserBigHorizontalOffset": 0.05,
         "SeedChooserBigScale": 1.7,
         "AlmanacBackdropName": "premium",
         "PlantPieceImageName": "IMAGE_UI_FRAGMENT_PIECES_PACKETS_VANILLA",
@@ -19049,7 +19091,7 @@
           "red",
           "electric"
         ],
-        "SeedChooserBigVerticalOffset": 0.29999999999999999,
+        "SeedChooserBigVerticalOffset": 0.3,
         "Avatars": [
           {
             "AvatarType": "normal",
@@ -19115,7 +19157,7 @@
         "AdventureFlags": [
           "green"
         ],
-        "SeedChooserBigVerticalOffset": 0.29999999999999999,
+        "SeedChooserBigVerticalOffset": 0.3,
         "Avatars": [
           {
             "AvatarType": "normal",
@@ -19184,7 +19226,7 @@
         "AdventureFlags": [
           "green"
         ],
-        "SeedChooserBigVerticalOffset": 0.29999999999999999,
+        "SeedChooserBigVerticalOffset": 0.3,
         "Avatars": [
           {
             "AvatarType": "normal",
@@ -19263,7 +19305,7 @@
           "orange",
           "purple"
         ],
-        "SeedChooserBigVerticalOffset": 0.29999999999999999,
+        "SeedChooserBigVerticalOffset": 0.3,
         "Avatars": [
           {
             "AvatarType": "normal",
@@ -19340,7 +19382,7 @@
         "AdventureFlags": [
           "green"
         ],
-        "SeedChooserBigVerticalOffset": 0.29999999999999999,
+        "SeedChooserBigVerticalOffset": 0.3,
         "Avatars": [
           {
             "AvatarType": "normal",
@@ -19417,7 +19459,7 @@
         "AdventureFlags": [
           "green"
         ],
-        "SeedChooserBigVerticalOffset": 0.29999999999999999,
+        "SeedChooserBigVerticalOffset": 0.3,
         "Avatars": [
           {
             "AvatarType": "normal",
@@ -19492,7 +19534,7 @@
           "purple",
           "fly"
         ],
-        "SeedChooserBigVerticalOffset": 0.29999999999999999,
+        "SeedChooserBigVerticalOffset": 0.3,
         "Avatars": [
           {
             "AvatarType": "normal",
@@ -20089,7 +20131,7 @@
         "AnimRigClass": "PlantAnimRig_Pokra",
         "PopAnim": "POPANIM_PLANT_POKRA",
         "HomeWorld": "gacha",
-        "SeedChooserBigVerticalOffset": 0.40000000000000002,
+        "SeedChooserBigVerticalOffset": 0.4,
         "SeedChooserBigHorizontalOffset": 0.02,
         "SeedChooserBigScale": 1.3,
         "PlantPieceImageName": "IMAGE_UI_FRAGMENT_PIECES_PACKETS_POKRA",
@@ -20172,7 +20214,7 @@
         "AnimRigClass": "PlantAnimRig_Hydrocotyledrummer",
         "PopAnim": "POPANIM_PLANT_HYDROCOTYLEDRUMMER",
         "HomeWorld": "gacha",
-        "SeedChooserBigVerticalOffset": 0.40000000000000002,
+        "SeedChooserBigVerticalOffset": 0.4,
         "SeedChooserBigHorizontalOffset": 0.02,
         "SeedChooserBigScale": 1.3,
         "PlantPieceImageName": "IMAGE_UI_FRAGMENT_PIECES_PACKETS_HYDROCOTYLEDRUMMER",
@@ -20262,7 +20304,7 @@
         "AnimRigClass": "PlantAnimRig_ShadowVanilla",
         "PopAnim": "POPANIM_PLANT_SHADOWVANILLA",
         "HomeWorld": "gacha",
-        "SeedChooserBigVerticalOffset": 0.40000000000000002,
+        "SeedChooserBigVerticalOffset": 0.4,
         "SeedChooserBigHorizontalOffset": 0.02,
         "SeedChooserBigScale": 1.3,
         "PlantPieceImageName": "IMAGE_UI_FRAGMENT_PIECES_PACKETS_SHADOWVANILLA",
@@ -20341,7 +20383,7 @@
         "AnimRigClass": "PlantAnimRig_Icelotus",
         "PopAnim": "POPANIM_PLANT_ICELOTUS",
         "HomeWorld": "heian",
-        "SeedChooserBigVerticalOffset": 0.40000000000000002,
+        "SeedChooserBigVerticalOffset": 0.4,
         "SeedChooserBigHorizontalOffset": 0.02,
         "SeedChooserBigScale": 1.3,
         "PlantPieceImageName": "IMAGE_UI_FRAGMENT_PIECES_PACKETS_ICELOTUS",
@@ -20477,7 +20519,7 @@
         "AnimRigClass": "PlantAnimRig_Dendrobiumguard",
         "PopAnim": "POPANIM_PLANT_DENDROBIUMGUARD",
         "HomeWorld": "heian",
-        "SeedChooserBigVerticalOffset": 0.40000000000000002,
+        "SeedChooserBigVerticalOffset": 0.4,
         "SeedChooserBigHorizontalOffset": 0.02,
         "SeedChooserBigScale": 1.3,
         "PlantPieceImageName": "IMAGE_UI_FRAGMENT_PIECES_PACKETS_DENDROBIUMGUARD",
@@ -20546,7 +20588,7 @@
         "AnimRigClass": "PlantAnimRig_Bromelblade",
         "PopAnim": "POPANIM_PLANT_BROMELBLADE",
         "HomeWorld": "kongfu",
-        "SeedChooserBigVerticalOffset": 0.40000000000000002,
+        "SeedChooserBigVerticalOffset": 0.4,
         "SeedChooserBigHorizontalOffset": 0.02,
         "SeedChooserBigScale": 1.3,
         "PlantPieceImageName": "IMAGE_UI_FRAGMENT_PIECES_PACKETS_BROMELBLADE",
@@ -20709,7 +20751,7 @@
         "AnimRigClass": "PlantAnimRig_OlivePit",
         "PopAnim": "POPANIM_PLANT_OLIVEPIT",
         "HomeWorld": "gacha",
-        "SeedChooserBigVerticalOffset": 0.20000000000000001,
+        "SeedChooserBigVerticalOffset": 0.2,
         "PlantPieceImageName": "IMAGE_UI_FRAGMENT_PIECES_PACKETS_OLIVEPIT",
         "AvatarPieceImageName": "IMAGE_UI_FRAGMENT_AVATAR_AVATAR_OLIVEPIT",
         "AdventureFlags": [
@@ -20791,7 +20833,7 @@
         "AnimRigClass": "PlantAnimRig_HeadbutterLettuce",
         "PopAnim": "POPANIM_PLANT_HEADBUTTERLETTUCE",
         "HomeWorld": "gacha",
-        "SeedChooserBigVerticalOffset": 0.20000000000000001,
+        "SeedChooserBigVerticalOffset": 0.2,
         "PlantPieceImageName": "IMAGE_UI_FRAGMENT_PIECES_PACKETS_HEADBUTTERLETTUCE",
         "AvatarPieceImageName": "IMAGE_UI_FRAGMENT_AVATAR_AVATAR_HEADBUTTERLETTUCE",
         "AdventureFlags": [
@@ -21194,7 +21236,7 @@
         "Properties": "RTID(BoomFlowerDefault@PropertySheets)",
         "AnimRigClass": "PlantAnimRig_BoomFlower",
         "PopAnim": "POPANIM_PLANT_BOOMFLOWER",
-        "SeedChooserBigVerticalOffset": 0.40000000000000002,
+        "SeedChooserBigVerticalOffset": 0.4,
         "SeedChooserBigScale": 1.3,
         "Premium": true,
         "AlmanacBackdropName": "warp",
@@ -21287,6 +21329,14 @@
             "AvatarType": "normal",
             "AvatarLayers": [
               "custom_01"
+            ]
+          },
+          {
+            "AvatarType": "normal",
+            "AvatarLayers": [
+              "custom_02a",
+              "custom_02b",
+              "custom_02c"
             ]
           }
         ]
@@ -21887,7 +21937,7 @@
         "Properties": "RTID(SeashroomDefault@PropertySheets)",
         "AnimRigClass": "PlantAnimRig_Seashroom",
         "PopAnim": "POPANIM_PLANT_SEASHROOM",
-        "SeedChooserBigVerticalOffset": 0.34000000000000002,
+        "SeedChooserBigVerticalOffset": 0.34,
         "HomeWorld": "atlantis",
         "PlantPieceImageName": "IMAGE_UI_FRAGMENT_PIECES_PACKETS_SEASHROOM",
         "AvatarPieceImageName": "IMAGE_UI_FRAGMENT_AVATAR_AVATAR_SEASHROOM",
@@ -21970,7 +22020,7 @@
         "Properties": "RTID(ScaredyShroomDefault@PropertySheets)",
         "AnimRigClass": "PlantAnimRig_ScaredyShroom",
         "PopAnim": "POPANIM_PLANT_SCAREDYSHROOM",
-        "SeedChooserBigVerticalOffset": 0.34000000000000002,
+        "SeedChooserBigVerticalOffset": 0.34,
         "HomeWorld": "zcorp",
         "PlantPieceImageName": "IMAGE_UI_FRAGMENT_PIECES_PACKETS_SCAREDYSHROOM",
         "AvatarPieceImageName": "IMAGE_UI_FRAGMENT_AVATAR_AVATAR_SCAREDYSHROOM",
@@ -22062,7 +22112,7 @@
         "Properties": "RTID(LevitaterDefault@PropertySheets)",
         "AnimRigClass": "PlantAnimRig_Levitater",
         "PopAnim": "POPANIM_PLANT_LEVITATER",
-        "SeedChooserBigVerticalOffset": 0.34000000000000002,
+        "SeedChooserBigVerticalOffset": 0.34,
         "HomeWorld": "zcorp",
         "PlantPieceImageName": "IMAGE_UI_FRAGMENT_PIECES_PACKETS_LEVITATER",
         "AvatarPieceImageName": "IMAGE_UI_FRAGMENT_AVATAR_AVATAR_LEVITATER",
@@ -22145,7 +22195,7 @@
         "Properties": "RTID(GloombaraDefault@PropertySheets)",
         "AnimRigClass": "PlantAnimRig",
         "PopAnim": "POPANIM_PLANT_GLOOMBARA",
-        "SeedChooserBigVerticalOffset": 0.34000000000000002,
+        "SeedChooserBigVerticalOffset": 0.34,
         "HomeWorld": "mausoleum",
         "PlantPieceImageName": "IMAGE_UI_FRAGMENT_PIECES_PACKETS_GLOOMBARA",
         "AvatarPieceImageName": "IMAGE_UI_FRAGMENT_AVATAR_AVATAR_GLOOMBARA",
@@ -22221,7 +22271,7 @@
         "Properties": "RTID(DoombellDefault@PropertySheets)",
         "AnimRigClass": "PlantAnimRig_Doombell",
         "PopAnim": "POPANIM_PLANT_DOOMBELL",
-        "SeedChooserBigVerticalOffset": 0.34000000000000002,
+        "SeedChooserBigVerticalOffset": 0.34,
         "HomeWorld": "mausoleum",
         "PlantPieceImageName": "IMAGE_UI_FRAGMENT_PIECES_PACKETS_DOOMBELL",
         "AvatarPieceImageName": "IMAGE_UI_FRAGMENT_AVATAR_AVATAR_DOOMBELL",
@@ -22295,7 +22345,7 @@
         "Properties": "RTID(GlacierShroomDefault@PropertySheets)",
         "AnimRigClass": "PlantAnimRig_GlacierShroom",
         "PopAnim": "POPANIM_PLANT_GLACIERSHROOM",
-        "SeedChooserBigVerticalOffset": 0.34000000000000002,
+        "SeedChooserBigVerticalOffset": 0.34,
         "HomeWorld": "gacha",
         "SecondPopAnimRare": [
           "rare1"
@@ -22454,8 +22504,8 @@
         "Properties": "RTID(JackOLanternDefault@PropertySheets)",
         "AnimRigClass": "PlantAnimRig_JackOLantern",
         "PopAnim": "POPANIM_PLANT_JACKOLANTERN",
-        "SeedChooserBigVerticalOffset": 0.34000000000000002,
-        "SeedChooserBigHorizontalOffset": -0.050000000000000003,
+        "SeedChooserBigVerticalOffset": 0.34,
+        "SeedChooserBigHorizontalOffset": -0.05,
         "SeedChooserBigScale": 1.325,
         "AlmanacBackdropName": "warp",
         "HomeWorld": "gacha",
@@ -22538,7 +22588,7 @@
         "PopAnim": "POPANIM_PLANT_VAMPORCINI",
         "Premium": true,
         "AlmanacBackdropName": "warp",
-        "SeedChooserBigVerticalOffset": 0.29999999999999999,
+        "SeedChooserBigVerticalOffset": 0.3,
         "PlantPieceImageName": "IMAGE_UI_FRAGMENT_PIECES_PACKETS_VAMPORCINI",
         "AvatarPieceImageName": "IMAGE_UI_FRAGMENT_AVATAR_AVATAR_VAMPORCINI",
         "HomeWorld": "gacha",
@@ -22613,8 +22663,8 @@
         "Properties": "RTID(PumpkinDefault@PropertySheets)",
         "AnimRigClass": "PlantAnimRig_Pumpkin",
         "PopAnim": "POPANIM_PLANT_PUMPKIN",
-        "SeedChooserBigVerticalOffset": 0.34000000000000002,
-        "SeasonsVerticalOffset": -20.300000000000001,
+        "SeedChooserBigVerticalOffset": 0.34,
+        "SeasonsVerticalOffset": -20.3,
         "PlantPieceImageName": "IMAGE_UI_FRAGMENT_PIECES_PACKETS_PUMPKIN",
         "AvatarPieceImageName": "IMAGE_UI_FRAGMENT_AVATAR_AVATAR_PUMPKIN",
         "Premium": true,
@@ -22695,8 +22745,8 @@
         "Properties": "RTID(GeraniiFencerDefault@PropertySheets)",
         "AnimRigClass": "PlantAnimRig_GeraniiFencer",
         "PopAnim": "POPANIM_PLANT_GERANIIFENCER",
-        "SeedChooserBigVerticalOffset": 0.34000000000000002,
-        "SeasonsVerticalOffset": -20.300000000000001,
+        "SeedChooserBigVerticalOffset": 0.34,
+        "SeasonsVerticalOffset": -20.3,
         "PlantPieceImageName": "IMAGE_UI_FRAGMENT_PIECES_PACKETS_GERANIIFENCER",
         "AvatarPieceImageName": "IMAGE_UI_FRAGMENT_AVATAR_AVATAR_GERANIIFENCER",
         "Premium": true,
@@ -22789,8 +22839,8 @@
         "Properties": "RTID(PowerVineDefault@PropertySheets)",
         "AnimRigClass": "PlantAnimRig_PowerVine",
         "PopAnim": "POPANIM_PLANT_POWERVINE",
-        "SeedChooserBigVerticalOffset": 0.34000000000000002,
-        "SeasonsVerticalOffset": -20.300000000000001,
+        "SeedChooserBigVerticalOffset": 0.34,
+        "SeasonsVerticalOffset": -20.3,
         "PlantPieceImageName": "IMAGE_UI_FRAGMENT_PIECES_PACKETS_POWERVINE",
         "AvatarPieceImageName": "IMAGE_UI_FRAGMENT_AVATAR_AVATAR_POWERVINE",
         "Premium": true,
@@ -22880,8 +22930,8 @@
         "Properties": "RTID(PlantSarraceniaDefault@PropertySheets)",
         "AnimRigClass": "PlantAnimRig_Sarracenia",
         "PopAnim": "POPANIM_PLANT_SARRACENIA",
-        "SeedChooserBigVerticalOffset": 0.34000000000000002,
-        "SeasonsVerticalOffset": -20.300000000000001,
+        "SeedChooserBigVerticalOffset": 0.34,
+        "SeasonsVerticalOffset": -20.3,
         "PlantPieceImageName": "IMAGE_UI_FRAGMENT_PIECES_PACKETS_SARRACENIA",
         "AvatarPieceImageName": "IMAGE_UI_FRAGMENT_AVATAR_AVATAR_SARRACENIA",
         "Premium": true,
@@ -23046,8 +23096,8 @@
         "Properties": "RTID(PlantPeavineDefault@PropertySheets)",
         "AnimRigClass": "PlantAnimRig_Peavine",
         "PopAnim": "POPANIM_PLANT_PEAVINE",
-        "SeedChooserBigVerticalOffset": 0.34000000000000002,
-        "SeasonsVerticalOffset": -20.300000000000001,
+        "SeedChooserBigVerticalOffset": 0.34,
+        "SeasonsVerticalOffset": -20.3,
         "PlantPieceImageName": "IMAGE_UI_FRAGMENT_PIECES_PACKETS_PEAVINE",
         "AvatarPieceImageName": "IMAGE_UI_FRAGMENT_AVATAR_AVATAR_PEAVINE",
         "Premium": true,
@@ -23122,8 +23172,8 @@
         "Properties": "RTID(PlantMaybeeDefault@PropertySheets)",
         "AnimRigClass": "PlantAnimRig_Maybee",
         "PopAnim": "POPANIM_PLANT_MAYBEE",
-        "SeedChooserBigVerticalOffset": 0.34000000000000002,
-        "SeasonsVerticalOffset": -20.300000000000001,
+        "SeedChooserBigVerticalOffset": 0.34,
+        "SeasonsVerticalOffset": -20.3,
         "PlantPieceImageName": "IMAGE_UI_FRAGMENT_PIECES_PACKETS_MAYBEE",
         "AvatarPieceImageName": "IMAGE_UI_FRAGMENT_AVATAR_AVATAR_MAYBEE",
         "Premium": true,
@@ -23200,8 +23250,8 @@
         "Properties": "RTID(PlantDracaenaDefault@PropertySheets)",
         "AnimRigClass": "PlantAnimRig_Dracaena",
         "PopAnim": "POPANIM_PLANT_DRACAENA",
-        "SeedChooserBigVerticalOffset": 0.34000000000000002,
-        "SeasonsVerticalOffset": -20.300000000000001,
+        "SeedChooserBigVerticalOffset": 0.34,
+        "SeasonsVerticalOffset": -20.3,
         "PlantPieceImageName": "IMAGE_UI_FRAGMENT_PIECES_PACKETS_DRACAENA",
         "AvatarPieceImageName": "IMAGE_UI_FRAGMENT_AVATAR_AVATAR_DRACAENA",
         "Premium": true,
@@ -23319,8 +23369,8 @@
         "Properties": "RTID(NightcapDefault@PropertySheets)",
         "AnimRigClass": "PlantAnimRig_Nightcap",
         "PopAnim": "POPANIM_PLANT_NIGHTCAP",
-        "SeedChooserBigVerticalOffset": 0.34000000000000002,
-        "SeasonsVerticalOffset": -20.300000000000001,
+        "SeedChooserBigVerticalOffset": 0.34,
+        "SeasonsVerticalOffset": -20.3,
         "PlantPieceImageName": "IMAGE_UI_FRAGMENT_PIECES_PACKETS_NIGHTCAP",
         "AvatarPieceImageName": "IMAGE_UI_FRAGMENT_AVATAR_AVATAR_NIGHTCAP",
         "Premium": true,
@@ -23893,7 +23943,7 @@
         "Properties": "RTID(ElectricPeelDefault@PropertySheets)",
         "AnimRigClass": "PlantAnimRig_ElectricPeel",
         "PopAnim": "POPANIM_PLANT_ELECTRICPEEL",
-        "SeedChooserBigVerticalOffset": 0.34000000000000002,
+        "SeedChooserBigVerticalOffset": 0.34,
         "IntegerID": 210,
         "Premium": true,
         "Rare": 4,
@@ -23987,7 +24037,7 @@
         "AnimRigClass": "PlantAnimRig_GloomVine",
         "PopAnim": "POPANIM_PLANT_GLOOMVINE",
         "SeedChooserBigVerticalOffset": 0.22,
-        "SeasonsVerticalOffset": -20.300000000000001,
+        "SeasonsVerticalOffset": -20.3,
         "Rare": 4,
         "PlantPieceImageName": "IMAGE_UI_FRAGMENT_PIECES_PACKETS_GLOOMVINE",
         "AvatarPieceImageName": "IMAGE_UI_FRAGMENT_AVATAR_AVATAR_GLOOMVINE",
@@ -24412,8 +24462,8 @@
         "PopAnim": "POPANIM_PLANT_SPARTANBAMBOO",
         "PlantPieceImageName": "IMAGE_UI_FRAGMENT_PIECES_PACKETS_SPARTANBAMBOO",
         "AvatarPieceImageName": "IMAGE_UI_FRAGMENT_AVATAR_AVATAR_SPARTANBAMBOO",
-        "SeedChooserBigVerticalOffset": 0.34000000000000002,
-        "SeedChooserBigHorizontalOffset": -0.10000000000000001,
+        "SeedChooserBigVerticalOffset": 0.34,
+        "SeedChooserBigHorizontalOffset": -0.1,
         "ShadowScale": 0.5,
         "Premium": true,
         "AlmanacBackdropName": "warp",
@@ -24502,8 +24552,8 @@
         "PopAnim": "POPANIM_PLANT_SHINEVINE",
         "PlantPieceImageName": "IMAGE_UI_FRAGMENT_PIECES_PACKETS_SHINEVINE",
         "AvatarPieceImageName": "IMAGE_UI_FRAGMENT_AVATAR_AVATAR_SHINEVINE",
-        "SeedChooserBigVerticalOffset": 0.29999999999999999,
-        "SeedChooserBigHorizontalOffset": -20.300000000000001,
+        "SeedChooserBigVerticalOffset": 0.3,
+        "SeedChooserBigHorizontalOffset": -20.3,
         "Premium": true,
         "AlmanacBackdropName": "warp",
         "HomeWorld": "gacha",
@@ -24578,8 +24628,8 @@
         "PopAnim": "POPANIM_PLANT_HAPPYLEEK",
         "PlantPieceImageName": "IMAGE_UI_FRAGMENT_PIECES_PACKETS_HAPPYLEEK",
         "AvatarPieceImageName": "IMAGE_UI_FRAGMENT_AVATAR_AVATAR_HAPPYLEEK",
-        "SeedChooserBigVerticalOffset": 0.29999999999999999,
-        "SeedChooserBigHorizontalOffset": -20.300000000000001,
+        "SeedChooserBigVerticalOffset": 0.3,
+        "SeedChooserBigHorizontalOffset": -20.3,
         "Premium": true,
         "AlmanacBackdropName": "warp",
         "HomeWorld": "gacha",
@@ -24677,6 +24727,12 @@
             "AvatarType": "normal",
             "AvatarLayers": [
               "custom_02"
+            ]
+          },
+          {
+            "AvatarType": "normal",
+            "AvatarLayers": [
+              "custom_03"
             ]
           }
         ]
@@ -24921,6 +24977,12 @@
             "AvatarLayers": [
               "custom_02"
             ]
+          },
+          {
+            "AvatarType": "normal",
+            "AvatarLayers": [
+              "custom_03"
+            ]
           }
         ]
       }
@@ -24975,7 +25037,7 @@
         "Properties": "RTID(BuduhBoomDefault@PropertySheets)",
         "AnimRigClass": "PlantAnimRig",
         "PopAnim": "POPANIM_PLANT_BUDUHBOOM",
-        "SeedChooserBigVerticalOffset": 0.40000000000000002,
+        "SeedChooserBigVerticalOffset": 0.4,
         "SeedChooserBigHorizontalOffset": 0.02,
         "SeedChooserBigScale": 1.3,
         "Premium": true,
@@ -25477,7 +25539,7 @@
         "Properties": "RTID(SeaderrisDefault@PropertySheets)",
         "AnimRigClass": "PlantAnimRig",
         "PopAnim": "POPANIM_PLANT_SEADERRIS",
-        "SeedChooserBigVerticalOffset": 0.40000000000000002,
+        "SeedChooserBigVerticalOffset": 0.4,
         "SeedChooserBigHorizontalOffset": 0.02,
         "SeedChooserBigScale": 1.3,
         "Premium": true,
@@ -25843,8 +25905,8 @@
         "PopAnim": "POPANIM_PLANT_PEONYCHI",
         "PlantPieceImageName": "IMAGE_UI_FRAGMENT_PIECES_PACKETS_PEONYCHI",
         "AvatarPieceImageName": "IMAGE_UI_FRAGMENT_AVATAR_AVATAR_PEONYCHI",
-        "SeedChooserBigVerticalOffset": 0.29999999999999999,
-        "SeedChooserBigHorizontalOffset": -20.300000000000001,
+        "SeedChooserBigVerticalOffset": 0.3,
+        "SeedChooserBigHorizontalOffset": -20.3,
         "Premium": true,
         "SecondPopAnimRare": [
           "rare0"
@@ -25953,8 +26015,8 @@
         ],
         "PlantPieceImageName": "IMAGE_UI_FRAGMENT_PIECES_PACKETS_DOOMSHROOM",
         "AvatarPieceImageName": "IMAGE_UI_FRAGMENT_AVATAR_AVATAR_DOOMSHROOM",
-        "SeedChooserBigVerticalOffset": 0.65000000000000002,
-        "SeedChooserBigHorizontalOffset": 0.059999999999999998,
+        "SeedChooserBigVerticalOffset": 0.65,
+        "SeedChooserBigHorizontalOffset": 0.06,
         "Premium": true,
         "AlmanacBackdropName": "warp",
         "HomeWorld": "gacha",
@@ -26118,8 +26180,8 @@
         "PopAnim": "POPANIM_PLANT_DOOMSHROOM",
         "PlantPieceImageName": "IMAGE_UI_FRAGMENT_PIECES_PACKETS_DOOMSHROOM",
         "AvatarPieceImageName": "IMAGE_UI_FRAGMENT_AVATAR_AVATAR_DOOMSHROOM",
-        "SeedChooserBigVerticalOffset": 0.65000000000000002,
-        "SeedChooserBigHorizontalOffset": 0.059999999999999998,
+        "SeedChooserBigVerticalOffset": 0.65,
+        "SeedChooserBigHorizontalOffset": 0.06,
         "Premium": true,
         "AlmanacBackdropName": "warp",
         "HomeWorld": "gacha",
@@ -26211,8 +26273,8 @@
         "PopAnim": "POPANIM_PLANT_AQUAVINE",
         "PlantPieceImageName": "IMAGE_UI_FRAGMENT_PIECES_PACKETS_AQUAVINE",
         "AvatarPieceImageName": "IMAGE_UI_FRAGMENT_AVATAR_AVATAR_AQUAVINE",
-        "SeedChooserBigVerticalOffset": 0.29999999999999999,
-        "SeedChooserBigHorizontalOffset": -20.300000000000001,
+        "SeedChooserBigVerticalOffset": 0.3,
+        "SeedChooserBigHorizontalOffset": -20.3,
         "Premium": true,
         "AlmanacBackdropName": "warp",
         "HomeWorld": "gacha",
@@ -26731,6 +26793,7 @@
           "rare0"
         ],
         "PlantResourceGroups": [
+          "Effects_Artifact",
           "PlantWireGelsemium",
           "PlantWireGelsemiumAudio",
           "PlantBananaAudio",
@@ -27138,6 +27201,13 @@
             "AvatarType": "normal",
             "AvatarLayers": [
               "custom_01"
+            ]
+          },
+          {
+            "AvatarType": "normal",
+            "AvatarLayers": [
+              "custom_02",
+              "custom_02a"
             ]
           }
         ]
@@ -28352,8 +28422,8 @@
         "Properties": "RTID(ParallelMoonFlowerDefault@PropertySheets)",
         "AnimRigClass": "PlantAnimRig_MoonFlower",
         "PopAnim": "POPANIM_PLANT_MOONFLOWER",
-        "SeedChooserBigVerticalOffset": 0.41999999999999998,
-        "SeedChooserBigHorizontalOffset": 0.029999999999999999,
+        "SeedChooserBigVerticalOffset": 0.42,
+        "SeedChooserBigHorizontalOffset": 0.03,
         "SeedChooserBigScale": 1.2,
         "PlantPieceImageName": "IMAGE_UI_FRAGMENT_PIECES_PACKETS_MOONFLOWER",
         "AvatarPieceImageName": "IMAGE_UI_FRAGMENT_AVATAR_AVATAR_MOONFLOWER",
@@ -28426,9 +28496,9 @@
         "Properties": "RTID(ParallelGrimroseDefault@PropertySheets)",
         "AnimRigClass": "PlantAnimRig_Grimrose",
         "PopAnim": "POPANIM_PLANT_GRIMROSE",
-        "SeedChooserBigVerticalOffset": 0.45000000000000001,
-        "SeedChooserBigHorizontalOffset": 0.0,
-        "SeedChooserBigScale": 1.1499999999999999,
+        "SeedChooserBigVerticalOffset": 0.45,
+        "SeedChooserBigHorizontalOffset": 0,
+        "SeedChooserBigScale": 1.15,
         "PlantPieceImageName": "IMAGE_UI_FRAGMENT_PIECES_PACKETS_GRIMROSE",
         "AvatarPieceImageName": "IMAGE_UI_FRAGMENT_AVATAR_AVATAR_GRIMROSE",
         "Rare": 3,
@@ -28468,7 +28538,7 @@
         "AnimRigClass": "PlantAnimRig_Nightshade",
         "PopAnim": "POPANIM_PLANT_NIGHTSHADE",
         "Properties": "RTID(ParallelNightshadeDefault@PropertySheets)",
-        "SeedChooserBigVerticalOffset": 0.42999999999999999,
+        "SeedChooserBigVerticalOffset": 0.43,
         "SeedChooserBigScale": 1.25,
         "PlantPieceImageName": "IMAGE_UI_FRAGMENT_PIECES_PACKETS_NIGHTSHADE",
         "AvatarPieceImageName": "IMAGE_UI_FRAGMENT_AVATAR_AVATAR_NIGHTSHADE",
@@ -28503,7 +28573,7 @@
         "AnimRigClass": "PlantAnimRig_Dusklobber",
         "PopAnim": "POPANIM_PLANT_DUSKLOBBER",
         "SeedChooserBigScale": 1.45,
-        "SeedChooserBigVerticalOffset": 0.34000000000000002,
+        "SeedChooserBigVerticalOffset": 0.34,
         "SeedChooserBigHorizontalOffset": 0,
         "PlantPieceImageName": "IMAGE_UI_FRAGMENT_PIECES_PACKETS_DUSKLOBBER",
         "AvatarPieceImageName": "IMAGE_UI_FRAGMENT_AVATAR_AVATAR_DUSKLOBBER",
@@ -28591,7 +28661,7 @@
         "Properties": "RTID(ParallelShadowvanillaDefault@PropertySheets)",
         "AnimRigClass": "PlantAnimRig_ShadowVanilla",
         "PopAnim": "POPANIM_PLANT_SHADOWVANILLA",
-        "SeedChooserBigVerticalOffset": 0.40000000000000002,
+        "SeedChooserBigVerticalOffset": 0.4,
         "SeedChooserBigHorizontalOffset": 0.02,
         "SeedChooserBigScale": 1.3,
         "PlantPieceImageName": "IMAGE_UI_FRAGMENT_PIECES_PACKETS_SHADOWVANILLA",
@@ -28627,7 +28697,7 @@
         "Properties": "RTID(ParallelPrimalSunflowerDefault@PropertySheets)",
         "AnimRigClass": "PlantAnimRig_PrimalSunflower",
         "PopAnim": "POPANIM_PLANT_PRIMALSUNFLOWER",
-        "SeedChooserBigVerticalOffset": 0.53000000000000003,
+        "SeedChooserBigVerticalOffset": 0.53,
         "PlantPieceImageName": "IMAGE_UI_FRAGMENT_PIECES_PACKETS_PRIMALSUNFLOWER",
         "AvatarPieceImageName": "IMAGE_UI_FRAGMENT_AVATAR_AVATAR_PRIMALSUNFLOWER",
         "AdventureFlags": [
@@ -28677,7 +28747,7 @@
         "Properties": "RTID(ParallelPrimalPeashooterDefault@PropertySheets)",
         "AnimRigClass": "PlantAnimRig_PrimalPeashooter",
         "PopAnim": "POPANIM_PLANT_PRIMALPEASHOOTER",
-        "SeedChooserBigVerticalOffset": 0.40000000000000002,
+        "SeedChooserBigVerticalOffset": 0.4,
         "PlantPieceImageName": "IMAGE_UI_FRAGMENT_PIECES_PACKETS_PRIMALPEASHOOTER",
         "AvatarPieceImageName": "IMAGE_UI_FRAGMENT_AVATAR_AVATAR_PRIMALPEASHOOTER",
         "AdventureFlags": [
@@ -28730,7 +28800,7 @@
         "Properties": "RTID(ParallelPrimalWallnutDefault@PropertySheets)",
         "AnimRigClass": "PlantAnimRig_PrimalWallnut",
         "PopAnim": "POPANIM_PLANT_PRIMALWALLNUT",
-        "SeedChooserBigVerticalOffset": 0.55000000000000004,
+        "SeedChooserBigVerticalOffset": 0.55,
         "SeedChooserBigScale": 1.3,
         "PlantPieceImageName": "IMAGE_UI_FRAGMENT_PIECES_PACKETS_PRIMALWALLNUT",
         "AvatarPieceImageName": "IMAGE_UI_FRAGMENT_AVATAR_AVATAR_PRIMALWALLNUT",
@@ -28771,7 +28841,7 @@
         ],
         "Properties": "RTID(ParallelPrimalPotatomineDefault@PropertySheets)",
         "AnimRigClass": "PlantAnimRig_PotatoMine",
-        "SeedChooserBigVerticalOffset": 0.40000000000000002,
+        "SeedChooserBigVerticalOffset": 0.4,
         "PopAnim": "POPANIM_PLANT_PRIMALPOTATOMINE",
         "PlantPieceImageName": "IMAGE_UI_FRAGMENT_PIECES_PACKETS_PRIMALPOTATOMINE",
         "AvatarPieceImageName": "IMAGE_UI_FRAGMENT_AVATAR_AVATAR_PRIMALPOTATOMINE",
@@ -28824,8 +28894,8 @@
         "Properties": "RTID(ParallelPumpkinDefault@PropertySheets)",
         "AnimRigClass": "PlantAnimRig_Pumpkin",
         "PopAnim": "POPANIM_PLANT_PUMPKIN",
-        "SeedChooserBigVerticalOffset": 0.34000000000000002,
-        "SeasonsVerticalOffset": -20.300000000000001,
+        "SeedChooserBigVerticalOffset": 0.34,
+        "SeasonsVerticalOffset": -20.3,
         "PlantPieceImageName": "IMAGE_UI_FRAGMENT_PIECES_PACKETS_PUMPKIN",
         "AvatarPieceImageName": "IMAGE_UI_FRAGMENT_AVATAR_AVATAR_PUMPKIN",
         "Premium": true,
@@ -29071,8 +29141,8 @@
         "AnimRigClass": "PlantAnimRig_MoonFlower",
         "PopAnim": "POPANIM_PLANT_MOONFLOWER",
         "HomeWorld": "modern",
-        "SeedChooserBigVerticalOffset": 0.41999999999999998,
-        "SeedChooserBigHorizontalOffset": 0.029999999999999999,
+        "SeedChooserBigVerticalOffset": 0.42,
+        "SeedChooserBigHorizontalOffset": 0.03,
         "SeedChooserBigScale": 1.2,
         "PlantPieceImageName": "IMAGE_UI_FRAGMENT_PIECES_PACKETS_MOONFLOWER",
         "AvatarPieceImageName": "IMAGE_UI_FRAGMENT_AVATAR_AVATAR_MOONFLOWER",
@@ -29156,8 +29226,7 @@
             "AvatarLayers": [
               "custom_01a",
               "custom_01c"
-            ],
-            "CostNum": -15
+            ]
           }
         ]
       }
@@ -29378,6 +29447,85 @@
             "AvatarType": "normal",
             "AvatarLayers": [
               "custom_01"
+            ]
+          },
+          {
+            "AvatarType": "normal",
+            "AvatarLayers": [
+              "custom_02"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "objclass": "PlantType",
+      "aliases": [
+        "mangofier"
+      ],
+      "objdata": {
+        "Profession": "shooter",
+        "Attribute": {
+          "Attributes": [
+            {
+              "Type": "hp",
+              "Rank": "C"
+            },
+            {
+              "Type": "plant",
+              "Rank": "A"
+            },
+            {
+              "Type": "attack",
+              "Rank": "A"
+            },
+            {
+              "Type": "range",
+              "Rank": "S"
+            },
+            {
+              "Type": "support",
+              "Rank": "none"
+            },
+            {
+              "Type": "control",
+              "Rank": "none"
+            }
+          ],
+          "Tags": [
+            "dps"
+          ]
+        },
+        "TypeName": "mangofier",
+        "PlantFramework": "PlantMangofier",
+        "Rare": 4,
+        "ExchangeAvatarCost": 400,
+        "PlantResourceGroups": [
+          "PlantMangofierGroup",
+          "ZombieEgyptExplorerGroup",
+          "PlantMangofierAudio"
+        ],
+        "Properties": "RTID(MangofierDefault@PropertySheets)",
+        "AnimRigClass": "PlantAnimRig_Mangofier",
+        "PopAnim": "POPANIM_PLANT_MANGOFIER",
+        "HomeWorld": "gacha",
+        "PlantPieceImageName": "IMAGE_UI_FRAGMENT_PIECES_PACKETS_MANGOFIER",
+        "AvatarPieceImageName": "IMAGE_UI_FRAGMENT_AVATAR_AVATAR_MANGOFIER",
+        "AdventureFlags": [
+          "orange"
+        ],
+        "Avatars": [
+          {
+            "AvatarType": "normal",
+            "AvatarLayers": [
+              "custom_01a",
+              "custom_01b"
+            ]
+          },
+          {
+            "AvatarType": "normal",
+            "AvatarLayers": [
+              "custom_02"
             ]
           }
         ]

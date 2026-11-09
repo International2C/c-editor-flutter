@@ -67,13 +67,14 @@ void main() {
         'assets/images/others/last.webp',
       ]);
       expect(kPreviewStickerTags.last, 'others');
-      expect(kPreviewStickerTags.take(7), [
+      expect(kPreviewStickerTags.take(8), [
         'plants',
         'zombies',
         'griditems',
         'creatures',
         'tool_packets',
         'components',
+        'npcs',
         'round_icons',
       ]);
     },
@@ -237,6 +238,64 @@ void main() {
           ),
       isFalse,
     );
+  });
+
+  test('jamNone is a localized map-and-music sticker', () {
+    final jamNone = stickers.singleWhere(
+      (sticker) => sticker.assetPath == 'assets/images/others/jamNone.webp',
+    );
+    expect(jamNone.tag, 'round_icons');
+    expect(jamNone.labelKey, 'previewStickerNameJamNone');
+    expect(jamNone.searchTerms, containsAll(['jamNone', 'LevelJam', 'None']));
+    expect(_messages('en')['previewStickerNameJamNone'], 'Level Jam — None');
+    expect(_messages('zh')['previewStickerNameJamNone'], '魔音音乐切换（默认/无）');
+    expect(_messages('ru')['previewStickerNameJamNone'], 'Level Jam — нет');
+  });
+
+  test('autumn stickers keep distinct early and late localized names', () {
+    const autumnIcons = {
+      'Stage_AutumnEarly': 'customStagePreset_autumnEarly',
+      'Stage_AutumnLate': 'stage_AutumnLateStage',
+    };
+    for (final entry in autumnIcons.entries) {
+      final path = 'assets/images/round_icons/${entry.key}.webp';
+      final sticker = stickers.singleWhere((item) => item.assetPath == path);
+      expect(sticker.tag, 'round_icons');
+      expect(sticker.resourceNameKey, entry.value);
+      for (final locale in ['zh', 'en', 'ru']) {
+        expect(
+          ResourceNames.lookupWithLocale(locale, entry.value),
+          isNot(entry.value),
+        );
+      }
+    }
+    expect(
+      stickers.any((item) => item.assetPath.endsWith('/Stage_Autumn.webp')),
+      isFalse,
+    );
+  });
+
+  test('mode and NPC icons use dedicated tags and three-language names', () {
+    for (final entry in kPreviewModeStickerLabels.entries) {
+      final path = 'assets/images/round_icons/${entry.key}.webp';
+      final sticker = stickers.singleWhere((item) => item.assetPath == path);
+      expect(sticker.tag, 'round_icons', reason: path);
+      expect(sticker.labelKey, entry.value, reason: path);
+      expect(sticker.searchTerms, contains(entry.key), reason: path);
+      for (final locale in ['en', 'zh', 'ru']) {
+        expect(_messages(locale)[entry.value], isNotEmpty, reason: path);
+      }
+    }
+    for (final entry in kPreviewNpcStickerLabels.entries) {
+      final path = 'assets/images/npcs/${entry.key}.webp';
+      final sticker = stickers.singleWhere((item) => item.assetPath == path);
+      expect(sticker.tag, 'npcs', reason: path);
+      expect(sticker.labelKey, entry.value, reason: path);
+      expect(sticker.searchTerms, contains(entry.key), reason: path);
+      for (final locale in ['en', 'zh', 'ru']) {
+        expect(_messages(locale)[entry.value], isNotEmpty, reason: path);
+      }
+    }
   });
 
   test('lawn components keep their module labels and internal ordering', () {

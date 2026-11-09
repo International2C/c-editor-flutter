@@ -160,6 +160,10 @@ class EventSelectionScreen extends StatefulWidget {
           return isTitle
               ? l10n.eventTitle_PumpkinHouseActionProps
               : l10n.eventDesc_PumpkinHouseActionProps;
+        case 'SpawnPumpkinScarecrowWaveActionProps':
+          return isTitle
+              ? l10n.eventTitle_SpawnPumpkinScarecrowWaveActionProps
+              : l10n.eventDesc_SpawnPumpkinScarecrowWaveActionProps;
         case 'WaveActionZombieTentProps':
           return isTitle
               ? l10n.eventTitle_WaveActionZombieTentProps
@@ -192,6 +196,10 @@ class EventSelectionScreen extends StatefulWidget {
           return isTitle
               ? l10n.eventTitle_BassRainZombieSpawnerProps
               : l10n.eventDesc_BassRainZombieSpawnerProps;
+        case 'HeianNinjaZombieSpawnerProps':
+          return isTitle
+              ? l10n.eventTitle_HeianNinjaZombieSpawnerProps
+              : l10n.eventDesc_HeianNinjaZombieSpawnerProps;
         case 'BlackHoleWaveActionProps':
           return isTitle
               ? l10n.eventTitle_BlackHoleWaveActionProps
@@ -216,6 +224,10 @@ class EventSelectionScreen extends StatefulWidget {
           return isTitle
               ? l10n.eventTitle_ThunderWaveActionProps
               : l10n.eventDesc_ThunderWaveActionProps;
+        case 'ZombieAirbubbleActionProps':
+          return isTitle
+              ? l10n.eventTitle_ZombieAirbubbleActionProps
+              : l10n.eventDesc_ZombieAirbubbleActionProps;
         case 'MagicMirrorWaveActionProps':
         case 'WaveActionMagicMirrorTeleportationArrayProps':
           return isTitle

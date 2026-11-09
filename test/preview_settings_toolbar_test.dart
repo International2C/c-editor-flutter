@@ -9,11 +9,13 @@ import 'package:c_editor/bundled_plugins/preview_img_cplugin/lib/src/preview/pre
 import 'package:c_editor/bundled_plugins/preview_img_cplugin/lib/src/preview/preview_settings_screen.dart';
 import 'package:c_editor/bundled_plugins/preview_img_cplugin/lib/src/preview/preview_toolbar_action.dart';
 import 'package:c_editor/bundled_plugins/preview_img_cplugin/lib/src/preview/preview_toolbar_prefs.dart';
+import 'package:c_editor/bloc/settings/settings_cubit.dart';
 import 'package:c_editor/data/pvz_models.dart';
 import 'package:c_editor/data/repository/level_repository.dart';
 import 'package:c_editor/plugin_api/c_plugin_host.dart';
 import 'package:c_editor/widgets/editor_components.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -268,6 +270,48 @@ void main() {
     await tester.pumpAndSettle();
     expect(await PreviewToolbarPrefs.getStyle(), PreviewToolbarStyle.compact);
     expect(await PreviewExportPrefs.getFolderName(), 'previews');
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('settings stages and saves the shared preview autosave option', (
+    tester,
+  ) async {
+    SharedPreferences.setMockInitialValues({});
+    final prefs = await SharedPreferences.getInstance();
+    final cubit = SettingsCubit(prefs);
+    addTearDown(cubit.close);
+    await tester.binding.setSurfaceSize(const Size(600, 900));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+
+    await tester.pumpWidget(
+      BlocProvider.value(
+        value: cubit,
+        child: MaterialApp(home: PreviewSettingsScreen(host: _Host())),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    final autosave = find.byKey(
+      const ValueKey('previewSettingsAutosaveOnExit'),
+    );
+    expect(tester.widget<CheckboxListTile>(autosave).value, isFalse);
+    await tester.tap(autosave);
+    await tester.pump();
+    expect(
+      cubit.state.autosaveTargets.contains(AutosaveTarget.previewImage),
+      isFalse,
+    );
+
+    await tester.tap(find.text(_t('previewSettingsSave')));
+    await tester.pumpAndSettle();
+    expect(
+      cubit.state.autosaveTargets.contains(AutosaveTarget.previewImage),
+      isTrue,
+    );
+    expect(
+      prefs.getBool(AutosaveTarget.previewImage.preferenceKey),
+      isTrue,
+    );
     expect(tester.takeException(), isNull);
   });
 

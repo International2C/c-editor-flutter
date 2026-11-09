@@ -48,11 +48,19 @@ class SelectionGridConfirmation extends StatelessWidget {
 
         final hasSelectAll = selectAllControl != null;
         final hasConfirm = button != null;
-        // Select-all chip (~label width) + gap + FAB.
-        final stackWidth =
-            (hasSelectAll ? 140.0 : 0.0) +
+        final fixedWidth =
             (hasSelectAll && hasConfirm ? _rowGap : 0.0) +
             (hasConfirm ? _buttonSize : 0.0);
+        final selectAllWidth = math.min(
+          math.max(
+            0.0,
+            size.width - safePadding.horizontal - _margin * 2 - fixedWidth,
+          ),
+          selectAllControl is SelectionGridSelectAllButton
+              ? selectAllControl.preferredWidth(context)
+              : 140.0,
+        );
+        final stackWidth = (hasSelectAll ? selectAllWidth : 0.0) + fixedWidth;
         final stackHeight = _buttonSize;
 
         final buttonRect = Rect.fromLTWH(
@@ -120,7 +128,11 @@ class SelectionGridConfirmation extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  ?selectAllControl,
+                  if (selectAllControl != null)
+                    ConstrainedBox(
+                      constraints: BoxConstraints(maxWidth: selectAllWidth),
+                      child: selectAllControl,
+                    ),
                   if (selectAllControl != null && button != null)
                     const SizedBox(width: _rowGap),
                   if (button != null)
@@ -152,6 +164,19 @@ class SelectionGridSelectAllButton extends StatelessWidget {
 
   static const height = SelectionGridConfirmation._buttonSize;
 
+  TextStyle? _labelStyle(BuildContext context) => Theme.of(
+    context,
+  ).textTheme.labelLarge?.copyWith(fontWeight: FontWeight.w700);
+
+  double preferredWidth(BuildContext context) {
+    final painter = TextPainter(
+      text: TextSpan(text: label, style: _labelStyle(context)),
+      textDirection: Directionality.of(context),
+      textScaler: MediaQuery.textScalerOf(context),
+    )..layout();
+    return painter.width + 32;
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -179,11 +204,12 @@ class SelectionGridSelectAllButton extends StatelessWidget {
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Center(
-                child: Text(
-                  label,
-                  style: theme.textTheme.labelLarge?.copyWith(
-                    color: fg,
-                    fontWeight: FontWeight.w700,
+                widthFactor: 1,
+                child: FittedBox(
+                  fit: BoxFit.scaleDown,
+                  child: Text(
+                    label,
+                    style: _labelStyle(context)?.copyWith(color: fg),
                   ),
                 ),
               ),

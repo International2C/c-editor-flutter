@@ -619,9 +619,20 @@ class _VaseBreakerTabState extends State<VaseBreakerTab> {
       context,
       MaterialPageRoute(
         builder: (ctx) => PlantSelectionScreen(
+          isMultiSelect: true,
           onPlantSelected: (id) {
             _addVase(VaseDefinition(plantTypeName: id, count: 1));
             Navigator.pop(ctx);
+          },
+          onMultiPlantSelected: (ids) {
+            Navigator.pop(ctx);
+            if (ids.isEmpty) return;
+            _updateData(
+              (data) => data.vases.addAll([
+                for (final id in ids)
+                  VaseDefinition(plantTypeName: id, count: 1),
+              ]),
+            );
           },
           onBack: () => Navigator.pop(context),
           levelFile: widget.levelFile,
@@ -637,9 +648,22 @@ class _VaseBreakerTabState extends State<VaseBreakerTab> {
       MaterialPageRoute(
         builder: (ctx) => ZombieSelectionScreen(
           editorCubit: widget.editorCubit,
+          levelFile: widget.levelFile,
+          onAddModule: widget.onAddModule,
+          multiSelect: true,
           onZombieSelected: (id) {
             _addVase(VaseDefinition(zombieTypeName: id, count: 1));
             Navigator.pop(ctx);
+          },
+          onMultiZombieSelected: (ids) {
+            Navigator.pop(ctx);
+            if (ids.isEmpty) return;
+            _updateData(
+              (data) => data.vases.addAll([
+                for (final id in ids)
+                  VaseDefinition(zombieTypeName: id, count: 1),
+              ]),
+            );
           },
           onBack: () => Navigator.pop(context),
         ),

@@ -80,31 +80,39 @@ class _GladiatorRowModuleScreenState extends State<GladiatorRowModuleScreen> {
     setState(() {});
   }
 
-  Future<void> _pickZombie(ValueChanged<String> change) async {
-    final type = await Navigator.push<String>(
+  Future<void> _pickZombie(
+    ValueChanged<String> change, {
+    bool multiSelect = false,
+  }) async {
+    final types = await Navigator.push<List<String>>(
       context,
       MaterialPageRoute(
         builder: (pickerContext) => ZombieSelectionScreen(
           stateBucketId: 'gladiator-row',
-          onZombieSelected: (id) => Navigator.pop(pickerContext, id),
+          multiSelect: multiSelect,
+          levelFile: widget.levelFile,
+          onZombieSelected: (id) => Navigator.pop(pickerContext, [id]),
+          onMultiZombieSelected: (ids) => Navigator.pop(pickerContext, ids),
           onBack: () => Navigator.pop(pickerContext),
         ),
       ),
     );
-    if (type == null || !mounted) return;
+    if (types == null || types.isEmpty || !mounted) return;
     await ZombiePropertiesRepository.init();
     if (!mounted) return;
-    final original = ZombiePropertiesRepository.getOriginalTypeObject(
-      ZombiePropertiesRepository.getTypeNameByAlias(type),
-    );
-    final groups = original?.objData is Map
-        ? (original!.objData as Map)['ResourceGroups']
-        : null;
-    _data.addResourceGroups([
-      'GladiatorRow',
-      if (groups is List) ...groups.whereType<String>(),
-    ]);
-    change(type);
+    for (final type in types) {
+      final original = ZombiePropertiesRepository.getOriginalTypeObject(
+        ZombiePropertiesRepository.getTypeNameByAlias(type),
+      );
+      final groups = original?.objData is Map
+          ? (original!.objData as Map)['ResourceGroups']
+          : null;
+      _data.addResourceGroups([
+        'GladiatorRow',
+        if (groups is List) ...groups.whereType<String>(),
+      ]);
+      change(type);
+    }
     _sync();
   }
 
@@ -326,9 +334,13 @@ class _GladiatorRowModuleScreenState extends State<GladiatorRowModuleScreen> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    final warningBrightness = Theme.of(context).brightness;
+    final theme = Theme.of(context);
+    final warningBrightness = theme.brightness;
     final warningForeground = editorWarningBannerForeground(warningBrightness);
     final encounter = _encounter;
+    final firstWaveGroup = encounter == null
+        ? -1
+        : _data.encounters.indexWhere((entry) => entry.wave == encounter.wave);
     final compatibilityWarnings =
         LevelIssueRegistry.forLevel(context, widget.levelFile).where(
           (issue) => issue.id == 'gladiatorWaveGeneratorCompatibilityWarning',
@@ -494,6 +506,16 @@ class _GladiatorRowModuleScreenState extends State<GladiatorRowModuleScreen> {
                   (n) => encounter.wave = n.toInt(),
                   integer: true,
                 ),
+                if (firstWaveGroup >= 0 && firstWaveGroup < _selected) ...[
+                  const SizedBox(height: 8),
+                  Text(
+                    l10n.gladiatorDuplicateWaveHint(firstWaveGroup + 1),
+                    key: const ValueKey('gladiator-duplicate-wave-hint'),
+                    style: theme.textTheme.bodySmall?.copyWith(
+                      color: theme.colorScheme.tertiary,
+                    ),
+                  ),
+                ],
                 _number(
                   encounter,
                   'Row',
@@ -543,7 +565,7 @@ class _GladiatorRowModuleScreenState extends State<GladiatorRowModuleScreen> {
                 ]),
               _card([
                 _heading(l10n.gladiatorSpawns),
-                const SizedBox(height: 12),
+                const SizedBox(height: 16),
                 for (var i = 0; i < encounter.spawns.length; i++)
                   _spawnCard(encounter, encounter.spawns[i], i, cols, l10n),
                 OutlinedButton.icon(
@@ -552,6 +574,7 @@ class _GladiatorRowModuleScreenState extends State<GladiatorRowModuleScreen> {
                     (type) => encounter.spawns.add(
                       GladiatorSpawnData(zombieType: type),
                     ),
+                    multiSelect: true,
                   ),
                   icon: const Icon(Icons.add),
                   label: Text(l10n.gladiatorAddSpawn),
@@ -562,7 +585,7 @@ class _GladiatorRowModuleScreenState extends State<GladiatorRowModuleScreen> {
               _heading(l10n.gladiatorPunishmentPool),
               const SizedBox(height: 8),
               Text(l10n.gladiatorPunishmentHint),
-              const SizedBox(height: 12),
+              const SizedBox(height: 16),
               for (var i = 0; i < _data.punishmentPool.length; i++)
                 _punishmentCard(_data.punishmentPool[i], i, l10n),
               OutlinedButton.icon(
@@ -571,6 +594,7 @@ class _GladiatorRowModuleScreenState extends State<GladiatorRowModuleScreen> {
                   (type) => _data.punishmentPool.add(
                     GladiatorPunishmentZombieData(zombieType: type),
                   ),
+                  multiSelect: true,
                 ),
                 icon: const Icon(Icons.add),
                 label: Text(l10n.gladiatorAddPunishment),

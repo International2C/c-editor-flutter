@@ -15,6 +15,7 @@ from typing import Any
 ROOT = Path(__file__).resolve().parents[1]
 LEVEL_MODULES_PATH = ROOT / "assets/reference/LevelModules.json"
 STAGES_TAGS_PATH = ROOT / "assets/resources/Stages_tags.json"
+CUSTOM_PRESETS_PATH = ROOT / "assets/resources/CustomStagePresets.json"
 ROUND_ICONS_DIR = ROOT / "assets/images/round_icons"
 HELPER_OUT_PATH = ROOT / "assets/resources/Stages_helper.json"
 OBJCLASS_HELPER_OUT_PATH = ROOT / "assets/resources/Stages_objclass_helper.json"
@@ -45,7 +46,7 @@ ZOMBIE_TYPE_PARAM_NAMES = {
 
 # BackgroundImagePrefix -> preferred stage alias when several share the same prefix.
 PREFIX_ALIAS_OVERRIDES: dict[str, str] = {
-    "IMAGE_BACKGROUNDS_AUTUMN_LATE": "AutumnEarlyStage",
+    "IMAGE_BACKGROUNDS_AUTUMN_LATE": "AutumnLateStage",
     "IMAGE_BACKGROUNDS_BEACH": "BeachStage",
     "IMAGE_BACKGROUNDS_EGYPT": "EgyptStage",
     "IMAGE_BACKGROUNDS_ICEAGE": "IceageStage",
@@ -468,6 +469,7 @@ def build_stages_helper(
     brg_prefix_to_aliases: dict[tuple[str, str], set[str]],
     stage_catalog: dict[str, str | None],
     round_icons: set[str],
+    custom_presets: list[dict[str, Any]] | None = None,
 ) -> dict[str, dict[str, dict[str, str]]]:
     """Map DelayLoad_Background -> BackgroundImagePrefix -> { image, nameKey }."""
     by_brg: dict[str, dict[str, dict[str, str]]] = defaultdict(dict)
@@ -477,6 +479,17 @@ def build_stages_helper(
         alias = pick_representative_alias(prefix, aliases, stage_catalog)
         by_brg[brg][prefix] = build_helper_leaf(
             prefix, alias, stage_catalog, round_icons
+        )
+
+    for preset in custom_presets or []:
+        objdata = preset["objdata"]
+        brg = infer_background_resource_group(objdata)
+        prefix = objdata.get("BackgroundImagePrefix")
+        if not isinstance(brg, str) or not isinstance(prefix, str):
+            continue
+        by_brg[brg].setdefault(
+            prefix,
+            {"image": preset["iconName"], "nameKey": preset["nameKey"]},
         )
 
     return {brg: dict(sorted(prefix_map.items())) for brg, prefix_map in sorted(by_brg.items())}
@@ -512,7 +525,7 @@ def verify_stages_helper(
             if not isinstance(image, str) or not image:
                 issues.append(f"{label}: missing image")
             if not isinstance(name_key, str) or not name_key.startswith(
-                STAGE_NAME_KEY_PREFIX
+                (STAGE_NAME_KEY_PREFIX, "customStagePreset_")
             ):
                 issues.append(f"{label}: invalid nameKey '{name_key}'")
     return issues
@@ -621,6 +634,7 @@ def verify_stages_new(
 
 def main() -> None:
     level_modules = load_json(LEVEL_MODULES_PATH)
+    custom_presets = load_json(CUSTOM_PRESETS_PATH)
     stage_metadata = load_stage_metadata()
     stage_catalog: dict[str, str | None] = {
         alias: meta.get("icon") for alias, meta in stage_metadata.items()
@@ -630,7 +644,7 @@ def main() -> None:
     brg_prefix_to_aliases, by_objclass = collect_stage_entries(level_modules)
 
     stages_helper = build_stages_helper(
-        brg_prefix_to_aliases, stage_catalog, round_icons
+        brg_prefix_to_aliases, stage_catalog, round_icons, custom_presets
     )
     stages = build_stages_new(by_objclass, stage_metadata)
     stages_objclass_helper = build_stages_objclass_helper(

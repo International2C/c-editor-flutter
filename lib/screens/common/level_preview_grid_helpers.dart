@@ -80,6 +80,7 @@ LevelPreviewGridStyle resolveGridStyle(
 
   switch (kind) {
     case GridPreviewModuleKind.plants:
+    case GridPreviewModuleKind.wizardCauldron:
       gridBg = greenBg;
       borderColor = greenBorder;
       cellBorderColor = greenCellBorder;
@@ -92,6 +93,7 @@ LevelPreviewGridStyle resolveGridStyle(
       cellBorderColor = purpleCellBorder;
       break;
 
+    case GridPreviewModuleKind.initialLawnOverview:
     case GridPreviewModuleKind.common:
     case GridPreviewModuleKind.armrack:
     case GridPreviewModuleKind.energyGrid:
@@ -120,6 +122,13 @@ LevelPreviewGridStyle resolveGridStyle(
       gridBg = isDark ? const Color(0xFF3E2723) : const Color(0xFFEFEBE9);
       borderColor = const Color(0xFF9E9E9E);
       cellBorderColor = const Color(0xFF9E9E9E).withValues(alpha: 0.5);
+      cellAspectRatio = 128 / 152;
+      break;
+
+    case GridPreviewModuleKind.speedUpTile:
+      gridBg = isDark ? const Color(0xFF163E3A) : const Color(0xFFE0F2F1);
+      borderColor = const Color(0xFF479891);
+      cellBorderColor = borderColor.withValues(alpha: 0.5);
       cellAspectRatio = 128 / 152;
       break;
 
@@ -220,6 +229,7 @@ LevelPreviewGridStyle resolveGridStyle(
 }
 
 enum GridPreviewModuleKind {
+  initialLawnOverview,
   common,
   plants,
   zombies,
@@ -239,6 +249,8 @@ enum GridPreviewModuleKind {
   manholePipeline,
   renaissance,
   roofProperties,
+  speedUpTile,
+  wizardCauldron,
   tunnelDefend,
   expeditionTiles,
   gulliverTunnel,
@@ -281,6 +293,9 @@ bool levelHasPrePlacedGridPreview(PvzLevelFile levelFile) {
   if (levelHasPrePlacedPlants(levelFile)) return true;
   if (levelHasPrePlacedZombies(levelFile)) return true;
   if (levelHasModule(levelFile, 'InitialGridItemProperties')) return true;
+  if (levelHasModule(levelFile, 'InitialGridItemWizardCrucibleProps')) {
+    return true;
+  }
   if (levelHasModule(levelFile, 'PiratePlankProperties')) return true;
   if (levelHasModule(levelFile, 'RailcartProperties')) return true;
   if (levelHasModule(levelFile, 'MechanismPlankProperties')) return true;
@@ -292,6 +307,7 @@ bool levelHasPrePlacedGridPreview(PvzLevelFile levelFile) {
   if (levelHasModule(levelFile, 'ManholePipelineModuleProperties')) return true;
   if (levelHasModule(levelFile, 'RenaiModuleProperties')) return true;
   if (levelHasModule(levelFile, 'RoofProperties')) return true;
+  if (levelHasModule(levelFile, 'SpeedUpTileModuleProperties')) return true;
   if (levelHasModule(levelFile, 'TunnelDefendModuleProperties')) return true;
   if (levelHasModule(levelFile, 'InitialGridItemGulliverTunnelProperties'))
     return true;
@@ -334,6 +350,69 @@ bool levelHasDropShip(PvzLevelFile levelFile) {
 
 bool levelHasCommonGridItems(PvzLevelFile levelFile) {
   return levelHasModule(levelFile, 'InitialGridItemProperties');
+}
+
+/// Initial lawn layers, in their shared overview paint order. Event-generated
+/// objects and wave-specific layouts keep their own preview categories.
+const initialTerrainModuleKinds = <String, GridPreviewModuleKind>{
+  'TideProperties': GridPreviewModuleKind.tideSystem,
+  'PiratePlankProperties': GridPreviewModuleKind.piratePlank,
+  'TunnelDefendModuleProperties': GridPreviewModuleKind.tunnelDefend,
+  'SpeedUpTileModuleProperties': GridPreviewModuleKind.speedUpTile,
+  'InitialGridItemWizardCrucibleProps': GridPreviewModuleKind.wizardCauldron,
+  'PowerTileProperties': GridPreviewModuleKind.powerTile,
+  'RailcartProperties': GridPreviewModuleKind.railcart,
+  'MechanismPlankProperties': GridPreviewModuleKind.mechanismPlank,
+  'RoofProperties': GridPreviewModuleKind.roofProperties,
+  'WarMistProperties': GridPreviewModuleKind.fogSystem,
+  'RenaiModuleProperties': GridPreviewModuleKind.renaissance,
+  'BronzeProperties': GridPreviewModuleKind.bronzeStatue,
+  'SmokePollutionModuleProperties': GridPreviewModuleKind.smokePollution,
+  'ManholePipelineModuleProperties': GridPreviewModuleKind.manholePipeline,
+  'InitialGridItemGulliverTunnelProperties':
+      GridPreviewModuleKind.gulliverTunnel,
+  MoldColonyModuleUtils.moduleObjClass: GridPreviewModuleKind.moldColony,
+};
+
+bool levelHasInitialTerrain(PvzLevelFile levelFile) {
+  return initialTerrainModuleKinds.keys.any(
+        (objClass) => levelHasModule(levelFile, objClass),
+      ) ||
+      levelHasExpeditionTilesModule(levelFile) ||
+      hasInitialArmrackItems(readArmrackModuleData(levelFile)) ||
+      hasInitialEnergyGridItems(readEnergyGridModuleData(levelFile));
+}
+
+/// Distinct module layers that can share the initial lawn overview. Multiple
+/// objects of the same module kind count once; later-wave overrides do not add
+/// initial layers. Lunar veins are already present as dormant initial objects.
+Set<GridPreviewModuleKind> initialLawnOverviewKinds(PvzLevelFile levelFile) {
+  final kinds = <GridPreviewModuleKind>{
+    for (final entry in initialTerrainModuleKinds.entries)
+      if (entry.value != GridPreviewModuleKind.tunnelDefend &&
+          levelHasModule(levelFile, entry.key))
+        entry.value,
+  };
+  if (levelHasStandardTunnelDefendModule(levelFile)) {
+    kinds.add(GridPreviewModuleKind.tunnelDefend);
+  }
+  if (levelHasExpeditionTilesModule(levelFile)) {
+    kinds.add(GridPreviewModuleKind.expeditionTiles);
+  }
+  if (levelHasCommonGridItems(levelFile)) {
+    kinds.add(GridPreviewModuleKind.common);
+  }
+  if (hasInitialArmrackItems(readArmrackModuleData(levelFile))) {
+    kinds.add(GridPreviewModuleKind.armrack);
+  }
+  if (hasInitialEnergyGridItems(readEnergyGridModuleData(levelFile))) {
+    kinds.add(GridPreviewModuleKind.energyGrid);
+  }
+  final lunarMineData = readLunarMineVeinModuleData(levelFile);
+  if (lunarMineData != null && lunarMineData.placements.isNotEmpty) {
+    kinds.add(GridPreviewModuleKind.lunarMineVein);
+  }
+  return kinds;
 }
 
 bool levelHasPrePlacedPlants(PvzLevelFile levelFile) {
@@ -439,14 +518,27 @@ List<GridPreviewCategoryOption> collectGridPreviewCategories(
     }
   }
 
-  final lunarMineForCommon = readLunarMineVeinModuleData(levelFile);
-  final hasLunarVeinsOnCommon =
-      lunarMineForCommon != null && lunarMineForCommon.placements.isNotEmpty;
-  if (levelHasCommonGridItems(levelFile) || hasLunarVeinsOnCommon) {
+  if (initialLawnOverviewKinds(levelFile).length >= 2) {
+    categories.add(
+      GridPreviewCategoryOption(
+        kind: GridPreviewModuleKind.initialLawnOverview,
+        label: l10n.previewTabInitialLawnOverview,
+      ),
+    );
+  }
+  if (levelHasModule(levelFile, 'InitialGridItemWizardCrucibleProps')) {
+    categories.add(
+      GridPreviewCategoryOption(
+        kind: GridPreviewModuleKind.wizardCauldron,
+        label: l10n.moduleTitle_InitialGridItemWizardCrucibleProps,
+      ),
+    );
+  }
+  if (levelHasCommonGridItems(levelFile)) {
     categories.add(
       GridPreviewCategoryOption(
         kind: GridPreviewModuleKind.common,
-        label: l10n.previewTabGridItems,
+        label: l10n.previewInitial,
       ),
     );
   }
@@ -571,6 +663,12 @@ List<GridPreviewCategoryOption> collectGridPreviewCategories(
     addModule(
       GridPreviewModuleKind.roofProperties,
       l10n.moduleTitle_RoofProperties,
+    );
+  }
+  if (levelHasModule(levelFile, 'SpeedUpTileModuleProperties')) {
+    addModule(
+      GridPreviewModuleKind.speedUpTile,
+      l10n.moduleTitle_SpeedUpTileModuleProperties,
     );
   }
   if (levelHasStandardTunnelDefendModule(levelFile)) {
@@ -952,6 +1050,15 @@ TunnelDefendModuleData? readExpeditionTilesData(PvzLevelFile levelFile) {
       : null;
 }
 
+SpeedUpTileModulePropertiesData? readSpeedUpTileData(PvzLevelFile levelFile) {
+  final obj = findModuleObject(levelFile, 'SpeedUpTileModuleProperties');
+  return obj?.objData is Map
+      ? SpeedUpTileModulePropertiesData.fromJson(
+          Map<String, dynamic>.from(obj!.objData as Map),
+        )
+      : null;
+}
+
 InitialGridItemGulliverTunnelPropertiesData? readGulliverTunnelData(
   PvzLevelFile levelFile,
 ) {
@@ -1238,6 +1345,8 @@ String? findLawnMowerAlias(LevelDefinitionData def) {
     'RenaiMowers',
     'HeianMowers',
     'RomanMowers2',
+    'RomanMowers',
+    'HalloweenMowers',
     'MoonMowers',
     'FairyTaleMowers',
     'ZCorpMowers',

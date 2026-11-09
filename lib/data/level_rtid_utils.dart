@@ -18,6 +18,12 @@ abstract final class LevelRtidUtils {
     if (value is List) {
       return [for (final item in value) replaceInValue(item, oldRtid, newRtid)];
     }
+    if (value is Map<String, dynamic>) {
+      return <String, dynamic>{
+        for (final entry in value.entries)
+          entry.key: replaceInValue(entry.value, oldRtid, newRtid),
+      };
+    }
     if (value is Map) {
       return {
         for (final entry in value.entries)

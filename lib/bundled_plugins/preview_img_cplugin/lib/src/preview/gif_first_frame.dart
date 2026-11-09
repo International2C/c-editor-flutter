@@ -8,7 +8,7 @@ import 'package:flutter/services.dart';
 Future<ui.Image?> decodeFirstFrameFromAsset(String assetPath) async {
   try {
     final data = await rootBundle.load(assetPath);
-    return decodeFirstFrameFromBytes(
+    return await decodeFirstFrameFromBytes(
       data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes),
     );
   } catch (e, st) {

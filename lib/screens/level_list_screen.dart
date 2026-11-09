@@ -11,6 +11,7 @@ import 'package:path/path.dart' as p;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:c_editor/bloc/settings/settings_cubit.dart';
 import 'package:c_editor/data/app_links.dart';
+import 'package:c_editor/data/interface_menu_config.dart';
 import 'package:c_editor/data/level_template_utils.dart';
 import 'package:c_editor/data/launch_external_url.dart';
 import 'package:c_editor/data/repository/level_repository.dart';
@@ -19,10 +20,12 @@ import 'package:c_editor/l10n/app_localizations.dart';
 import 'package:c_editor/plugin_api/c_plugin_host.dart';
 import 'package:c_editor/plugins/plugin_constants.dart';
 import 'package:c_editor/plugins/plugin_install_dialog.dart';
+import 'package:c_editor/plugins/interface_menu_plugin_actions.dart';
 import 'package:c_editor/plugins/plugin_manager.dart';
 import 'package:c_editor/plugins/plugin_ui_host.dart';
 import 'package:c_editor/screens/level_list_platform.dart';
 import 'package:c_editor/screens/image_viewer_screen.dart';
+import 'package:c_editor/screens/interface_settings_screen.dart';
 import 'package:c_editor/screens/level_overview/level_overview.dart';
 import 'package:c_editor/widgets/app_message.dart';
 import 'package:c_editor/widgets/autosave_settings_dialog.dart';
@@ -500,6 +503,9 @@ class _LevelListScreenState extends State<LevelListScreen> {
     _showUploadFabAfterLevelReturn =
         widget.showUploadAfterLevelReturn && _pendingReturnLevelPath != null;
     _listScrollController.addListener(_onListScroll);
+    if (PluginManager.isInitialized) {
+      PluginManager.instance.addListener(_onPluginsChanged);
+    }
     _seedRootFromStartupCache();
     _loadSavedPathAndList();
   }
@@ -537,10 +543,17 @@ class _LevelListScreenState extends State<LevelListScreen> {
 
   @override
   void dispose() {
+    if (PluginManager.isInitialized) {
+      PluginManager.instance.removeListener(_onPluginsChanged);
+    }
     _listScrollController.removeListener(_onListScroll);
     _listScrollController.dispose();
     _searchController.dispose();
     super.dispose();
+  }
+
+  void _onPluginsChanged() {
+    if (mounted) setState(() {});
   }
 
   void _onListScroll() {
@@ -1586,6 +1599,144 @@ class _LevelListScreenState extends State<LevelListScreen> {
     ];
   }
 
+  bool _workspaceActionAvailable(String id) {
+    return switch (id) {
+      InterfaceMenuActionIds.sort => _viewMode == LevelViewMode.all,
+      InterfaceMenuActionIds.refresh ||
+      InterfaceMenuActionIds.switchFolder => !kIsWeb,
+      InterfaceMenuActionIds.importFiles ||
+      InterfaceMenuActionIds.importFolder ||
+      InterfaceMenuActionIds.downloadAll => kIsWeb,
+      InterfaceMenuActionIds.levelTestingMod =>
+        workspacePluginMenuElement(id) != null,
+      _ => true,
+    };
+  }
+
+  String _workspaceActionLabel(
+    AppLocalizations l10n,
+    SettingsState settings,
+    String id,
+  ) {
+    return switch (id) {
+      InterfaceMenuActionIds.language => l10n.language,
+      InterfaceMenuActionIds.theme => l10n.toggleTheme,
+      InterfaceMenuActionIds.uiScale => l10n.uiSize,
+      InterfaceMenuActionIds.autosave =>
+        settings.hasAutosave ? l10n.autosaveOn : l10n.autosaveOff,
+      InterfaceMenuActionIds.sort => l10n.sortByLabel,
+      InterfaceMenuActionIds.refresh => l10n.refresh,
+      InterfaceMenuActionIds.switchFolder => l10n.switchFolder,
+      InterfaceMenuActionIds.importFiles => l10n.importFiles,
+      InterfaceMenuActionIds.importFolder => l10n.importFolder,
+      InterfaceMenuActionIds.downloadAll => l10n.downloadAllLevels,
+      InterfaceMenuActionIds.interfaceSettings => l10n.interfaceSettings,
+      InterfaceMenuActionIds.clearCache => l10n.clearCache,
+      InterfaceMenuActionIds.plugins => l10n.pluginsTitle,
+      InterfaceMenuActionIds.about => l10n.aboutSoftware,
+      InterfaceMenuActionIds.levelTestingMod =>
+        workspacePluginMenuElement(id)?.resolvedTitle(context) ??
+            l10n.exportLevels,
+      _ => id,
+    };
+  }
+
+  IconData _workspaceActionIcon(String id, SettingsState settings) {
+    return switch (id) {
+      InterfaceMenuActionIds.language => Icons.language,
+      InterfaceMenuActionIds.theme =>
+        settings.themeMode == ThemeMode.dark
+            ? Icons.light_mode
+            : Icons.dark_mode,
+      InterfaceMenuActionIds.uiScale => Icons.aspect_ratio,
+      InterfaceMenuActionIds.autosave => Icons.save_outlined,
+      InterfaceMenuActionIds.sort => Icons.sort,
+      InterfaceMenuActionIds.refresh => Icons.refresh,
+      InterfaceMenuActionIds.switchFolder => Icons.folder_open,
+      InterfaceMenuActionIds.importFiles => Icons.file_open,
+      InterfaceMenuActionIds.importFolder => Icons.drive_folder_upload_outlined,
+      InterfaceMenuActionIds.downloadAll => Icons.download,
+      InterfaceMenuActionIds.interfaceSettings => Icons.tune,
+      InterfaceMenuActionIds.clearCache => Icons.delete_outline,
+      InterfaceMenuActionIds.plugins => Icons.extension,
+      InterfaceMenuActionIds.about => Icons.info_outline,
+      InterfaceMenuActionIds.levelTestingMod =>
+        workspacePluginMenuElement(id)?.icon ?? Icons.inventory_2,
+      _ => Icons.more_horiz,
+    };
+  }
+
+  Future<void> _handleWorkspaceAction(String id) async {
+    final l10n = AppLocalizations.of(context)!;
+    switch (id) {
+      case InterfaceMenuActionIds.sort:
+        _toggleSortMode();
+      case InterfaceMenuActionIds.refresh:
+        _loadCurrentDirectory();
+      case InterfaceMenuActionIds.switchFolder:
+        _pickFolder();
+      case InterfaceMenuActionIds.importFiles:
+        _pickAndAddFile();
+      case InterfaceMenuActionIds.importFolder:
+        _pickAndImportFolder();
+      case InterfaceMenuActionIds.downloadAll:
+        _downloadAllLevels();
+      case InterfaceMenuActionIds.theme:
+        context.read<SettingsCubit>().cycleTheme();
+      case InterfaceMenuActionIds.clearCache:
+        final count = await LevelRepository.clearAllInternalCache();
+        if (mounted) _showMessage(l10n.cacheCleared(count));
+      case InterfaceMenuActionIds.autosave:
+        if (!mounted) return;
+        await showAutosaveSettingsDialog(context);
+      case InterfaceMenuActionIds.uiScale:
+        setState(() => _showUiScaleDialog = true);
+        WidgetsBinding.instance.addPostFrameCallback(
+          (_) => _showUiScaleDialogImpl(),
+        );
+      case InterfaceMenuActionIds.language:
+        widget.onLanguageTap(context);
+      case InterfaceMenuActionIds.interfaceSettings:
+        await showInterfaceSettingsScreen(context);
+      case InterfaceMenuActionIds.plugins:
+        widget.onPluginsClick();
+      case InterfaceMenuActionIds.about:
+        widget.onAboutClick();
+      case InterfaceMenuActionIds.levelTestingMod:
+        final element = workspacePluginMenuElement(id);
+        if (element != null) openPluginUiElement(context, element);
+    }
+  }
+
+  Widget _workspaceToolbarAction(
+    AppLocalizations l10n,
+    SettingsState settings,
+    String id,
+  ) {
+    return IconButton(
+      key: ValueKey('workspaceToolbarAction_$id'),
+      icon: Icon(_workspaceActionIcon(id, settings)),
+      tooltip: _workspaceActionLabel(l10n, settings, id),
+      onPressed: () => _handleWorkspaceAction(id),
+    );
+  }
+
+  PopupMenuEntry<String> _workspaceOverflowAction(
+    AppLocalizations l10n,
+    SettingsState settings,
+    String id,
+  ) {
+    return PopupMenuItem<String>(
+      key: ValueKey('workspaceOverflowAction_$id'),
+      value: id,
+      child: EditorPopupMenuTile(
+        leading: Icon(_workspaceActionIcon(id, settings)),
+        title: Text(_workspaceActionLabel(l10n, settings, id)),
+        contentPadding: EdgeInsets.zero,
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final settings = context.watch<SettingsCubit>().state;
@@ -1628,7 +1779,33 @@ class _LevelListScreenState extends State<LevelListScreen> {
 
     final screenWidth = MediaQuery.sizeOf(context).width;
     final bool useCompactActions = screenWidth < 540;
-
+    final configuredActions = settings
+        .interfaceMenuActionsFor(InterfaceMenuSurface.workspace)
+        .where((action) => _workspaceActionAvailable(action.id))
+        .toList(growable: false);
+    final requestedToolbarActions = configuredActions
+        .where((action) => action.placement == InterfaceMenuPlacement.toolbar)
+        .toList(growable: false);
+    final toolbarCapacity = useCompactActions
+        ? (requestedToolbarActions.length < 3
+              ? requestedToolbarActions.length
+              : 3)
+        : ((screenWidth - 160) / 48)
+              .floor()
+              .clamp(0, requestedToolbarActions.length)
+              .toInt();
+    final toolbarActionIds = {
+      for (final action in requestedToolbarActions.take(toolbarCapacity))
+        action.id,
+    };
+    final overflowActions = configuredActions
+        .where(
+          (action) =>
+              action.placement == InterfaceMenuPlacement.overflow ||
+              (action.placement == InterfaceMenuPlacement.toolbar &&
+                  !toolbarActionIds.contains(action.id)),
+        )
+        .toList(growable: false);
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -1637,205 +1814,36 @@ class _LevelListScreenState extends State<LevelListScreen> {
           overflow: TextOverflow.ellipsis,
         ),
         actions: [
-          if (_viewMode == LevelViewMode.all)
-            IconButton(
-              icon: const Icon(Icons.sort),
-              tooltip: l10n.sortByLabel,
-              onPressed: _toggleSortMode,
-            ),
-          if (!kIsWeb && !useCompactActions) ...[
-            IconButton(
-              icon: const Icon(Icons.refresh),
-              tooltip: l10n.refresh,
-              onPressed: _loadCurrentDirectory,
-            ),
-            IconButton(
-              icon: const Icon(Icons.folder_open),
-              tooltip: l10n.switchFolder,
-              onPressed: _pickFolder,
-            ),
-          ],
-          if (kIsWeb && !useCompactActions) ...[
-            IconButton(
-              icon: const Icon(Icons.file_open),
-              tooltip: l10n.importFiles,
-              onPressed: _pickAndAddFile,
-            ),
-            IconButton(
-              icon: const Icon(Icons.drive_folder_upload_outlined),
-              tooltip: l10n.importFolder,
-              onPressed: _pickAndImportFolder,
-            ),
-            IconButton(
-              icon: const Icon(Icons.download),
-              tooltip: l10n.downloadAllLevels,
-              onPressed: _downloadAllLevels,
-            ),
-          ],
+          for (final action in configuredActions)
+            if (toolbarActionIds.contains(action.id))
+              _workspaceToolbarAction(l10n, settings, action.id),
           PopupMenuButton<String>(
+            key: const ValueKey('workspaceOverflowMenu'),
             itemBuilder: (context) => [
-              if (useCompactActions) ...[
-                if (!kIsWeb) ...[
-                  PopupMenuItem(
-                    value: 'refresh',
-                    child: EditorPopupMenuTile(
-                      leading: const Icon(Icons.refresh),
-                      title: Text(l10n.refresh),
-                      contentPadding: EdgeInsets.zero,
-                    ),
-                  ),
-                  PopupMenuItem(
-                    value: 'switch_folder',
-                    child: EditorPopupMenuTile(
-                      leading: const Icon(Icons.folder_open),
-                      title: Text(l10n.switchFolder),
-                      contentPadding: EdgeInsets.zero,
-                    ),
-                  ),
-                ],
-                if (kIsWeb) ...[
-                  PopupMenuItem(
-                    value: 'import_files',
-                    child: EditorPopupMenuTile(
-                      leading: const Icon(Icons.file_open),
-                      title: Text(l10n.importFiles),
-                      contentPadding: EdgeInsets.zero,
-                    ),
-                  ),
-                  PopupMenuItem(
-                    value: 'import_folder',
-                    child: EditorPopupMenuTile(
-                      leading: const Icon(Icons.drive_folder_upload_outlined),
-                      title: Text(l10n.importFolder),
-                      contentPadding: EdgeInsets.zero,
-                    ),
-                  ),
-                  PopupMenuItem(
-                    value: 'download_all',
-                    child: EditorPopupMenuTile(
-                      leading: const Icon(Icons.download),
-                      title: Text(l10n.downloadAllLevels),
-                      contentPadding: EdgeInsets.zero,
-                    ),
-                  ),
-                ],
-                const PopupMenuDivider(),
-              ],
-              PopupMenuItem(
-                value: 'theme',
-                child: EditorPopupMenuTile(
-                  leading: Icon(
-                    settings.themeMode == ThemeMode.dark
-                        ? Icons.light_mode
-                        : Icons.dark_mode,
-                  ),
-                  title: Text(l10n.toggleTheme),
-                  contentPadding: EdgeInsets.zero,
-                ),
-              ),
-              PopupMenuItem(
-                value: 'cache',
-                child: EditorPopupMenuTile(
-                  leading: const Icon(Icons.delete_outline),
-                  title: Text(l10n.clearCache),
-                  contentPadding: EdgeInsets.zero,
-                ),
-              ),
-              PopupMenuItem(
-                value: 'autosave',
-                child: EditorPopupMenuTile(
-                  leading: const Icon(Icons.save_outlined),
-                  title: Text(
-                    settings.hasAutosave ? l10n.autosaveOn : l10n.autosaveOff,
-                  ),
-                  contentPadding: EdgeInsets.zero,
-                ),
-              ),
-              PopupMenuItem(
-                value: 'ui',
-                child: EditorPopupMenuTile(
-                  leading: const Icon(Icons.aspect_ratio),
-                  title: Text(l10n.uiSize),
-                  contentPadding: EdgeInsets.zero,
-                ),
-              ),
-              PopupMenuItem(
-                value: 'lang',
-                child: EditorPopupMenuTile(
-                  leading: const Icon(Icons.language),
-                  title: Text(l10n.language),
-                  contentPadding: EdgeInsets.zero,
-                ),
-              ),
-              PopupMenuItem(
-                value: 'plugins',
-                child: EditorPopupMenuTile(
-                  leading: const Icon(Icons.extension),
-                  title: Text(l10n.pluginsTitle),
-                  contentPadding: EdgeInsets.zero,
-                ),
-              ),
+              for (final action in overflowActions)
+                _workspaceOverflowAction(l10n, settings, action.id),
               ...pluginOverflowMenuItems(
                 context: context,
                 slot: CPluginUiSlots.levelListOverflow,
                 valuePrefix: 'plugin:',
-              ),
-              PopupMenuItem(
-                value: 'about',
-                child: EditorPopupMenuTile(
-                  leading: const Icon(Icons.info_outline),
-                  title: Text(l10n.aboutSoftware),
-                  contentPadding: EdgeInsets.zero,
-                ),
+                excludedElementKeys: {
+                  for (final action in configuredActions)
+                    if (workspacePluginMenuElement(action.id)
+                        case final element?)
+                      element.key,
+                },
               ),
             ],
             onSelected: (value) async {
-              if (value == 'refresh') {
-                _loadCurrentDirectory();
-              } else if (value == 'switch_folder') {
-                _pickFolder();
-              } else if (value == 'import_files') {
-                _pickAndAddFile();
-              } else if (value == 'import_folder') {
-                _pickAndImportFolder();
-              } else if (value == 'download_all') {
-                _downloadAllLevels();
-              } else if (value == 'theme') {
-                context.read<SettingsCubit>().cycleTheme();
-              } else if (value == 'cache') {
-                final count = await LevelRepository.clearAllInternalCache();
-                if (context.mounted) {
-                  _showMessage(l10n.cacheCleared(count));
-                }
-              } else if (value == 'autosave') {
-                Future.microtask(() {
-                  if (!context.mounted) return;
-                  showAutosaveSettingsDialog(context);
-                });
-              } else if (value == 'ui') {
-                setState(() => _showUiScaleDialog = true);
-                WidgetsBinding.instance.addPostFrameCallback(
-                  (_) => _showUiScaleDialogImpl(),
-                );
-              } else if (value == 'lang') {
-                Future.microtask(() {
-                  if (!context.mounted) return;
-                  widget.onLanguageTap(context);
-                });
-              } else if (value == 'plugins') {
-                widget.onPluginsClick();
-              } else if (value == 'about') {
-                Future.microtask(() {
-                  if (!context.mounted) return;
-                  widget.onAboutClick();
-                });
-              } else {
+              if (value.startsWith('plugin:')) {
                 handlePluginOverflowSelection(
                   context,
                   value: value,
                   valuePrefix: 'plugin:',
                   slot: CPluginUiSlots.levelListOverflow,
                 );
+              } else {
+                await _handleWorkspaceAction(value);
               }
             },
           ),
@@ -2243,7 +2251,7 @@ class _LevelListScreenState extends State<LevelListScreen> {
                                                 fileName: item.name,
                                                 filePath: item.path,
                                               ),
-                                        showMove: !item.isDirectory && !kIsWeb,
+                                        showMove: !item.isDirectory,
                                       ),
                                     );
                                   },

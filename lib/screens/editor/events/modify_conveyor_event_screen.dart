@@ -111,7 +111,10 @@ class _ModifyConveyorEventScreenState extends State<ModifyConveyorEventScreen> {
         iLevel: existing >= 0 ? _data.addList[existing].iLevel : null,
         iAvatar: existing >= 0 ? _data.addList[existing].iAvatar : null,
       );
-      _showModifyEntryDialog(base, isTool: false);
+      if (existing < 0) {
+        _data.addList.add(base);
+        _sync();
+      }
     });
   }
 
@@ -308,7 +311,7 @@ class _ModifyConveyorEventScreenState extends State<ModifyConveyorEventScreen> {
             onPressed: () => showEditorHelpDialog(
               context,
               isEvent: true,
-              title: l10n?.eventConveyorModify ?? 'Conveyor modify event',
+              title: eventTitle,
               sections: [
                 HelpSectionData(
                   title: l10n?.overview ?? 'Overview',
@@ -632,7 +635,7 @@ class _ModifyConveyorEntryDialogState
           children: [
             if (isTool)
               _McNumField(
-                label: l10n?.initialWeight ?? 'Weight',
+                label: l10n?.initialWeight ?? 'Weight (Weight)',
                 value: _weight,
                 onChanged: (v) => setState(() => _weight = v),
               )
@@ -641,7 +644,7 @@ class _ModifyConveyorEntryDialogState
                 children: [
                   Expanded(
                     child: _McNumField(
-                      label: l10n?.initialWeight ?? 'Weight',
+                      label: l10n?.initialWeight ?? 'Weight (Weight)',
                       value: _weight,
                       onChanged: (v) => setState(() => _weight = v),
                     ),
@@ -649,7 +652,11 @@ class _ModifyConveyorEntryDialogState
                   const SizedBox(width: 8),
                   Expanded(
                     child: _McNumField(
-                      label: l10n?.plantLevelLabel ?? 'Plant level (iLevel)',
+                      label: localizedPropertyLabel(
+                        context,
+                        l10n?.plantLevelLabel ?? 'Plant level',
+                        'iLevel',
+                      ),
                       value: _level,
                       onChanged: (v) => setState(() => _level = v.clamp(0, 5)),
                     ),
@@ -687,7 +694,7 @@ class _ModifyConveyorEntryDialogState
               children: [
                 Expanded(
                   child: _McNumField(
-                    label: l10n?.maxCountThreshold ?? 'Max count',
+                    label: l10n?.maxCountThreshold ?? 'Max count (MaxCount)',
                     value: _maxCount,
                     onChanged: (v) => setState(() => _maxCount = v),
                   ),
@@ -695,7 +702,11 @@ class _ModifyConveyorEntryDialogState
                 const SizedBox(width: 8),
                 Expanded(
                   child: _McDoubleField(
-                    label: l10n?.weightFactor ?? 'Max weight factor',
+                    label: localizedPropertyLabel(
+                      context,
+                      l10n?.weightFactor ?? 'Max weight factor',
+                      'MaxWeightFactor',
+                    ),
                     value: _maxWeightFactor,
                     onChanged: (v) => setState(() => _maxWeightFactor = v),
                   ),
@@ -714,7 +725,7 @@ class _ModifyConveyorEntryDialogState
               children: [
                 Expanded(
                   child: _McNumField(
-                    label: l10n?.minCountThreshold ?? 'Min count',
+                    label: l10n?.minCountThreshold ?? 'Min count (MinCount)',
                     value: _minCount,
                     onChanged: (v) => setState(() => _minCount = v),
                   ),
@@ -722,7 +733,11 @@ class _ModifyConveyorEntryDialogState
                 const SizedBox(width: 8),
                 Expanded(
                   child: _McDoubleField(
-                    label: l10n?.weightFactor ?? 'Min weight factor',
+                    label: localizedPropertyLabel(
+                      context,
+                      l10n?.weightFactor ?? 'Min weight factor',
+                      'MinWeightFactor',
+                    ),
                     value: _minWeightFactor,
                     onChanged: (v) => setState(() => _minWeightFactor = v),
                   ),

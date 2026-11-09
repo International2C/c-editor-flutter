@@ -1,3 +1,6 @@
+import 'dart:convert';
+import 'dart:math' as math;
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -8,9 +11,9 @@ import 'package:c_editor/widgets/editor_components.dart';
 import 'package:c_editor/data/level_validator.dart';
 import 'package:c_editor/data/repository/level_repository.dart';
 import 'package:c_editor/data/repository/world_repository.dart';
-import 'package:c_editor/utils/3rdParty/pyvz2/pyvz2_rton_codec.dart';
 import 'package:c_editor/widgets/asset_image.dart';
 import 'package:c_editor/screens/export/export_engine.dart';
+import 'package:c_editor/screens/export/export_rsb_isolate.dart';
 import 'package:c_editor/plugins/plugin_host_hooks.dart';
 import 'package:c_editor/theme/app_theme.dart';
 
@@ -172,11 +175,18 @@ class _ExportScreenState extends State<ExportScreen> {
       _rootPath != null &&
       _rootPath!.isNotEmpty;
 
+  /// Directory the user is currently browsing (or the library root).
+  String? get _currentLibraryPath {
+    if (_pathStack.isNotEmpty) return _pathStack.last.path;
+    return _rootPath;
+  }
+
   Future<void> _runExternalDynamicDownload({
     bool skipInitialPrompt = false,
   }) async {
     final hook = PluginHostHooks.offerExternalDynamic;
-    final libraryPath = _rootPath;
+    // Import into the folder currently being browsed, matching native behavior.
+    final libraryPath = _currentLibraryPath;
     if (hook == null || libraryPath == null || libraryPath.isEmpty) return;
     if (!mounted) return;
 
@@ -191,12 +201,14 @@ class _ExportScreenState extends State<ExportScreen> {
   }
 
   Future<void> _refreshAfterExternalDynamicDownload() async {
-    final libraryPath = _rootPath;
-    if (libraryPath == null || libraryPath.isEmpty) return;
+    final rootPath = _rootPath;
+    if (rootPath == null || rootPath.isEmpty) return;
+    final currentPath = _currentLibraryPath ?? rootPath;
 
     setState(() => _isScanning = true);
     try {
-      final hasEligibleFile = await _engine.hasEligibleArchive(libraryPath);
+      // Eligibility is library-wide; refresh the folder the user is viewing.
+      final hasEligibleFile = await _engine.hasEligibleArchive(rootPath);
       if (!mounted) return;
       if (!hasEligibleFile) return;
 
@@ -206,11 +218,10 @@ class _ExportScreenState extends State<ExportScreen> {
           _noFilesFound = false;
           _pathStack.clear();
         });
-        await _loadDirectory(libraryPath);
+        await _loadDirectory(rootPath);
       } else if (_currentStep == ExportStep.selectingArchive) {
         setState(() => _noFilesFound = false);
-        final dir = _pathStack.isNotEmpty ? _pathStack.last.path : libraryPath;
-        await _loadDirectory(dir);
+        await _loadDirectory(currentPath);
       }
     } finally {
       if (mounted) setState(() => _isScanning = false);
@@ -1684,6 +1695,11 @@ class _ExportScreenState extends State<ExportScreen> {
     if (_selectedArchivePath == null) return;
     final l10n = AppLocalizations.of(context)!;
 
+    // Clear stale cancellation state before anything starts: a Cancel tap
+    // during the encoding stage below must not be lost (or, worse, dropped
+    // by the engine when the pipeline itself begins).
+    _engine.resetExportState();
+
     setState(() {
       _isExporting = true;
       _exportProgress = 0;
@@ -1693,16 +1709,22 @@ class _ExportScreenState extends State<ExportScreen> {
     final String archivePath = _selectedArchivePath!;
 
     try {
-      // 1. Encode the selected levels as encrypted RTON (cross-platform).
+      // 1. Encode the selected levels as encrypted RTON. The heavy Rijndael
+      // pass runs in a background isolate per level, so the editor stays
+      // responsive and the Cancel button keeps working.
       setState(() {
-        _exportProgress = 0.1;
+        _exportProgress = 0.02;
         _exportStatus = l10n.exportStatusCreatingRton;
       });
 
       final Map<String, Uint8List> rtonLevels = {};
-      final rtonCodec = const Pyvz2RtonCodec();
+      final assignmentCount = _levelAssignments.length;
+      var encodedCount = 0;
 
       for (final entry in _levelAssignments.entries) {
+        if (_engine.isCancelledByUser) {
+          throw const ExportCancelledException();
+        }
         final srcPath = entry.key;
         final assignment = entry.value;
         final exportedName = '${assignment.world}${assignment.level}.rton';
@@ -1712,8 +1734,18 @@ class _ExportScreenState extends State<ExportScreen> {
           throw Exception("Failed to load level: $srcPath");
         }
 
-        final rtonBytes = rtonCodec.encode(levelFile, encrypt: true);
+        final levelJson = jsonEncode(levelFile.toJson());
+        final rtonBytes = await compute(exportIsolateEncodeRton, levelJson);
         rtonLevels[exportedName] = rtonBytes;
+
+        encodedCount++;
+        if (mounted) {
+          setState(() {
+            _exportProgress =
+                0.02 + 0.13 * encodedCount / math.max(1, assignmentCount);
+            _exportStatus = l10n.exportStatusCreatingRton;
+          });
+        }
       }
 
       // 2. Run the platform-specific unpack -> inject -> repack pipeline.

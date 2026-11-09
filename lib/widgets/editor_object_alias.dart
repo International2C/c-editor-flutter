@@ -1,11 +1,14 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:c_editor/bloc/settings/settings_cubit.dart';
 import 'package:c_editor/data/pvz_alias_utils.dart';
 import 'package:c_editor/data/pvz_models.dart';
 import 'package:c_editor/data/registry/module_registry.dart';
 import 'package:c_editor/data/rtid_parser.dart';
 import 'package:c_editor/l10n/app_localizations.dart';
 import 'package:c_editor/screens/select/event_selection_screen.dart';
+import 'package:c_editor/widgets/alias_input_validation.dart';
 import 'package:c_editor/widgets/app_message.dart';
 import 'package:c_editor/widgets/editor_components.dart';
 
@@ -113,6 +116,7 @@ class EditorAliasInputField extends StatefulWidget {
     this.accentColor,
     this.onChanged,
     this.wrapInCard = true,
+    this.duplicateMessage,
   });
 
   final String alias;
@@ -121,6 +125,7 @@ class EditorAliasInputField extends StatefulWidget {
   final Color? accentColor;
   final VoidCallback? onChanged;
   final bool wrapInCard;
+  final String? duplicateMessage;
 
   @override
   State<EditorAliasInputField> createState() => _EditorAliasInputFieldState();
@@ -129,6 +134,7 @@ class EditorAliasInputField extends StatefulWidget {
 class _EditorAliasInputFieldState extends State<EditorAliasInputField> {
   late final TextEditingController _controller;
   late final FocusNode _focusNode;
+  bool _commitInProgress = false;
 
   @override
   void initState() {
@@ -161,9 +167,21 @@ class _EditorAliasInputFieldState extends State<EditorAliasInputField> {
   }
 
   Future<void> _commit() async {
-    if (!mounted) return;
+    if (!mounted || _commitInProgress) return;
     final l10n = AppLocalizations.of(context);
-    final next = _controller.text.trim();
+    final raw = _controller.text;
+    if (raw == widget.alias) return;
+    final characterError = aliasCharacterValidationError(l10n, raw);
+    if (characterError != null) {
+      AppMessage.show(
+        context,
+        characterError,
+        icon: Icons.warning_amber_rounded,
+      );
+      _controller.text = widget.alias;
+      return;
+    }
+    final next = raw.trim();
     if (next.isEmpty || next == widget.alias) {
       if (mounted) {
         _controller.text = widget.alias;
@@ -178,7 +196,8 @@ class _EditorAliasInputFieldState extends State<EditorAliasInputField> {
       if (!mounted) return;
       AppMessage.show(
         context,
-        l10n?.aliasAlreadyExists ?? 'Alias already exists in this level.',
+        widget.duplicateMessage ??
+            aliasRenameFailureMessage(widget.levelFile, widget.alias, l10n),
         icon: Icons.warning_amber_rounded,
       );
       if (mounted) {
@@ -186,6 +205,7 @@ class _EditorAliasInputFieldState extends State<EditorAliasInputField> {
       }
       return;
     }
+    _commitInProgress = true;
     final confirm = await showDialog<bool>(
       context: context,
       builder: (ctx) => AlertDialog(
@@ -206,6 +226,7 @@ class _EditorAliasInputFieldState extends State<EditorAliasInputField> {
         ],
       ),
     );
+    _commitInProgress = false;
     if (!mounted) return;
     if (confirm != true) {
       _controller.text = widget.alias;
@@ -294,7 +315,22 @@ Future<String?> showPvzAliasInputDialog(
   required String title,
   required String objClass,
   required PvzLevelFile levelFile,
+  bool forCreation = false,
 }) {
+  if (forCreation) {
+    // Keep this helper usable in isolated editor/widget tests where no app
+    // settings provider is present. In the real app, the preference defaults
+    // to false and creation proceeds with the already-unique suggested alias.
+    SettingsCubit? settings;
+    try {
+      settings = context.read<SettingsCubit>();
+    } catch (_) {
+      settings = null;
+    }
+    if (settings != null && !settings.state.promptForAliasOnCreate) {
+      return Future<String?>.value(defaultAlias);
+    }
+  }
   return showDialog<String>(
     context: context,
     builder: (ctx) => _PvzAliasInputDialog(
@@ -341,9 +377,18 @@ class _PvzAliasInputDialogState extends State<_PvzAliasInputDialog> {
 
   void _submit() {
     final l10n = AppLocalizations.of(context);
-    final alias = _controller.text.trim();
-    if (alias.isEmpty ||
-        !PvzAliasUtils.isAliasAvailable(widget.levelFile, alias)) {
+    final raw = _controller.text;
+    final characterError = aliasCharacterValidationError(l10n, raw);
+    if (characterError != null) {
+      setState(() => _errorText = characterError);
+      return;
+    }
+    final alias = raw.trim();
+    if (alias.isEmpty) {
+      setState(() => _errorText = l10n?.aliasEmpty ?? 'Alias cannot be empty');
+      return;
+    }
+    if (!PvzAliasUtils.isAliasAvailable(widget.levelFile, alias)) {
       setState(
         () => _errorText =
             l10n?.aliasAlreadyExists ?? 'Alias already exists in this level.',
@@ -381,6 +426,9 @@ class _PvzAliasInputDialogState extends State<_PvzAliasInputDialog> {
               controller: _controller,
               autofocus: true,
               decoration: decoration,
+              onChanged: (_) {
+                if (_errorText != null) setState(() => _errorText = null);
+              },
               onSubmitted: (_) => _submit(),
             ),
           ),
@@ -416,6 +464,27 @@ void renameLevelObjectAlias({
 
 String aliasFromRtid(String rtid) {
   return RtidParser.parse(rtid)?.alias ?? rtid;
+}
+
+String aliasRenameFailureMessage(
+  PvzLevelFile level,
+  String alias,
+  AppLocalizations? l10n,
+) {
+  final matches = level.objects.where(
+    (o) => o.aliases?.contains(alias) == true,
+  );
+  final objClass = matches.firstOrNull?.objClass ?? '';
+  if (objClass.contains('WaveAction')) {
+    return l10n?.renameEventFail ??
+        'Cannot rename event: this alias is already used in the level.';
+  }
+  if (ModuleRegistry.registry.containsKey(objClass)) {
+    return l10n?.renameModuleFail ??
+        'Cannot rename module: this alias is already used in the level.';
+  }
+  return l10n?.renameAliasFail ??
+      'Cannot rename: this alias is already used in the level.';
 }
 
 bool isLevelModulesRtid(String rtid) {
@@ -475,6 +544,7 @@ class ModuleAliasInputField extends StatelessWidget {
       accentColor: accentColor,
       onChanged: onChanged,
       wrapInCard: wrapInCard,
+      duplicateMessage: AppLocalizations.of(context)?.renameModuleFail,
     );
   }
 }

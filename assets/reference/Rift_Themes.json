@@ -1,1042 +1,1042 @@
 {
-    "#comment": "Insert new Themes here",
-    "version": 1,
-    "objects": [
-        {
-            "objclass": "RiftThemeJunggledProperties",
-            "aliases": [
-                "junggled"
-            ],
-            "objdata": {
-                "TypeName": "junggled",
-                "ClassName": "RiftThemeJunggled",
-                "LaunchVelocity": {
-                    "x": 500,
-                    "y": 0,
-                    "z": 0
-                },
-                "LaunchAcceleration": {
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                },
-                "LaunchHeight": {
-                    "Min": 50,
-                    "Max": 50
-                },
-                "MaxProjectilesToJuggle": 1000,
-                "JuggleLaunchDelay": 2,
-                "MoveSpeedMultiplierWhileJuggling": 1.1,
-                "CatchArcDegrees": 120,
-                "JuggleableProjectiles": [
-                    "PeaDefault",
-                    "ThreepeaterPeaDefault",
-                    "ThreepeaterPeaSnow",
-                    "ThreepeaterPeaFire",
-                    "ThreepeaterPeaUltraFire",
-                    "PlantfoodPeaDefault",
-                    "FirePeaDefault",
-                    "UltraFirePeaDefault",
-                    "SnowPeaDefault",
-                    "GiantPeaDefault",
-                    "GiantFirePeaDefault",
-                    "GiantUltraFirePeaDefault",
-                    "CannonballDefault",
-                    "CabbageDefault",
-                    "MelonDefault",
-                    "WinterMelonDefault",
-                    "KernelDefault",
-                    "ButterDefault",
-                    "StarFruitShot",
-                    "BloomerangDefault",
-                    "BloomerangAvatar",
-                    "PlasmaBall",
-                    "PuffSporeDefault",
-                    "ThrownZombieParticle",
-                    "GuacodileDefault",
-                    "HomingThistleDefault",
-                    "HomingThistlePlantfood",
-                    "BowlingBulbDefault",
-                    "BowlingBulbDefault2",
-                    "BowlingBulbDefault3",
-                    "PameBulletNormal",
-                    "PameBulletPlantfood",
-                    "PameBulletAvatarPlantfood",
-                    "PeanutDefault",
-                    "IceLancePeaDefault",
-                    "PepperpultDefault",
-                    "PepperpultPlantfoodDefault",
-                    "XShotShot",
-                    "XShotGiantShot",
-                    "StingerDefault",
-                    "AkeeDefault",
-                    "MegaAkeeDefault",
-                    "NekotailStabDefault",
-                    "NekotailStabAdvance",
-                    "HugeNekotailStab",
-                    "wasabiwhipLevel5",
-                    "BearberryDefaultProjectile",
-                    "BearberryLevel2Projectile",
-                    "PoisonPeaDefault"
-                ],
-                "UnthrowableProjectiles": [],
-                "AngleAgnosticProjectiles": [
-                    "HomingThistleDefault",
-                    "HomingThistlePlantfood"
-                ]
-            }
+  "#comment": "Insert new Themes here",
+  "version": 1,
+  "objects": [
+    {
+      "objclass": "RiftThemeJunggledProperties",
+      "aliases": [
+        "junggled"
+      ],
+      "objdata": {
+        "TypeName": "junggled",
+        "ClassName": "RiftThemeJunggled",
+        "LaunchVelocity": {
+          "x": 500,
+          "y": 0,
+          "z": 0
         },
-        {
-            "objclass": "RiftThemeHealthDebuffProperties",
-            "aliases": [
-                "healthdebuff"
-            ],
-            "objdata": {
-                "TypeName": "healthdebuff",
-                "ClassName": "RiftThemeHealthDebuff",
-                "TargetablePlantTypes": {
-                    "ListType": "whitelist",
-                    "List": [
-                        "wallnut",
-                        "primalwallnut",
-                        "torchwood",
-                        "tallnut",
-                        "turnip",
-                        "holonut",
-                        "broccoli",
-                        "sweetpotato",
-                        "sugarcane",
-                        "pineapple",
-                        "endurian",
-                        "cactus",
-                        "whitemelon",
-                        "explodeonut",
-                        "kiwibeast",
-                        "hotdate",
-                        "hollyknight",
-                        "waxgourd"
-                    ]
-                },
-                "HealthPercent": 0.33
-            }
+        "LaunchAcceleration": {
+          "x": 0,
+          "y": 0,
+          "z": 0
         },
-        {
-            "objclass": "RiftThemeExploderProperties",
-            "aliases": [
-                "exploder"
-            ],
-            "objdata": {
-                "TypeName": "exploder",
-                "ClassName": "RiftThemeExploder",
-                "TargetableZombieTypes": {
-                    "ListType": "blacklist",
-                    "List": [
-                        "zombossmech_future",
-                        "wealth_god",
-                        "turkeypult_basic",
-                        "turkeypult_turkzilla_lv5",
-                        "turkeypult_turkzilla",
-                        "turkeypult_turkzilla_avatar",
-                        "dark_rogue"
-                    ]
-                }
-            }
+        "LaunchHeight": {
+          "Min": 50,
+          "Max": 50
         },
-        {
-            "objclass": "RiftThemeNoPlantfoodProperties",
-            "aliases": [
-                "noplantfood"
-            ],
-            "objdata": {
-                "TypeName": "noplantfood",
-                "ClassName": "RiftThemeNoPlantfood",
-                "TargetablePlantTypes": {
-                    "ListType": "whitelist",
-                    "List": [
-                        "bonkchoy",
-                        "spikeweed",
-                        "spikerock",
-                        "turnip",
-                        "broccoli",
-                        "chardguard",
-                        "stunion",
-                        "roseswordman",
-                        "redstinger",
-                        "agave",
-                        "matchflower",
-                        "phatbeet",
-                        "celerystalker",
-                        "garlic",
-                        "dragoncane",
-                        "electriccurrant",
-                        "whitemelon",
-                        "nighyshade",
-                        "wasabiwhip",
-                        "kiwibeast",
-                        "icycurrant",
-                        "alarmsagittifolia",
-                        "pokra"
-                    ]
-                }
-            }
+        "MaxProjectilesToJuggle": 1000,
+        "JuggleLaunchDelay": 2,
+        "MoveSpeedMultiplierWhileJuggling": 1.1,
+        "CatchArcDegrees": 120,
+        "JuggleableProjectiles": [
+          "PeaDefault",
+          "ThreepeaterPeaDefault",
+          "ThreepeaterPeaSnow",
+          "ThreepeaterPeaFire",
+          "ThreepeaterPeaUltraFire",
+          "PlantfoodPeaDefault",
+          "FirePeaDefault",
+          "UltraFirePeaDefault",
+          "SnowPeaDefault",
+          "GiantPeaDefault",
+          "GiantFirePeaDefault",
+          "GiantUltraFirePeaDefault",
+          "CannonballDefault",
+          "CabbageDefault",
+          "MelonDefault",
+          "WinterMelonDefault",
+          "KernelDefault",
+          "ButterDefault",
+          "StarFruitShot",
+          "BloomerangDefault",
+          "BloomerangAvatar",
+          "PlasmaBall",
+          "PuffSporeDefault",
+          "ThrownZombieParticle",
+          "GuacodileDefault",
+          "HomingThistleDefault",
+          "HomingThistlePlantfood",
+          "BowlingBulbDefault",
+          "BowlingBulbDefault2",
+          "BowlingBulbDefault3",
+          "PameBulletNormal",
+          "PameBulletPlantfood",
+          "PameBulletAvatarPlantfood",
+          "PeanutDefault",
+          "IceLancePeaDefault",
+          "PepperpultDefault",
+          "PepperpultPlantfoodDefault",
+          "XShotShot",
+          "XShotGiantShot",
+          "StingerDefault",
+          "AkeeDefault",
+          "MegaAkeeDefault",
+          "NekotailStabDefault",
+          "NekotailStabAdvance",
+          "HugeNekotailStab",
+          "wasabiwhipLevel5",
+          "BearberryDefaultProjectile",
+          "BearberryLevel2Projectile",
+          "PoisonPeaDefault"
+        ],
+        "UnthrowableProjectiles": [],
+        "AngleAgnosticProjectiles": [
+          "HomingThistleDefault",
+          "HomingThistlePlantfood"
+        ]
+      }
+    },
+    {
+      "objclass": "RiftThemeHealthDebuffProperties",
+      "aliases": [
+        "healthdebuff"
+      ],
+      "objdata": {
+        "TypeName": "healthdebuff",
+        "ClassName": "RiftThemeHealthDebuff",
+        "TargetablePlantTypes": {
+          "ListType": "whitelist",
+          "List": [
+            "wallnut",
+            "primalwallnut",
+            "torchwood",
+            "tallnut",
+            "turnip",
+            "holonut",
+            "broccoli",
+            "sweetpotato",
+            "sugarcane",
+            "pineapple",
+            "endurian",
+            "cactus",
+            "whitemelon",
+            "explodeonut",
+            "kiwibeast",
+            "hotdate",
+            "hollyknight",
+            "waxgourd"
+          ]
         },
-        {
-            "objclass": "RiftThemeArmoredProperties",
-            "aliases": [
-                "armored"
-            ],
-            "objdata": {
-                "TypeName": "armored",
-                "ClassName": "RiftThemeArmored",
-                "KnightHelm": "bucket",
-                "KnightHelmHitpoints": 1600,
-                "ValidKnightTargets": [
-                    "roman",
-                    "roman_armor1",
-                    "roman_armor2",
-                    "roman_armor3",
-                    "tutorial",
-                    "tutorial_armor1",
-                    "tutorial_armor2",
-                    "mummy",
-                    "mummy_armor1",
-                    "mummy_armor2",
-                    "pirate",
-                    "pirate_armor1",
-                    "pirate_armor2",
-                    "cowboy",
-                    "cowboy_armor1",
-                    "cowboy_armor2",
-                    "kongfu_basic",
-                    "kongfu_basic_armor1",
-                    "kongfu_basic_armor2",
-                    "kongfu_basic_armor3",
-                    "future",
-                    "future_armor1",
-                    "future_armor2",
-                    "dark",
-                    "dark_armor1",
-                    "dark_armor2",
-                    "dark_armor3",
-                    "beach",
-                    "beach_armor1",
-                    "beach_armor2",
-                    "beach_fem",
-                    "beach_fem_armor1",
-                    "beach_fem_armor2",
-                    "iceage",
-                    "iceage_armor1",
-                    "iceage_armor2",
-                    "iceage_armor3",
-                    "skycity",
-                    "skycity_armor1",
-                    "skycity_armor2",
-                    "skycity_armor3",
-                    "lostcity",
-                    "lostcity_armor1",
-                    "lostcity_armor2",
-                    "lostcity_bug",
-                    "lostcity_bug_armor1",
-                    "lostcity_bug_armor2",
-                    "eighties",
-                    "eighties_armor1",
-                    "eighties_armor2",
-                    "eighties_8bit",
-                    "eighties_8bit_armor1",
-                    "eighties_8bit_armor2",
-                    "dino",
-                    "dino_armor1",
-                    "dino_armor2",
-                    "dino_armor3",
-                    "steam_worker",
-                    "steam_armor1",
-                    "steam_armor2",
-                    "renai_worker",
-                    "renai_armor1",
-                    "renai_armor2"
-                ],
-                "LinePosition": 747.0
-            }
-        },
-        {
-            "objclass": "RiftThemeReduceRangeProperties",
-            "aliases": [
-                "reducerange"
-            ],
-            "objdata": {
-                "TypeName": "reducerange",
-                "ClassName": "RiftThemeReduceRange",
-                "TargetablePlantTypes": {
-                    "ListType": "whitelist",
-                    "List": [
-                        "cabbagepult",
-                        "melonpult",
-                        "kernelpult",
-                        "wintermelon",
-                        "carrotlauncher",
-                        "sapfling",
-                        "pepperpult",
-                        "pumpkinwitch",
-                        "akee",
-                        "dragonfruit",
-                        "primalrafflesia",
-                        "applemortar",
-                        "dusklobber",
-                        "bloominghearts",
-                        "convallariachemist",
-                        "slingpea",
-                        "pomegranatejeweler",
-                        "elaeocarpus"
-                    ]
-                },
-                "ReducedGrids": 8
-            }
-        },
-        {
-            "objclass": "RiftThemeLimitedSeedPacketProperties",
-            "aliases": [
-                "limitedpacket"
-            ],
-            "objdata": {
-                "TypeName": "limitedpacket",
-                "ClassName": "RiftThemeLimitedSeedPacket",
-                "DisabledPlantNum": 3
-            }
-        },
-        {
-            "objclass": "RiftThemeZombieSpeedProperties",
-            "aliases": [
-                "zombiespeed"
-            ],
-            "objdata": {
-                "TypeName": "zombiespeed",
-                "ClassName": "RiftThemeZombieSpeed",
-                "TargetableZombieTypes": {
-                    "ListType": "blacklist",
-                    "List": [
-                        "zombossmech_future",
-                        "wealth_god",
-                        "turkeypult_basic",
-                        "turkeypult_turkzilla_lv5",
-                        "turkeypult_turkzilla",
-                        "turkeypult_turkzilla_avatar",
-                        "dark_rogue"
-                    ]
-                },
-                "SpeedScale": 4.0
-            }
-        },
-        {
-            "objclass": "RiftThemeZombossReviveProperties",
-            "aliases": [
-                "revive"
-            ],
-            "objdata": {
-                "TypeName": "revive",
-                "ClassName": "RiftThemeZombossRevive",
-                "TargetableZombieTypes": {
-                    "ListType": "blacklist",
-                    "List": [
-                        "zombossmech_future",
-                        "wealth_god",
-                        "turkeypult_basic",
-                        "turkeypult_turkzilla_lv5",
-                        "turkeypult_turkzilla",
-                        "turkeypult_turkzilla_avatar",
-                        "dark_rogue"
-                    ]
-                },
-                "ReviveCount": 1
-            }
-        },
-        {
-            "objclass": "RiftThemeInvisibleProperties",
-            "aliases": [
-                "invisible"
-            ],
-            "objdata": {
-                "TypeName": "invisible",
-                "ClassName": "RiftThemeInvisible",
-                "TargetableZombieTypes": {
-                    "ListType": "blacklist",
-                    "List": [
-                        "zombossmech_future",
-                        "wealth_god",
-                        "turkeypult_basic",
-                        "turkeypult_turkzilla_lv5",
-                        "turkeypult_turkzilla",
-                        "turkeypult_turkzilla_avatar",
-                        "dark_rogue"
-                    ]
-                }
-            }
-        },
-        {
-            "objclass": "RiftThemeShrunkenProperties",
-            "aliases": [
-                "shrunken"
-            ],
-            "objdata": {
-                "TypeName": "shrunken",
-                "ClassName": "RiftThemeShrunken",
-                "TargetableZombieTypes": {
-                    "ListType": "blacklist",
-                    "List": [
-                        "zombossmech_future",
-                        "wealth_god",
-                        "turkeypult_basic",
-                        "turkeypult_turkzilla_lv5",
-                        "turkeypult_turkzilla",
-                        "turkeypult_turkzilla_avatar",
-                        "dark_rogue"
-                    ]
-                },
-                "ModifiedScale": 0.5,
-                "ModifiedSpeed": 1.4
-            }
-        },
-        {
-            "objclass": "RiftThemeSunDrainProperties",
-            "aliases": [
-                "sun"
-            ],
-            "objdata": {
-                "TypeName": "sun",
-                "ClassName": "RiftThemeSunDrain",
-                "StartDealy": 60.0,
-                "TriggerInterval": 10.0,
-                "DrainAmount": 25
-            }
-        },
-        {
-            "objclass": "RiftThemeRainDarkProperties",
-            "aliases": [
-                "dark"
-            ],
-            "objdata": {
-                "TypeName": "dark",
-                "ClassName": "RiftThemeRainDark",
-                "TriggerInterval": 30.0,
-                "Duration": 4.0
-            }
-        },
-        {
-            "objclass": "RiftThemeBlizzardProperties",
-            "aliases": [
-                "blizzard"
-            ],
-            "objdata": {
-                "TypeName": "blizzard",
-                "ClassName": "RiftThemeBlizzard",
-                "TriggerInterval": 20.0,
-                "TakeEffectDelay": 1.0
-            }
-        },
-        {
-            "objclass": "RiftThemeGravestoneProperties",
-            "aliases": [
-                "gravestone"
-            ],
-            "objdata": {
-                "TypeName": "gravestone",
-                "ClassName": "RiftThemeGravestone",
-                "TargetableZombieTypes": {
-                    "ListType": "blacklist",
-                    "List": [
-                        "zombossmech_future",
-                        "wealth_god",
-                        "turkeypult_basic",
-                        "turkeypult_turkzilla_lv5",
-                        "turkeypult_turkzilla",
-                        "turkeypult_turkzilla_avatar",
-                        "dark_rogue"
-                    ]
-                }
-            }
-        },
-        {
-            "objclass": "RiftThemeBuffExploderProperties",
-            "aliases": [
-                "plant_exploder"
-            ],
-            "objdata": {
-                "TypeName": "plant_exploder",
-                "ClassName": "RiftThemeBuffExploder",
-                "TargetablePlantTypes": {
-                    "ListType": "blacklist",
-                    "List": [
-                        "flowerpot",
-                        "imitater"
-                    ]
-                },
-                "ExplodeDamage": 500.0
-            }
-        },
-        {
-            "objclass": "RiftThemeBuffPlantAOEProperties",
-            "aliases": [
-                "plant_aoe"
-            ],
-            "objdata": {
-                "TypeName": "plant_aoe",
-                "ClassName": "RiftThemeBuffPlantAOE",
-                "TargetablePlantTypes": {
-                    "ListType": "whitelist",
-                    "List": [
-                        "potatomine",
-                        "cherry_bomb",
-                        "jalapeno",
-                        "cracker",
-                        "lavaguava",
-                        "primalpotatomine",
-                        "grapeshot",
-                        "escaperoot",
-                        "explodeonut",
-                        "explodeonut",
-                        "electricitea",
-                        "alarmsagittifolia",
-                        "strawburst",
-                        "hotdate"
-                    ]
-                },
-                "DamagePercent": 2.0,
-                "SunReducedRate": 0.5
-            }
-        },
-        {
-            "objclass": "RiftThemeBuffPlantFastCDProperties",
-            "aliases": [
-                "plant_fastcd"
-            ],
-            "objdata": {
-                "TypeName": "plant_fastcd",
-                "ClassName": "RiftThemeBuffPlantFastCD",
-                "TargetablePlantTypes": {
-                    "ListType": "whitelist",
-                    "List": [
-                        "wallnut",
-                        "tallnut",
-                        "turnip",
-                        "holonut",
-                        "peanut",
-                        "broccoli",
-                        "sweetpotato",
-                        "chardguard",
-                        "sugarcane",
-                        "pineapple",
-                        "endurian",
-                        "agave",
-                        "primalwallnut",
-                        "Whitemelonsumowrestlers",
-                        "explodeonut",
-                        "kiwibeast",
-                        "hotdate",
-                        "hollyknight",
-                        "waxgourd",
-                        "dendrobiumguard",
-                        "beercoconut"
-                    ]
-                },
-                "ReducedCooldown": 0.5
-            }
-        },
-        {
-            "objclass": "RiftThemeBuffPlantMeleeProperties",
-            "aliases": [
-                "plant_melee"
-            ],
-            "objdata": {
-                "TypeName": "plant_melee",
-                "ClassName": "RiftThemeBuffPlantMelee",
-                "TargetablePlantTypes": {
-                    "ListType": "whitelist",
-                    "List": [
-                        "spikerock",
-                        "spikeweed",
-                        "bamboo",
-                        "broccoli",
-                        "guacodile",
-                        "roseswordman",
-                        "jackfruit",
-                        "flamelady",
-                        "dragoncane",
-                        "Whitemelonsumowrestlers ",
-                        "wasabiwhip",
-                        "parsnip",
-                        "kiwibeast",
-                        "bromelblade",
-                        "tupistrastalker",
-                        "bonkchoy",
-                        "matchflower",
-                        "heavendatura"
-                    ]
-                },
-                "DamagePercent": 2.0
-            }
-        },
-        {
-            "objclass": "RiftThemeRainLemonProperties",
-            "aliases": [
-                "lemon"
-            ],
-            "objdata": {
-                "TypeName": "lemon",
-                "ClassName": "RiftThemeRainLemon",
-                "TriggerInterval": 1.0,
-                "DamageRate": 3.3
-            }
-        },
-        {
-            "objclass": "RiftThemeBalloonProperties",
-            "aliases": [
-                "balloon"
-            ],
-            "objdata": {
-                "TypeName": "balloon",
-                "ClassName": "RiftThemeBalloon",
-                "TriggerInterval": 3,
-                "DamageRate": 3.3
-            }
-        },
-        {
-            "objclass": "RiftThemeSeedRainProperties",
-            "aliases": [
-                "seed_rain"
-            ],
-            "objdata": {
-                "TypeName": "seed_rain",
-                "ClassName": "RiftThemeSeedRain"
-            }
-        },
-        {
-            "objclass": "RiftThemeWealthGodProperties",
-            "aliases": [
-                "wealth"
-            ],
-            "objdata": {
-                "TypeName": "wealth",
-                "ClassName": "RiftThemeWealthGod"
-            }
-        },
-        {
-            "objclass": "RiftThemeZombieSpawnOffsetProperties",
-            "aliases": [
-                "spawn_offset"
-            ],
-            "objdata": {
-                "TypeName": "spawn_offset",
-                "ClassName": "RiftThemeZombieSpawnOffset"
-            }
-        },
-        {
-            "objclass": "RiftThemeFireReduceProperties",
-            "aliases": [
-                "fire_reduce"
-            ],
-            "objdata": {
-                "TypeName": "fire_reduce",
-                "ClassName": "RiftThemeFireReduce"
-            }
-        },
-        {
-            "objclass": "RiftThemeLightingReduceProperties",
-            "aliases": [
-                "lighting_reduce"
-            ],
-            "objdata": {
-                "TypeName": "lighting_reduce",
-                "ClassName": "RiftThemeLightingReduce"
-            }
-        },
-        {
-            "objclass": "RiftThemeColdReduceProperties",
-            "aliases": [
-                "cold_reduce"
-            ],
-            "objdata": {
-                "TypeName": "cold_reduce",
-                "ClassName": "RiftThemeColdReduce"
-            }
-        },
-        {
-            "objclass": "RiftThemeHeavyBallonProperties",
-            "aliases": [
-                "heavy_ballon"
-            ],
-            "objdata": {
-                "TypeName": "heavy_ballon",
-                "ClassName": "RiftThemeHeavyBallon"
-            }
-        },
-        {
-            "objclass": "RiftThemeCrossFireProperties",
-            "aliases": [
-                "miner_cheating"
-            ],
-            "objdata": {
-                "TypeName": "miner_cheating",
-                "ClassName": "RiftThemeCrossFire"
-            }
-        },
-        {
-            "objclass": "RiftThemeChargingProperties",
-            "aliases": [
-                "knight_cheating"
-            ],
-            "objdata": {
-                "TypeName": "knight_cheating",
-                "ClassName": "RiftThemeCharging"
-            }
-        },
-        {
-            "objclass": "RiftThemeFastSpellProperties",
-            "aliases": [
-                "mage_cheating"
-            ],
-            "objdata": {
-                "TypeName": "mage_cheating",
-                "ClassName": "RiftThemeFastSpell",
-                "ReducedCooldownRate": 0.4
-            }
-        },
-        {
-            "objclass": "RiftThemeLightningProperties",
-            "aliases": [
-                "lightning"
-            ],
-            "objdata": {
-                "TypeName": "lightning",
-                "ClassName": "RiftThemeLightning",
-                "TriggerInterval": 3,
-                "DamageRate": 3.3
-            }
-        },
-        {
-            "objclass": "RiftThemePiggyBankProperties",
-            "aliases": [
-                "piggy_bank"
-            ],
-            "objdata": {
-                "TypeName": "piggy_bank",
-                "ClassName": "RiftThemePiggyBank"
-            }
-        },
-        {
-            "objclass": "RiftThemePlantSeedProperties",
-            "aliases": [
-                "plant_seed"
-            ],
-            "objdata": {
-                "TypeName": "plant_seed",
-                "ClassName": "RiftThemePlantSeed",
-                "PlantBlackList": [
-                    "carrotmissile",
-                    "powerplant",
-                    "smallChestnut",
-                    "flowerpot",
-                    "bitpeashooter",
-                    "magicbeans",
-                    "frog",
-                    "pumpkin"
-                ]
-            }
-        },
-        {
-            "objclass": "RiftThemeEnergyFlyProperties",
-            "aliases": [
-                "energy_fly"
-            ],
-            "objdata": {
-                "TypeName": "energy_fly",
-                "ClassName": "RiftThemeEnergyFly",
-                "EnergyCostOnPlantPlanted": 0.01
-            }
-        },
-        {
-            "objclass": "RiftThemeTextOnlyProperties",
-            "aliases": [
-                "text_only"
-            ],
-            "objdata": {
-                "TypeName": "text_only",
-                "ClassName": "RiftThemeTextOnly"
-            }
-        },
-        {
-            "objclass": "RiftThemePeaRainProperties",
-            "aliases": [
-                "pea_rain"
-            ],
-            "objdata": {
-                "TypeName": "pea_rain",
-                "ClassName": "RiftThemePeaRain",
-                "ShotTotal": 200,
-                "Duration": 5.0,
-                "ValidPlants": {
-                    "ListType": "whitelist",
-                    "List": [
-                        "peashooter",
-                        "splitpea",
-                        "snowpea",
-                        "peapod",
-                        "threepeater",
-                        "firepeashooter",
-                        "repeater",
-                        "gatlingpea",
-                        "primalpeashooter",
-                        "electricpeashooter",
-                        "snappea",
-                        "slingpea",
-                        "poisonpeashooter",
-                        "beanchemist",
-                        "peavine",
-                        "shadowpeashooter"
-                    ]
-                },
-                "ActivatedDmgAmount": 5000.0
-            }
-        },
-        {
-            "objclass": "RiftThemeWateringProperties",
-            "aliases": [
-                "watering"
-            ],
-            "objdata": {
-                "TypeName": "watering",
-                "ClassName": "RiftThemeWatering",
-                "BlackListPlantTypes": {
-                    "ListType": "whitelist",
-                    "List": [
-                        "minigame_imitater",
-                        "imitater",
-                        "intensivecarrot",
-                        "flowerpot",
-                        "jalapeno",
-                        "cherry_bomb",
-                        "gravebuster",
-                        "chilibean",
-                        "blover",
-                        "tanglekelp",
-                        "hurrikale",
-                        "ghostpepper",
-                        "doublesamara",
-                        "saucer",
-                        "stunion",
-                        "lavaguava",
-                        "jackfruit",
-                        "thymewarp",
-                        "celerystalker",
-                        "grapeshot",
-                        "perfumeshroom",
-                        "flattenedshroom",
-                        "olive",
-                        "icelotus",
-                        "olivepit",
-                        "heathseeker",
-                        "powerplant",
-                        "powerlily",
-                        "goldbloom",
-                        "coffeebean",
-                        "squash",
-                        "smallChestnut",
-                        "hotdate",
-                        "buduhboom"
-                    ]
-                }
-            }
-        },
-        {
-            "objclass": "RiftThemeMindControlProperties",
-            "aliases": [
-                "mind_control"
-            ],
-            "objdata": {
-                "TypeName": "mind_control",
-                "ClassName": "RiftThemeMindControl",
-                "PlantBlackList": {
-                    "ListType": "whitelist",
-                    "List": [
-                        "iceburg",
-                        "shadowshroom",
-                        "chomper",
-                        "grimrose",
-                        "cobcannon",
-                        "primalpotatomine",
-                        "pumpkin",
-                        "cherry_bomb",
-                        "bonkchoy"
-                    ]
-                },
-                "TriggerInterval": 10.0,
-                "PlantBombExplosionRadius": 25,
-                "ZombieBombExplosionRadius": 80,
-                "PlantDamage": 1000.0,
-                "ZombieDamage": 500.0,
-                "Duration": 10.0,
-                "TriggerWaveInterval": 2,
-                "ShovelInterval": 5.0
-            }
-        },
-        {
-            "objclass": "RiftThemeDisableBoostProperties",
-            "aliases": [
-                "disable_boost"
-            ],
-            "objdata": {
-                "TypeName": "disable_boost",
-                "ClassName": "RiftThemeDisableBoost"
-            }
-        },
-        {
-            "objclass": "RiftThemePrinterProperties",
-            "aliases": [
-                "printer"
-            ],
-            "objdata": {
-                "TypeName": "printer",
-                "ClassName": "RiftThemePrinter",
-                "PrintInfo": {
-                    "NormalThrowPaperNum": {
-                        "Min": 1,
-                        "Max": 3
-                    },
-                    "ThrowInterval": 15.0,
-                    "AdvThrowPaperRate": 0.2,
-                    "AdvThrowPaperNum": 6
-                },
-                "PrinterLoc": {
-                    "mX": 7,
-                    "mY": 2
-                }
-            }
-        },
-        {
-            "objclass": "RiftThemeCleanerProperties",
-            "aliases": [
-                "cleaner"
-            ],
-            "objdata": {
-                "TypeName": "cleaner",
-                "ClassName": "RiftThemeCleaner",
-                "CleanerLevelInfos": {
-                    "uncharted_zcorp_n_3": {
-                        "CleanerLoc": {
-                            "mX": 8,
-                            "mY": 0
-                        },
-                        "Direction": "left"
-                    },
-                    "uncharted_zcorp_n_5": {
-                        "CleanerLoc": {
-                            "mX": 4,
-                            "mY": 0
-                        },
-                        "Direction": "down"
-                    },
-                    "uncharted_zcorp_n_6": {
-                        "CleanerLoc": {
-                            "mX": 4,
-                            "mY": 2
-                        },
-                        "Direction": "right"
-                    },
-                    "uncharted_zcorp_n_9": {
-                        "CleanerLoc": {
-                            "mX": 2,
-                            "mY": 1
-                        },
-                        "Direction": "left"
-                    },
-                    "uncharted_zcorp_n_10": {
-                        "CleanerLoc": {
-                            "mX": 5,
-                            "mY": 4
-                        },
-                        "Direction": "up"
-                    },
-                    "uncharted_zcorp_h_2": {
-                        "CleanerLoc": {
-                            "mX": 1,
-                            "mY": 1
-                        },
-                        "Direction": "right"
-                    },
-                    "uncharted_zcorp_h_3": {
-                        "CleanerLoc": {
-                            "mX": 6,
-                            "mY": 3
-                        },
-                        "Direction": "down"
-                    },
-                    "uncharted_zcorp_h_4": {
-                        "CleanerLoc": {
-                            "mX": 8,
-                            "mY": 4
-                        },
-                        "Direction": "up"
-                    },
-                    "uncharted_zcorp_h_6": {
-                        "CleanerLoc": {
-                            "mX": 8,
-                            "mY": 3
-                        },
-                        "Direction": "left"
-                    },
-                    "uncharted_zcorp_h_7": {
-                        "CleanerLoc": {
-                            "mX": 3,
-                            "mY": 1
-                        },
-                        "Direction": "right"
-                    },
-                    "uncharted_zcorp_h_9": {
-                        "CleanerLoc": {
-                            "mX": 7,
-                            "mY": 1
-                        },
-                        "Direction": "down"
-                    },
-                    "uncharted_zcorp_h_10": {
-                        "CleanerLoc": {
-                            "mX": 8,
-                            "mY": 3
-                        },
-                        "Direction": "left"
-                    }
-                }
-            }
-        },
-        {
-            "objclass": "RiftThemeSunDisabledProperties",
-            "aliases": [
-                "sun_disabled"
-            ],
-            "objdata": {
-                "TypeName": "sun_disabled",
-                "ClassName": "RiftThemeSunDisabled",
-                "PlantBlackList": [
-                    "sunflower",
-                    "sunshroom",
-                    "sunbean",
-                    "happyleek",
-                    "primalsunflower",
-                    "birthsunflower",
-                    "twinsunflower",
-                    "goldbloom",
-                    "toadstool",
-                    "moonflower"
-                ]
-            }
-        },
-        {
-            "objclass": "RiftThemeZombieSunProperties",
-            "aliases": [
-                "zombie_sun"
-            ],
-            "objdata": {
-                "TypeName": "zombie_sun",
-                "ClassName": "RiftThemeZombieSun"
-            }
+        "HealthPercent": 0.33
+      }
+    },
+    {
+      "objclass": "RiftThemeExploderProperties",
+      "aliases": [
+        "exploder"
+      ],
+      "objdata": {
+        "TypeName": "exploder",
+        "ClassName": "RiftThemeExploder",
+        "TargetableZombieTypes": {
+          "ListType": "blacklist",
+          "List": [
+            "zombossmech_future",
+            "wealth_god",
+            "turkeypult_basic",
+            "turkeypult_turkzilla_lv5",
+            "turkeypult_turkzilla",
+            "turkeypult_turkzilla_avatar",
+            "dark_rogue"
+          ]
         }
-    ]
+      }
+    },
+    {
+      "objclass": "RiftThemeNoPlantfoodProperties",
+      "aliases": [
+        "noplantfood"
+      ],
+      "objdata": {
+        "TypeName": "noplantfood",
+        "ClassName": "RiftThemeNoPlantfood",
+        "TargetablePlantTypes": {
+          "ListType": "whitelist",
+          "List": [
+            "bonkchoy",
+            "spikeweed",
+            "spikerock",
+            "turnip",
+            "broccoli",
+            "chardguard",
+            "stunion",
+            "roseswordman",
+            "redstinger",
+            "agave",
+            "matchflower",
+            "phatbeet",
+            "celerystalker",
+            "garlic",
+            "dragoncane",
+            "electriccurrant",
+            "whitemelon",
+            "nighyshade",
+            "wasabiwhip",
+            "kiwibeast",
+            "icycurrant",
+            "alarmsagittifolia",
+            "pokra"
+          ]
+        }
+      }
+    },
+    {
+      "objclass": "RiftThemeArmoredProperties",
+      "aliases": [
+        "armored"
+      ],
+      "objdata": {
+        "TypeName": "armored",
+        "ClassName": "RiftThemeArmored",
+        "KnightHelm": "bucket",
+        "KnightHelmHitpoints": 1600,
+        "ValidKnightTargets": [
+          "roman",
+          "roman_armor1",
+          "roman_armor2",
+          "roman_armor3",
+          "tutorial",
+          "tutorial_armor1",
+          "tutorial_armor2",
+          "mummy",
+          "mummy_armor1",
+          "mummy_armor2",
+          "pirate",
+          "pirate_armor1",
+          "pirate_armor2",
+          "cowboy",
+          "cowboy_armor1",
+          "cowboy_armor2",
+          "kongfu_basic",
+          "kongfu_basic_armor1",
+          "kongfu_basic_armor2",
+          "kongfu_basic_armor3",
+          "future",
+          "future_armor1",
+          "future_armor2",
+          "dark",
+          "dark_armor1",
+          "dark_armor2",
+          "dark_armor3",
+          "beach",
+          "beach_armor1",
+          "beach_armor2",
+          "beach_fem",
+          "beach_fem_armor1",
+          "beach_fem_armor2",
+          "iceage",
+          "iceage_armor1",
+          "iceage_armor2",
+          "iceage_armor3",
+          "skycity",
+          "skycity_armor1",
+          "skycity_armor2",
+          "skycity_armor3",
+          "lostcity",
+          "lostcity_armor1",
+          "lostcity_armor2",
+          "lostcity_bug",
+          "lostcity_bug_armor1",
+          "lostcity_bug_armor2",
+          "eighties",
+          "eighties_armor1",
+          "eighties_armor2",
+          "eighties_8bit",
+          "eighties_8bit_armor1",
+          "eighties_8bit_armor2",
+          "dino",
+          "dino_armor1",
+          "dino_armor2",
+          "dino_armor3",
+          "steam_worker",
+          "steam_armor1",
+          "steam_armor2",
+          "renai_worker",
+          "renai_armor1",
+          "renai_armor2"
+        ],
+        "LinePosition": 747
+      }
+    },
+    {
+      "objclass": "RiftThemeReduceRangeProperties",
+      "aliases": [
+        "reducerange"
+      ],
+      "objdata": {
+        "TypeName": "reducerange",
+        "ClassName": "RiftThemeReduceRange",
+        "TargetablePlantTypes": {
+          "ListType": "whitelist",
+          "List": [
+            "cabbagepult",
+            "melonpult",
+            "kernelpult",
+            "wintermelon",
+            "carrotlauncher",
+            "sapfling",
+            "pepperpult",
+            "pumpkinwitch",
+            "akee",
+            "dragonfruit",
+            "primalrafflesia",
+            "applemortar",
+            "dusklobber",
+            "bloominghearts",
+            "convallariachemist",
+            "slingpea",
+            "pomegranatejeweler",
+            "elaeocarpus"
+          ]
+        },
+        "ReducedGrids": 8
+      }
+    },
+    {
+      "objclass": "RiftThemeLimitedSeedPacketProperties",
+      "aliases": [
+        "limitedpacket"
+      ],
+      "objdata": {
+        "TypeName": "limitedpacket",
+        "ClassName": "RiftThemeLimitedSeedPacket",
+        "DisabledPlantNum": 3
+      }
+    },
+    {
+      "objclass": "RiftThemeZombieSpeedProperties",
+      "aliases": [
+        "zombiespeed"
+      ],
+      "objdata": {
+        "TypeName": "zombiespeed",
+        "ClassName": "RiftThemeZombieSpeed",
+        "TargetableZombieTypes": {
+          "ListType": "blacklist",
+          "List": [
+            "zombossmech_future",
+            "wealth_god",
+            "turkeypult_basic",
+            "turkeypult_turkzilla_lv5",
+            "turkeypult_turkzilla",
+            "turkeypult_turkzilla_avatar",
+            "dark_rogue"
+          ]
+        },
+        "SpeedScale": 4
+      }
+    },
+    {
+      "objclass": "RiftThemeZombossReviveProperties",
+      "aliases": [
+        "revive"
+      ],
+      "objdata": {
+        "TypeName": "revive",
+        "ClassName": "RiftThemeZombossRevive",
+        "TargetableZombieTypes": {
+          "ListType": "blacklist",
+          "List": [
+            "zombossmech_future",
+            "wealth_god",
+            "turkeypult_basic",
+            "turkeypult_turkzilla_lv5",
+            "turkeypult_turkzilla",
+            "turkeypult_turkzilla_avatar",
+            "dark_rogue"
+          ]
+        },
+        "ReviveCount": 1
+      }
+    },
+    {
+      "objclass": "RiftThemeInvisibleProperties",
+      "aliases": [
+        "invisible"
+      ],
+      "objdata": {
+        "TypeName": "invisible",
+        "ClassName": "RiftThemeInvisible",
+        "TargetableZombieTypes": {
+          "ListType": "blacklist",
+          "List": [
+            "zombossmech_future",
+            "wealth_god",
+            "turkeypult_basic",
+            "turkeypult_turkzilla_lv5",
+            "turkeypult_turkzilla",
+            "turkeypult_turkzilla_avatar",
+            "dark_rogue"
+          ]
+        }
+      }
+    },
+    {
+      "objclass": "RiftThemeShrunkenProperties",
+      "aliases": [
+        "shrunken"
+      ],
+      "objdata": {
+        "TypeName": "shrunken",
+        "ClassName": "RiftThemeShrunken",
+        "TargetableZombieTypes": {
+          "ListType": "blacklist",
+          "List": [
+            "zombossmech_future",
+            "wealth_god",
+            "turkeypult_basic",
+            "turkeypult_turkzilla_lv5",
+            "turkeypult_turkzilla",
+            "turkeypult_turkzilla_avatar",
+            "dark_rogue"
+          ]
+        },
+        "ModifiedScale": 0.5,
+        "ModifiedSpeed": 1.4
+      }
+    },
+    {
+      "objclass": "RiftThemeSunDrainProperties",
+      "aliases": [
+        "sun"
+      ],
+      "objdata": {
+        "TypeName": "sun",
+        "ClassName": "RiftThemeSunDrain",
+        "StartDealy": 60,
+        "TriggerInterval": 10,
+        "DrainAmount": 25
+      }
+    },
+    {
+      "objclass": "RiftThemeRainDarkProperties",
+      "aliases": [
+        "dark"
+      ],
+      "objdata": {
+        "TypeName": "dark",
+        "ClassName": "RiftThemeRainDark",
+        "TriggerInterval": 30,
+        "Duration": 4
+      }
+    },
+    {
+      "objclass": "RiftThemeBlizzardProperties",
+      "aliases": [
+        "blizzard"
+      ],
+      "objdata": {
+        "TypeName": "blizzard",
+        "ClassName": "RiftThemeBlizzard",
+        "TriggerInterval": 20,
+        "TakeEffectDelay": 1
+      }
+    },
+    {
+      "objclass": "RiftThemeGravestoneProperties",
+      "aliases": [
+        "gravestone"
+      ],
+      "objdata": {
+        "TypeName": "gravestone",
+        "ClassName": "RiftThemeGravestone",
+        "TargetableZombieTypes": {
+          "ListType": "blacklist",
+          "List": [
+            "zombossmech_future",
+            "wealth_god",
+            "turkeypult_basic",
+            "turkeypult_turkzilla_lv5",
+            "turkeypult_turkzilla",
+            "turkeypult_turkzilla_avatar",
+            "dark_rogue"
+          ]
+        }
+      }
+    },
+    {
+      "objclass": "RiftThemeBuffExploderProperties",
+      "aliases": [
+        "plant_exploder"
+      ],
+      "objdata": {
+        "TypeName": "plant_exploder",
+        "ClassName": "RiftThemeBuffExploder",
+        "TargetablePlantTypes": {
+          "ListType": "blacklist",
+          "List": [
+            "flowerpot",
+            "imitater"
+          ]
+        },
+        "ExplodeDamage": 500
+      }
+    },
+    {
+      "objclass": "RiftThemeBuffPlantAOEProperties",
+      "aliases": [
+        "plant_aoe"
+      ],
+      "objdata": {
+        "TypeName": "plant_aoe",
+        "ClassName": "RiftThemeBuffPlantAOE",
+        "TargetablePlantTypes": {
+          "ListType": "whitelist",
+          "List": [
+            "potatomine",
+            "cherry_bomb",
+            "jalapeno",
+            "cracker",
+            "lavaguava",
+            "primalpotatomine",
+            "grapeshot",
+            "escaperoot",
+            "explodeonut",
+            "explodeonut",
+            "electricitea",
+            "alarmsagittifolia",
+            "strawburst",
+            "hotdate"
+          ]
+        },
+        "DamagePercent": 2,
+        "SunReducedRate": 0.5
+      }
+    },
+    {
+      "objclass": "RiftThemeBuffPlantFastCDProperties",
+      "aliases": [
+        "plant_fastcd"
+      ],
+      "objdata": {
+        "TypeName": "plant_fastcd",
+        "ClassName": "RiftThemeBuffPlantFastCD",
+        "TargetablePlantTypes": {
+          "ListType": "whitelist",
+          "List": [
+            "wallnut",
+            "tallnut",
+            "turnip",
+            "holonut",
+            "peanut",
+            "broccoli",
+            "sweetpotato",
+            "chardguard",
+            "sugarcane",
+            "pineapple",
+            "endurian",
+            "agave",
+            "primalwallnut",
+            "Whitemelonsumowrestlers",
+            "explodeonut",
+            "kiwibeast",
+            "hotdate",
+            "hollyknight",
+            "waxgourd",
+            "dendrobiumguard",
+            "beercoconut"
+          ]
+        },
+        "ReducedCooldown": 0.5
+      }
+    },
+    {
+      "objclass": "RiftThemeBuffPlantMeleeProperties",
+      "aliases": [
+        "plant_melee"
+      ],
+      "objdata": {
+        "TypeName": "plant_melee",
+        "ClassName": "RiftThemeBuffPlantMelee",
+        "TargetablePlantTypes": {
+          "ListType": "whitelist",
+          "List": [
+            "spikerock",
+            "spikeweed",
+            "bamboo",
+            "broccoli",
+            "guacodile",
+            "roseswordman",
+            "jackfruit",
+            "flamelady",
+            "dragoncane",
+            "Whitemelonsumowrestlers ",
+            "wasabiwhip",
+            "parsnip",
+            "kiwibeast",
+            "bromelblade",
+            "tupistrastalker",
+            "bonkchoy",
+            "matchflower",
+            "heavendatura"
+          ]
+        },
+        "DamagePercent": 2
+      }
+    },
+    {
+      "objclass": "RiftThemeRainLemonProperties",
+      "aliases": [
+        "lemon"
+      ],
+      "objdata": {
+        "TypeName": "lemon",
+        "ClassName": "RiftThemeRainLemon",
+        "TriggerInterval": 1,
+        "DamageRate": 3.3
+      }
+    },
+    {
+      "objclass": "RiftThemeBalloonProperties",
+      "aliases": [
+        "balloon"
+      ],
+      "objdata": {
+        "TypeName": "balloon",
+        "ClassName": "RiftThemeBalloon",
+        "TriggerInterval": 3,
+        "DamageRate": 3.3
+      }
+    },
+    {
+      "objclass": "RiftThemeSeedRainProperties",
+      "aliases": [
+        "seed_rain"
+      ],
+      "objdata": {
+        "TypeName": "seed_rain",
+        "ClassName": "RiftThemeSeedRain"
+      }
+    },
+    {
+      "objclass": "RiftThemeWealthGodProperties",
+      "aliases": [
+        "wealth"
+      ],
+      "objdata": {
+        "TypeName": "wealth",
+        "ClassName": "RiftThemeWealthGod"
+      }
+    },
+    {
+      "objclass": "RiftThemeZombieSpawnOffsetProperties",
+      "aliases": [
+        "spawn_offset"
+      ],
+      "objdata": {
+        "TypeName": "spawn_offset",
+        "ClassName": "RiftThemeZombieSpawnOffset"
+      }
+    },
+    {
+      "objclass": "RiftThemeFireReduceProperties",
+      "aliases": [
+        "fire_reduce"
+      ],
+      "objdata": {
+        "TypeName": "fire_reduce",
+        "ClassName": "RiftThemeFireReduce"
+      }
+    },
+    {
+      "objclass": "RiftThemeLightingReduceProperties",
+      "aliases": [
+        "lighting_reduce"
+      ],
+      "objdata": {
+        "TypeName": "lighting_reduce",
+        "ClassName": "RiftThemeLightingReduce"
+      }
+    },
+    {
+      "objclass": "RiftThemeColdReduceProperties",
+      "aliases": [
+        "cold_reduce"
+      ],
+      "objdata": {
+        "TypeName": "cold_reduce",
+        "ClassName": "RiftThemeColdReduce"
+      }
+    },
+    {
+      "objclass": "RiftThemeHeavyBallonProperties",
+      "aliases": [
+        "heavy_ballon"
+      ],
+      "objdata": {
+        "TypeName": "heavy_ballon",
+        "ClassName": "RiftThemeHeavyBallon"
+      }
+    },
+    {
+      "objclass": "RiftThemeCrossFireProperties",
+      "aliases": [
+        "miner_cheating"
+      ],
+      "objdata": {
+        "TypeName": "miner_cheating",
+        "ClassName": "RiftThemeCrossFire"
+      }
+    },
+    {
+      "objclass": "RiftThemeChargingProperties",
+      "aliases": [
+        "knight_cheating"
+      ],
+      "objdata": {
+        "TypeName": "knight_cheating",
+        "ClassName": "RiftThemeCharging"
+      }
+    },
+    {
+      "objclass": "RiftThemeFastSpellProperties",
+      "aliases": [
+        "mage_cheating"
+      ],
+      "objdata": {
+        "TypeName": "mage_cheating",
+        "ClassName": "RiftThemeFastSpell",
+        "ReducedCooldownRate": 0.4
+      }
+    },
+    {
+      "objclass": "RiftThemeLightningProperties",
+      "aliases": [
+        "lightning"
+      ],
+      "objdata": {
+        "TypeName": "lightning",
+        "ClassName": "RiftThemeLightning",
+        "TriggerInterval": 3,
+        "DamageRate": 3.3
+      }
+    },
+    {
+      "objclass": "RiftThemePiggyBankProperties",
+      "aliases": [
+        "piggy_bank"
+      ],
+      "objdata": {
+        "TypeName": "piggy_bank",
+        "ClassName": "RiftThemePiggyBank"
+      }
+    },
+    {
+      "objclass": "RiftThemePlantSeedProperties",
+      "aliases": [
+        "plant_seed"
+      ],
+      "objdata": {
+        "TypeName": "plant_seed",
+        "ClassName": "RiftThemePlantSeed",
+        "PlantBlackList": [
+          "carrotmissile",
+          "powerplant",
+          "smallChestnut",
+          "flowerpot",
+          "bitpeashooter",
+          "magicbeans",
+          "frog",
+          "pumpkin"
+        ]
+      }
+    },
+    {
+      "objclass": "RiftThemeEnergyFlyProperties",
+      "aliases": [
+        "energy_fly"
+      ],
+      "objdata": {
+        "TypeName": "energy_fly",
+        "ClassName": "RiftThemeEnergyFly",
+        "EnergyCostOnPlantPlanted": 0.01
+      }
+    },
+    {
+      "objclass": "RiftThemeTextOnlyProperties",
+      "aliases": [
+        "text_only"
+      ],
+      "objdata": {
+        "TypeName": "text_only",
+        "ClassName": "RiftThemeTextOnly"
+      }
+    },
+    {
+      "objclass": "RiftThemePeaRainProperties",
+      "aliases": [
+        "pea_rain"
+      ],
+      "objdata": {
+        "TypeName": "pea_rain",
+        "ClassName": "RiftThemePeaRain",
+        "ShotTotal": 200,
+        "Duration": 5,
+        "ValidPlants": {
+          "ListType": "whitelist",
+          "List": [
+            "peashooter",
+            "splitpea",
+            "snowpea",
+            "peapod",
+            "threepeater",
+            "firepeashooter",
+            "repeater",
+            "gatlingpea",
+            "primalpeashooter",
+            "electricpeashooter",
+            "snappea",
+            "slingpea",
+            "poisonpeashooter",
+            "beanchemist",
+            "peavine",
+            "shadowpeashooter"
+          ]
+        },
+        "ActivatedDmgAmount": 5000
+      }
+    },
+    {
+      "objclass": "RiftThemeWateringProperties",
+      "aliases": [
+        "watering"
+      ],
+      "objdata": {
+        "TypeName": "watering",
+        "ClassName": "RiftThemeWatering",
+        "BlackListPlantTypes": {
+          "ListType": "whitelist",
+          "List": [
+            "minigame_imitater",
+            "imitater",
+            "intensivecarrot",
+            "flowerpot",
+            "jalapeno",
+            "cherry_bomb",
+            "gravebuster",
+            "chilibean",
+            "blover",
+            "tanglekelp",
+            "hurrikale",
+            "ghostpepper",
+            "doublesamara",
+            "saucer",
+            "stunion",
+            "lavaguava",
+            "jackfruit",
+            "thymewarp",
+            "celerystalker",
+            "grapeshot",
+            "perfumeshroom",
+            "flattenedshroom",
+            "olive",
+            "icelotus",
+            "olivepit",
+            "heathseeker",
+            "powerplant",
+            "powerlily",
+            "goldbloom",
+            "coffeebean",
+            "squash",
+            "smallChestnut",
+            "hotdate",
+            "buduhboom"
+          ]
+        }
+      }
+    },
+    {
+      "objclass": "RiftThemeMindControlProperties",
+      "aliases": [
+        "mind_control"
+      ],
+      "objdata": {
+        "TypeName": "mind_control",
+        "ClassName": "RiftThemeMindControl",
+        "PlantBlackList": {
+          "ListType": "whitelist",
+          "List": [
+            "iceburg",
+            "shadowshroom",
+            "chomper",
+            "grimrose",
+            "cobcannon",
+            "primalpotatomine",
+            "pumpkin",
+            "cherry_bomb",
+            "bonkchoy"
+          ]
+        },
+        "TriggerInterval": 10,
+        "PlantBombExplosionRadius": 25,
+        "ZombieBombExplosionRadius": 80,
+        "PlantDamage": 1000,
+        "ZombieDamage": 500,
+        "Duration": 10,
+        "TriggerWaveInterval": 2,
+        "ShovelInterval": 5
+      }
+    },
+    {
+      "objclass": "RiftThemeDisableBoostProperties",
+      "aliases": [
+        "disable_boost"
+      ],
+      "objdata": {
+        "TypeName": "disable_boost",
+        "ClassName": "RiftThemeDisableBoost"
+      }
+    },
+    {
+      "objclass": "RiftThemePrinterProperties",
+      "aliases": [
+        "printer"
+      ],
+      "objdata": {
+        "TypeName": "printer",
+        "ClassName": "RiftThemePrinter",
+        "PrintInfo": {
+          "NormalThrowPaperNum": {
+            "Min": 1,
+            "Max": 3
+          },
+          "ThrowInterval": 15,
+          "AdvThrowPaperRate": 0.2,
+          "AdvThrowPaperNum": 6
+        },
+        "PrinterLoc": {
+          "mX": 7,
+          "mY": 2
+        }
+      }
+    },
+    {
+      "objclass": "RiftThemeCleanerProperties",
+      "aliases": [
+        "cleaner"
+      ],
+      "objdata": {
+        "TypeName": "cleaner",
+        "ClassName": "RiftThemeCleaner",
+        "CleanerLevelInfos": {
+          "uncharted_zcorp_n_3": {
+            "CleanerLoc": {
+              "mX": 8,
+              "mY": 0
+            },
+            "Direction": "left"
+          },
+          "uncharted_zcorp_n_5": {
+            "CleanerLoc": {
+              "mX": 4,
+              "mY": 0
+            },
+            "Direction": "down"
+          },
+          "uncharted_zcorp_n_6": {
+            "CleanerLoc": {
+              "mX": 4,
+              "mY": 2
+            },
+            "Direction": "right"
+          },
+          "uncharted_zcorp_n_9": {
+            "CleanerLoc": {
+              "mX": 2,
+              "mY": 1
+            },
+            "Direction": "left"
+          },
+          "uncharted_zcorp_n_10": {
+            "CleanerLoc": {
+              "mX": 5,
+              "mY": 4
+            },
+            "Direction": "up"
+          },
+          "uncharted_zcorp_h_2": {
+            "CleanerLoc": {
+              "mX": 1,
+              "mY": 1
+            },
+            "Direction": "right"
+          },
+          "uncharted_zcorp_h_3": {
+            "CleanerLoc": {
+              "mX": 6,
+              "mY": 3
+            },
+            "Direction": "down"
+          },
+          "uncharted_zcorp_h_4": {
+            "CleanerLoc": {
+              "mX": 8,
+              "mY": 4
+            },
+            "Direction": "up"
+          },
+          "uncharted_zcorp_h_6": {
+            "CleanerLoc": {
+              "mX": 8,
+              "mY": 3
+            },
+            "Direction": "left"
+          },
+          "uncharted_zcorp_h_7": {
+            "CleanerLoc": {
+              "mX": 3,
+              "mY": 1
+            },
+            "Direction": "right"
+          },
+          "uncharted_zcorp_h_9": {
+            "CleanerLoc": {
+              "mX": 7,
+              "mY": 1
+            },
+            "Direction": "down"
+          },
+          "uncharted_zcorp_h_10": {
+            "CleanerLoc": {
+              "mX": 8,
+              "mY": 3
+            },
+            "Direction": "left"
+          }
+        }
+      }
+    },
+    {
+      "objclass": "RiftThemeSunDisabledProperties",
+      "aliases": [
+        "sun_disabled"
+      ],
+      "objdata": {
+        "TypeName": "sun_disabled",
+        "ClassName": "RiftThemeSunDisabled",
+        "PlantBlackList": [
+          "sunflower",
+          "sunshroom",
+          "sunbean",
+          "happyleek",
+          "primalsunflower",
+          "birthsunflower",
+          "twinsunflower",
+          "goldbloom",
+          "toadstool",
+          "moonflower"
+        ]
+      }
+    },
+    {
+      "objclass": "RiftThemeZombieSunProperties",
+      "aliases": [
+        "zombie_sun"
+      ],
+      "objdata": {
+        "TypeName": "zombie_sun",
+        "ClassName": "RiftThemeZombieSun"
+      }
+    }
+  ]
 }

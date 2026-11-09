@@ -106,6 +106,16 @@ class _CustomPortalPropertiesScreenState
     });
   }
 
+  void _setSpawnInterval(bool enabled) {
+    setState(() {
+      if (enabled) {
+        _data['TimeBetweenSpawns'] = {'Min': 1.0, 'Max': 1.0};
+      } else {
+        _data.remove('TimeBetweenSpawns');
+      }
+    });
+  }
+
   String _savePortal() {
     final existing = _existing;
     final portalType = existing == null
@@ -195,6 +205,18 @@ class _CustomPortalPropertiesScreenState
         _data['ZombieSpawnMethod']?.toString() ??
         PortalRepository.spawnMethodCodes.first;
     final hasInterval = _data['TimeBetweenSpawns'] is Map;
+    final sectionStyle = theme.textTheme.titleMedium?.copyWith(
+      color: theme.colorScheme.primary,
+      fontWeight: FontWeight.bold,
+    );
+    final fieldHeadingStyle = theme.textTheme.titleSmall?.copyWith(
+      color: theme.colorScheme.onSurface,
+      fontWeight: FontWeight.bold,
+    );
+    final selectedValueStyle = theme.textTheme.bodyLarge?.copyWith(
+      color: theme.colorScheme.onSurface,
+      fontWeight: FontWeight.normal,
+    );
 
     return PopScope(
       canPop: _canPop,
@@ -237,9 +259,7 @@ class _CustomPortalPropertiesScreenState
                     Text(
                       l10n?.customPortalAppearanceSection ??
                           'Portal appearance',
-                      style: theme.textTheme.titleMedium?.copyWith(
-                        fontWeight: FontWeight.bold,
-                      ),
+                      style: sectionStyle,
                     ),
                     const SizedBox(height: 12),
                     EditorResponsiveInputField(
@@ -251,6 +271,7 @@ class _CustomPortalPropertiesScreenState
                       builder: (context, decoration) =>
                           DropdownButtonFormField<String>(
                             isExpanded: true,
+                            style: selectedValueStyle,
                             initialValue:
                                 PortalRepository.worldCodes.contains(
                                   _data['World'],
@@ -275,6 +296,7 @@ class _CustomPortalPropertiesScreenState
                     ),
                     const SizedBox(height: 12),
                     SeparatedOptionPickerField<String>(
+                      selectedTextStyle: selectedValueStyle,
                       labelText: _portalPropertyLabel(
                         l10n?.customPortalPopAnimation ?? 'Portal animation',
                         'PopAnim',
@@ -309,12 +331,11 @@ class _CustomPortalPropertiesScreenState
                   children: [
                     Text(
                       l10n?.customPortalSpawnSection ?? 'Zombie spawning',
-                      style: theme.textTheme.titleMedium?.copyWith(
-                        fontWeight: FontWeight.bold,
-                      ),
+                      style: sectionStyle,
                     ),
                     const SizedBox(height: 12),
                     SeparatedOptionPickerField<String>(
+                      selectedTextStyle: selectedValueStyle,
                       labelText: _portalPropertyLabel(
                         l10n?.customPortalSpawnMethod ?? 'Spawn method',
                         'ZombieSpawnMethod',
@@ -341,6 +362,7 @@ class _CustomPortalPropertiesScreenState
                     ),
                     const SizedBox(height: 16),
                     ZombossMechWeightedZombieListEditor(
+                      headingStyle: fieldHeadingStyle,
                       fieldLabel: _portalPropertyLabel(
                         l10n?.customPortalZombieTypes ?? 'Zombie types',
                         'ZombieTypesToSpawn',
@@ -356,31 +378,49 @@ class _CustomPortalPropertiesScreenState
                       onChanged: _setZombies,
                     ),
                     const SizedBox(height: 8),
-                    SwitchListTile(
-                      contentPadding: EdgeInsets.zero,
-                      title: Text(
-                        _portalPropertyLabel(
-                          l10n?.customPortalSpawnInterval ?? 'Spawn interval',
-                          'TimeBetweenSpawns',
+                    Semantics(
+                      container: true,
+                      toggled: hasInterval,
+                      child: InkWell(
+                        borderRadius: BorderRadius.circular(8),
+                        onTap: () => _setSpawnInterval(!hasInterval),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 8),
+                          child: EditorResponsiveActionRow(
+                            content: Column(
+                              key: const ValueKey(
+                                'customPortalSpawnIntervalText',
+                              ),
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                              children: [
+                                Text(
+                                  _portalPropertyLabel(
+                                    l10n?.customPortalSpawnInterval ??
+                                        'Spawn interval',
+                                    'TimeBetweenSpawns',
+                                  ),
+                                  style: fieldHeadingStyle,
+                                ),
+                                const SizedBox(height: 4),
+                                Text(
+                                  l10n?.customPortalSpawnIntervalSubtitle ??
+                                      'Optionally limit the time between zombie spawns.',
+                                  style: theme.textTheme.bodySmall?.copyWith(
+                                    color: theme.colorScheme.onSurfaceVariant,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            action: Switch.adaptive(
+                              key: const ValueKey(
+                                'customPortalSpawnIntervalSwitch',
+                              ),
+                              value: hasInterval,
+                              onChanged: _setSpawnInterval,
+                            ),
+                          ),
                         ),
                       ),
-                      subtitle: Text(
-                        l10n?.customPortalSpawnIntervalSubtitle ??
-                            'Optionally limit the time between zombie spawns.',
-                      ),
-                      value: hasInterval,
-                      onChanged: (enabled) {
-                        setState(() {
-                          if (enabled) {
-                            _data['TimeBetweenSpawns'] = {
-                              'Min': 1.0,
-                              'Max': 1.0,
-                            };
-                          } else {
-                            _data.remove('TimeBetweenSpawns');
-                          }
-                        });
-                      },
                     ),
                     if (hasInterval) ...[
                       const SizedBox(height: 8),

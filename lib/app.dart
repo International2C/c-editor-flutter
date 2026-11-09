@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:c_editor/widgets/browser_leave_protection.dart';
+import 'package:c_editor/widgets/app_update_prompt.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:c_editor/escape_override.dart';
@@ -15,6 +17,7 @@ import 'package:c_editor/screens/plugins_screen.dart';
 import 'package:c_editor/theme/app_theme.dart';
 import 'package:c_editor/widgets/app_ui_scaler.dart';
 import 'package:c_editor/widgets/locale_flag_icon.dart';
+import 'package:c_editor/widgets/persistent_scrollbar_scroll_behavior.dart';
 import 'package:c_editor/widgets/editor_components.dart' show EditorOptionTile;
 
 /// Wraps child and handles Escape key on desktop to trigger back/pop.
@@ -97,6 +100,16 @@ class ZEditorApp extends StatefulWidget {
 }
 
 class _ZEditorAppState extends State<ZEditorApp> {
+  final _leaveObserver = BrowserLeaveProtectionObserver();
+  final _editorLeaveOwner = Object();
+
+  @override
+  void dispose() {
+    _leaveObserver.dispose();
+    BrowserLeaveProtection.instance.setActive(_editorLeaveOwner, false);
+    super.dispose();
+  }
+
   Future<bool> Function()? _editorBackHandler;
 
   void _backToLevelList(BuildContext context) {
@@ -108,8 +121,10 @@ class _ZEditorAppState extends State<ZEditorApp> {
     return BlocBuilder<SettingsCubit, SettingsState>(
       builder: (context, settings) {
         return MaterialApp(
+          navigatorObservers: [_leaveObserver],
           title: 'C-Editor',
           debugShowCheckedModeBanner: false,
+          scrollBehavior: const PersistentScrollbarScrollBehavior(),
           theme: lightTheme,
           darkTheme: darkTheme,
           themeMode: settings.themeMode,
@@ -130,6 +145,11 @@ class _ZEditorAppState extends State<ZEditorApp> {
           },
           home: BlocBuilder<AppNavigationCubit, AppNavigationState>(
             builder: (context, nav) {
+              // Editor subtools may hold changes not yet committed to its cubit.
+              BrowserLeaveProtection.instance.setActive(
+                _editorLeaveOwner,
+                nav.screen == AppScreen.editor,
+              );
               final appNav = context.read<AppNavigationCubit>();
               return _DesktopEscapeHandler(
                 currentScreen: nav.screen,
@@ -187,28 +207,30 @@ class _ZEditorAppState extends State<ZEditorApp> {
   Widget _buildCurrentScreen(BuildContext context, AppNavigationState nav) {
     switch (nav.screen) {
       case AppScreen.levelList:
-        return LevelListScreen(
-          returnToLevelPath: nav.lastOpenedLevelPath,
-          returnToScrollOffset: nav.levelListScrollOffset,
-          returnToViewMode: nav.levelListFavoritesView
-              ? LevelViewMode.favorites
-              : LevelViewMode.all,
-          returnToSearchQuery: nav.levelListSearchQuery,
-          showUploadAfterLevelReturn: nav.showUploadAfterLevelReturn,
-          onLevelClick:
-              (fileName, filePath, scrollOffset, viewMode, searchQuery) {
-                context.read<AppNavigationCubit>().openLevel(
-                  fileName,
-                  filePath,
-                  levelListScrollOffset: scrollOffset,
-                  levelListFavoritesView: viewMode == LevelViewMode.favorites,
-                  levelListSearchQuery: searchQuery,
-                );
-              },
-          onAboutClick: () => context.read<AppNavigationCubit>().openAbout(),
-          onPluginsClick: () =>
-              context.read<AppNavigationCubit>().openPlugins(),
-          onLanguageTap: _showLanguageSelector,
+        return AutomaticAppUpdateCheck(
+          child: LevelListScreen(
+            returnToLevelPath: nav.lastOpenedLevelPath,
+            returnToScrollOffset: nav.levelListScrollOffset,
+            returnToViewMode: nav.levelListFavoritesView
+                ? LevelViewMode.favorites
+                : LevelViewMode.all,
+            returnToSearchQuery: nav.levelListSearchQuery,
+            showUploadAfterLevelReturn: nav.showUploadAfterLevelReturn,
+            onLevelClick:
+                (fileName, filePath, scrollOffset, viewMode, searchQuery) {
+                  context.read<AppNavigationCubit>().openLevel(
+                    fileName,
+                    filePath,
+                    levelListScrollOffset: scrollOffset,
+                    levelListFavoritesView: viewMode == LevelViewMode.favorites,
+                    levelListSearchQuery: searchQuery,
+                  );
+                },
+            onAboutClick: () => context.read<AppNavigationCubit>().openAbout(),
+            onPluginsClick: () =>
+                context.read<AppNavigationCubit>().openPlugins(),
+            onLanguageTap: _showLanguageSelector,
+          ),
         );
       case AppScreen.editor:
         return BlocProvider(

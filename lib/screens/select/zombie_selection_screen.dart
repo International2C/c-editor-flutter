@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:c_editor/bloc/editor/editor_cubit.dart';
 import 'package:c_editor/data/registry/module_registry.dart';
+import 'package:c_editor/data/repository/zombie_properties_repository.dart';
 import 'package:c_editor/data/repository/zombie_repository.dart';
 import 'package:c_editor/data/pvz_models.dart';
 import 'package:c_editor/theme/app_theme.dart';
@@ -35,6 +36,7 @@ enum _ZombieBlockedReason {
   stayTunedTaleZCorp,
   stayTunedFallback,
   missingModule,
+  notPointSpawnable,
 }
 
 class _ZombieSelectionViewState {
@@ -67,6 +69,7 @@ class ZombieSelectionScreen extends StatefulWidget {
     this.stateBucketId,
     this.levelFile,
     this.onAddModule,
+    this.pointSpawnOnly = false,
   });
 
   final bool multiSelect;
@@ -94,6 +97,10 @@ class ZombieSelectionScreen extends StatefulWidget {
 
   /// Called when user taps "Add" in the "module required" dialog.
   final void Function(String objClass)? onAddModule;
+
+  /// When true, zombies that never spawn from the point budget are blocked
+  /// (used by point-based auto-spawner pools).
+  final bool pointSpawnOnly;
 
   @override
   State<ZombieSelectionScreen> createState() => _ZombieSelectionScreenState();
@@ -135,7 +142,10 @@ class _ZombieSelectionScreenState extends State<ZombieSelectionScreen> {
         widget.initialSelectedIds.isNotEmpty) {
       _selectedIds.addAll(widget.initialSelectedIds);
     }
-    ZombieRepository().init().then((_) {
+    Future.wait([
+      ZombieRepository().init(),
+      if (widget.pointSpawnOnly) ZombiePropertiesRepository.init(),
+    ]).then((_) {
       if (mounted) {
         setState(() {
           _removeBlockedSelections();
@@ -310,6 +320,10 @@ class _ZombieSelectionScreenState extends State<ZombieSelectionScreen> {
         }
       }
     }
+    if (widget.pointSpawnOnly &&
+        !ZombiePropertiesRepository.canSpawnFromPoints(zombie.id)) {
+      return _ZombieBlockedReason.notPointSpawnable;
+    }
     return null;
   }
 
@@ -325,20 +339,24 @@ class _ZombieSelectionScreenState extends State<ZombieSelectionScreen> {
   }
 
   void _removeBlockedSelections() {
-    bool isBlocked(String id) => _zombieBlockedReasonForId(id) != null;
+    final excluded = widget.excludeIds.toSet();
+    bool isBlocked(String id) =>
+        excluded.contains(id) || _zombieBlockedReasonForId(id) != null;
     _selectedIds.removeWhere(isBlocked);
     _selectedIdsWithDuplicates.removeWhere(isBlocked);
   }
 
   List<String> _filterSelectableZombieIds(List<String> ids) {
-    return ids.where((id) => _zombieBlockedReasonForId(id) == null).toList();
+    final excluded = widget.excludeIds.toSet();
+    return ids
+        .where(
+          (id) =>
+              !excluded.contains(id) && _zombieBlockedReasonForId(id) == null,
+        )
+        .toList();
   }
 
-  void _selectAllVisible(List<ZombieInfo> zombies) {
-    final selectableIds = zombies
-        .where((zombie) => _zombieBlockedReason(zombie) == null)
-        .map((zombie) => zombie.id)
-        .toList(growable: false);
+  void _toggleAllVisible(List<String> selectableIds) {
     if (selectableIds.isEmpty) return;
 
     setState(() {
@@ -395,9 +413,15 @@ class _ZombieSelectionScreenState extends State<ZombieSelectionScreen> {
             'This content is not officially available yet. Stay tuned for '
                 'future updates!',
       ),
-      _ZombieBlockedReason.missingModule => (
-        l10n?.warning ?? 'Warning',
-        '',
+      _ZombieBlockedReason.missingModule => (l10n?.warning ?? 'Warning', ''),
+      _ZombieBlockedReason.notPointSpawnable => (
+        l10n?.pointSpawnOnlyZombieBlockedTitle ??
+            'Cannot be used in point auto-spawn',
+        l10n?.pointSpawnOnlyZombieBlockedMessage ??
+            'This zombie has no point cost (WavePointCost) data. The game '
+                'needs this field to select and spawn zombies according to '
+                'the wave\'s points, so this zombie cannot be used in point '
+                'auto-spawn.',
       ),
     };
     await showDialog<void>(
@@ -536,6 +560,15 @@ class _ZombieSelectionScreenState extends State<ZombieSelectionScreen> {
       crossAxisSpacing: 8,
       childAspectRatio: 0.65,
     );
+    final selectableIds = zombies
+        .where((zombie) => _zombieBlockedReason(zombie) == null)
+        .map((zombie) => zombie.id)
+        .toList(growable: false);
+    final selectedIds = widget.allowDuplicateSelection
+        ? _selectedIdsWithDuplicates.toSet()
+        : _selectedIds;
+    final allVisibleSelected =
+        selectableIds.isNotEmpty && selectableIds.every(selectedIds.contains);
     final confirmation = widget.multiSelect
         ? FloatingActionButton(
             backgroundColor: themeColor,
@@ -561,11 +594,13 @@ class _ZombieSelectionScreenState extends State<ZombieSelectionScreen> {
         : null;
     final selectAll = widget.multiSelect
         ? SelectionGridSelectAllButton(
-            label: l10n?.selectAll ?? 'Select ALL',
+            label: allVisibleSelected
+                ? (l10n?.deselectAll ?? 'Deselect ALL')
+                : (l10n?.selectAll ?? 'Select ALL'),
             backgroundColor: themeColor,
             foregroundColor: theme.colorScheme.surface,
-            onPressed: _isLoaded && zombies.isNotEmpty
-                ? () => _selectAllVisible(zombies)
+            onPressed: _isLoaded && selectableIds.isNotEmpty
+                ? () => _toggleAllVisible(selectableIds)
                 : null,
           )
         : null;
@@ -739,11 +774,8 @@ class _ZombieSelectionScreenState extends State<ZombieSelectionScreen> {
                           selectionColor: widget.multiSelect
                               ? themeColor
                               : null,
-                          onTap: () => _onZombieTap(
-                            context,
-                            zombie,
-                            blockedReason,
-                          ),
+                          onTap: () =>
+                              _onZombieTap(context, zombie, blockedReason),
                           onLongPress: () =>
                               _toggleFavorite(context, zombie.id),
                         );

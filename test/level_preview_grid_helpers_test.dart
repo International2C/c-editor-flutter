@@ -170,9 +170,19 @@ void main() {
 
     expect(levelHasPrePlacedGridPreview(level), isTrue);
     expect(
-      categories.any((category) => category.kind == GridPreviewModuleKind.common),
-      isTrue,
-      reason: 'Lunar veins should appear on the Initial grid-items preview',
+      categories.any(
+        (category) => category.kind == GridPreviewModuleKind.common,
+      ),
+      isFalse,
+      reason: 'The initial grid-items tab only represents its own module',
+    );
+    expect(
+      categories.any(
+        (category) =>
+            category.kind == GridPreviewModuleKind.initialLawnOverview,
+      ),
+      isFalse,
+      reason: 'A future meteor schedule is not a second initial layer',
     );
     expect(
       categories
@@ -195,7 +205,7 @@ void main() {
     expect(readRadiationMeteorModuleData(level)!.spawnSchedule, hasLength(2));
   });
 
-  testWidgets('module armrack/Taiji stay on their own preview tabs', (
+  testWidgets('initial armrack/Taiji also appear in their combined overview', (
     tester,
   ) async {
     final level = PvzLevelFile(
@@ -263,12 +273,24 @@ void main() {
     );
 
     expect(
-      categories.any((category) => category.kind == GridPreviewModuleKind.common),
-      isFalse,
-      reason: 'Module armrack/Taiji should not open Initial grid items',
+      categories.any(
+        (category) =>
+            category.kind == GridPreviewModuleKind.initialLawnOverview,
+      ),
+      isTrue,
+      reason:
+          'Two initial presets belong on both the combined and dedicated tabs',
     );
     expect(
-      categories.any((category) => category.kind == GridPreviewModuleKind.armrack),
+      categories.any(
+        (category) => category.kind == GridPreviewModuleKind.common,
+      ),
+      isFalse,
+    );
+    expect(
+      categories.any(
+        (category) => category.kind == GridPreviewModuleKind.armrack,
+      ),
       isTrue,
     );
     expect(

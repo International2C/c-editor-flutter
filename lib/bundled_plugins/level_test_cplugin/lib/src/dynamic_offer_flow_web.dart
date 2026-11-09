@@ -78,8 +78,10 @@ Future<String?> _resolveWebFileName(
   required String libraryPath,
   required String preferredName,
 }) async {
-  final exists =
-      await LevelRepository.fileExistsInDirectory(libraryPath, preferredName);
+  final exists = await LevelRepository.fileExistsInDirectory(
+    libraryPath,
+    preferredName,
+  );
   if (!exists) return preferredName;
   if (!context.mounted) return null;
 
@@ -94,7 +96,7 @@ Future<String?> _resolveWebFileName(
           host.localize(
             ctx,
             'dynamicExistsBody',
-            '“{name}” is already in your workspace.\n\n'
+            '"{name}" is already in your workspace.\n\n'
                 'Overwrite it, or save under a different name?',
             {'name': preferredName},
           ),
@@ -138,8 +140,10 @@ Future<String?> _promptAlternateWebFileName(
   required String libraryPath,
   required String preferredName,
 }) async {
-  final suggested =
-      await _suggestAlternateWebFileName(libraryPath, preferredName);
+  final suggested = await _suggestAlternateWebFileName(
+    libraryPath,
+    preferredName,
+  );
   if (!context.mounted) return null;
   final controller = TextEditingController(text: suggested);
   String? fieldError;
@@ -175,8 +179,11 @@ Future<String?> _promptAlternateWebFileName(
                     controller: controller,
                     autofocus: true,
                     decoration: InputDecoration(
-                      labelText:
-                          host.localize(ctx, 'dynamicRenameHint', 'File name'),
+                      labelText: host.localize(
+                        ctx,
+                        'dynamicRenameHint',
+                        'File name',
+                      ),
                       errorText: fieldError,
                     ),
                     onSubmitted: (_) => submit(),
@@ -236,7 +243,11 @@ Future<({String? fileName, String? error})> _validateAlternateWebFileName({
   if (name.isEmpty) {
     return (
       fileName: null,
-      error: host.localize(context, 'dynamicRenameInvalid', 'Enter a file name.'),
+      error: host.localize(
+        context,
+        'dynamicRenameInvalid',
+        'Enter a file name.',
+      ),
     );
   }
   if (name.contains('/') ||
@@ -333,8 +344,7 @@ class _WebBrowserDownloadDialogState extends State<_WebBrowserDownloadDialog> {
         _error = widget.host.localize(
           context,
           'dynamicWebOpenFailed',
-          'Could not open the download link. Copy it from the release page, '
-              'or try again.',
+          'Could not open the download link. Allow browser pop-ups, or download manually from GitHub Releases.',
         );
       }
     });
@@ -371,7 +381,7 @@ class _WebBrowserDownloadDialogState extends State<_WebBrowserDownloadDialog> {
           _error = host.localize(
             context,
             'dynamicWebPickEmpty',
-            'Could not read the selected file. Try again.',
+            'Could not read the selected file. Make sure the download has finished and select a readable .rsb.smf file again.',
           );
         });
         return;
@@ -380,7 +390,10 @@ class _WebBrowserDownloadDialogState extends State<_WebBrowserDownloadDialog> {
       final key = _webStorageKey(widget.libraryPath, widget.fileName);
       // `bytes` is already a Uint8List from the picker; pass it through so the
       // repository doesn't make another full copy of a large archive.
-      final ok = await LevelRepository.prepareInternalCacheFromBytes(key, bytes);
+      final ok = await LevelRepository.prepareInternalCacheFromBytes(
+        key,
+        bytes,
+      );
       if (!mounted) return;
       if (!ok) {
         setState(() {
@@ -388,7 +401,7 @@ class _WebBrowserDownloadDialogState extends State<_WebBrowserDownloadDialog> {
           _error = host.localize(
             context,
             'dynamicWebImportFailed',
-            'Failed to store the file in the workspace.',
+            'Could not store the file in the workspace. Check free space and make sure the browser allows local storage, then try again.',
           );
         });
         return;
@@ -397,11 +410,15 @@ class _WebBrowserDownloadDialogState extends State<_WebBrowserDownloadDialog> {
         _importing = false;
         _done = true;
       });
-    } catch (e) {
+    } catch (_) {
       if (!mounted) return;
       setState(() {
         _importing = false;
-        _error = localizeDynamicDownloadError(host, context, e);
+        _error = host.localize(
+          context,
+          'dynamicWebImportFailed',
+          'Could not store the file in the workspace. Check free space and make sure the browser allows local storage, then try again.',
+        );
       });
     }
   }
@@ -414,17 +431,14 @@ class _WebBrowserDownloadDialogState extends State<_WebBrowserDownloadDialog> {
         : '';
     final sizeSuffix = sizeLabel.isNotEmpty ? ' ($sizeLabel)' : '';
     final body = _done
-        ? host.localize(
-            context,
-            'dynamicDownloadDone',
-            null,
-            {'path': widget.fileName},
-          )
+        ? host.localize(context, 'dynamicDownloadDone', null, {
+            'path': widget.fileName,
+          })
         : host.localize(
             context,
             'dynamicWebImportBody',
             '1. Let the browser finish downloading {asset}{size}.\n'
-                '2. Click “Choose file” and select that download to add it '
+                '2. Click "Choose file" and select that download to add it '
                 'to your workspace as {name}.',
             {
               'asset': widget.option.assetName,
@@ -472,7 +486,9 @@ class _WebBrowserDownloadDialogState extends State<_WebBrowserDownloadDialog> {
           )
         else ...[
           TextButton(
-            onPressed: _importing ? null : () => Navigator.of(context).pop(false),
+            onPressed: _importing
+                ? null
+                : () => Navigator.of(context).pop(false),
             child: Text(host.localize(context, 'cancel', 'Cancel')),
           ),
           TextButton(

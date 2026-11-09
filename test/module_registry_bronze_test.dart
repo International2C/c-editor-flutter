@@ -46,4 +46,13 @@ void main() {
       );
     });
   });
+
+  test('Escalation Spawning follows Wave Generator in module list order', () {
+    final keys = ModuleRegistry.registry.keys.toList();
+    final waveGeneratorIndex = keys.indexOf('WaveGeneratorProperties');
+    final escalationIndex = keys.indexOf('LevelEscalationModuleProperties');
+
+    expect(waveGeneratorIndex, greaterThanOrEqualTo(0));
+    expect(escalationIndex, waveGeneratorIndex + 1);
+  });
 }

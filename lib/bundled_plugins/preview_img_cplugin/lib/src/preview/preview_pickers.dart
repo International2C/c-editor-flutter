@@ -43,6 +43,15 @@ _PreviewBannerPresentation _bannerPresentationFor({
     );
   }
 
+  if (stem == 'Moon' || stem == 'Moon2') {
+    return _PreviewBannerPresentation(
+      name: stem == 'Moon2'
+          ? t('previewGenMoonPart2Banner', 'Moon BaseZ - Part 2')
+          : t('previewGenMoonPart1Banner', 'Moon BaseZ - Part 1'),
+      iconAssetPath: banners.roundIconAssetForStem(stem),
+    );
+  }
+
   final aliases = banners.stageAliasesForStem(stem);
   final candidates = [
     for (final stage in StageRepository.allItems)
@@ -438,7 +447,8 @@ class _PreviewStickerPickerDialogState
       'creatures': ('previewStickerTagCreatures', 'Creatures'),
       'tool_packets': ('previewStickerTagToolPackets', 'Tool Packets'),
       'components': ('previewStickerTagComponents', 'Components'),
-      'round_icons': ('previewStickerTagMapAndMusic', 'Lawns and music'),
+      'npcs': ('previewStickerTagNPC', 'NPC'),
+      'round_icons': ('previewStickerTagMapAndMusic', 'Modes and music'),
       'ui': ('previewStickerTagUI', 'Tags and themes'),
       'worlds': ('previewStickerTagWorlds', 'Worlds'),
       'others': ('previewStickerTagOthers', 'Others'),

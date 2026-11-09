@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:c_editor/data/custom_zombie_level_utils.dart';
 import 'package:c_editor/data/pvz_models.dart';
@@ -21,7 +23,7 @@ class CustomZombiePropertiesSheetActions extends StatelessWidget {
   final String baseType;
   final String currentRtid;
   final ValueChanged<String> onRtidSelected;
-  final void Function(String rtid)? onEditCustomZombie;
+  final FutureOr<void> Function(String rtid)? onEditCustomZombie;
   final String? Function(String baseType)? onInjectCustomZombie;
   final VoidCallback? onCloseSheet;
 
@@ -99,7 +101,7 @@ Future<void> showCustomZombiePropertiesSwitchDialog(
   required String baseType,
   required String currentRtid,
   required ValueChanged<String> onRtidSelected,
-  void Function(String rtid)? onEditCustomZombie,
+  FutureOr<void> Function(String rtid)? onEditCustomZombie,
   String? Function(String baseType)? onInjectCustomZombie,
 }) async {
   final l10n = AppLocalizations.of(context);

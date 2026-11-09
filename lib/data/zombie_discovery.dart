@@ -230,11 +230,16 @@ class ZombieDiscovery {
     Set<String> out,
     Set<String> customZombieAliases,
   ) {
+    if (obj.objClass == 'SpawnPumpkinScarecrowWaveActionProps') {
+      out.add('zombie_pumpkin_scarecrow_bird');
+      return;
+    }
     const skippedClasses = {
       'SpawnGravestonesWaveActionProps',
       'ModifyConveyorWaveActionProps',
       'ZombiePotionActionProps',
       'PumpkinHouseActionProps',
+      'SpawnPumpkinScarecrowWaveActionProps',
       'SpawnEagleFlagsWaveActionProps',
       'ThunderWaveActionProps',
       'ZombieAtlantisShellActionProps',

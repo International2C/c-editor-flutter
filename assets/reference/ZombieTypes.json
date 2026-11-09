@@ -599,9 +599,7 @@
         "HomeWorld": "egypt"
       }
     },
-    {
-
-    },
+    {},
     {
       "#comment": "####### Pirate Zombies #######",
       "uid": "1.21.1",
@@ -989,9 +987,7 @@
         "HomeWorld": "pirate"
       }
     },
-    {
-
-    },
+    {},
     {
       "#comment": "####### West Zombies #######",
       "uid": "1.33.1",
@@ -2116,11 +2112,11 @@
         "Resistences": [
           1,
           0.5,
-          0.29999999999999999,
+          0.3,
           0,
-          0.29999999999999999,
-          0.69999999999999996,
-          0.69999999999999996
+          0.3,
+          0.7,
+          0.7
         ]
       }
     },
@@ -2149,11 +2145,11 @@
         "Resistences": [
           1,
           0.5,
-          0.29999999999999999,
+          0.3,
           0,
-          0.29999999999999999,
-          0.69999999999999996,
-          0.69999999999999996
+          0.3,
+          0.7,
+          0.7
         ]
       }
     },
@@ -4881,9 +4877,9 @@
         "HomeWorld": "christmas",
         "Resistences": [
           1,
-          0.20000000000000001,
-          0.69999999999999996,
-          0.69999999999999996,
+          0.2,
+          0.7,
+          0.7,
           0.5,
           0.5,
           0.5
@@ -5059,12 +5055,12 @@
         "Placeable": true,
         "Resistences": [
           1,
-          0.20000000000000001,
-          0.40000000000000002,
-          0.40000000000000002,
-          0.69999999999999996,
-          0.40000000000000002,
-          0.40000000000000002
+          0.2,
+          0.4,
+          0.4,
+          0.7,
+          0.4,
+          0.4
         ]
       }
     },
@@ -6393,12 +6389,12 @@
         "IsBasicZombie": true,
         "Resistences": [
           0,
-          0.59999999999999998,
-          0.40000000000000002,
-          0.40000000000000002,
-          0.40000000000000002,
-          0.69999999999999996,
-          0.10000000000000001
+          0.6,
+          0.4,
+          0.4,
+          0.4,
+          0.7,
+          0.1
         ]
       }
     },
@@ -6557,12 +6553,12 @@
         "Placeable": true,
         "Resistences": [
           1,
-          0.59999999999999998,
-          0.29999999999999999,
-          0.40000000000000002,
-          0.29999999999999999,
-          0.69999999999999996,
-          0.10000000000000001
+          0.6,
+          0.3,
+          0.4,
+          0.3,
+          0.7,
+          0.1
         ]
       }
     },
@@ -6635,12 +6631,12 @@
         "HomeWorld": "iceage",
         "Resistences": [
           1,
-          0.69999999999999996,
-          0.29999999999999999,
-          0.40000000000000002,
-          0.29999999999999999,
-          0.69999999999999996,
-          0.10000000000000001
+          0.7,
+          0.3,
+          0.4,
+          0.3,
+          0.7,
+          0.1
         ]
       }
     },
@@ -6714,12 +6710,12 @@
         "HomeWorld": "iceage",
         "Resistences": [
           1,
-          0.69999999999999996,
-          0.29999999999999999,
-          0.40000000000000002,
-          0.29999999999999999,
-          0.69999999999999996,
-          0.10000000000000001
+          0.7,
+          0.3,
+          0.4,
+          0.3,
+          0.7,
+          0.1
         ]
       }
     },
@@ -6878,11 +6874,11 @@
         "Resistences": [
           1,
           0.5,
-          0.40000000000000002,
-          0.40000000000000002,
-          0.40000000000000002,
-          0.69999999999999996,
-          0.10000000000000001
+          0.4,
+          0.4,
+          0.4,
+          0.7,
+          0.1
         ]
       }
     },
@@ -6913,11 +6909,11 @@
         "Resistences": [
           1,
           0.5,
-          0.40000000000000002,
-          0.40000000000000002,
-          0.40000000000000002,
-          0.40000000000000002,
-          0.10000000000000001
+          0.4,
+          0.4,
+          0.4,
+          0.4,
+          0.1
         ]
       }
     },
@@ -10042,12 +10038,12 @@
         ],
         "AnimRigClass": "ZombieAnimRig_LostCityBug",
         "PopAnim": "POPANIM_ZOMBIE_ZOMBIE_CHILDREN_BALLON",
-        "BoardAlmanac": false,
+        "BoardAlmanac": true,
         "Enabled": true,
         "RecommendPlants": [
           "cherry_bomb"
         ],
-        "HomeWorld": "childrenday",
+        "HomeWorld": "childrensday",
         "Placeable": true
       }
     },
@@ -10071,7 +10067,7 @@
         "RecommendPlants": [
           "cherry_bomb"
         ],
-        "HomeWorld": "childrenday",
+        "HomeWorld": "childrensday",
         "Placeable": true
       }
     },
@@ -10099,7 +10095,7 @@
         "RecommendPlants": [
           "cherry_bomb"
         ],
-        "HomeWorld": "childrenday",
+        "HomeWorld": "childrensday",
         "Placeable": true
       }
     },
@@ -10148,7 +10144,7 @@
         "RecommendPlants": [
           "cherry_bomb"
         ],
-        "HomeWorld": "childrenday",
+        "HomeWorld": "childrensday",
         "Placeable": false
       }
     },
@@ -10194,7 +10190,7 @@
         "RecommendPlants": [
           "cherry_bomb"
         ],
-        "HomeWorld": "childrenday",
+        "HomeWorld": "childrensday",
         "Placeable": false
       }
     },
@@ -10215,11 +10211,11 @@
         "AnimRigClass": "ZombieAnimRig_TombRaiser",
         "PopAnim": "POPANIM_ZOMBIE_ZOMBIE_CHILDREN_LOLLIPOPS",
         "Enabled": true,
-        "BoardAlmanac": false,
+        "BoardAlmanac": true,
         "RecommendPlants": [
           "cherry_bomb"
         ],
-        "HomeWorld": "childrenday",
+        "HomeWorld": "childrensday",
         "Placeable": true
       }
     },
@@ -11738,12 +11734,12 @@
         "HomeWorld": "renai",
         "Resistences": [
           1,
-          0.69999999999999996,
+          0.7,
           0,
-          0.80000000000000004,
-          0.20000000000000001,
-          0.40000000000000002,
-          0.59999999999999998
+          0.8,
+          0.2,
+          0.4,
+          0.6
         ]
       }
     },
@@ -11771,12 +11767,12 @@
         "HomeWorld": "renai",
         "Resistences": [
           1,
-          0.59999999999999998,
+          0.6,
           0,
-          0.59999999999999998,
-          0.20000000000000001,
-          0.40000000000000002,
-          0.59999999999999998
+          0.6,
+          0.2,
+          0.4,
+          0.6
         ]
       }
     },
@@ -11870,12 +11866,12 @@
         "HomeWorld": "renai",
         "Resistences": [
           1,
-          0.59999999999999998,
-          0.59999999999999998,
-          0.69999999999999996,
+          0.6,
+          0.6,
+          0.7,
           0.5,
-          0.10000000000000001,
-          0.40000000000000002
+          0.1,
+          0.4
         ]
       }
     },
@@ -11903,11 +11899,11 @@
         "HomeWorld": "renai",
         "Resistences": [
           1,
-          0.59999999999999998,
+          0.6,
           0,
-          0.59999999999999998,
+          0.6,
           0.5,
-          0.10000000000000001,
+          0.1,
           0.5
         ]
       }
@@ -14178,12 +14174,12 @@
         "Placeable": true,
         "Resistences": [
           1,
-          0.20000000000000001,
-          0.29999999999999999,
-          0.40000000000000002,
-          0.69999999999999996,
+          0.2,
+          0.3,
+          0.4,
+          0.7,
           0.5,
-          0.40000000000000002
+          0.4
         ]
       }
     },
@@ -14518,10 +14514,10 @@
           1,
           0.5,
           0,
-          0.90000000000000002,
+          0.9,
           0,
-          0.29999999999999999,
-          0.90000000000000002
+          0.3,
+          0.9
         ]
       }
     },
@@ -14602,10 +14598,10 @@
           1,
           0.5,
           0,
-          0.90000000000000002,
+          0.9,
           0,
-          0.29999999999999999,
-          0.90000000000000002
+          0.3,
+          0.9
         ]
       }
     },
@@ -15669,7 +15665,7 @@
         ],
         "AnimRigClass": "ZombieAnimRig_Parrot",
         "PopAnim": "POPANIM_ZOMBIE_ZOMBIE_CHILDREN_AIRBUBBLE",
-        "BoardAlmanac": false,
+        "BoardAlmanac": true,
         "Enabled": true,
         "RecommendPlants": [
           "cherry_bomb"
@@ -16573,6 +16569,7 @@
         "ZombieClass": "ZombieCarnieMagicianArtifact",
         "Properties": "RTID(ZombieCarnieMagicianArtifact@PropertySheets)",
         "ResourceGroups": [
+          "Effects_Artifact",
           "ZombieCarnieDoveGroup",
           "ZombieWestChickenFarmerGroup",
           "ZombieCarnieMagicianGroup",
@@ -17403,7 +17400,7 @@
         ],
         "AnimRigClass": "ZombieAnimRig_FootballMech",
         "PopAnim": "POPANIM_ZOMBIE_ZOMBIE_CHILDREN_TOYCAR",
-        "BoardAlmanac": false,
+        "BoardAlmanac": true,
         "Enabled": true,
         "RecommendPlants": [
           "cherry_bomb"
@@ -18396,6 +18393,121 @@
     {
       "objclass": "ZombieType",
       "aliases": [
+        "new_pvp_nutcracker"
+      ],
+      "objdata": {
+        "TypeName": "new_pvp_nutcracker",
+        "ZombieClass": "ZombieNutCracker",
+        "Properties": "RTID(ZombieNewPvPNutCrackerDefault@PropertySheets)",
+        "ResourceGroups": [
+          "ZombieNutcrackerGroup",
+          "ZombieNutcrackerEffects"
+        ],
+        "AudioGroups": [],
+        "AnimRigClass": "ZombieAnimRig_NutCracker",
+        "PopAnim": "POPANIM_ZOMBIE_ZOMBIE_NUTCRACKER",
+        "HomeWorld": "new_pvp",
+        "IsBasicZombie": true,
+        "BoardAlmanac": true,
+        "AlmanacBackdropName": "warp"
+      }
+    },
+    {
+      "objclass": "ZombieType",
+      "aliases": [
+        "new_pvp_teleport_left"
+      ],
+      "objdata": {
+        "TypeName": "new_pvp_teleport_left",
+        "ZombieClass": "ZombieMoonTeleportation",
+        "Properties": "RTID(ZombieNewPVPMoonTeleportationLeftDefault@PropertySheets)",
+        "ResourceGroups": [
+          "ZombieMoonTeleportationGroup"
+        ],
+        "AudioGroups": [
+          "ZombieMoonTeleportationAudio"
+        ],
+        "AnimRigClass": "ZombieAnimRig_MoonTeleportation",
+        "PopAnim": "POPANIM_ZOMBIE_ZOMBIE_MOON_TELEPORT_LEFT",
+        "Placeable": true,
+        "BoardAlmanac": false,
+        "HomeWorld": "new_pvp"
+      }
+    },
+    {
+      "objclass": "ZombieType",
+      "aliases": [
+        "new_pvp_future_imp"
+      ],
+      "objdata": {
+        "TypeName": "new_pvp_future_imp",
+        "ZombieClass": "ZombieFutureImp",
+        "Properties": "RTID(ZombieNewPVPFutureImpDefault@PropertySheets)",
+        "ResourceGroups": [
+          "ZombieFutureImpGroup"
+        ],
+        "AudioGroups": [
+          "ZombieFutureSpiderBotAudio"
+        ],
+        "AnimRigClass": "ZombieAnimRig_FutureImp",
+        "PopAnim": "POPANIM_ZOMBIE_GARGANTUAR_IMP",
+        "BoardAlmanac": false,
+        "RecommendPlants": [
+          "cherry_bomb"
+        ],
+        "HomeWorld": "new_pvp",
+        "Placeable": true
+      }
+    },
+    {
+      "objclass": "ZombieType",
+      "aliases": [
+        "new_pvp_gladiator_zombie"
+      ],
+      "objdata": {
+        "TypeName": "new_pvp_gladiator_zombie",
+        "ZombieClass": "ZombieGladiator",
+        "Properties": "RTID(ZombieNewPVPGladiator@PropertySheets)",
+        "ResourceGroups": [
+          "ZombieGladiatorGroup"
+        ],
+        "AudioGroups": [
+          "ZombieGladiatorAudio"
+        ],
+        "AnimRigClass": "ZombieAnimRig_Gladiator",
+        "PopAnim": "POPANIM_ZOMBIE_ZOMBIE_ROMAN_GLADIATOR",
+        "BoardAlmanac": true,
+        "RecommendPlants": [
+          "cherry_bomb"
+        ],
+        "HomeWorld": "new_pvp",
+        "Placeable": true
+      }
+    },
+    {
+      "objclass": "ZombieType",
+      "aliases": [
+        "new_pvp_eighties_mc"
+      ],
+      "objdata": {
+        "TypeName": "new_pvp_eighties_mc",
+        "ZombieClass": "ZombieEightiesMC",
+        "Properties": "RTID(ZombieNewPVPEightiesMC@PropertySheets)",
+        "ResourceGroups": [
+          "ZombieEightiesMCGroup"
+        ],
+        "AudioGroups": [
+          "ZombieEightiesMCZombieAudio"
+        ],
+        "AnimRigClass": "ZombieAnimRig_EightiesMC",
+        "PopAnim": "POPANIM_ZOMBIE_ZOMBIE_80S_MCZOMBIE",
+        "HomeWorld": "eighties",
+        "IsBasicZombie": false
+      }
+    },
+    {
+      "objclass": "ZombieType",
+      "aliases": [
         "zombie_snowman"
       ],
       "objdata": {
@@ -18581,12 +18693,12 @@
         "BoardAlmanac": true,
         "Resistences": [
           1,
-          0.40000000000000002,
+          0.4,
           0.5,
-          0.10000000000000001,
-          0.40000000000000002,
-          0.40000000000000002,
-          0.40000000000000002
+          0.1,
+          0.4,
+          0.4,
+          0.4
         ]
       }
     },
@@ -18895,12 +19007,12 @@
         ],
         "Resistences": [
           0.5,
-          0.59999999999999998,
-          0.40000000000000002,
-          0.40000000000000002,
-          0.40000000000000002,
-          0.69999999999999996,
-          0.10000000000000001
+          0.6,
+          0.4,
+          0.4,
+          0.4,
+          0.7,
+          0.1
         ]
       }
     },
@@ -19559,11 +19671,11 @@
         "Resistences": [
           1,
           0.5,
-          0.69999999999999996,
-          0.10000000000000001,
-          0.40000000000000002,
-          0.40000000000000002,
-          0.40000000000000002
+          0.7,
+          0.1,
+          0.4,
+          0.4,
+          0.4
         ]
       }
     },
@@ -19746,12 +19858,12 @@
         "Placeable": true,
         "Resistences": [
           1,
-          0.59999999999999998,
-          0.29999999999999999,
-          0.40000000000000002,
-          0.29999999999999999,
-          0.69999999999999996,
-          0.10000000000000001
+          0.6,
+          0.3,
+          0.4,
+          0.3,
+          0.7,
+          0.1
         ]
       }
     },
@@ -19777,12 +19889,12 @@
         "HomeWorld": "iceage",
         "Resistences": [
           1,
-          0.69999999999999996,
-          0.29999999999999999,
-          0.40000000000000002,
-          0.29999999999999999,
-          0.69999999999999996,
-          0.10000000000000001
+          0.7,
+          0.3,
+          0.4,
+          0.3,
+          0.7,
+          0.1
         ]
       }
     },
@@ -19809,11 +19921,11 @@
         "Resistences": [
           1,
           0.5,
-          0.69999999999999996,
-          0.10000000000000001,
-          0.40000000000000002,
-          0.40000000000000002,
-          0.40000000000000002
+          0.7,
+          0.1,
+          0.4,
+          0.4,
+          0.4
         ]
       }
     },
@@ -19844,11 +19956,11 @@
         "Resistences": [
           1,
           0.5,
-          0.40000000000000002,
-          0.40000000000000002,
-          0.40000000000000002,
-          0.69999999999999996,
-          0.10000000000000001
+          0.4,
+          0.4,
+          0.4,
+          0.7,
+          0.1
         ]
       }
     },
@@ -19877,12 +19989,12 @@
         ],
         "Resistences": [
           0.5,
-          0.59999999999999998,
-          0.40000000000000002,
-          0.40000000000000002,
-          0.40000000000000002,
-          0.69999999999999996,
-          0.10000000000000001
+          0.6,
+          0.4,
+          0.4,
+          0.4,
+          0.7,
+          0.1
         ]
       }
     },
@@ -19910,12 +20022,12 @@
         "HomeWorld": "dark",
         "Resistences": [
           1,
-          0.20000000000000001,
-          0.40000000000000002,
-          0.40000000000000002,
-          0.69999999999999996,
+          0.2,
+          0.4,
+          0.4,
+          0.7,
           0.5,
-          0.40000000000000002
+          0.4
         ]
       }
     },
@@ -20224,12 +20336,12 @@
         "HomeWorld": "renai",
         "Resistences": [
           1,
-          0.59999999999999998,
+          0.6,
           0,
-          0.69999999999999996,
-          0.10000000000000001,
-          0.20000000000000001,
-          0.80000000000000004
+          0.7,
+          0.1,
+          0.2,
+          0.8
         ]
       }
     },
@@ -20254,12 +20366,12 @@
         "HomeWorld": "renai",
         "Resistences": [
           1,
-          0.59999999999999998,
+          0.6,
           0,
-          0.59999999999999998,
+          0.6,
           0.5,
-          0.40000000000000002,
-          0.69999999999999996
+          0.4,
+          0.7
         ]
       }
     },
@@ -20284,12 +20396,12 @@
         "HomeWorld": "renai",
         "Resistences": [
           1,
-          0.69999999999999996,
-          0.20000000000000001,
-          0.80000000000000004,
-          0.90000000000000002,
-          0.59999999999999998,
-          0.40000000000000002
+          0.7,
+          0.2,
+          0.8,
+          0.9,
+          0.6,
+          0.4
         ]
       }
     },
@@ -20314,12 +20426,12 @@
         "HomeWorld": "renai",
         "Resistences": [
           1,
-          0.29999999999999999,
-          0.10000000000000001,
-          0.40000000000000002,
-          0.40000000000000002,
-          0.29999999999999999,
-          0.20000000000000001
+          0.3,
+          0.1,
+          0.4,
+          0.4,
+          0.3,
+          0.2
         ]
       }
     },
@@ -20344,12 +20456,12 @@
         "HomeWorld": "renai",
         "Resistences": [
           1,
-          0.59999999999999998,
-          0.20000000000000001,
-          0.69999999999999996,
-          0.80000000000000004,
-          0.59999999999999998,
-          0.40000000000000002
+          0.6,
+          0.2,
+          0.7,
+          0.8,
+          0.6,
+          0.4
         ]
       }
     },
@@ -20371,12 +20483,12 @@
         "HomeWorld": "renai",
         "Resistences": [
           1,
-          0.59999999999999998,
+          0.6,
           0,
-          0.69999999999999996,
-          0.20000000000000001,
+          0.7,
+          0.2,
           0.5,
-          0.59999999999999998
+          0.6
         ]
       }
     },
@@ -20589,12 +20701,12 @@
         "HomeWorld": "journey_to_the_west",
         "Resistences": [
           1,
-          0.20000000000000001,
-          0.40000000000000002,
-          0.40000000000000002,
-          0.69999999999999996,
+          0.2,
+          0.4,
+          0.4,
+          0.7,
           0.5,
-          0.40000000000000002
+          0.4
         ]
       }
     },
@@ -20617,11 +20729,11 @@
         "HomeWorld": "journey_to_the_west",
         "Resistences": [
           1,
-          0.40000000000000002,
-          0.69999999999999996,
-          0.40000000000000002,
-          0.69999999999999996,
-          0.40000000000000002,
+          0.4,
+          0.7,
+          0.4,
+          0.7,
+          0.4,
           1
         ]
       }
@@ -21323,7 +21435,7 @@
           0,
           0,
           0,
-          0.90000000000000002,
+          0.9,
           0,
           0,
           0
@@ -21361,7 +21473,7 @@
           0,
           0,
           0,
-          0.90000000000000002
+          0.9
         ]
       }
     },
@@ -21395,7 +21507,7 @@
           0,
           0,
           0,
-          0.90000000000000002,
+          0.9,
           0
         ]
       }
@@ -22725,6 +22837,33 @@
     {
       "objclass": "ZombieType",
       "aliases": [
+        "GingleZombieGhost"
+      ],
+      "objdata": {
+        "TypeName": "GingleZombieGhost",
+        "ZombieClass": "GingleZombieGhost",
+        "Properties": "RTID(GingleZombieGhostDefault@PropertySheets)",
+        "ResourceGroups": [
+          "ZombieTutorialGroup"
+        ],
+        "AnimRigClass": "ZombieAnimRig",
+        "PopAnim": "POPANIM_ZOMBIE_ZOMBIE_PUMPKIN_HOUSE_GHOST",
+        "BoardAlmanac": false,
+        "HomeWorld": "tutorial",
+        "Resistences": [
+          1,
+          0,
+          1,
+          1,
+          1,
+          1,
+          1
+        ]
+      }
+    },
+    {
+      "objclass": "ZombieType",
+      "aliases": [
         "fairy_tale_armed_gargantuar_Elite"
       ],
       "objdata": {
@@ -22769,10 +22908,10 @@
         "HomeWorld": "christmas",
         "Resistences": [
           1,
-          0.40000000000000002,
-          0.20000000000000001,
-          0.90000000000000002,
-          0.90000000000000002,
+          0.4,
+          0.2,
+          0.9,
+          0.9,
           0.5,
           0.5
         ]
@@ -23274,6 +23413,30 @@
     {
       "objclass": "ZombieType",
       "aliases": [
+        "mausoleum_gargantuar_danger"
+      ],
+      "objdata": {
+        "TypeName": "mausoleum_gargantuar_danger",
+        "ZombieClass": "ZombieGargantuar",
+        "Properties": "RTID(ZombieMausoleumGargantuarDanger@PropertySheets)",
+        "ResourceGroups": [
+          "ZombieMausoleumGargantuarGroup",
+          "ZombieMausoleumImpGroup",
+          "ZombieGargantuarEffects",
+          "ZombieBronzeEffects"
+        ],
+        "AudioGroups": [
+          "ZombieGlobalGargantuarAudio"
+        ],
+        "AnimRigClass": "ZombieAnimRig_Gargantuar",
+        "PopAnim": "POPANIM_ZOMBIE_ZOMBIE_MAUSOLEUM_GARGANTUAR",
+        "BoardAlmanac": true,
+        "HomeWorld": "mausoleum"
+      }
+    },
+    {
+      "objclass": "ZombieType",
+      "aliases": [
         "mausoleum_imp"
       ],
       "objdata": {
@@ -23535,6 +23698,33 @@
         ],
         "AnimRigClass": "ZombieAnimRig_ZombossQinShiHuangGhost",
         "PopAnim": "POPANIM_ZOMBIE_ZOMBIE_ZOMBOSS_QINSHIHUANG_GHOST",
+        "BoardAlmanac": false,
+        "RecommendPlants": [
+          ""
+        ],
+        "HomeWorld": "mausoleum"
+      }
+    },
+    {
+      "objclass": "ZombieType",
+      "aliases": [
+        "zomboss_qinshihuang_dangerroom"
+      ],
+      "objdata": {
+        "TypeName": "zomboss_qinshihuang_dangerroom",
+        "ZombieClass": "ZombieZombossQinShiHuang",
+        "Properties": "RTID(ZombieZombossQinShiHuangDangerroomDefault@PropertySheets)",
+        "ResourceGroups": [
+          "ZombossQinShiHuangGroup",
+          "ZombiePVZ1RobotZombossGroup",
+          "PlantFlamelady",
+          "FreezonEffectGroup"
+        ],
+        "AudioGroups": [
+          "ZombossQinShiHuangAudio"
+        ],
+        "AnimRigClass": "ZombieAnimRig_ZombossQinShiHuang",
+        "PopAnim": "POPANIM_ZOMBIE_ZOMBIE_ZOMBOSS_QINSHIHUANG",
         "BoardAlmanac": false,
         "RecommendPlants": [
           ""
@@ -23901,7 +24091,6 @@
       }
     },
     {
-      "uid": "1.246.1",
       "objclass": "ZombieType",
       "aliases": [
         "trench_coat_imps"
@@ -24352,12 +24541,12 @@
         ],
         "Resistences": [
           1,
-          0.90000000000000002,
-          0.29999999999999999,
-          0.40000000000000002,
+          0.9,
+          0.3,
+          0.4,
           0.5,
-          0.40000000000000002,
-          0.80000000000000004
+          0.4,
+          0.8
         ],
         "HomeWorld": "childrensday"
       }
@@ -24502,188 +24691,48 @@
     {
       "objclass": "ZombieType",
       "aliases": [
-        "teleport_left"
+        "zombie_werewolf"
       ],
       "objdata": {
-        "TypeName": "teleport_left",
-        "ZombieClass": "ZombieMoonTeleportation",
-        "Properties": "RTID(ZombieMoonTeleportationLeftDefault@PropertySheets)",
+        "TypeName": "zombie_werewolf",
+        "ZombieClass": "ZombieWerewolf",
+        "Properties": "RTID(ZombieWerewolf@PropertySheets)",
         "ResourceGroups": [
-          "ZombieMoonTeleportationGroup"
+          "ZombieHalloWeenWereWolfGroup"
         ],
         "AudioGroups": [
-          "ZombieMoonTeleportationAudio"
+          "ZombiewerewolfAudio"
         ],
-        "AnimRigClass": "ZombieAnimRig_MoonTeleportation",
-        "PopAnim": "POPANIM_ZOMBIE_ZOMBIE_MOON_TELEPORT_LEFT",
-        "Placeable": true,
-        "BoardAlmanac": false,
-        "HomeWorld": "moon"
-      }
-    },
-    {
-      "objclass": "ZombieType",
-      "aliases": [
-        "teleport_right"
-      ],
-      "objdata": {
-        "TypeName": "teleport_right",
-        "ZombieClass": "ZombieMoonTeleportation",
-        "Properties": "RTID(ZombieMoonTeleportationRightDefault@PropertySheets)",
-        "ResourceGroups": [
-          "ZombieMoonTeleportationGroup"
-        ],
-        "AudioGroups": [
-          "ZombieMoonTeleportationAudio"
-        ],
-        "AnimRigClass": "ZombieAnimRig_MoonTeleportation",
-        "PopAnim": "POPANIM_ZOMBIE_ZOMBIE_MOON_TELEPORT_RIGHT",
-        "Placeable": true,
-        "BoardAlmanac": false,
-        "HomeWorld": "moon"
-      }
-    },
-    {
-      "objclass": "ZombieType",
-      "aliases": [
-        "teleport_left_beacon"
-      ],
-      "objdata": {
-        "TypeName": "teleport_left_beacon",
-        "ZombieClass": "ZombieMoonTeleportation",
-        "Properties": "RTID(ZombieMoonTeleportationLeftBeaconDefault@PropertySheets)",
-        "ResourceGroups": [
-          "ZombieMoonTeleportationGroup",
-          "Teleport_Beacon"
-        ],
-        "AudioGroups": [
-          "ZombieMoonTeleportationAudio"
-        ],
-        "AnimRigClass": "ZombieAnimRig_MoonTeleportation",
-        "PopAnim": "POPANIM_ZOMBIE_ZOMBIE_MOON_TELEPORT_LEFT",
-        "Placeable": true,
-        "BoardAlmanac": false,
-        "HomeWorld": "moon"
-      }
-    },
-    {
-      "objclass": "ZombieType",
-      "aliases": [
-        "teleport_right_beacon"
-      ],
-      "objdata": {
-        "TypeName": "teleport_right_beacon",
-        "ZombieClass": "ZombieMoonTeleportation",
-        "Properties": "RTID(ZombieMoonTeleportationRightBeaconDefault@PropertySheets)",
-        "ResourceGroups": [
-          "ZombieMoonTeleportationGroup",
-          "Teleport_Beacon"
-        ],
-        "AudioGroups": [
-          "ZombieMoonTeleportationAudio"
-        ],
-        "AnimRigClass": "ZombieAnimRig_MoonTeleportation",
-        "PopAnim": "POPANIM_ZOMBIE_ZOMBIE_MOON_TELEPORT_RIGHT",
-        "Placeable": true,
-        "BoardAlmanac": false,
-        "HomeWorld": "moon"
-      }
-    },
-    {
-      "objclass": "ZombieType",
-      "aliases": [
-        "zombie_cosmic_imp"
-      ],
-      "objdata": {
-        "TypeName": "zombie_cosmic_imp",
-        "ZombieClass": "ZombieCosmicImp",
-        "Properties": "RTID(ZombieCosmicImp@PropertySheets)",
-        "ResourceGroups": [
-          "ZombieGalacticImp",
-          "ZombieChildrenToycarGroup",
-          "EMPeachEffects",
-          "ZombieChildrenToygunGroup",
-          "ZombieChildrenAirbubbleGroup",
-          "ZombieZcorpGargGroup",
-          "ZombieZcorpImpGroup",
-          "ZombieGargantuarEffects"
-        ],
-        "AnimRigClass": "ZombieAnimRig_CosmicImp",
-        "PopAnim": "POPANIM_ZOMBIE_ZOMBIE_GALACTIC_IMP",
+        "AnimRigClass": "ZombieAnimRig_Werewolf",
+        "PopAnim": "POPANIM_ZOMBIE_ZOMBIE_HALLOWEEN_WEREWOLF",
         "Placeable": true,
         "BoardAlmanac": true,
         "RecommendPlants": [
-          "cherry_bomb"
+          "ghostpepper"
         ],
-        "HomeWorld": "moon"
+        "HomeWorld": "halloween"
       }
     },
     {
       "objclass": "ZombieType",
       "aliases": [
-        "zombie_cosmic_imp_toycar"
+        "zombie_werewolf_wolf"
       ],
       "objdata": {
-        "TypeName": "zombie_cosmic_imp_toycar",
-        "ZombieClass": "ZombieCosmicImpToycar",
-        "Properties": "RTID(ZombieChildrenToycar@PropertySheets)",
+        "TypeName": "zombie_werewolf_wolf",
+        "ZombieClass": "ZombieWerewolfWolf",
+        "Properties": "RTID(ZombieWerewolfWolf@PropertySheets)",
         "ResourceGroups": [
-          "ZombieChildrenToycarGroup",
-          "EMPeachEffects"
+          "ZombieHalloWeenWereWolfGroup"
         ],
         "AudioGroups": [
-          "ZombieFutureMechFootballAudio"
+          "ZombiewerewolfAudio"
         ],
-        "AnimRigClass": "ZombieAnimRig_FootballMech",
-        "PopAnim": "POPANIM_ZOMBIE_ZOMBIE_GALACTIC_IMP_TOYCAR",
+        "AnimRigClass": "ZombieAnimRig_WerewolfWolf",
+        "PopAnim": "POPANIM_ZOMBIE_ZOMBIE_HALLOWEEN_WEREWOLF",
         "BoardAlmanac": false,
-        "Placeable": true,
-        "HomeWorld": "moon"
-      }
-    },
-    {
-      "objclass": "ZombieType",
-      "aliases": [
-        "zombie_cosmic_imp_bubblegun"
-      ],
-      "objdata": {
-        "TypeName": "zombie_cosmic_imp_bubblegun",
-        "ZombieClass": "ZombieCosmicToygun",
-        "Properties": "RTID(ZombieChildrenToygun@PropertySheets)",
-        "ResourceGroups": [
-          "ZombieChildrenToygunGroup",
-          "ZombieChildrenAirbubbleGroup"
-        ],
-        "AnimRigClass": "ZombieAnimRig_Toygun",
-        "PopAnim": "POPANIM_ZOMBIE_ZOMBIE_GALACTIC_IMP_BUBBLEGUN",
-        "BoardAlmanac": false,
-        "Placeable": true,
-        "HomeWorld": "moon"
-      }
-    },
-    {
-      "objclass": "ZombieType",
-      "aliases": [
-        "zombie_cosmic_imp_corporate"
-      ],
-      "objdata": {
-        "TypeName": "zombie_cosmic_imp_corporate",
-        "ZombieClass": "ZombieCosmicImpCorporate",
-        "Properties": "RTID(ZombieCosmicImpCorporate@PropertySheets)",
-        "ResourceGroups": [
-          "ZombieZcorpGargGroup",
-          "ZombieZcorpImpGroup",
-          "ZombieGargantuarEffects"
-        ],
-        "AudioGroups": [
-          "ZombieZcorpGargAudio",
-          "ZombieZcorpImpAudio"
-        ],
-        "AnimRigClass": "ZombieAnimRig_ZCorpGargantuar",
-        "PopAnim": "POPANIM_ZOMBIE_ZOMBIE_GALACTIC_IMP_CORPORATE",
-        "BoardAlmanac": false,
-        "Placeable": true,
-        "HomeWorld": "moon"
+        "Placeable": false,
+        "HomeWorld": "halloween"
       }
     },
     {
@@ -24734,6 +24783,9 @@
         "AnimRigClass": "ZombieAnimRig_MoonIllusionist",
         "PopAnim": "POPANIM_ZOMBIE_ZOMBIE_GALACTIC_MYSTERIO",
         "BoardAlmanac": true,
+        "RecommendPlants": [
+          "cherry_bomb"
+        ],
         "Placeable": true,
         "HomeWorld": "moon"
       }

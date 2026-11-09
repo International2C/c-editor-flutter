@@ -3,12 +3,14 @@ import 'package:c_editor/widgets/camel_minigame_conflicts.dart';
 import 'package:c_editor/data/pvz_models.dart';
 import 'package:c_editor/data/registry/issue_registry.dart';
 import 'package:c_editor/data/rtid_parser.dart';
+import 'package:c_editor/data/repository/zombie_properties_repository.dart';
 import 'package:c_editor/data/repository/zombie_repository.dart';
 import 'package:c_editor/data/wave_generator_level_utils.dart';
 import 'package:c_editor/data/zombie_display_utils.dart';
 import 'package:c_editor/l10n/app_localizations.dart';
 import 'package:c_editor/theme/app_theme.dart';
 import 'package:c_editor/widgets/editor_components.dart';
+import 'package:c_editor/widgets/wave_flag_strip.dart';
 import 'package:c_editor/widgets/wave_generator_zombie_tile.dart';
 import 'package:c_editor/widgets/editor_object_alias.dart';
 
@@ -161,13 +163,15 @@ class _WaveGeneratorModuleScreenState extends State<WaveGeneratorModuleScreen> {
     return id == 'yeti' || id == 'treasureyeti' || id == 'treasureyeti_egypt';
   }
 
+  void _showBlockedMessage(String message) {
+    final messenger = ScaffoldMessenger.of(context);
+    messenger.clearSnackBars();
+    messenger.showSnackBar(SnackBar(content: Text(message)));
+  }
+
   void _showYetiZombieBlockedMessage(AppLocalizations? l10n) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(
-          l10n?.yetiZombiesNotAllowed ?? 'Yetis are not allowed here',
-        ),
-      ),
+    _showBlockedMessage(
+      l10n?.yetiZombiesNotAllowed ?? 'Yetis are not allowed here',
     );
   }
 
@@ -179,13 +183,17 @@ class _WaveGeneratorModuleScreenState extends State<WaveGeneratorModuleScreen> {
         return;
       }
       if (ZombieRepository().isElite(selectedId)) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(
-              l10n?.eliteZombiesNotAllowed ??
-                  'Elite zombies are not allowed here',
-            ),
-          ),
+        _showBlockedMessage(
+          l10n?.eliteZombiesNotAllowed ?? 'Elite zombies are not allowed here',
+        );
+        return;
+      }
+      if (!ZombiePropertiesRepository.canSpawnFromPoints(selectedId)) {
+        _showBlockedMessage(
+          l10n?.pointSpawnOnlyZombiesBlocked ??
+              'This zombie has no point cost (WavePointCost) data, so the '
+                  'game cannot select and spawn it according to the wave\'s '
+                  'points, and it cannot be added to the point-spawn pool.',
         );
         return;
       }
@@ -194,13 +202,9 @@ class _WaveGeneratorModuleScreenState extends State<WaveGeneratorModuleScreen> {
         'ZombieTypes',
       );
       if (RtidParser.parse(rtid)?.source == 'CurrentLevel') {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(
-              l10n?.waveGeneratorCustomZombieBlocked ??
-                  'Custom zombies are not supported in wave generator levels.',
-            ),
-          ),
+        _showBlockedMessage(
+          l10n?.waveGeneratorCustomZombieBlocked ??
+              'Custom zombies are not supported in wave generator levels.',
         );
         return;
       }
@@ -428,7 +432,22 @@ class _WaveGeneratorModuleScreenState extends State<WaveGeneratorModuleScreen> {
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    const SizedBox(height: 12),
+                    if (_data.waves.isNotEmpty) ...[
+                      WaveFlagStrip(
+                        color:
+                            theme.textTheme.titleMedium?.color ??
+                            theme.colorScheme.onSurface,
+                        waveCount: _data.waves.length,
+                        isFlagWave: (w) {
+                          final interval = _data.flagWaveInterval <= 0
+                              ? 10
+                              : _data.flagWaveInterval;
+                          return w % interval == 0 || w == _data.waves.length;
+                        },
+                      ),
+                      const SizedBox(height: 24),
+                    ] else
+                      const SizedBox(height: 12),
                     _buildLabeledNumberField(
                       controller: _flagIntervalCtrl,
                       label:
@@ -502,43 +521,38 @@ class _WaveGeneratorModuleScreenState extends State<WaveGeneratorModuleScreen> {
                         ),
                       ),
                     ],
-                    const SizedBox(height: 16),
-                    SwitchListTile(
-                      title: Text(
-                        l10n?.waveGeneratorRiseFromGround ??
-                            'Rise from ground mode',
-                      ),
-                      subtitle: Text(
-                        l10n?.waveGeneratorRiseFromGroundHint ??
-                            'IsRiseFromGroundMode',
-                        style: theme.textTheme.bodySmall,
-                      ),
-                      value: _data.isRiseFromGroundMode,
-                      onChanged: (v) {
-                        _data.isRiseFromGroundMode = v;
-                        if (v) {
-                          _data.spawnColStart = 2;
-                          _data.spawnColEnd = 2;
-                        }
-                        _sync();
-                      },
-                      contentPadding: EdgeInsets.zero,
-                    ),
-                    if (_data.isRiseFromGroundMode)
-                      EditorWarningBanner(
-                        title: l10n!.waveGeneratorRiseFromGroundWarningTitle,
-                        message: l10n.waveGeneratorRiseFromGroundWarning,
-                      ),
-                    const SizedBox(height: 8),
-                    Text(
-                      l10n?.waveGeneratorWaveCountSummary(_data.waves.length) ??
-                          'Waves: ${_data.waves.length} (edit on Waves tab)',
-                      style: theme.textTheme.bodySmall,
-                    ),
                   ],
                 ),
               ),
             ),
+            const SizedBox(height: 16),
+            Card(
+              child: SwitchListTile(
+                title: Text(
+                  l10n?.waveGeneratorRiseFromGround ?? 'Rise from ground mode',
+                ),
+                subtitle: Text(
+                  l10n?.waveGeneratorRiseFromGroundHint ??
+                      'IsRiseFromGroundMode',
+                ),
+                value: _data.isRiseFromGroundMode,
+                onChanged: (v) {
+                  _data.isRiseFromGroundMode = v;
+                  if (v) {
+                    _data.spawnColStart = 2;
+                    _data.spawnColEnd = 2;
+                  }
+                  _sync();
+                },
+              ),
+            ),
+            if (_data.isRiseFromGroundMode) ...[
+              const SizedBox(height: 8),
+              EditorWarningBanner(
+                title: l10n!.waveGeneratorRiseFromGroundWarningTitle,
+                message: l10n.waveGeneratorRiseFromGroundWarning,
+              ),
+            ],
             const SizedBox(height: 16),
             Card(
               child: Padding(

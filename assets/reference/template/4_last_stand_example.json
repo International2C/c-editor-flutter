@@ -4,6 +4,7 @@
       "objclass": "LevelDefinition",
       "objdata": {
         "Description": "本关为坚不可摧示例关",
+        "DisablePeavine": true,
         "LevelNumber": 4,
         "Loot": "RTID(DefaultLoot@LevelModules)",
         "Modules": [

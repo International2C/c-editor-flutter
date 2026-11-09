@@ -76,6 +76,8 @@ class _BootstrapAppState extends State<BootstrapApp> {
   double _progress = 0;
   BootstrapLoadingCategory? _loadingCategory;
   bool _ready = false;
+  int? _pluginResourcesCompleted;
+  int? _pluginResourcesTotal;
   late final Locale _startupLocale = resolveStartupLocale(widget.prefs);
 
   late final ThemeMode _startupThemeMode = _resolveThemeMode(widget.prefs);
@@ -112,7 +114,23 @@ class _BootstrapAppState extends State<BootstrapApp> {
       _progress = 0.92;
       _loadingCategory = BootstrapLoadingCategory.plugins;
     });
-    await PluginManager.init(widget.prefs);
+    final progressClock = Stopwatch()..start();
+    var lastUpdateMs = -100;
+    await PluginManager.init(
+      widget.prefs,
+      onResourceProgress: (completed, total) {
+        if (!mounted) return;
+        final now = progressClock.elapsedMilliseconds;
+        if (completed != total && now - lastUpdateMs < 100) return;
+        lastUpdateMs = now;
+        setState(() {
+          _pluginResourcesCompleted = completed;
+          _pluginResourcesTotal = total;
+          // Reserve the final 1% for storage and plugin entrypoints.
+          _progress = 0.92 + (total == 0 ? 0 : completed / total) * 0.07;
+        });
+      },
+    );
     if (!mounted) return;
     setState(() {
       _progress = 1.0;
@@ -128,6 +146,8 @@ class _BootstrapAppState extends State<BootstrapApp> {
         locale: _startupLocale,
         themeMode: _startupThemeMode,
         loadingCategory: _loadingCategory,
+        pluginResourcesCompleted: _pluginResourcesCompleted,
+        pluginResourcesTotal: _pluginResourcesTotal,
       );
     }
 

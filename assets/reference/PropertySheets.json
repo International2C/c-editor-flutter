@@ -334,7 +334,8 @@
           "cosmicpea",
           "cosmicmushroom",
           "cosmicnut",
-          "phoenixfloat"
+          "phoenixfloat",
+          "mangofier"
         ],
         "PlantAlmanacOrder": [
           "sunflower",
@@ -655,7 +656,8 @@
           "dmdragonfruit",
           "phoenixfloat",
           "cosmicsaucer",
-          "nagasalak"
+          "nagasalak",
+          "mangofier"
         ],
         "ParallelPlantAlmanacOrder": [
           "parallel_sunflower",
@@ -717,6 +719,7 @@
           "pirate_armor1",
           "pirate_armor2",
           "pirate_armor4",
+          "pelican",
           "pirate_flag",
           "swashbuckler",
           "seagull",
@@ -1019,6 +1022,8 @@
           "childrensday_gargantuar",
           "childrensday_imp",
           "children_lollipops",
+          "children_ballon",
+          "children_toygun",
           "bumpercar",
           "parkour_runner",
           "parkour",
@@ -1185,7 +1190,8 @@
           "zombie_moon_illusionist",
           "supernova_gargantuar_gemini",
           "zombie_supernova_imp",
-          "lunar_radiation_gargantuar"
+          "lunar_radiation_gargantuar",
+          "zombie_werewolf"
         ],
         "PowerTilePropagationAlpha": 1,
         "PowerTilePropagationDelay": 0.20000000000000001,
@@ -4552,11 +4558,11 @@
             120
           ],
           "AttackInterval": [
-            3.5,
-            3.5,
-            3.5,
-            3.5,
-            3.5
+            1.5,
+            1.5,
+            1.5,
+            1.5,
+            1.5
           ],
           "Ranage": [
             "[RANGE_0]",
@@ -8040,7 +8046,7 @@
         "PowerCost": 2,
         "Hitpoints": 300,
         "MinLevel": 1,
-        "MaxLevel": 4,
+        "MaxLevel": 5,
         "BoostRate": 0.25,
         "PacketCooldown": 20,
         "StartingCooldown": 20,
@@ -8061,6 +8067,18 @@
         "# Time the bean is reconvering from attacking.": 0,
         "StunTimeAfterPF": 2,
         "# Time zombie remains stun after PF effect, only for star level.": 0,
+        "Level5ImpactDamage": 1800,
+        "Level5FlightHeight": 800,
+        "Level5RiseTime": 1.5,
+        "Level5TransferTime": 1.5,
+        "Level5FallTime": 1.5,
+        "Level5LandingStunTime": 1,
+        "Level5GiantLaunchHeight": 130,
+        "Level5GiantLaunchTime": 0.5,
+        "Level5OlivePitAboveHeight": 130,
+        "Level5OlivePitTravelTime": 0.5,
+        "Level5OlivePitFallTime": 1.5,
+        "Level5OlivePitDigestTime": 3,
         "StarRate": {
           "SecondStarRate": 0.14999999999999999,
           "ThirdStarRate": 0.29999999999999999
@@ -8137,8 +8155,8 @@
           {
             "AttackLevel": 3,
             "HitPointsLevel": 3,
-            "PropertySkillType": "RTID(SunflowerLevel5Avatar@SkillTypes)",
-            "AdvancedSkillType": "RTID(plant_wakeup_level2@SkillTypes)"
+            "PropertySkillType": "RTID(Plant_PropertyUp_Level4@SkillTypes)",
+            "AdvancedSkillType": "RTID(Springbean_Skill1_Level5@SkillTypes)"
           }
         ],
         "DetailProps": {
@@ -8154,15 +8172,18 @@
             11,
             11,
             11,
+            11,
             11
           ],
           "Ranage": [
             "[RANGE_18]",
             "[RANGE_18]",
             "[RANGE_18]",
+            "[RANGE_18]",
             "[RANGE_18]"
           ],
           "Area": [
+            "[AREA_SINGLE]",
             "[AREA_SINGLE]",
             "[AREA_SINGLE]",
             "[AREA_SINGLE]",
@@ -13449,7 +13470,7 @@
           {
             "AttackLevel": 3,
             "HitPointsLevel": 3,
-            "PropertySkillType": "RTID(SunflowerLevel5Avatar@SkillTypes)",
+            "PropertySkillType": "RTID(Plant_PropertyUp_Level4@SkillTypes)",
             "AdvancedSkillType": "RTID(Peanut_Skill1_Level5@SkillTypes)"
           }
         ],
@@ -39967,7 +39988,8 @@
             "roman_ballista",
             "hamster_ball",
             "plushie_cart",
-            "bubble_machine_imp"
+            "bubble_machine_imp",
+            "GingleZombieGhost"
           ]
         },
         "ArtCenter": {
@@ -52944,7 +52966,8 @@
         "PitCapacityExcludelist": {
           "ListType": "blacklist",
           "List": [
-            "ZombieChicken"
+            "ZombieChicken",
+            "ZombieMausoleumPiggy"
           ]
         },
         "CanBeTargetedByList": {
@@ -58404,7 +58427,8 @@
           "List": [
             "ZombieChicken",
             "ZombiePirateParrot",
-            "ZombieWeasel"
+            "ZombieWeasel",
+            "ZombieMausoleumPiggy"
           ]
         },
         "Actions": [
@@ -71347,7 +71371,12 @@
           "contagiouspoison",
           "dripwater",
           "stucked",
-          "shadowpoisoned"
+          "shadowpoisoned",
+          "thornspoison",
+          "thornslv5poison",
+          "oilfire",
+          "oil",
+          "vulnerablefire"
         ],
         "HitRect": {
           "mX": 0,
@@ -72254,7 +72283,12 @@
           "contagiouspoison",
           "dripwater",
           "stucked",
-          "shadowpoisoned"
+          "shadowpoisoned",
+          "thornspoison",
+          "thornslv5poison",
+          "oilfire",
+          "oil",
+          "vulnerablefire"
         ],
         "HitRect": {
           "mX": 0,
@@ -74094,7 +74128,12 @@
           "contagiouspoison",
           "dripwater",
           "stucked",
-          "shadowpoisoned"
+          "shadowpoisoned",
+          "thornspoison",
+          "thornslv5poison",
+          "oilfire",
+          "oil",
+          "vulnerablefire"
         ],
         "HitRect": {
           "mX": 0,
@@ -74996,6 +75035,669 @@
                 "GridX": 0,
                 "GridY": 2,
                 "Img": "IMAGE_UI_MAUSOLEUM_TUNNEL_LEFT_4"
+              }
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "objclass": "ZombieZombossQinShiHuangProps",
+      "aliases": [
+        "ZombieZombossQinShiHuangDangerroomDefault"
+      ],
+      "objdata": {
+        "Speed": 0.20000000000000001,
+        "CanSpawnPlantFood": false,
+        "EnableAutoTest": false,
+        "SizeType": "big",
+        "CanBeLaunchedByPlants": false,
+        "EnableEliteImmunities": true,
+        "CanShowEliteButton": false,
+        "ZombieSpeedUpValue": 2.0,
+        "ElementBallColdDown": 24.0,
+        "FatalitySkillCondition": 3000,
+        "FinalPhaseSummonInterval": 5,
+        "ZombossFinalStageTimeLimited": 24.0,
+        "DestroyGridStartCol": 4,
+        "DestroyGridEndCol": 6,
+        "ZombieStats": [
+          {
+            "Type": "toughness",
+            "Value": "toughness8"
+          },
+          {
+            "Type": "speed",
+            "Value": "speed3"
+          }
+        ],
+        "ZombieLevelStats": [
+          {
+            "AttackLevel": 1,
+            "HitPointsLevel": 1
+          },
+          {
+            "AttackLevel": 2,
+            "HitPointsLevel": 2
+          },
+          {
+            "AttackLevel": 3,
+            "HitPointsLevel": 3
+          },
+          {
+            "AttackLevel": 4.5,
+            "HitPointsLevel": 4.5
+          },
+          {
+            "AttackLevel": 5,
+            "HitPointsLevel": 5
+          }
+        ],
+        "ZombieConditionsWhichZombieBossImmunities": [
+          "chill",
+          "freeze",
+          "stun",
+          "numb",
+          "butter",
+          "butter9",
+          "haunted",
+          "stalled",
+          "poisoned",
+          "contagiouspoison",
+          "dripwater",
+          "stucked",
+          "shadowpoisoned",
+          "thornspoison",
+          "thornslv5poison",
+          "oilfire",
+          "oil",
+          "vulnerablefire"
+        ],
+        "HitRect": {
+          "mX": 0,
+          "mY": 86,
+          "mWidth": 70,
+          "mHeight": 240
+        },
+        "AttackRect": {
+          "mX": -10,
+          "mY": 86,
+          "mWidth": 20,
+          "mHeight": 200
+        },
+        "ArtCenter": {
+          "x": 33,
+          "y": 116
+        },
+        "ShadowOffset": {
+          "x": 55,
+          "y": -50,
+          "z": 0.80000000000000004
+        },
+        "ShadowScaling": {
+          "x": 4.5,
+          "y": 4.5
+        },
+        "AlmanacOffset": {
+          "x": 41,
+          "y": 114
+        },
+        "AlmanacScale": 0.65000000000000002,
+        "GroundTrackName": "ground_swatch",
+        "ZombossStageCount": 3,
+        "ElementBallTypeList": [
+          "zomboss_fire_element_ball",
+          "zomboss_ice_element_ball"
+        ],
+        "AttackInterval": {
+          "Min": 8,
+          "Max": 10
+        },
+        "MinColumn": 5,
+        "MaxColumn": 8,
+        "Stages": [
+          {
+            "Hitpoints": 1500,
+            "IdleTime": {
+              "Min": 5,
+              "Max": 5
+            },
+            "RandomActions": [
+              {
+                "RandomActionWeight": 70,
+                "RandomAction": "SummonZombies"
+              },
+              {
+                "RandomActionWeight": 0,
+                "RandomAction": "CreateTunnel"
+              },
+              {
+                "RandomActionWeight": 0,
+                "RandomAction": "SummonHeroicSpirit"
+              },
+              {
+                "RandomActionWeight": 0,
+                "RandomAction": "MakeHowling"
+              },
+              {
+                "RandomActionWeight": 0,
+                "RandomAction": "DestroyLand"
+              },
+              {
+                "RandomActionWeight": 0,
+                "RandomAction": "SummonElementBall"
+              },
+              {
+                "RandomActionWeight": 0,
+                "RandomAction": "ImperialJadeSeal"
+              },
+              {
+                "RandomActionWeight": 0,
+                "RandomAction": "SweepSixDirections"
+              }
+            ],
+            "HeroicSpiritDataPool": {
+              "HeroicSpiritCount": 2,
+              "HeroicSpiritTypeName": "terracottaArmy",
+              "SummonHeroicSpiritStartCol": 4,
+              "SummonHeroicSpiritEndCol": 6
+            },
+            "ZombieSummonDataPool": {
+              "SummonType": "RiseFromGround",
+              "SummonNumMin": 2,
+              "SummonNumMax": 3,
+              "ZombieSummonPool": [
+                {
+                  "ZombieWeight": 300,
+                  "SummonRange": {
+                    "mX": 5,
+                    "mY": 0,
+                    "mWidth": 1,
+                    "mHeight": 5
+                  },
+                  "ZombieTypeName": "mausoleum_basic"
+                },
+                {
+                  "ZombieWeight": 100,
+                  "SummonRange": {
+                    "mX": 5,
+                    "mY": 0,
+                    "mWidth": 1,
+                    "mHeight": 5
+                  },
+                  "ZombieTypeName": "mausoleum_armor1"
+                }
+              ]
+            }
+          },
+          {
+            "Hitpoints": 3900,
+            "IdleTime": {
+              "Min": 6.5,
+              "Max": 8.5
+            },
+            "RandomActions": [
+              {
+                "RandomActionWeight": 44,
+                "RandomAction": "SummonZombies"
+              },
+              {
+                "RandomActionWeight": 100,
+                "RandomAction": "CreateTunnel"
+              },
+              {
+                "RandomActionWeight": 25,
+                "RandomAction": "SummonHeroicSpirit"
+              },
+              {
+                "RandomActionWeight": 33,
+                "RandomAction": "MakeHowling"
+              },
+              {
+                "RandomActionWeight": 0,
+                "RandomAction": "DestroyLand"
+              },
+              {
+                "RandomActionWeight": 0,
+                "RandomAction": "SummonElementBall"
+              },
+              {
+                "RandomActionWeight": 0,
+                "RandomAction": "ImperialJadeSeal"
+              },
+              {
+                "RandomActionWeight": 0,
+                "RandomAction": "SweepSixDirections"
+              }
+            ],
+            "HeroicSpiritDataPool": {
+              "HeroicSpiritCount": 2,
+              "HeroicSpiritTypeName": "terracottaArmy",
+              "SummonHeroicSpiritStartCol": 4,
+              "SummonHeroicSpiritEndCol": 6
+            },
+            "ZombieSummonDataPool": {
+              "SummonType": "RiseFromGround",
+              "SummonNumMin": 3,
+              "SummonNumMax": 4,
+              "ZombieSummonPool": [
+                {
+                  "ZombieWeight": 300,
+                  "SummonRange": {
+                    "mX": 4,
+                    "mY": 0,
+                    "mWidth": 2,
+                    "mHeight": 5
+                  },
+                  "ZombieTypeName": "mausoleum_basic"
+                },
+                {
+                  "ZombieWeight": 100,
+                  "SummonRange": {
+                    "mX": 5,
+                    "mY": 0,
+                    "mWidth": 1,
+                    "mHeight": 5
+                  },
+                  "ZombieTypeName": "mausoleum_armor1"
+                },
+                {
+                  "ZombieWeight": 60,
+                  "SummonRange": {
+                    "mX": 5,
+                    "mY": 0,
+                    "mWidth": 1,
+                    "mHeight": 5
+                  },
+                  "ZombieTypeName": "mausoleum_armor2"
+                },
+                {
+                  "ZombieWeight": 60,
+                  "SummonRange": {
+                    "mX": 5,
+                    "mY": 0,
+                    "mWidth": 1,
+                    "mHeight": 5
+                  },
+                  "ZombieTypeName": "qin_jingke"
+                }
+              ]
+            }
+          },
+          {
+            "Hitpoints": 7500,
+            "IdleTime": {
+              "Min": 6.5,
+              "Max": 8
+            },
+            "NeedDestroyLandStage": true,
+            "ElementBallCountNeedIncreate": true,
+            "RandomActions": [
+              {
+                "RandomActionWeight": 44,
+                "RandomAction": "SummonZombies"
+              },
+              {
+                "RandomActionWeight": 500,
+                "RandomAction": "CreateTunnel"
+              },
+              {
+                "RandomActionWeight": 25,
+                "RandomAction": "SummonHeroicSpirit"
+              },
+              {
+                "RandomActionWeight": 22,
+                "RandomAction": "MakeHowling"
+              },
+              {
+                "RandomActionWeight": 0,
+                "RandomAction": "DestroyLand"
+              },
+              {
+                "RandomActionWeight": 0,
+                "RandomAction": "SummonElementBall"
+              },
+              {
+                "RandomActionWeight": 22,
+                "RandomAction": "ImperialJadeSeal"
+              },
+              {
+                "RandomActionWeight": 0,
+                "RandomAction": "SweepSixDirections"
+              }
+            ],
+            "HeroicSpiritDataPool": {
+              "HeroicSpiritCount": 2,
+              "HeroicSpiritTypeName": "terracottaArmy",
+              "SummonHeroicSpiritStartCol": 4,
+              "SummonHeroicSpiritEndCol": 6
+            },
+            "ZombieSummonDataPool": {
+              "SummonType": "RiseFromGround",
+              "SummonNumMin": 4,
+              "SummonNumMax": 4,
+              "ZombieSummonPool": [
+                {
+                  "ZombieWeight": 400,
+                  "SummonRange": {
+                    "mX": 4,
+                    "mY": 0,
+                    "mWidth": 2,
+                    "mHeight": 5
+                  },
+                  "ZombieTypeName": "mausoleum_basic"
+                },
+                {
+                  "ZombieWeight": 50,
+                  "SummonRange": {
+                    "mX": 5,
+                    "mY": 0,
+                    "mWidth": 1,
+                    "mHeight": 5
+                  },
+                  "ZombieTypeName": "mausoleum_gargantuar"
+                },
+                {
+                  "ZombieWeight": 60,
+                  "SummonRange": {
+                    "mX": 5,
+                    "mY": 0,
+                    "mWidth": 1,
+                    "mHeight": 5
+                  },
+                  "ZombieTypeName": "qin_shield_segment"
+                }
+              ]
+            }
+          }
+        ],
+        "RandomTunnelList": [
+          [
+            [
+              {
+                "GridX": 8,
+                "GridY": 0,
+                "Img": "IMAGE_UI_MAUSOLEUM_TUNNEL_LEFT"
+              },
+              {
+                "GridX": 7,
+                "GridY": 0,
+                "Img": "IMAGE_UI_MAUSOLEUM_TUNNEL_LEFT"
+              },
+              {
+                "GridX": 6,
+                "GridY": 0,
+                "Img": "IMAGE_UI_MAUSOLEUM_TUNNEL_LEFT"
+              },
+              {
+                "GridX": 5,
+                "GridY": 0,
+                "Img": "IMAGE_UI_MAUSOLEUM_TUNNEL_LEFT"
+              },
+              {
+                "GridX": 4,
+                "GridY": 0,
+                "Img": "IMAGE_UI_MAUSOLEUM_TUNNEL_DOWN_2"
+              },
+              {
+                "GridX": 4,
+                "GridY": 1,
+                "Img": "IMAGE_UI_MAUSOLEUM_TUNNEL_DOWN"
+              },
+              {
+                "GridX": 4,
+                "GridY": 2,
+                "Img": "IMAGE_UI_MAUSOLEUM_TUNNEL_LEFT_3"
+              }
+            ],
+            [
+              {
+                "GridX": 8,
+                "GridY": 4,
+                "Img": "IMAGE_UI_MAUSOLEUM_TUNNEL_LEFT"
+              },
+              {
+                "GridX": 7,
+                "GridY": 4,
+                "Img": "IMAGE_UI_MAUSOLEUM_TUNNEL_LEFT"
+              },
+              {
+                "GridX": 6,
+                "GridY": 4,
+                "Img": "IMAGE_UI_MAUSOLEUM_TUNNEL_LEFT"
+              },
+              {
+                "GridX": 5,
+                "GridY": 4,
+                "Img": "IMAGE_UI_MAUSOLEUM_TUNNEL_LEFT"
+              },
+              {
+                "GridX": 4,
+                "GridY": 4,
+                "Img": "IMAGE_UI_MAUSOLEUM_TUNNEL_LEFT"
+              }
+            ],
+            [
+              {
+                "GridX": 8,
+                "GridY": 0,
+                "Img": "IMAGE_UI_MAUSOLEUM_TUNNEL_LEFT"
+              },
+              {
+                "GridX": 7,
+                "GridY": 0,
+                "Img": "IMAGE_UI_MAUSOLEUM_TUNNEL_LEFT"
+              },
+              {
+                "GridX": 6,
+                "GridY": 0,
+                "Img": "IMAGE_UI_MAUSOLEUM_TUNNEL_LEFT"
+              },
+              {
+                "GridX": 5,
+                "GridY": 0,
+                "Img": "IMAGE_UI_MAUSOLEUM_TUNNEL_LEFT"
+              },
+              {
+                "GridX": 4,
+                "GridY": 0,
+                "Img": "IMAGE_UI_MAUSOLEUM_TUNNEL_DOWN_LEFT"
+              }
+            ]
+          ],
+          [
+            [
+              {
+                "GridX": 8,
+                "GridY": 0,
+                "Img": "IMAGE_UI_MAUSOLEUM_TUNNEL_LEFT"
+              },
+              {
+                "GridX": 7,
+                "GridY": 0,
+                "Img": "IMAGE_UI_MAUSOLEUM_TUNNEL_LEFT"
+              },
+              {
+                "GridX": 6,
+                "GridY": 0,
+                "Img": "IMAGE_UI_MAUSOLEUM_TUNNEL_LEFT"
+              },
+              {
+                "GridX": 5,
+                "GridY": 0,
+                "Img": "IMAGE_UI_MAUSOLEUM_TUNNEL_DOWN_2"
+              },
+              {
+                "GridX": 5,
+                "GridY": 1,
+                "Img": "IMAGE_UI_MAUSOLEUM_TUNNEL_DOWN"
+              },
+              {
+                "GridX": 5,
+                "GridY": 2,
+                "Img": "IMAGE_UI_MAUSOLEUM_TUNNEL_DOWN"
+              },
+              {
+                "GridX": 5,
+                "GridY": 3,
+                "Img": "IMAGE_UI_MAUSOLEUM_TUNNEL_LEFT_3"
+              },
+              {
+                "GridX": 4,
+                "GridY": 3,
+                "Img": "IMAGE_UI_MAUSOLEUM_TUNNEL_LEFT"
+              }
+            ],
+            [
+              {
+                "GridX": 8,
+                "GridY": 4,
+                "Img": "IMAGE_UI_MAUSOLEUM_TUNNEL_LEFT"
+              },
+              {
+                "GridX": 7,
+                "GridY": 4,
+                "Img": "IMAGE_UI_MAUSOLEUM_TUNNEL_LEFT"
+              },
+              {
+                "GridX": 6,
+                "GridY": 4,
+                "Img": "IMAGE_UI_MAUSOLEUM_TUNNEL_LEFT"
+              },
+              {
+                "GridX": 5,
+                "GridY": 4,
+                "Img": "IMAGE_UI_MAUSOLEUM_TUNNEL_LEFT"
+              },
+              {
+                "GridX": 4,
+                "GridY": 4,
+                "Img": "IMAGE_UI_MAUSOLEUM_TUNNEL_LEFT"
+              }
+            ],
+            [
+              {
+                "GridX": 8,
+                "GridY": 0,
+                "Img": "IMAGE_UI_MAUSOLEUM_TUNNEL_LEFT"
+              },
+              {
+                "GridX": 7,
+                "GridY": 0,
+                "Img": "IMAGE_UI_MAUSOLEUM_TUNNEL_LEFT"
+              },
+              {
+                "GridX": 6,
+                "GridY": 0,
+                "Img": "IMAGE_UI_MAUSOLEUM_TUNNEL_LEFT"
+              },
+              {
+                "GridX": 5,
+                "GridY": 0,
+                "Img": "IMAGE_UI_MAUSOLEUM_TUNNEL_DOWN_LEFT"
+              },
+              {
+                "GridX": 4,
+                "GridY": 0,
+                "Img": "IMAGE_UI_MAUSOLEUM_TUNNEL_LEFT"
+              }
+            ]
+          ],
+          [
+            [
+              {
+                "GridX": 8,
+                "GridY": 4,
+                "Img": "IMAGE_UI_MAUSOLEUM_TUNNEL_LEFT"
+              },
+              {
+                "GridX": 7,
+                "GridY": 4,
+                "Img": "IMAGE_UI_MAUSOLEUM_TUNNEL_LEFT"
+              },
+              {
+                "GridX": 6,
+                "GridY": 4,
+                "Img": "IMAGE_UI_MAUSOLEUM_TUNNEL_LEFT"
+              },
+              {
+                "GridX": 5,
+                "GridY": 4,
+                "Img": "IMAGE_UI_MAUSOLEUM_TUNNEL_UP_2"
+              },
+              {
+                "GridX": 5,
+                "GridY": 3,
+                "Img": "IMAGE_UI_MAUSOLEUM_TUNNEL_UP"
+              },
+              {
+                "GridX": 5,
+                "GridY": 2,
+                "Img": "IMAGE_UI_MAUSOLEUM_TUNNEL_UP"
+              },
+              {
+                "GridX": 5,
+                "GridY": 1,
+                "Img": "IMAGE_UI_MAUSOLEUM_TUNNEL_LEFT_2"
+              },
+              {
+                "GridX": 4,
+                "GridY": 1,
+                "Img": "IMAGE_UI_MAUSOLEUM_TUNNEL_LEFT"
+              }
+            ],
+            [
+              {
+                "GridX": 8,
+                "GridY": 0,
+                "Img": "IMAGE_UI_MAUSOLEUM_TUNNEL_LEFT"
+              },
+              {
+                "GridX": 7,
+                "GridY": 0,
+                "Img": "IMAGE_UI_MAUSOLEUM_TUNNEL_LEFT"
+              },
+              {
+                "GridX": 6,
+                "GridY": 0,
+                "Img": "IMAGE_UI_MAUSOLEUM_TUNNEL_LEFT"
+              },
+              {
+                "GridX": 5,
+                "GridY": 0,
+                "Img": "IMAGE_UI_MAUSOLEUM_TUNNEL_LEFT"
+              },
+              {
+                "GridX": 4,
+                "GridY": 0,
+                "Img": "IMAGE_UI_MAUSOLEUM_TUNNEL_LEFT"
+              }
+            ],
+            [
+              {
+                "GridX": 8,
+                "GridY": 4,
+                "Img": "IMAGE_UI_MAUSOLEUM_TUNNEL_LEFT"
+              },
+              {
+                "GridX": 7,
+                "GridY": 4,
+                "Img": "IMAGE_UI_MAUSOLEUM_TUNNEL_LEFT"
+              },
+              {
+                "GridX": 6,
+                "GridY": 4,
+                "Img": "IMAGE_UI_MAUSOLEUM_TUNNEL_LEFT"
+              },
+              {
+                "GridX": 5,
+                "GridY": 4,
+                "Img": "IMAGE_UI_MAUSOLEUM_TUNNEL_LEFT"
+              },
+              {
+                "GridX": 4,
+                "GridY": 4,
+                "Img": "IMAGE_UI_MAUSOLEUM_TUNNEL_LEFT"
               }
             ]
           ]
@@ -90694,6 +91396,7 @@
         "ZombieWizardEliteDefault"
       ],
       "objdata": {
+        "IsEliteZombie": true,
         "SizeType": "big",
         "EnableShowHealthBarByDamage": true,
         "EnableEliteImmunities": true,
@@ -90992,6 +91695,7 @@
         "ZombieDarkJugglerElite"
       ],
       "objdata": {
+        "IsEliteZombie": true,
         "EnableShowHealthBarByDamage": true,
         "EnableEliteImmunities": true,
         "EnableNoInvincibleTakeDamage": true,
@@ -92010,6 +92714,7 @@
         "ZombieDarkKingElite"
       ],
       "objdata": {
+        "IsEliteZombie": true,
         "SizeType": "big",
         "EnableShowHealthBarByDamage": true,
         "EnableEliteImmunities": true,
@@ -97369,6 +98074,7 @@
         "ZombieIceageArmor3EliteDefault"
       ],
       "objdata": {
+        "IsEliteZombie": true,
         "Speed": 0.185,
         "Hitpoints": 270,
         "EatDPS": 100,
@@ -97587,6 +98293,7 @@
         "ZombieIceAgeHunterElite"
       ],
       "objdata": {
+        "IsEliteZombie": true,
         "SizeType": "big",
         "EnableShowHealthBarByDamage": true,
         "EnableEliteImmunities": true,
@@ -97678,6 +98385,7 @@
         "ZombiePlantWarsIceAgeHunterEliteDefault"
       ],
       "objdata": {
+        "IsEliteZombie": true,
         "SizeType": "big",
         "EnableShowHealthBarByDamage": true,
         "EnableEliteImmunities": true,
@@ -98424,6 +99132,7 @@
         "ZombieIceAgeChiefElite"
       ],
       "objdata": {
+        "IsEliteZombie": true,
         "SizeType": "big",
         "EnableShowHealthBarByDamage": true,
         "EnableEliteImmunities": true,
@@ -98510,6 +99219,7 @@
         "ZombieIceAgeChiefEliteMemo"
       ],
       "objdata": {
+        "IsEliteZombie": true,
         "SizeType": "big",
         "EnableShowHealthBarByDamage": true,
         "EnableEliteImmunities": true,
@@ -98595,6 +99305,7 @@
         "ZombiePlantWarsIceAgeChiefElite"
       ],
       "objdata": {
+        "IsEliteZombie": true,
         "SizeType": "big",
         "EnableShowHealthBarByDamage": true,
         "EnableEliteImmunities": true,
@@ -107105,6 +107816,7 @@
         "ProjectileBounceTime": 0.90000000000000002,
         "ProjectileBounceDistance": 160,
         "BounceableProjectiles": [
+          "RTID(MangofierLob@ProjectileTypes)",
           "RTID(StickybombRiceDefault@ProjectileTypes)",
           "RTID(CypripediumDefault@ProjectileTypes)",
           "RTID(CypripediumThickDefault@ProjectileTypes)",
@@ -107269,6 +107981,7 @@
         "ProjectileBounceTime": 0.90000000000000002,
         "ProjectileBounceDistance": 160,
         "BounceableProjectiles": [
+          "RTID(MangofierLob@ProjectileTypes)",
           "RTID(StickybombRiceDefault@ProjectileTypes)",
           "RTID(CypripediumDefault@ProjectileTypes)",
           "RTID(CypripediumThickDefault@ProjectileTypes)",
@@ -109210,6 +109923,7 @@
         "ProjectileBounceTime": 0.90000000000000002,
         "ProjectileBounceDistance": 160,
         "BounceableProjectiles": [
+          "RTID(MangofierLob@ProjectileTypes)",
           "RTID(StickybombRiceDefault@ProjectileTypes)",
           "RTID(CypripediumDefault@ProjectileTypes)",
           "RTID(CypripediumThickDefault@ProjectileTypes)",
@@ -122774,6 +123488,45 @@
       }
     },
     {
+      "objclass": "PVZ2GingleWizardGridItemProps",
+      "aliases": [
+        "PVZ2GingleWizardGridItemDefault"
+      ],
+      "objdata": {
+        "PopAnimRenderOffset": {
+          "x": 98,
+          "y": 127
+        },
+        "PopAnim": "POPANIM_EFFECTS_SNOWMAN_GINGLE_WIZARD",
+        "PopAnimRigClass": "GravestoneAnimRig",
+        "StandardDamage": 1000,
+        "TargetsCount": 2,
+        "TransformPlantBlacklist": {
+          "ListType": "blacklist",
+          "List": [
+            "kelpguard",
+            "powerplant",
+            "minishroom",
+            "smallcherry",
+            "carrotmissile",
+            "smallexplodeonut",
+            "smallcactus",
+            "hollybarrierleaf",
+            "sea_puffshroom",
+            "dragonbabybruit",
+            "bashopult",
+            "bitpeashooter",
+            "magicbeans",
+            "frog",
+            "smallChestnut"
+          ]
+        },
+        "CastCooldown": 8.0,
+        "GhostSpeed": 0.10000000000000001,
+        "GhostAddedDuration": 2.0
+      }
+    },
+    {
       "objclass": "GridItemAnimationProps",
       "aliases": [
         "PVZ2GingleSoldierGridItemDefault"
@@ -122824,6 +123577,7 @@
         "ProjectileBounceTime": 0.90000000000000002,
         "ProjectileBounceDistance": 160,
         "BounceableProjectiles": [
+          "RTID(MangofierLob@ProjectileTypes)",
           "RTID(StickybombRiceDefault@ProjectileTypes)",
           "RTID(CypripediumDefault@ProjectileTypes)",
           "RTID(CypripediumThickDefault@ProjectileTypes)",
@@ -124328,8 +125082,6 @@
             "camel_manyhump",
             "camel_segment",
             "pirate_captain_parrot",
-            "children_toygun",
-            "children_airbubble",
             "barrelroller",
             "catapult",
             "journey_to_the_west_catapult",
@@ -126081,7 +126833,7 @@
         "GridItemFlameTrailDefault"
       ],
       "objdata": {
-        "PopAnim": "POPANIM_EFFECTS_FLAMELADY_GROUNDFLAME",
+        "PopAnim": "POPANIM_EFFECTS_ZOMBIE_ZOMBOSS_QINSHIHUANG_FIREBALL_EFFECTS",
         "PopAnimRigClass": "PopAnimRig",
         "PopAnimRenderOffset": {
           "x": 97,
@@ -127386,7 +128138,7 @@
       ],
       "objdata": {
         "PopAnim": "POPANIM_EFFECTS_ZOMBIE_WITCH_EFFECT",
-        "StartAnim": "ghost_loop",
+        "StartAnim": "ghost_start",
         "LoopAnim": "ghost_loop",
         "EndAnim": "ghost_end",
         "PopAnimRenderOffset": {
@@ -132325,6 +133077,247 @@
                     "CostAddValue": 1
                   }
                 ]
+              },
+              {
+                "Type": 400076,
+                "LevelInfos": [
+                  {
+                    "UnlockedTurn": 2,
+                    "Level": 3,
+                    "Cost": 65,
+                    "CostAddValue": 1
+                  },
+                  {
+                    "UnlockedTurn": 6,
+                    "Level": 5,
+                    "Cost": 65,
+                    "CostAddValue": 1
+                  },
+                  {
+                    "UnlockedTurn": 9,
+                    "Level": 6,
+                    "Cost": 65,
+                    "CostAddValue": 1
+                  },
+                  {
+                    "UnlockedTurn": 12,
+                    "Level": 7,
+                    "Cost": 65,
+                    "CostAddValue": 1
+                  },
+                  {
+                    "UnlockedTurn": 15,
+                    "Level": 8,
+                    "Cost": 65,
+                    "CostAddValue": 1
+                  },
+                  {
+                    "UnlockedTurn": 18,
+                    "Level": 9,
+                    "Cost": 65,
+                    "CostAddValue": 1
+                  },
+                  {
+                    "UnlockedTurn": 19,
+                    "Level": 10,
+                    "Cost": 65,
+                    "CostAddValue": 1
+                  }
+                ]
+              },
+              {
+                "Type": 400077,
+                "LevelInfos": [
+                  {
+                    "UnlockedTurn": 4,
+                    "Level": 3,
+                    "Cost": 90,
+                    "CostAddValue": 1
+                  },
+                  {
+                    "UnlockedTurn": 6,
+                    "Level": 5,
+                    "Cost": 90,
+                    "CostAddValue": 1
+                  },
+                  {
+                    "UnlockedTurn": 9,
+                    "Level": 6,
+                    "Cost": 90,
+                    "CostAddValue": 1
+                  },
+                  {
+                    "UnlockedTurn": 12,
+                    "Level": 7,
+                    "Cost": 90,
+                    "CostAddValue": 1
+                  },
+                  {
+                    "UnlockedTurn": 15,
+                    "Level": 8,
+                    "Cost": 90,
+                    "CostAddValue": 1
+                  },
+                  {
+                    "UnlockedTurn": 18,
+                    "Level": 9,
+                    "Cost": 90,
+                    "CostAddValue": 1
+                  },
+                  {
+                    "UnlockedTurn": 19,
+                    "Level": 10,
+                    "Cost": 90,
+                    "CostAddValue": 1
+                  }
+                ]
+              },
+              {
+                "Type": 400078,
+                "LevelInfos": [
+                  {
+                    "UnlockedTurn": 0,
+                    "Level": 1,
+                    "Cost": 15,
+                    "CostAddValue": 1
+                  },
+                  {
+                    "UnlockedTurn": 2,
+                    "Level": 3,
+                    "Cost": 15,
+                    "CostAddValue": 1
+                  },
+                  {
+                    "UnlockedTurn": 6,
+                    "Level": 5,
+                    "Cost": 15,
+                    "CostAddValue": 1
+                  },
+                  {
+                    "UnlockedTurn": 9,
+                    "Level": 6,
+                    "Cost": 15,
+                    "CostAddValue": 1
+                  },
+                  {
+                    "UnlockedTurn": 12,
+                    "Level": 7,
+                    "Cost": 15,
+                    "CostAddValue": 1
+                  },
+                  {
+                    "UnlockedTurn": 15,
+                    "Level": 8,
+                    "Cost": 15,
+                    "CostAddValue": 1
+                  },
+                  {
+                    "UnlockedTurn": 18,
+                    "Level": 9,
+                    "Cost": 15,
+                    "CostAddValue": 1
+                  },
+                  {
+                    "UnlockedTurn": 19,
+                    "Level": 10,
+                    "Cost": 15,
+                    "CostAddValue": 1
+                  }
+                ]
+              },
+              {
+                "Type": 400079,
+                "LevelInfos": [
+                  {
+                    "UnlockedTurn": 4,
+                    "Level": 3,
+                    "Cost": 110,
+                    "CostAddValue": 1
+                  },
+                  {
+                    "UnlockedTurn": 6,
+                    "Level": 5,
+                    "Cost": 110,
+                    "CostAddValue": 1
+                  },
+                  {
+                    "UnlockedTurn": 9,
+                    "Level": 6,
+                    "Cost": 110,
+                    "CostAddValue": 1
+                  },
+                  {
+                    "UnlockedTurn": 12,
+                    "Level": 7,
+                    "Cost": 110,
+                    "CostAddValue": 1
+                  },
+                  {
+                    "UnlockedTurn": 15,
+                    "Level": 8,
+                    "Cost": 110,
+                    "CostAddValue": 1
+                  },
+                  {
+                    "UnlockedTurn": 18,
+                    "Level": 9,
+                    "Cost": 110,
+                    "CostAddValue": 1
+                  },
+                  {
+                    "UnlockedTurn": 19,
+                    "Level": 10,
+                    "Cost": 110,
+                    "CostAddValue": 1
+                  }
+                ]
+              },
+              {
+                "Type": 400080,
+                "LevelInfos": [
+                  {
+                    "UnlockedTurn": 3,
+                    "Level": 3,
+                    "Cost": 100,
+                    "CostAddValue": 1
+                  },
+                  {
+                    "UnlockedTurn": 6,
+                    "Level": 5,
+                    "Cost": 100,
+                    "CostAddValue": 1
+                  },
+                  {
+                    "UnlockedTurn": 9,
+                    "Level": 6,
+                    "Cost": 100,
+                    "CostAddValue": 1
+                  },
+                  {
+                    "UnlockedTurn": 12,
+                    "Level": 7,
+                    "Cost": 100,
+                    "CostAddValue": 1
+                  },
+                  {
+                    "UnlockedTurn": 15,
+                    "Level": 8,
+                    "Cost": 100,
+                    "CostAddValue": 1
+                  },
+                  {
+                    "UnlockedTurn": 18,
+                    "Level": 9,
+                    "Cost": 100,
+                    "CostAddValue": 1
+                  },
+                  {
+                    "UnlockedTurn": 19,
+                    "Level": 10,
+                    "Cost": 100,
+                    "CostAddValue": 1
+                  }
+                ]
               }
             ]
           }
@@ -132570,7 +133563,8 @@
           200140,
           200142,
           200143,
-          200158
+          200158,
+          200191
         ],
         "UnsyncPlantBlacklist": [
           111053,
@@ -136833,6 +137827,269 @@
                   "Speed": 0.12
                 }
               ]
+            },
+            {
+              "Type": 400076,
+              "BattleType": "melee",
+              "Description": "",
+              "ValueDatas": [
+                {
+                  "Cost": 65,
+                  "Hitpoints": 2390.0,
+                  "DPS": 100.0,
+                  "Speed": 0.17999999999999999
+                },
+                {
+                  "Cost": 65,
+                  "Hitpoints": 2390.0,
+                  "DPS": 105.0,
+                  "Speed": 0.17999999999999999
+                },
+                {
+                  "Cost": 65,
+                  "Hitpoints": 2390.0,
+                  "DPS": 110.0,
+                  "Speed": 0.17999999999999999
+                },
+                {
+                  "Cost": 65,
+                  "Hitpoints": 2390.0,
+                  "DPS": 115.0,
+                  "Speed": 0.17999999999999999
+                },
+                {
+                  "Cost": 65,
+                  "Hitpoints": 2390.0,
+                  "DPS": 120.0,
+                  "Speed": 0.17999999999999999
+                },
+                {
+                  "Cost": 65,
+                  "Hitpoints": 2390.0,
+                  "DPS": 125.0,
+                  "Speed": 0.17999999999999999
+                },
+                {
+                  "Cost": 65,
+                  "Hitpoints": 2390.0,
+                  "DPS": 130.0,
+                  "Speed": 0.17999999999999999
+                },
+                {
+                  "Cost": 65,
+                  "Hitpoints": 2390.0,
+                  "DPS": 135.0,
+                  "Speed": 0.17999999999999999
+                },
+                {
+                  "Cost": 65,
+                  "Hitpoints": 2390.0,
+                  "DPS": 140.0,
+                  "Speed": 0.17999999999999999
+                },
+                {
+                  "Cost": 65,
+                  "Hitpoints": 2390.0,
+                  "DPS": 145.0,
+                  "Speed": 0.17999999999999999
+                }
+              ]
+            },
+            {
+              "Type": 400077,
+              "BattleType": "range",
+              "Description": "",
+              "ValueDatas": [
+                {
+                  "Cost": 90,
+                  "Hitpoints": 500.0,
+                  "DPS": 100.0,
+                  "Speed": 0.17999999999999999
+                },
+                {
+                  "Cost": 90,
+                  "Hitpoints": 540.0,
+                  "DPS": 100.0,
+                  "Speed": 0.17999999999999999
+                },
+                {
+                  "Cost": 90,
+                  "Hitpoints": 580.0,
+                  "DPS": 100.0,
+                  "Speed": 0.17999999999999999
+                },
+                {
+                  "Cost": 90,
+                  "Hitpoints": 620.0,
+                  "DPS": 100.0,
+                  "Speed": 0.17999999999999999
+                },
+                {
+                  "Cost": 90,
+                  "Hitpoints": 660.0,
+                  "DPS": 100.0,
+                  "Speed": 0.17999999999999999
+                },
+                {
+                  "Cost": 90,
+                  "Hitpoints": 700.0,
+                  "DPS": 100.0,
+                  "Speed": 0.17999999999999999
+                },
+                {
+                  "Cost": 90,
+                  "Hitpoints": 740.0,
+                  "DPS": 100.0,
+                  "Speed": 0.17999999999999999
+                },
+                {
+                  "Cost": 90,
+                  "Hitpoints": 780.0,
+                  "DPS": 100.0,
+                  "Speed": 0.17999999999999999
+                }
+              ]
+            },
+            {
+              "Type": 400078,
+              "BattleType": "melee",
+              "Description": "",
+              "ValueDatas": [
+                {
+                  "Cost": 15,
+                  "Hitpoints": 270.0,
+                  "DPS": 100.0,
+                  "Speed": 0.22
+                },
+                {
+                  "Cost": 15,
+                  "Hitpoints": 310.0,
+                  "DPS": 100.0,
+                  "Speed": 0.22
+                },
+                {
+                  "Cost": 15,
+                  "Hitpoints": 350.0,
+                  "DPS": 100.0,
+                  "Speed": 0.22
+                },
+                {
+                  "Cost": 15,
+                  "Hitpoints": 390.0,
+                  "DPS": 100.0,
+                  "Speed": 0.22
+                },
+                {
+                  "Cost": 15,
+                  "Hitpoints": 430.0,
+                  "DPS": 100.0,
+                  "Speed": 0.22
+                },
+                {
+                  "Cost": 15,
+                  "Hitpoints": 470.0,
+                  "DPS": 100.0,
+                  "Speed": 0.22
+                },
+                {
+                  "Cost": 15,
+                  "Hitpoints": 510.0,
+                  "DPS": 100.0,
+                  "Speed": 0.22
+                },
+                {
+                  "Cost": 15,
+                  "Hitpoints": 550.0,
+                  "DPS": 100.0,
+                  "Speed": 0.22
+                }
+              ]
+            },
+            {
+              "Type": 400079,
+              "BattleType": "melee",
+              "Description": "",
+              "ValueDatas": [
+                {
+                  "Cost": 110,
+                  "Hitpoints": 900.0,
+                  "DPS": 100.0,
+                  "Speed": 0.17999999999999999
+                },
+                {
+                  "Cost": 110,
+                  "Hitpoints": 940.0,
+                  "DPS": 100.0,
+                  "Speed": 0.17999999999999999
+                },
+                {
+                  "Cost": 110,
+                  "Hitpoints": 980.0,
+                  "DPS": 100.0,
+                  "Speed": 0.17999999999999999
+                },
+                {
+                  "Cost": 110,
+                  "Hitpoints": 1020.0,
+                  "DPS": 100.0,
+                  "Speed": 0.17999999999999999
+                },
+                {
+                  "Cost": 110,
+                  "Hitpoints": 1060.0,
+                  "DPS": 100.0,
+                  "Speed": 0.17999999999999999
+                },
+                {
+                  "Cost": 110,
+                  "Hitpoints": 1100.0,
+                  "DPS": 100.0,
+                  "Speed": 0.17999999999999999
+                },
+                {
+                  "Cost": 110,
+                  "Hitpoints": 1140.0,
+                  "DPS": 100.0,
+                  "Speed": 0.17999999999999999
+                },
+                {
+                  "Cost": 110,
+                  "Hitpoints": 1180.0,
+                  "DPS": 100.0,
+                  "Speed": 0.17999999999999999
+                }
+              ]
+            },
+            {
+              "Type": 400080,
+              "BattleType": "melee",
+              "Description": "",
+              "ValueDatas": [
+                {
+                  "Cost": 100,
+                  "Hitpoints": 400.0,
+                  "DPS": 2001.0,
+                  "Speed": 0.23000000000000001
+                },
+                {
+                  "Cost": 100,
+                  "Hitpoints": 550.0,
+                  "DPS": 2001.0,
+                  "Speed": 0.23000000000000001
+                },
+                {
+                  "Cost": 100,
+                  "Hitpoints": 700.0,
+                  "DPS": 2001.0,
+                  "Speed": 0.23000000000000001
+                },
+                {
+                  "Cost": 100,
+                  "Hitpoints": 850.0,
+                  "DPS": 2001.0,
+                  "Speed": 0.23000000000000001
+                }
+              ]
             }
           ]
         }
@@ -137479,6 +138736,36 @@
           "sunflower",
           "peashooter",
           "wallnut"
+        ],
+        "BlackList": [
+          "blover",
+          "empea",
+          "gravebuster",
+          "lilypad",
+          "flowerpot",
+          "tanglekelp",
+          "goldleaf",
+          "thymewarp",
+          "perfumeshroom"
+        ]
+      }
+    },
+    {
+      "objclass": "WorldSpecificDangerRoomProperties",
+      "aliases": [
+        "MausoleumDangerRoomProps"
+      ],
+      "objdata": {
+        "DefaultSelectedPlants": [
+          "uncharted_haystack",
+          "gloombara"
+        ],
+        "StartingPlants": [
+          "sunflower",
+          "peashooter",
+          "wallnut",
+          "uncharted_haystack",
+          "gloombara"
         ],
         "BlackList": [
           "blover",
@@ -138342,6 +139629,7 @@
           "ImageName": "IMAGE_POTS_POT_SUNUP"
         },
         "DisabledPlants": [
+          "mangofier",
           "nukelauncher",
           "shadowvanilla",
           "hydrocotyledrummer",
@@ -139050,6 +140338,7 @@
           "ImageName": ""
         },
         "DisabledPlants": [
+          "mangofier",
           "nukelauncher",
           "boophonegeisha",
           "icelotus",
@@ -139366,6 +140655,7 @@
           "ImageName": ""
         },
         "DisabledPlants": [
+          "mangofier",
           "nukelauncher",
           "boophonegeisha",
           "icelotus",
@@ -139691,6 +140981,7 @@
           "ImageName": ""
         },
         "DisabledPlants": [
+          "mangofier",
           "nukelauncher",
           "boophonegeisha",
           "icelotus",
@@ -140027,6 +141318,7 @@
           "ImageName": ""
         },
         "DisabledPlants": [
+          "mangofier",
           "nukelauncher",
           "icelotus",
           "olivepit",
@@ -142158,6 +143450,7 @@
           "ImageName": ""
         },
         "DisabledPlants": [
+          "mangofier",
           "headbutterlettuce",
           "dazeychain",
           "nukelauncher",
@@ -142483,6 +143776,7 @@
           "ImageName": ""
         },
         "DisabledPlants": [
+          "mangofier",
           "headbutterlettuce",
           "dazeychain",
           "nukelauncher",
@@ -142803,6 +144097,7 @@
           "ImageName": ""
         },
         "DisabledPlants": [
+          "mangofier",
           "headbutterlettuce",
           "dazeychain",
           "nukelauncher",
@@ -143137,6 +144432,7 @@
           "ImageName": ""
         },
         "DisabledPlants": [
+          "mangofier",
           "headbutterlettuce",
           "dazeychain",
           "nukelauncher",
@@ -143688,6 +144984,7 @@
           "ImageName": ""
         },
         "DisabledPlants": [
+          "mangofier",
           "headbutterlettuce",
           "dazeychain",
           "nukelauncher",
@@ -144007,6 +145304,7 @@
           "ImageName": ""
         },
         "DisabledPlants": [
+          "mangofier",
           "headbutterlettuce",
           "dazeychain",
           "nukelauncher",
@@ -144337,6 +145635,7 @@
           "ImageName": ""
         },
         "DisabledPlants": [
+          "mangofier",
           "headbutterlettuce",
           "dazeychain",
           "nukelauncher",
@@ -149551,6 +150850,7 @@
           "ImageName": ""
         },
         "DisabledPlants": [
+          "mangofier",
           "nukelauncher",
           "icelotus",
           "olivepit",
@@ -150011,6 +151311,7 @@
           "ImageName": ""
         },
         "DisabledPlants": [
+          "mangofier",
           "nukelauncher",
           "icelotus",
           "olivepit",
@@ -152303,6 +153604,7 @@
           "ImageName": ""
         },
         "DisabledPlants": [
+          "mangofier",
           "nukelauncher",
           "shadowvanilla",
           "hydrocotyledrummer",
@@ -154730,6 +156032,7 @@
         "ZombieBumperCarElite"
       ],
       "objdata": {
+        "IsEliteZombie": true,
         "EnableShowHealthBarByDamage": true,
         "EnableEliteImmunities": true,
         "EnableNoInvincibleTakeDamage": true,
@@ -155011,6 +156314,7 @@
         "ZombiePlantWarsBumperCarElite"
       ],
       "objdata": {
+        "IsEliteZombie": true,
         "EnableShowHealthBarByDamage": true,
         "EnableEliteImmunities": true,
         "EnableNoInvincibleTakeDamage": true,
@@ -158619,6 +159923,7 @@
         "ProjectileBounceTime": 0.90000000000000002,
         "ProjectileBounceDistance": 160,
         "BounceableProjectiles": [
+          "RTID(MangofierLob@ProjectileTypes)",
           "RTID(StickybombRiceDefault@ProjectileTypes)",
           "RTID(CypripediumDefault@ProjectileTypes)",
           "RTID(CypripediumThickDefault@ProjectileTypes)",
@@ -158748,6 +160053,7 @@
         "ProjectileBounceTime": 0.90000000000000002,
         "ProjectileBounceDistance": 160,
         "BounceableProjectiles": [
+          "RTID(MangofierLob@ProjectileTypes)",
           "RTID(StickybombRiceDefault@ProjectileTypes)",
           "RTID(CypripediumDefault@ProjectileTypes)",
           "RTID(CypripediumThickDefault@ProjectileTypes)",
@@ -159504,6 +160810,7 @@
         "ProjectileBounceTime": 0.90000000000000002,
         "ProjectileBounceDistance": 160,
         "BounceableProjectiles": [
+          "RTID(MangofierLob@ProjectileTypes)",
           "RTID(StickybombRiceDefault@ProjectileTypes)",
           "RTID(CypripediumDefault@ProjectileTypes)",
           "RTID(CypripediumThickDefault@ProjectileTypes)",
@@ -159695,6 +161002,7 @@
         "ProjectileBounceTime": 0.90000000000000002,
         "ProjectileBounceDistance": 160,
         "BounceableProjectiles": [
+          "RTID(MangofierLob@ProjectileTypes)",
           "RTID(StickybombRiceDefault@ProjectileTypes)",
           "RTID(CypripediumDefault@ProjectileTypes)",
           "RTID(CypripediumThickDefault@ProjectileTypes)",
@@ -159887,6 +161195,7 @@
         "ProjectileBounceTime": 0.90000000000000002,
         "ProjectileBounceDistance": 160,
         "BounceableProjectiles": [
+          "RTID(MangofierLob@ProjectileTypes)",
           "RTID(StickybombRiceDefault@ProjectileTypes)",
           "RTID(CypripediumDefault@ProjectileTypes)",
           "RTID(CypripediumThickDefault@ProjectileTypes)",
@@ -160078,6 +161387,7 @@
         "ProjectileBounceTime": 0.90000000000000002,
         "ProjectileBounceDistance": 160,
         "BounceableProjectiles": [
+          "RTID(MangofierLob@ProjectileTypes)",
           "RTID(StickybombRiceDefault@ProjectileTypes)",
           "RTID(CypripediumDefault@ProjectileTypes)",
           "RTID(CypripediumThickDefault@ProjectileTypes)",
@@ -165627,6 +166937,193 @@
       }
     },
     {
+      "aliases": [
+        "ZombieWerewolf"
+      ],
+      "objclass": "ZombieWerewolfProps",
+      "objdata": {
+        "ArtCenter": {
+          "x": 102,
+          "y": 124
+        },
+        "AttackRect": {
+          "mHeight": 80,
+          "mWidth": 20,
+          "mX": 15,
+          "mY": 0
+        },
+        "CanSpawnPlantFood": false,
+        "Cost": 150,
+        "EatDPS": 100,
+        "GroundTrackName": "ground_swatch",
+        "HitRect": {
+          "mHeight": 80,
+          "mWidth": 42,
+          "mX": 0,
+          "mY": 10
+        },
+        "Hitpoints": 3000,
+        "HypnoshroomEffectOffset": {
+          "x": 0,
+          "y": 48
+        },
+        "ShadowOffset": {
+          "x": 5,
+          "y": 0,
+          "z": 0.80000000000000004
+        },
+        "SizeType": "mid",
+        "SoundOnTakeDamage": "Play_Zomb_Moon_Basic_Impact",
+        "Speed": 0.185,
+        "WavePointCost": 600,
+        "Weight": 1000,
+        "TransformHpFraction": 0.5,
+        "WolfType": "zombie_werewolf_wolf",
+        "ZombieStats": [
+          {
+            "Type": "toughness",
+            "Value": "toughness2"
+          },
+          {
+            "Type": "speed",
+            "Value": "speed3"
+          }
+        ],
+        "ScaledProps": [
+          {
+            "Arg1": 1.3,
+            "Arg2": 0.050000000000000003,
+            "Formula": "standard",
+            "Key": "Hitpoints"
+          },
+          {
+            "Arg1": 1.3,
+            "Arg2": 0.050000000000000003,
+            "Formula": "standard",
+            "Key": "EatDPS"
+          },
+          {
+            "Formula": "constant",
+            "Key": "Speed"
+          },
+          {
+            "Formula": "constant",
+            "Key": "WavePointCost"
+          }
+        ],
+        "ZombieLevelStats": [
+          {
+            "HitPointsLevel": 1
+          },
+          {
+            "HitPointsLevel": 2
+          },
+          {
+            "HitPointsLevel": 3
+          },
+          {
+            "HitPointsLevel": 4.5
+          },
+          {
+            "HitPointsLevel": 5
+          }
+        ]
+      }
+    },
+    {
+      "aliases": [
+        "ZombieWerewolfWolf"
+      ],
+      "objclass": "ZombieWerewolfWolfProps",
+      "objdata": {
+        "ArtCenter": {
+          "x": 102,
+          "y": 124
+        },
+        "AttackRect": {
+          "mHeight": 65,
+          "mWidth": 30,
+          "mX": -30,
+          "mY": 10
+        },
+        "CanSpawnPlantFood": false,
+        "Cost": 500,
+        "EatDPS": 100,
+        "GroundTrackName": "ground_swatch",
+        "HitRect": {
+          "mHeight": 95,
+          "mWidth": 42,
+          "mX": 0,
+          "mY": 10
+        },
+        "Hitpoints": 1500,
+        "HypnoshroomEffectOffset": {
+          "x": 35,
+          "y": 20
+        },
+        "ShadowOffset": {
+          "x": 5,
+          "y": 0,
+          "z": 0.80000000000000004
+        },
+        "SizeType": "mid",
+        "Speed": 0.19,
+        "WavePointCost": 600,
+        "Weight": 4000,
+        "ChargeSpeed": 9.0,
+        "RetreatSpeed": 1.8,
+        "RammingDamage": 1000,
+        "KnockbackGrids": 2.0,
+        "StunTime": 2.0,
+        "RamRect": {
+          "mHeight": 95,
+          "mWidth": 30,
+          "mX": -30,
+          "mY": 10
+        },
+        "HumanType": "zombie_werewolf",
+        "ScaledProps": [
+          {
+            "Arg1": 1.3,
+            "Arg2": 0.050000000000000003,
+            "Formula": "standard",
+            "Key": "Hitpoints"
+          },
+          {
+            "Arg1": 1.3,
+            "Arg2": 0.050000000000000003,
+            "Formula": "standard",
+            "Key": "EatDPS"
+          },
+          {
+            "Formula": "constant",
+            "Key": "Speed"
+          },
+          {
+            "Formula": "constant",
+            "Key": "WavePointCost"
+          }
+        ],
+        "ZombieLevelStats": [
+          {
+            "HitPointsLevel": 1
+          },
+          {
+            "HitPointsLevel": 2
+          },
+          {
+            "HitPointsLevel": 3
+          },
+          {
+            "HitPointsLevel": 4.5
+          },
+          {
+            "HitPointsLevel": 5
+          }
+        ]
+      }
+    },
+    {
       "objclass": "ZombieSupernovaGargantuarProps",
       "aliases": [
         "ZombieSupernovaGargantuarGeminiDefault"
@@ -166395,8 +167892,8 @@
         "SurprisedTime": 1,
         "SwitchToHeadCamelSign": true,
         "WalkCycleOffset": -10,
-        "WavePointCost": 1000,
-        "Weight": 3000,
+        "WavePointCost": 800,
+        "Weight": 4500,
         "ZombieStats": [
           {
             "Type": "toughness",
@@ -166415,6 +167912,7 @@
       ],
       "objclass": "ZombieQinJingkeProps",
       "objdata": {
+        "CanSpawnPlantFood": true,
         "SpiritTypeName": "qin_jingke_ghost_spirit",
         "AssassinateDamage": 300,
         "ArtCenter": {
@@ -166481,8 +167979,8 @@
           "x": 5,
           "y": 2
         },
-        "WavePointCost": 1600,
-        "Weight": 4000,
+        "WavePointCost": 300,
+        "Weight": 3000,
         "ZombieStats": [
           {
             "Type": "toughness",
@@ -166582,6 +168080,7 @@
       ],
       "objclass": "ZombieQinTaoistProps",
       "objdata": {
+        "CanSpawnPlantFood": true,
         "StartAttackCloumn": 7,
         "ActionCoolDown": 10,
         "TransFromZombies": [
@@ -166649,8 +168148,8 @@
           "x": 5,
           "y": 2
         },
-        "WavePointCost": 800,
-        "Weight": 3500,
+        "WavePointCost": 600,
+        "Weight": 4000,
         "ZombieStats": [
           {
             "Type": "toughness",
@@ -173549,6 +175048,7 @@
         "ProjectileBounceTime": 0.90000000000000002,
         "ProjectileBounceDistance": 160,
         "BounceableProjectiles": [
+          "RTID(MangofierLob@ProjectileTypes)",
           "RTID(StickybombRiceDefault@ProjectileTypes)",
           "RTID(CypripediumDefault@ProjectileTypes)",
           "RTID(CypripediumThickDefault@ProjectileTypes)",
@@ -178323,10 +179823,14 @@
         "LivingArmorLeftGridItemDefault"
       ],
       "objdata": {
-        "PopAnim": "POPANIM_EFFECTS_SNOWMAN_DRUNKARD",
+        "PopAnim": "POPANIM_EFFECTS_LIVINGARMOR",
         "PopAnimRigClass": "PopAnimRig",
+        "PopAnimRenderOffset": {
+          "x": 98,
+          "y": 127
+        },
         "MoveSpeed": 1.0,
-        "AttackDamage": 50.0,
+        "AttackDamage": 5000.0,
         "AttackCooldown": 5.0,
         "DetectionRange": 3,
         "StartsFacingRight": false
@@ -178338,10 +179842,14 @@
         "LivingArmorRightGridItemDefault"
       ],
       "objdata": {
-        "PopAnim": "POPANIM_EFFECTS_SNOWMAN_DRUNKARD",
+        "PopAnim": "POPANIM_EFFECTS_LIVINGARMOR",
         "PopAnimRigClass": "PopAnimRig",
+        "PopAnimRenderOffset": {
+          "x": 98,
+          "y": 127
+        },
         "MoveSpeed": 1.0,
-        "AttackDamage": 50.0,
+        "AttackDamage": 5000.0,
         "AttackCooldown": 5.0,
         "DetectionRange": 3,
         "StartsFacingRight": true
@@ -178662,8 +180170,109 @@
             "HitPointsLevel": 5
           }
         ]
-      },
-      "Resilience": "RTID(ResiliencePoison2@ResilienceConfig)"
+      }
+    },
+    {
+      "aliases": [
+        "GingleZombieGhostDefault"
+      ],
+      "objclass": "ZombiePropertySheet",
+      "objdata": {
+        "CanBeFlicked": false,
+        "CanBeFlickedOff": false,
+        "CanBeLaunchedByPlants": false,
+        "CanBePlantTossedStrong": false,
+        "CanBePlantTossedWeak": false,
+        "IsEliteZombie": true,
+        "CanShowEliteButton": false,
+        "EnableEliteImmunities": true,
+        "EliteScale": 1,
+        "ArtCenter": {
+          "x": 90,
+          "y": 125
+        },
+        "AttackRect": {
+          "mHeight": 95,
+          "mWidth": 20,
+          "mX": 15,
+          "mY": 0
+        },
+        "CanSpawnPlantFood": true,
+        "Cost": 150,
+        "EatDPS": 100,
+        "GroundTrackName": "ground_swatch",
+        "HitRect": {
+          "mHeight": 95,
+          "mWidth": 32,
+          "mX": 10,
+          "mY": 10
+        },
+        "Hitpoints": 10000,
+        "ScaledProps": [
+          {
+            "Arg1": 1.3,
+            "Arg2": 0.050000000000000003,
+            "Formula": "standard",
+            "Key": "Hitpoints"
+          },
+          {
+            "Arg1": 1.3,
+            "Arg2": 0.050000000000000003,
+            "Formula": "standard",
+            "Key": "EatDPS"
+          },
+          {
+            "Formula": "constant",
+            "Key": "Speed"
+          },
+          {
+            "Formula": "constant",
+            "Key": "WavePointCost"
+          }
+        ],
+        "ShadowOffset": {
+          "x": 5,
+          "y": 0,
+          "z": 1.3999999999999999
+        },
+        "SizeType": "small",
+        "Speed": 0.5,
+        "WavePointCost": 100,
+        "Weight": 1000,
+        "ZombieStats": [
+          {
+            "Type": "toughness",
+            "Value": "toughness1"
+          },
+          {
+            "Type": "speed",
+            "Value": "speed2"
+          }
+        ],
+        "ZombieLevelStats": [
+          {
+            "AttackLevel": 1,
+            "HitPointsLevel": 1
+          },
+          {
+            "AttackLevel": 2,
+            "HitPointsLevel": 2
+          },
+          {
+            "AttackLevel": 3,
+            "HitPointsLevel": 3
+          },
+          {
+            "AttackLevel": 4.5,
+            "HitPointsLevel": 4.5
+          },
+          {
+            "AttackLevel": 5,
+            "HitPointsLevel": 5
+          }
+        ],
+        "Resilience": "RTID(ResiliencePhysical200@ResilienceConfig)"
+      }
     },
     {
       "aliases": [
@@ -180976,7 +182585,7 @@
         "EatDPS": 0,
         "ExplodesWhenMowed": true,
         "FlickIsLaneRestricted": true,
-        "CanBeLaunchedByPlants": false,
+        "CanBeLaunchedByPlants": true,
         "HasImp": true,
         "GroundTrackName": "ground_swatch",
         "HealthThresholdToImpAmmoLayers": [
@@ -181837,6 +183446,429 @@
             "HitPointsLevel": 5
           }
         ]
+      }
+    },
+    {
+      "aliases": [
+        "ZombieNewPvPNutCrackerDefault"
+      ],
+      "objclass": "ZombieNutCrackerProps",
+      "objdata": {
+        "ArtCenter": {
+          "x": 100,
+          "y": 130
+        },
+        "AttackRect": {
+          "mHeight": 95,
+          "mWidth": 20,
+          "mX": 15,
+          "mY": 0
+        },
+        "CanSpawnPlantFood": true,
+        "CanBeLaunchedByPlants": false,
+        "SizeType": "small",
+        "Cost": 150,
+        "EatDPS": 100,
+        "GroundTrackName": "ground_swatch",
+        "HitRect": {
+          "mHeight": 95,
+          "mWidth": 32,
+          "mX": 10,
+          "mY": 10
+        },
+        "Hitpoints": 2390,
+        "ScaledProps": [
+          {
+            "Arg1": 1.3,
+            "Arg2": 0.050000000000000003,
+            "Formula": "standard",
+            "Key": "Hitpoints"
+          },
+          {
+            "Arg1": 1.3,
+            "Arg2": 0.050000000000000003,
+            "Formula": "standard",
+            "Key": "EatDPS"
+          },
+          {
+            "Formula": "constant",
+            "Key": "Speed"
+          },
+          {
+            "Formula": "constant",
+            "Key": "WavePointCost"
+          }
+        ],
+        "ShadowOffset": {
+          "x": 0,
+          "y": 0,
+          "z": 1.2
+        },
+        "Speed": 0.185,
+        "WavePointCost": 500,
+        "Weight": 3000,
+        "ZombieArmorProps": [
+          "RTID(NutCrackerBody@ArmorTypes)",
+          "RTID(NutCrackerArm@ArmorTypes)",
+          "RTID(NutCrackerWindUpKey@ArmorTypes)"
+        ],
+        "ZombieStats": [
+          {
+            "Type": "toughness",
+            "Value": "toughness6"
+          },
+          {
+            "Type": "speed",
+            "Value": "speed2"
+          }
+        ],
+        "ZombieLevelStats": [
+          {
+            "AttackLevel": 1,
+            "HitPointsLevel": 1
+          },
+          {
+            "AttackLevel": 2,
+            "HitPointsLevel": 2
+          },
+          {
+            "AttackLevel": 3,
+            "HitPointsLevel": 3
+          },
+          {
+            "AttackLevel": 4.5,
+            "HitPointsLevel": 4.5
+          },
+          {
+            "AttackLevel": 5,
+            "HitPointsLevel": 5
+          }
+        ],
+        "RechargeDuration": 1.5,
+        "SpecialDamagePercentage": 50.0,
+        "SpecialTargets": {
+          "List": [
+            "wallnut",
+            "primalwallnut",
+            "tallnut",
+            "peanut",
+            "explodeonut",
+            "murkadamia",
+            "holonut"
+          ],
+          "ListType": "whitelist"
+        }
+      }
+    },
+    {
+      "objclass": "ZombieMoonTeleportationProps",
+      "aliases": [
+        "ZombieNewPVPMoonTeleportationLeftDefault"
+      ],
+      "objdata": {
+        "Speed": 0.185,
+        "Hitpoints": 440,
+        "EatDPS": 100,
+        "CanSpawnPlantFood": true,
+        "SizeType": "normal",
+        "HitRect": {
+          "mX": 0,
+          "mY": 10,
+          "mWidth": 42,
+          "mHeight": 95
+        },
+        "AttackRect": {
+          "mX": 15,
+          "mY": 0,
+          "mWidth": 20,
+          "mHeight": 95
+        },
+        "Cost": 150,
+        "WavePointCost": 100,
+        "Weight": 1000,
+        "ArtCenter": {
+          "x": 100,
+          "y": 130
+        },
+        "ShadowOffset": {
+          "x": 0,
+          "y": 0,
+          "z": 1.2
+        },
+        "ZombieStats": [
+          {
+            "Type": "toughness",
+            "Value": "toughness1"
+          },
+          {
+            "Type": "speed",
+            "Value": "speed2"
+          }
+        ],
+        "ZombieLevelStats": [
+          {
+            "AttackLevel": 1,
+            "HitPointsLevel": 1
+          },
+          {
+            "AttackLevel": 2,
+            "HitPointsLevel": 2
+          },
+          {
+            "AttackLevel": 3,
+            "HitPointsLevel": 3
+          },
+          {
+            "AttackLevel": 4.5,
+            "HitPointsLevel": 4.5
+          },
+          {
+            "AttackLevel": 5,
+            "HitPointsLevel": 5
+          }
+        ],
+        "GroundTrackName": "ground_swatch",
+        "CrystalTeleportInterval": 15.0,
+        "ZombieTeleportInterval": 7.0,
+        "TeleportCastDuration": 0.5,
+        "CrystalTeleportDistance": 1,
+        "ZombieTeleportDistance": 1,
+        "SoundOnTakeDamage": "Play_Zomb_Moon_Basic_Impact"
+      }
+    },
+    {
+      "objclass": "ZombiePropertySheet",
+      "aliases": [
+        "ZombieNewPVPFutureImpDefault"
+      ],
+      "objdata": {
+        "Speed": 0.22,
+        "Hitpoints": 270,
+        "EatDPS": 100,
+        "CanSpawnPlantFood": false,
+        "SizeType": "small",
+        "HeadDropFraction": -1,
+        "ArmDropFraction": -1,
+        "HitRect": {
+          "mX": 0,
+          "mY": 10,
+          "mWidth": 42,
+          "mHeight": 80
+        },
+        "AttackRect": {
+          "mX": 15,
+          "mY": 0,
+          "mWidth": 20,
+          "mHeight": 125
+        },
+        "HypnoshroomEffectOffset": {
+          "x": -17,
+          "y": 45
+        },
+        "Cost": 50,
+        "FirstWave": 1,
+        "WavePointCost": 100,
+        "Weight": 1000,
+        "ArtCenter": {
+          "x": 96,
+          "y": 115
+        },
+        "ShadowOffset": {
+          "x": 5,
+          "y": 0,
+          "z": 0.80000000000000004
+        },
+        "GroundTrackName": "ground_swatch",
+        "ZombieStats": [
+          {
+            "Type": "toughness",
+            "Value": "toughness1"
+          },
+          {
+            "Type": "speed",
+            "Value": "speed3"
+          }
+        ],
+        "ZombieLevelStats": [
+          {
+            "AttackLevel": 1,
+            "HitPointsLevel": 1
+          },
+          {
+            "AttackLevel": 2,
+            "HitPointsLevel": 2
+          },
+          {
+            "AttackLevel": 3,
+            "HitPointsLevel": 3
+          },
+          {
+            "AttackLevel": 4.5,
+            "HitPointsLevel": 4.5
+          },
+          {
+            "AttackLevel": 5,
+            "HitPointsLevel": 5
+          }
+        ]
+      }
+    },
+    {
+      "objclass": "ZombieGladiatorProps",
+      "aliases": [
+        "ZombieNewPVPGladiator"
+      ],
+      "objdata": {
+        "Speed": 0.185,
+        "Hitpoints": 900,
+        "EatDPS": 200,
+        "CanSpawnPlantFood": true,
+        "SizeType": "small",
+        "Helm": "cone",
+        "HelmHitpoints": 300,
+        "HitRect": {
+          "mX": 10,
+          "mY": 10,
+          "mWidth": 32,
+          "mHeight": 95
+        },
+        "AttackRect": {
+          "mX": 15,
+          "mY": 0,
+          "mWidth": 20,
+          "mHeight": 95
+        },
+        "ChargeHitRect": {
+          "mX": -45,
+          "mY": 0,
+          "mWidth": 80,
+          "mHeight": 95
+        },
+        "ChargeDistanceGrid": 1.5,
+        "ChargeRunSpeed": 0.29999999999999999,
+        "ChargeDamage": 600,
+        "MinChargeDistanceToHouseGrid": 2.0,
+        "ChargeStartSound": "",
+        "ShieldBlockSound": "",
+        "Cost": 175,
+        "FirstWave": 2,
+        "WavePointCost": 400,
+        "Weight": 3000,
+        "DiedSun": 75,
+        "ArtCenter": {
+          "x": 90,
+          "y": 125
+        },
+        "ShadowOffset": {
+          "x": 0,
+          "y": 0,
+          "z": 1.2
+        },
+        "GroundTrackName": "ground_swatch",
+        "ZombieStats": [
+          {
+            "Type": "toughness",
+            "Value": "toughness4"
+          },
+          {
+            "Type": "speed",
+            "Value": "speed2"
+          }
+        ],
+        "ZombieLevelStats": [
+          {
+            "AttackLevel": 1,
+            "HitPointsLevel": 1
+          },
+          {
+            "AttackLevel": 2,
+            "HitPointsLevel": 2
+          },
+          {
+            "AttackLevel": 3,
+            "HitPointsLevel": 3
+          },
+          {
+            "AttackLevel": 4.5,
+            "HitPointsLevel": 4.5
+          },
+          {
+            "AttackLevel": 5,
+            "HitPointsLevel": 5
+          }
+        ]
+      }
+    },
+    {
+      "objclass": "ZombieEightiesMCProps",
+      "aliases": [
+        "ZombieNewPVPEightiesMC"
+      ],
+      "objdata": {
+        "Speed": 0.23125000000000001,
+        "Hitpoints": 350,
+        "EatDPS": 100,
+        "CanSpawnPlantFood": true,
+        "HitRect": {
+          "mX": 10,
+          "mY": 10,
+          "mWidth": 32,
+          "mHeight": 95
+        },
+        "AttackRect": {
+          "mX": 15,
+          "mY": 0,
+          "mWidth": 20,
+          "mHeight": 95
+        },
+        "Cost": 450,
+        "WavePointCost": 300,
+        "Weight": 1000,
+        "ArtCenter": {
+          "x": 90,
+          "y": 125
+        },
+        "ShadowOffset": {
+          "x": 5,
+          "y": 0,
+          "z": 1.3999999999999999
+        },
+        "GroundTrackName": "ground_swatch",
+        "ZombieStats": [
+          {
+            "Type": "toughness",
+            "Value": "toughness2"
+          },
+          {
+            "Type": "speed",
+            "Value": "speed3"
+          }
+        ],
+        "ZombieLevelStats": [
+          {
+            "AttackLevel": 1,
+            "HitPointsLevel": 1
+          },
+          {
+            "AttackLevel": 2,
+            "HitPointsLevel": 2
+          },
+          {
+            "AttackLevel": 3,
+            "HitPointsLevel": 3
+          },
+          {
+            "AttackLevel": 4.5,
+            "HitPointsLevel": 4.5
+          },
+          {
+            "AttackLevel": 5,
+            "HitPointsLevel": 5
+          }
+        ],
+        "JamStyle": "jam_rap",
+        "JamAttackRadius": 100,
+        "JamAttackDamage": 2001
       }
     },
     {
@@ -185058,7 +187090,7 @@
         "EnableEliteScale": true,
         "HeadDropFraction": -1,
         "ArmDropFraction": -1,
-        "Resilience": "RTID(ResilienceMagic5@ResilienceConfig)",
+        "Resilience": "RTID(ResilienceFire1@ResilienceConfig)",
         "NoInvincibleTakeDamagePlantsList": [
           "escaperoot"
         ],
@@ -193699,8 +195731,8 @@
         },
         "Cost": 150,
         "FirstWave": 1,
-        "WavePointCost": 200,
-        "Weight": 1000,
+        "WavePointCost": 150,
+        "Weight": 12000,
         "ArtCenter": {
           "x": 90,
           "y": 125
@@ -193844,8 +195876,8 @@
         },
         "Cost": 150,
         "FirstWave": 1,
-        "WavePointCost": 1600,
-        "Weight": 1000,
+        "WavePointCost": 500,
+        "Weight": 4000,
         "ArtCenter": {
           "x": 90,
           "y": 125
@@ -194135,8 +196167,8 @@
         },
         "Cost": 150,
         "FirstWave": 2,
-        "WavePointCost": 400,
-        "Weight": 3000,
+        "WavePointCost": 300,
+        "Weight": 12000,
         "ArtCenter": {
           "x": 90,
           "y": 125
@@ -194356,7 +196388,7 @@
         },
         "Cost": 150,
         "FirstWave": 3,
-        "WavePointCost": 400,
+        "WavePointCost": 700,
         "Weight": 4000,
         "ArtCenter": {
           "x": 90,
@@ -194431,8 +196463,8 @@
         },
         "Cost": 150,
         "FirstWave": 3,
-        "WavePointCost": 800,
-        "Weight": 4000,
+        "WavePointCost": 450,
+        "Weight": 12000,
         "ArtCenter": {
           "x": 90,
           "y": 125
@@ -194711,7 +196743,7 @@
         "Speed": 0.16,
         "Hitpoints": 3600,
         "EatDPS": 0,
-        "CanSpawnPlantFood": true,
+        "CanSpawnPlantFood": false,
         "ExplodesWhenMowed": true,
         "IsValidPinchTarget": false,
         "SizeType": "big",
@@ -194760,6 +196792,137 @@
         "HealthThresholdToImpAmmoLayers": [
           {
             "HealthPercentThrowImp": 0.5,
+            "ProjectileLayersToHide": [
+              "zombie_imp_skull",
+              "zombie_imp_jaw",
+              "Zombie_gargantuar_whiterope",
+              "zombie_imp_arm_inner_lower",
+              "zombie_imp_arm_inner_upper",
+              "zombie_imp_arm_outer_lower",
+              "zombie_imp_arm_outer_upper_01",
+              "zombie_imp_arm_outer_upper_02",
+              "zombie_imp_arms_outer_upper",
+              "zombie_imp_eye",
+              "zombie_imp_eye_sm",
+              "zombie_imp_hand_inner",
+              "zombie_imp_hand_outer",
+              "zombie_imp_leg_inner_lower",
+              "zombie_imp_leg_inner_upper",
+              "zombie_imp_leg_outer_lower",
+              "zombie_imp_leg_outer_upper",
+              "zombie_imp_pupil",
+              "zombie_imp_torso",
+              "zombie_imp_waist",
+              "zombie_imp_toe_outer",
+              "zombie_imp_toe_inner"
+            ]
+          }
+        ],
+        "ArtCenter": {
+          "x": 90,
+          "y": 125
+        },
+        "ShadowOffset": {
+          "x": 5,
+          "y": 0,
+          "z": 1.3999999999999999
+        },
+        "GroundTrackName": "ground_swatch",
+        "ZombieStats": [
+          {
+            "Type": "toughness",
+            "Value": "toughness7"
+          },
+          {
+            "Type": "speed",
+            "Value": "speed3"
+          }
+        ],
+        "ZombieLevelStats": [
+          {
+            "AttackLevel": 1,
+            "HitPointsLevel": 1
+          },
+          {
+            "AttackLevel": 2,
+            "HitPointsLevel": 2
+          },
+          {
+            "AttackLevel": 3,
+            "HitPointsLevel": 3
+          },
+          {
+            "AttackLevel": 4.5,
+            "HitPointsLevel": 4.5
+          },
+          {
+            "AttackLevel": 5,
+            "HitPointsLevel": 5
+          }
+        ],
+        "SoundOnIdle": "Play_Zomb_Tutorial_Gargantuar_Mvmt_Idle",
+        "SoundOnAsh": "Play_Zomb_Global_Gargantuar_Mvmt_Death_Ash",
+        "SoundOnElectrocute": "Play_Zomb_Global_Gargantuar_Mvmt_Shock"
+      }
+    },
+    {
+      "objclass": "ZombieGargantuarProps",
+      "aliases": [
+        "ZombieMausoleumGargantuarDanger"
+      ],
+      "objdata": {
+        "Speed": 0.16,
+        "Hitpoints": 3600,
+        "EatDPS": 0,
+        "CanSpawnPlantFood": false,
+        "ExplodesWhenMowed": true,
+        "IsValidPinchTarget": false,
+        "SizeType": "big",
+        "HeadDropFraction": 0,
+        "ArmDropFraction": -1,
+        "HitRect": {
+          "mX": 0,
+          "mY": 10,
+          "mWidth": 42,
+          "mHeight": 95
+        },
+        "AttackRect": {
+          "mX": 10,
+          "mY": 10,
+          "mWidth": 50,
+          "mHeight": 95
+        },
+        "HypnoshroomEffectOffset": {
+          "x": 0,
+          "y": 120
+        },
+        "AlmanacScale": 0.80000000000000004,
+        "AlmanacOffset": {
+          "x": 0,
+          "y": 70
+        },
+        "Cost": 150,
+        "FirstWave": 5,
+        "WavePointCost": 1500,
+        "Weight": 3500,
+        "ImpType": "mausoleum_imp",
+        "MinPosXThrowImp": 400,
+        "ThrowImpDuration": 1,
+        "ImpTargetColumn": 2,
+        "ImpApex": 250,
+        "ImpFlightTime": 1.5,
+        "ImpSpawnOffset": {
+          "x": -100,
+          "y": 2,
+          "z": 115
+        },
+        "SmashDuration": 2,
+        "SmashDamage": 1500,
+        "StaticArtImageAsset": "IMAGE_GARGANTUAR",
+        "ArtScale": 0.55000000000000004,
+        "HealthThresholdToImpAmmoLayers": [
+          {
+            "HealthPercentThrowImp": 0.02,
             "ProjectileLayersToHide": [
               "zombie_imp_skull",
               "zombie_imp_jaw",
@@ -195003,8 +197166,8 @@
         },
         "Cost": 150,
         "FirstWave": 5,
-        "WavePointCost": 3000,
-        "Weight": 3000,
+        "WavePointCost": 2250,
+        "Weight": 12000,
         "ImpType": "mausoleum_imp",
         "MinPosXThrowImp": 400,
         "ThrowImpDuration": 1,
@@ -195105,7 +197268,7 @@
         "Speed": 0.22,
         "Hitpoints": 270,
         "EatDPS": 100,
-        "CanSpawnPlantFood": false,
+        "CanSpawnPlantFood": true,
         "SizeType": "small",
         "HitRect": {
           "mX": 0,
@@ -195183,7 +197346,7 @@
         "Speed": 0.19,
         "Hitpoints": 1570,
         "EatDPS": 99999,
-        "CanSpawnPlantFood": false,
+        "CanSpawnPlantFood": true,
         "IsValidPinchTarget": false,
         "SizeType": "small",
         "HitRect": {
@@ -195204,8 +197367,8 @@
         },
         "Cost": 150,
         "FirstWave": 1,
-        "WavePointCost": 1000,
-        "Weight": 3000,
+        "WavePointCost": 600,
+        "Weight": 4500,
         "ArtCenter": {
           "x": 100,
           "y": 130
@@ -195341,14 +197504,14 @@
         "Speed": 0.185,
         "Hitpoints": 1000,
         "EatDPS": 100,
-        "CanSpawnPlantFood": false,
+        "CanSpawnPlantFood": true,
         "IsValidPinchTarget": false,
         "SizeType": "small",
         "HitRect": {
           "mX": 0,
           "mY": 10,
           "mWidth": 42,
-          "mHeight": 60
+          "mHeight": 95
         },
         "AttackRect": {
           "mX": -15,
@@ -195363,7 +197526,7 @@
         "Cost": 150,
         "FirstWave": 1,
         "WavePointCost": 400,
-        "Weight": 3000,
+        "Weight": 4000,
         "ArtCenter": {
           "x": 100,
           "y": 130
@@ -195419,7 +197582,7 @@
         "Speed": 0.16500000000000001,
         "Hitpoints": 270,
         "EatDPS": 100,
-        "CanSpawnPlantFood": false,
+        "CanSpawnPlantFood": true,
         "IsValidPinchTarget": false,
         "SizeType": "small",
         "HitRect": {
@@ -195440,8 +197603,8 @@
         },
         "Cost": 150,
         "FirstWave": 1,
-        "WavePointCost": 1200,
-        "Weight": 2000,
+        "WavePointCost": 300,
+        "Weight": 3000,
         "ArtCenter": {
           "x": 100,
           "y": 130
@@ -195573,7 +197736,7 @@
         "Speed": 0.16500000000000001,
         "Hitpoints": 640,
         "EatDPS": 100,
-        "CanSpawnPlantFood": false,
+        "CanSpawnPlantFood": true,
         "SizeType": "small",
         "HitRect": {
           "mX": 0,
@@ -195589,8 +197752,8 @@
         },
         "Cost": 150,
         "FirstWave": 1,
-        "WavePointCost": 600,
-        "Weight": 2000,
+        "WavePointCost": 400,
+        "Weight": 4000,
         "ArtCenter": {
           "x": 100,
           "y": 130
@@ -198935,7 +201098,8 @@
             "jewelrabbit",
             "seashroom",
             "spikeweed",
-            "spikerock"
+            "spikerock",
+            "powerplant"
           ]
         }
       }
@@ -203146,6 +205310,191 @@
         "PopAnimIdleAnim": "animate_03",
         "PopAnimDeathAnim": "break",
         "Regenerates": false
+      }
+    },
+    {
+      "objclass": "MangofierProps",
+      "aliases": [
+        "MangofierDefault"
+      ],
+      "objdata": {
+        "Cost": 150,
+        "PowerCost": 7,
+        "Hitpoints": 300,
+        "MinLevel": 1,
+        "MaxLevel": 5,
+        "BoostRate": 0.59999999999999998,
+        "PacketCooldown": 10,
+        "PlantGridType": "ground",
+        "PlantFoodDurationSeconds": 6,
+        "PlantFoodActivationSound": "",
+        "ArtCenter": {
+          "x": 97.5,
+          "y": 115
+        },
+        "ViewOffset": {
+          "x": 0,
+          "y": 0
+        },
+        "LaserWindup": 0.93333299999999997,
+        "LobWindup": 1.3,
+        "PlantFoodWindup": 1.0333330000000001,
+        "BeamDuration": 2,
+        "BeamTickInterval": 0.5,
+        "BeamDamageMultiplierByLevel": [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        "BeamRangeColumns": 4,
+        "BeamMouthRows": 3,
+        "HeatKillTimeByLevel": [
+          6,
+          5,
+          4,
+          4,
+          4
+        ],
+        "CompressedChance": 0.40000000000000002,
+        "CompressedHeatKillTime": 2,
+        "JointFocusDuration": 5,
+        "JointFocusTickInterval": 0.5,
+        "JointFocusDamageMultiplierByLevel": [
+          2.5,
+          3.5,
+          4.5,
+          5.5,
+          7
+        ],
+        "JointFocusDamageMultiplier": 2.5,
+        "Level5JointFocusDamageMultiplier": 7,
+        "JointFocusCooldown": 25,
+        "PlantFoodDuration": 6,
+        "PlantFoodBeamCount": 6,
+        "AvatarPlantFoodBeamCount": 12,
+        "PlantFoodDamageMultiplier": 3,
+        "PlantFoodDamageInterval": 0.5,
+        "AvatarPlantFoodAreaDiameter": 5,
+        "AvatarPlantFoodDamageInterval": 0.29999999999999999,
+        "LobFlightTime": 0.5,
+        "LobApexHeight": 220,
+        "Actions": [
+          {
+            "Type": "projectile",
+            "Damage": 90,
+            "InitialMinCooldownTime": 0,
+            "CooldownTimeMin": 3,
+            "CooldownTimeMax": 3,
+            "SpawnOffset": {
+              "x": 30,
+              "y": -40
+            }
+          },
+          {
+            "Type": "lobbed",
+            "Damage": 90,
+            "InitialMinCooldownTime": 0,
+            "CooldownTimeMin": 3,
+            "CooldownTimeMax": 3,
+            "SpawnOffset": {
+              "x": 30,
+              "y": -40
+            },
+            "Projectile": "RTID(MangofierLob@ProjectileTypes)",
+            "SecondaryAction": true
+          }
+        ],
+        "IdleAnimationWeights": {
+          "idle": 50,
+          "idle2": 50
+        },
+        "PlantStats": [
+          {
+            "Type": "damage",
+            "Value": "damage3"
+          },
+          {
+            "Type": "range",
+            "Value": "fullboard"
+          },
+          {
+            "Type": "recharge",
+            "Value": "recharge4"
+          }
+        ],
+        "PlantLevelStats": [
+          {
+            "AttackLevel": 1,
+            "HitPointsLevel": 1
+          },
+          {
+            "AttackLevel": 1.5,
+            "HitPointsLevel": 1.5,
+            "PropertySkillType": "RTID(Plant_PropertyUp_Level1@SkillTypes)",
+            "AdvancedSkillType": "RTID(Mangofier_Skill_Level1@SkillTypes)"
+          },
+          {
+            "AttackLevel": 2,
+            "HitPointsLevel": 2,
+            "PropertySkillType": "RTID(Plant_PropertyUp_Level2@SkillTypes)",
+            "AdvancedSkillType": "RTID(Mangofier_Skill_Level2@SkillTypes)"
+          },
+          {
+            "AttackLevel": 2.5,
+            "HitPointsLevel": 2.5,
+            "PropertySkillType": "RTID(Plant_PropertyUp_Level3@SkillTypes)",
+            "AdvancedSkillType": "RTID(plant_wakeup_level1@SkillTypes)"
+          },
+          {
+            "AttackLevel": 3,
+            "HitPointsLevel": 3,
+            "PropertySkillType": "RTID(Plant_PropertyUp_Level4@SkillTypes)",
+            "AdvancedSkillType": "RTID(Mangofier_Skill_Level5@SkillTypes)"
+          }
+        ],
+        "DetailProps": {
+          "DetailsList": [
+            "suncost",
+            "cooldown",
+            "hitpoint",
+            "damage",
+            "attackInterval",
+            "range",
+            "area"
+          ],
+          "Damages": [
+            90,
+            135,
+            180,
+            225,
+            270
+          ],
+          "AttackInterval": [
+            3,
+            3,
+            3,
+            3,
+            3
+          ],
+          "Ranage": [
+            "[MANGOFIER_RANGE]",
+            "[MANGOFIER_RANGE]",
+            "[MANGOFIER_RANGE]",
+            "[MANGOFIER_RANGE]",
+            "[MANGOFIER_RANGE]"
+          ],
+          "Area": [
+            "[MANGOFIER_AREA]",
+            "[MANGOFIER_AREA]",
+            "[MANGOFIER_AREA]",
+            "[MANGOFIER_AREA]",
+            "[MANGOFIER_AREA]"
+          ]
+        },
+        "DisplayActions": "RTID(MangofierDefault@DisplayActions)",
+        "DisplayAvatarActions": "RTID(MangofierDefault@DisplayAvatarActions)"
       }
     }
   ]

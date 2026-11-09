@@ -60,6 +60,7 @@ void main() {
       for (final key in const [
         'conflictDesc_WaveGeneratorWaveManagerModule',
         'conflictDesc_WaveGeneratorWaveManager',
+        'conflictDesc_WaveGeneratorLevelEscalation',
         'conflictDesc_SeedBankConveyor',
         'moonLifeSupportHelpOverview',
         'lastStandHelpNotesBody',

@@ -267,7 +267,6 @@ class _GulliverTunnelModuleScreenState
     setState(() {});
   }
 
-
   void _handleAliasChanged(String newAlias) {
     renameLevelObjectAlias(
       levelFile: widget.levelFile,
@@ -336,7 +335,7 @@ class _GulliverTunnelModuleScreenState
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-ModuleAliasInputField(
+            ModuleAliasInputField(
               rtid: widget.rtid,
               alias: _alias,
               levelFile: widget.levelFile,
@@ -394,63 +393,6 @@ ModuleAliasInputField(
                 ),
               ),
             ),
-            const SizedBox(height: 16),
-            Card(
-              child: Padding(
-                padding: const EdgeInsets.all(16),
-                child: EditorResponsiveActionRow(
-                  content: Text(
-                    '${l10n?.gulliverTunnelPlacedCount ?? 'Placed'}: ${_data.tunnelPlacements.length}',
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                    style: theme.textTheme.bodyMedium?.copyWith(
-                      color: theme.colorScheme.onSurfaceVariant,
-                    ),
-                  ),
-                  action: FilledButton.icon(
-                    onPressed: _data.tunnelPlacements.isEmpty
-                        ? null
-                        : _requestClearAll,
-                    style: FilledButton.styleFrom(
-                      backgroundColor: theme.colorScheme.error,
-                      foregroundColor: theme.colorScheme.onError,
-                    ),
-                    icon: const Icon(Icons.delete_outline, size: 18),
-                    label: Text(l10n?.gulliverTunnelClearAll ?? 'Clear all'),
-                  ),
-                ),
-              ),
-            ),
-            if (_isDefaultLawnSize && _placementsOutsideLawn.isNotEmpty) ...[
-              const SizedBox(height: 16),
-              Card(
-                child: Padding(
-                  padding: const EdgeInsets.all(16),
-                  child: EditorResponsiveActionRow(
-                    content: Text(
-                      '${l10n?.gulliverTunnelOutsideLawn ?? 'Outside lawn'}: ${_placementsOutsideLawn.map((p) => '${_orientationLabel(l10n, p.orientation)} (R${p.gridY + 1}:C${p.gridX + 1})').join(', ')}',
-                      style: theme.textTheme.bodyMedium?.copyWith(
-                        color: theme.colorScheme.onSurfaceVariant,
-                      ),
-                    ),
-                    action: FilledButton.icon(
-                      onPressed: _requestDeleteOutsideLawn,
-                      style: FilledButton.styleFrom(
-                        backgroundColor: Colors.amber.shade700,
-                        foregroundColor: Colors.black87,
-                      ),
-                      icon: const Icon(Icons.delete_outline, size: 18),
-                      label: Text(
-                        l10n?.gulliverTunnelDeleteOutside ??
-                            'Delete outside lawn',
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            ],
             const SizedBox(height: 16),
             Card(
               child: Padding(
@@ -530,6 +472,63 @@ ModuleAliasInputField(
                 ),
               ),
             ),
+            const SizedBox(height: 16),
+            Card(
+              child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: EditorResponsiveActionRow(
+                  content: Text(
+                    '${l10n?.gulliverTunnelPlacedCount ?? 'Placed'}: ${_data.tunnelPlacements.length}',
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: theme.textTheme.bodyMedium?.copyWith(
+                      color: theme.colorScheme.onSurfaceVariant,
+                    ),
+                  ),
+                  action: FilledButton.icon(
+                    onPressed: _data.tunnelPlacements.isEmpty
+                        ? null
+                        : _requestClearAll,
+                    style: FilledButton.styleFrom(
+                      backgroundColor: theme.colorScheme.error,
+                      foregroundColor: theme.colorScheme.onError,
+                    ),
+                    icon: const Icon(Icons.delete_outline, size: 18),
+                    label: Text(l10n?.gulliverTunnelClearAll ?? 'Clear all'),
+                  ),
+                ),
+              ),
+            ),
+            if (_isDefaultLawnSize && _placementsOutsideLawn.isNotEmpty) ...[
+              const SizedBox(height: 16),
+              Card(
+                child: Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: EditorResponsiveActionRow(
+                    content: Text(
+                      '${l10n?.gulliverTunnelOutsideLawn ?? 'Outside lawn'}: ${_placementsOutsideLawn.map((p) => '${_orientationLabel(l10n, p.orientation)} (R${p.gridY + 1}:C${p.gridX + 1})').join(', ')}',
+                      style: theme.textTheme.bodyMedium?.copyWith(
+                        color: theme.colorScheme.onSurfaceVariant,
+                      ),
+                    ),
+                    action: FilledButton.icon(
+                      onPressed: _requestDeleteOutsideLawn,
+                      style: FilledButton.styleFrom(
+                        backgroundColor: Colors.amber.shade700,
+                        foregroundColor: Colors.black87,
+                      ),
+                      icon: const Icon(Icons.delete_outline, size: 18),
+                      label: Text(
+                        l10n?.gulliverTunnelDeleteOutside ??
+                            'Delete outside lawn',
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ],
           ],
         ),
       ),

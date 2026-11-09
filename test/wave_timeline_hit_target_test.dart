@@ -278,4 +278,80 @@ void main() {
       expect(tester.takeException(), isNull);
     },
   );
+
+  testWidgets(
+    'renaming from event sheet passes the new rtid to edit properties',
+    (tester) async {
+      tester.view.physicalSize = const Size(1200, 900);
+      tester.view.devicePixelRatio = 1;
+      addTearDown(tester.view.reset);
+
+      const oldAlias = 'Wave2ModConveyor0';
+      const newAlias = 'Wave2ModConveyorRenamed';
+      final event = PvzObject(
+        aliases: [oldAlias],
+        objClass: 'ModifyConveyorWaveActionProps',
+        objData: <String, dynamic>{},
+      );
+      final waveManager = WaveManagerData(
+        waveCount: 1,
+        waves: [
+          [RtidParser.build(oldAlias, 'CurrentLevel')],
+        ],
+      );
+      final objectMap = <String, PvzObject>{oldAlias: event};
+      final editedRtids = <String>[];
+
+      await tester.pumpWidget(
+        MaterialApp(
+          locale: const Locale('en'),
+          supportedLocales: AppLocalizations.supportedLocales,
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          home: Scaffold(
+            body: WaveTimelineTab(
+              levelFile: PvzLevelFile(
+                objects: [
+                  event,
+                  PvzObject(
+                    aliases: const ['WaveManager'],
+                    objClass: 'WaveManagerProperties',
+                    objData: waveManager.toJson(),
+                  ),
+                ],
+              ),
+              parsed: ParsedLevelData(
+                waveManager: waveManager,
+                objectMap: objectMap,
+              ),
+              onChanged: () {},
+              onEditEvent: (rtid, _) async {
+                editedRtids.add(rtid);
+              },
+              onAddEvent: (_) {},
+              onEditWaveManagerSettings: () {},
+            ),
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.text(oldAlias).first);
+      await tester.pumpAndSettle();
+      await tester.tap(find.byKey(const ValueKey('waveEventRenameButton')));
+      await tester.pumpAndSettle();
+      await tester.enterText(find.byType(TextField).last, newAlias);
+      await tester.tap(find.text('Confirm'));
+      await tester.pumpAndSettle();
+
+      expect(objectMap.containsKey(newAlias), isTrue);
+      expect(objectMap.containsKey(oldAlias), isFalse);
+      expect(find.textContaining(newAlias), findsWidgets);
+
+      await tester.tap(find.text('Edit properties'));
+      await tester.pumpAndSettle();
+
+      expect(editedRtids, [RtidParser.build(newAlias, 'CurrentLevel')]);
+      expect(tester.takeException(), isNull);
+    },
+  );
 }

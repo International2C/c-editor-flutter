@@ -100,7 +100,7 @@ Future<String?> _resolveDownloadFileName(
           host.localize(
             ctx,
             'dynamicExistsBody',
-            '“{name}” is already in your workspace.\n\n'
+            '"{name}" is already in your workspace.\n\n'
                 'Overwrite it, or save under a different name?',
             {'name': preferredName},
           ),

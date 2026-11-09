@@ -82,7 +82,7 @@ class _MusicSuffixSelectionScreenState
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
     final theme = Theme.of(context);
-    final allCodes = <String>['', ...MusicSuffixCatalog.orderedCodes];
+    final allCodes = MusicSuffixCatalog.orderedCodes;
     var items = allCodes;
     if (normalizeSelectionSearchQuery(_searchQuery).isNotEmpty) {
       items = allCodes.where((code) {
@@ -153,7 +153,9 @@ class _MusicSuffixSelectionScreenState
               itemCount: items.length,
               itemBuilder: (_, i) {
                 final code = items[i];
-                final isSelected = code == widget.currentCodename;
+                final isSelected =
+                    MusicSuffixCatalog.canonicalCode(code) ==
+                    MusicSuffixCatalog.canonicalCode(widget.currentCodename);
                 return _MusicSuffixTile(
                   codename: code,
                   displayName: ResourceNames.lookup(
@@ -227,23 +229,15 @@ class _MusicSuffixTile extends StatelessWidget {
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
               ),
-              if (codename.isNotEmpty)
-                Text(
-                  codename,
-                  style: theme.textTheme.bodySmall?.copyWith(
-                    color: theme.colorScheme.onSurfaceVariant,
-                  ),
-                  textAlign: TextAlign.center,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                )
-              else
-                Text(
-                  '—',
-                  style: theme.textTheme.bodySmall?.copyWith(
-                    color: theme.colorScheme.onSurfaceVariant,
-                  ),
+              Text(
+                codename,
+                style: theme.textTheme.bodySmall?.copyWith(
+                  color: theme.colorScheme.onSurfaceVariant,
                 ),
+                textAlign: TextAlign.center,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
             ],
           ),
         ),

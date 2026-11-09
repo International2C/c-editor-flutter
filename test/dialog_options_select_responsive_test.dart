@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:c_editor/bundled_plugins/level_test_cplugin/lib/src/dynamic_fetch_ui.dart';
 import 'package:c_editor/bundled_plugins/level_test_cplugin/lib/src/releases_api.dart';
 import 'package:c_editor/bundled_plugins/preview_img_cplugin/lib/src/preview/preview_document.dart';
@@ -17,6 +19,10 @@ import 'package:flutter_test/flutter_test.dart';
 String _t(String key, [String? fallback]) => fallback ?? key;
 
 class _Host extends Fake implements CPluginHost {
+  _Host({this.failureMessage});
+
+  final String? failureMessage;
+
   @override
   String localize(
     BuildContext context,
@@ -26,7 +32,8 @@ class _Host extends Fake implements CPluginHost {
   ]) => switch (key) {
     'dynamicSelectTitle' => 'Select a dynamic resource release',
     'dynamicLatestBadge' => 'Latest',
-    'dynamicFetchError' => args?['error']?.toString() ?? fallback ?? key,
+    'dynamicFetchError' =>
+      failureMessage ?? args?['error']?.toString() ?? fallback ?? key,
     _ => fallback ?? key,
   };
 }
@@ -163,40 +170,120 @@ void main() {
     expect(tester.takeException(), isNull);
   });
 
-  testWidgets('narrow release errors remain scrollable and retry works', (
+  testWidgets('release failure actions share one footer row', (tester) async {
+    var closed = false;
+    await _open(
+      tester,
+      (context) async {
+        final choice = await showDynamicReleasePicker(
+          context,
+          _Host(),
+          loadReleases: () async => throw StateError('Network unavailable'),
+        );
+        expect(choice, isNull);
+        closed = true;
+      },
+      size: const Size(800, 600),
+      textScale: 1,
+    );
+    final cancel = find.widgetWithText(TextButton, 'Cancel');
+    final retry = find.widgetWithText(FilledButton, 'Retry');
+    expect(cancel.hitTestable(), findsOneWidget);
+    expect(retry.hitTestable(), findsOneWidget);
+    expect(tester.getCenter(cancel).dy, closeTo(tester.getCenter(retry).dy, 1));
+    final gap = tester.getTopLeft(retry).dx - tester.getBottomRight(cancel).dx;
+    expect(gap, inInclusiveRange(0, 16));
+    await tester.tap(cancel);
+    await tester.pumpAndSettle();
+    expect(closed, isTrue);
+    expect(tester.takeException(), isNull);
+  });
+
+  for (final size in [const Size(320, 700), const Size(900, 300)]) {
+    testWidgets(
+      'release error actions stay visible while content scrolls at $size',
+      (tester) async {
+        var closed = false;
+        await _open(tester, (context) async {
+          await showDynamicReleasePicker(
+            context,
+            _Host(
+              failureMessage: List.filled(
+                20,
+                'A long translated network failure description.',
+              ).join(' '),
+            ),
+            loadReleases: () async => throw StateError('Network unavailable'),
+          );
+          closed = true;
+        }, size: size);
+        final dialog = find.byKey(const ValueKey('dynamicReleasePickerDialog'));
+        final cancel = find.widgetWithText(TextButton, 'Cancel');
+        final retry = find.widgetWithText(FilledButton, 'Retry');
+        expect(cancel.hitTestable(), findsOneWidget);
+        expect(retry.hitTestable(), findsOneWidget);
+        final cancelTop = tester.getTopLeft(cancel).dy;
+        final retryTop = tester.getTopLeft(retry).dy;
+        final scroll = find
+            .descendant(of: dialog, matching: find.byType(Scrollable))
+            .first;
+        final position = tester.state<ScrollableState>(scroll).position;
+        expect(position.maxScrollExtent, greaterThan(0));
+        await tester.drag(scroll, const Offset(0, -200));
+        await tester.pumpAndSettle();
+        expect(position.pixels, greaterThan(0));
+        expect(tester.getTopLeft(cancel).dy, closeTo(cancelTop, 0.1));
+        expect(tester.getTopLeft(retry).dy, closeTo(retryTop, 0.1));
+        expect(cancel.hitTestable(), findsOneWidget);
+        expect(retry.hitTestable(), findsOneWidget);
+        await tester.tap(cancel);
+        await tester.pumpAndSettle();
+        expect(closed, isTrue);
+        expect(tester.takeException(), isNull);
+      },
+    );
+  }
+
+  testWidgets('retry clears its action while loading and returns a release', (
     tester,
   ) async {
     var attempts = 0;
+    final pending = Completer<List<DynamicReleaseOption>>();
+    DynamicReleaseOption? choice;
     await _open(tester, (context) async {
-      await showDynamicReleasePicker(
+      choice = await showDynamicReleasePicker(
         context,
         _Host(),
-        loadReleases: () async {
+        loadReleases: () {
           attempts++;
           if (attempts == 1) {
-            throw StateError(
-              List.filled(12, 'A long translated download error.').join(' '),
-            );
+            return Future.error(StateError('Network unavailable'));
           }
-          return [_release];
+          return pending.future;
         },
       );
     });
-    final scroll = find
-        .descendant(
-          of: find.byKey(const ValueKey('dynamicReleasePickerDialog')),
-          matching: find.byType(Scrollable),
-        )
-        .first;
-    final retry = find.text('Retry');
-    await tester.scrollUntilVisible(retry, 240, scrollable: scroll);
+    final retry = find.widgetWithText(FilledButton, 'Retry');
     await tester.tap(retry);
-    await tester.pumpAndSettle();
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 100));
     expect(attempts, 2);
+    expect(find.text('Retry'), findsNothing);
+    expect(find.byType(CircularProgressIndicator), findsOneWidget);
     expect(
-      find.byKey(const ValueKey('dynamicReleaseOption-2026.09.13-release')),
+      find.widgetWithText(TextButton, 'Cancel').hitTestable(),
       findsOneWidget,
     );
+    pending.complete([_release]);
+    await tester.pumpAndSettle();
+    expect(find.text('Retry'), findsNothing);
+    final option = find.byKey(
+      const ValueKey('dynamicReleaseOption-2026.09.13-release'),
+    );
+    await tester.ensureVisible(option);
+    await tester.tap(option);
+    await tester.pumpAndSettle();
+    expect(choice, same(_release));
     expect(tester.takeException(), isNull);
   });
 
