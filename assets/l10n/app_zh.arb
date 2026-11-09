@@ -1283,7 +1283,7 @@
   "moduleTitle_ProtectThePlantChallengeProperties": "保护植物挑战",
   "moduleDesc_ProtectThePlantChallengeProperties": "设置关卡中必须保护的植物",
   "moduleTitle_ProtectTheGridItemChallengeProperties": "保护物品挑战",
-  "moduleDesc_ProtectTheGridItemChallengeProperties": "设置关卡中必须保护的障碍物",
+  "moduleDesc_ProtectTheGridItemChallengeProperties": "设置关卡中必须保护且不能被破坏的物品",
   "moduleTitle_MoldColonyChallengeProps": "霉菌区域",
   "moduleDesc_MoldColonyChallengeProps": "设置关卡中禁止种植的霉菌覆盖区域",
   "moldColonyLocationsTitle": "关联霉菌布局 (Locations)",

@@ -3128,7 +3128,7 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get moduleDesc_ProtectTheGridItemChallengeProperties =>
-      '设置关卡中必须保护的障碍物';
+      '设置关卡中必须保护且不能被破坏的物品';
 
   @override
   String get moduleTitle_MoldColonyChallengeProps => '霉菌区域';
