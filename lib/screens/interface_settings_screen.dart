@@ -460,7 +460,7 @@ class _InterfaceSettingsScreenState extends State<InterfaceSettingsScreen> {
             l10n.menuCustomizationDragHint,
             style: Theme.of(context).textTheme.bodySmall,
           ),
-          const SizedBox(height: 4),
+          const SizedBox(height: 12),
           ConstrainedBox(
             key: ValueKey('interfaceMenuViewport_${_selectedSurface.name}'),
             constraints: BoxConstraints(
@@ -473,6 +473,7 @@ class _InterfaceSettingsScreenState extends State<InterfaceSettingsScreen> {
               key: ValueKey('interfaceMenu_${_selectedSurface.name}'),
               shrinkWrap: true,
               primary: false,
+              padding: EdgeInsets.zero,
               physics: const ClampingScrollPhysics(),
               buildDefaultDragHandles: false,
               itemCount: actions.length,
@@ -1051,12 +1052,21 @@ class _PlacementControl extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final labelStyle = theme.textTheme.labelLarge!;
+    final labelHeight =
+        MediaQuery.textScalerOf(context).scale(labelStyle.fontSize ?? 14) *
+        (labelStyle.height ?? 1);
+    final controlHeight =
+        (labelHeight + 16).clamp(40.0, double.infinity) +
+        theme.visualDensity.baseSizeAdjustment.dy;
     if (compact) {
       return Container(
+        height: controlHeight,
         padding: const EdgeInsets.symmetric(horizontal: 14),
         decoration: ShapeDecoration(
           shape: StadiumBorder(
-            side: BorderSide(color: Theme.of(context).colorScheme.outline),
+            side: BorderSide(color: theme.colorScheme.outline),
           ),
         ),
         child: DropdownButtonHideUnderline(
@@ -1066,6 +1076,10 @@ class _PlacementControl extends StatelessWidget {
                   focusNode: focusNode,
                   value: placement,
                   isExpanded: true,
+                  isDense: true,
+                  style: labelStyle.copyWith(
+                    color: theme.colorScheme.onSurface,
+                  ),
                   items: [
                     DropdownMenuItem(
                       value: InterfaceMenuPlacement.toolbar,
@@ -1125,29 +1139,37 @@ class _PlacementControl extends StatelessWidget {
         ),
       );
     }
-    return SegmentedButton<InterfaceMenuPlacement>(
-      showSelectedIcon: false,
-      expandedInsets: EdgeInsets.zero,
-      segments: [
-        ButtonSegment(
-          value: InterfaceMenuPlacement.toolbar,
-          icon: const Icon(Icons.push_pin_outlined),
-          label: Text(toolbarLabel),
+    return SizedBox(
+      height: controlHeight,
+      child: SegmentedButton<InterfaceMenuPlacement>(
+        showSelectedIcon: false,
+        expandedInsets: EdgeInsets.zero,
+        style: SegmentedButton.styleFrom(
+          textStyle: labelStyle,
+          visualDensity: theme.visualDensity,
+          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
         ),
-        ButtonSegment(
-          value: InterfaceMenuPlacement.overflow,
-          icon: const Icon(Icons.more_vert),
-          label: Text(overflowLabel),
-        ),
-        if (allowSettingsPage)
+        segments: [
           ButtonSegment(
-            value: InterfaceMenuPlacement.settingsPage,
-            icon: const Icon(Icons.tune),
-            label: Text(settingsPageLabel),
+            value: InterfaceMenuPlacement.toolbar,
+            icon: const Icon(Icons.push_pin_outlined),
+            label: Text(toolbarLabel),
           ),
-      ],
-      selected: {placement},
-      onSelectionChanged: (selection) => onChanged(selection.first),
+          ButtonSegment(
+            value: InterfaceMenuPlacement.overflow,
+            icon: const Icon(Icons.more_vert),
+            label: Text(overflowLabel),
+          ),
+          if (allowSettingsPage)
+            ButtonSegment(
+              value: InterfaceMenuPlacement.settingsPage,
+              icon: const Icon(Icons.tune),
+              label: Text(settingsPageLabel),
+            ),
+        ],
+        selected: {placement},
+        onSelectionChanged: (selection) => onChanged(selection.first),
+      ),
     );
   }
 }
