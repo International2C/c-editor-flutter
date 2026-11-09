@@ -828,7 +828,7 @@ class _ZombieSpawnEventScreenState extends State<ZombieSpawnEventScreen> {
                         'Assign Ztalemate Escape buffs to individual zombies via the Titles property. Each perk type can only be used once per zombie.',
                   ),
                 HelpSectionData(
-                  title: l10n?.row ?? 'Row',
+                  title: l10n?.barrelWaveHelpRows ?? 'Row numbering',
                   body: _isDeepSeaLawn
                       ? (l10n?.eventHelpStandardRowDeepSea ??
                             'Rows 0–5 (6-row lawn). Leave unset for random row.')

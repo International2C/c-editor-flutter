@@ -138,6 +138,7 @@ class _CustomStagePropertiesScreenState
   bool get _hasAdvancedSettings =>
       _objclass == 'FutureStageProperties' ||
       CustomStageLevelUtils.supportsCosmicPlantfoodFill(_objclass) ||
+      CustomStageLevelUtils.supportsMoonPart2Appearance(_objdata) ||
       CustomStageLevelUtils.supportsBeachMinigame(_objdata) ||
       CustomStageLevelUtils.supportsSubmarine(_objclass) ||
       CustomStageLevelUtils.supportsSkyCityAirship(_objclass);
@@ -934,6 +935,27 @@ class _CustomStagePropertiesScreenState
                           },
                         ),
                       ),
+                    ),
+                  ),
+                if (CustomStageLevelUtils.supportsMoonPart2Appearance(_objdata))
+                  Card(
+                    child: SwitchListTile(
+                      key: const ValueKey('moonPart2AppearanceSwitch'),
+                      title: Text(
+                        l10n?.customStageMoonPart2Appearance ??
+                            'Use part 2 lawn appearance',
+                      ),
+                      value: CustomStageLevelUtils.isMoonPart2AppearanceEnabled(
+                        _objdata,
+                      ),
+                      activeThumbColor: accent,
+                      onChanged: (enabled) {
+                        CustomStageLevelUtils.applyMoonPart2Appearance(
+                          _objdata,
+                          enabled: enabled,
+                        );
+                        _sync();
+                      },
                     ),
                   ),
                 if (CustomStageLevelUtils.supportsBeachMinigame(_objdata)) ...[

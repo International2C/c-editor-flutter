@@ -167,15 +167,23 @@ void main() {
     },
   );
 
-  test('tent spawn precedes pumpkin house in both event order sources', () {
+  test('tent spawn sits between barrel and bungee in both event orders', () {
     final order = EventRegistry.getAll().map((m) => m.defaultObjClass).toList();
     expect(
+      order.indexOf('BarrelWaveActionProps') + 1,
+      order.indexOf('WaveActionZombieTentProps'),
+    );
+    expect(
       order.indexOf('WaveActionZombieTentProps') + 1,
-      order.indexOf('PumpkinHouseActionProps'),
+      order.indexOf('BungeeWaveActionProps'),
+    );
+    expect(
+      ObjectOrderRegistry.getPriority('BarrelWaveActionProps') + 1,
+      ObjectOrderRegistry.getPriority('WaveActionZombieTentProps'),
     );
     expect(
       ObjectOrderRegistry.getPriority('WaveActionZombieTentProps') + 1,
-      ObjectOrderRegistry.getPriority('PumpkinHouseActionProps'),
+      ObjectOrderRegistry.getPriority('BungeeWaveActionProps'),
     );
   });
 

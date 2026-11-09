@@ -99,7 +99,7 @@ PRESETS = [
         "AutumnLateCustom",
         "customStagePreset_autumnLate",
         "customStagePresetSource_memoryLaneS28Level13",
-        "Stage_Autumn.webp",
+        "Stage_AutumnLate.webp",
     ),
 ]
 

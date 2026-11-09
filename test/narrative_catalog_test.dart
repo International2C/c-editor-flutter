@@ -49,6 +49,70 @@ void main() {
   });
 
   test(
+    'search orders displayed days numerically across campaign variants',
+    () async {
+      const expected = [
+        'FRESHINTRO_EGYPT_DAY1',
+        'FRESHINTRO_ZOMBIE_INTRO',
+        'EGYPT_INTRO_FIRSTLEVEL',
+        'EAT_PLANTFOOD_INTRO',
+        'USE_PLANTFOOD_INTRO',
+        'EGYPT_ZOMBIENOTE',
+        'EGYPT_INTRO_ZOMBOSS',
+        'EGYPT_OUTRO_ZOMBOSS',
+      ];
+      for (final (language, titleQuery, contentQuery) in [
+        ('zh', '神秘埃及', '玉米卷'),
+        ('en', 'Ancient Egypt', 'taco'),
+        ('ru', 'Древний Египет', 'тако'),
+      ]) {
+        final catalog = await NarrativeCatalog.load(Locale(language));
+        final byTitle = searchNarratives(
+          catalog,
+          NarrativeCategory.all,
+          titleQuery,
+        ).byTitle;
+        expect(
+          byTitle.map((entry) => entry.groupId).where(expected.contains),
+          expected,
+          reason: language,
+        );
+        for (final entries in [
+          searchNarratives(
+            catalog,
+            NarrativeCategory.all,
+            contentQuery,
+          ).byContent,
+          searchNarratives(
+            catalog,
+            NarrativeCategory.all,
+            'crazydave',
+          ).bySpeaker,
+        ]) {
+          final ids = entries.map((entry) => entry.groupId).toList();
+          expect(ids, contains('EGYPT_INTRO_FIRSTLEVEL'));
+          expect(ids, contains('EGYPT_INTRO_ZOMBOSS'));
+          expect(
+            ids.indexOf('EGYPT_INTRO_FIRSTLEVEL'),
+            lessThan(ids.indexOf('EGYPT_INTRO_ZOMBOSS')),
+            reason: language,
+          );
+        }
+        final seasonIds = searchNarratives(
+          catalog,
+          NarrativeCategory.memoryLane,
+          'PVZ1_S32',
+        ).byTitle.map((entry) => entry.groupId).toList();
+        expect(
+          seasonIds.indexOf('PVZ1_S32_9_H_INTRO'),
+          lessThan(seasonIds.indexOf('PVZ1_S32_6_H_INTRO')),
+          reason: language,
+        );
+      }
+    },
+  );
+
+  test(
     'three locale catalogues stay structurally aligned and exclude Heroes',
     () async {
       final zh = await NarrativeCatalog.load(const Locale('zh'));

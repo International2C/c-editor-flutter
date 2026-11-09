@@ -7450,17 +7450,6 @@
     "icon": "zombie_halloween_imp.webp"
   },
   {
-    "id": "pumpkin_knight_ghost",
-    "name": "zombie_pumpkin_knight_ghost",
-    "tags": [
-      "Festival2",
-      "Imp",
-      "Pet",
-      "Chinese"
-    ],
-    "icon": "zombie_pumpkin_knight_ghost.webp"
-  },
-  {
     "id": "pumpkin_scarecrow_bird",
     "name": "zombie_pumpkin_scarecrow_bird",
     "tags": [
@@ -7469,6 +7458,16 @@
       "Chinese"
     ],
     "icon": "zombie_pumpkin_scarecrow_bird.webp"
+  },
+  {
+    "id": "pumpkin_knight_ghost",
+    "name": "zombie_pumpkin_knight_ghost",
+    "tags": [
+      "Festival2",
+      "Pet",
+      "Chinese"
+    ],
+    "icon": "zombie_pumpkin_knight_ghost.webp"
   },
   {
     "id": "pumpkin_house_ghost",
@@ -7527,6 +7526,16 @@
       "Chinese"
     ],
     "icon": "zombie_pumpkin_knight.webp"
+  },
+  {
+    "id": "witch",
+    "name": "zombie_witch",
+    "tags": [
+      "Festival2",
+      "Elite",
+      "Chinese"
+    ],
+    "icon": "zombie_witch.webp"
   },
   {
     "id": "pumpkin_necromancer",

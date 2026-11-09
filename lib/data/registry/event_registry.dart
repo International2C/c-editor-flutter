@@ -536,6 +536,27 @@ class EventRegistry {
         }
       },
     ),
+    'WaveActionZombieTentProps': EventMetadata(
+      titleKey: 'eventTitle_WaveActionZombieTentProps',
+      descriptionKey: 'eventDesc_WaveActionZombieTentProps',
+      icon: Icons.festival,
+      color: const Color(0xFFC62828),
+      darkColor: const Color(0xFFEF9A9A),
+      category: EventCategory.gridItemSpawn,
+      defaultAlias: 'FestivalZombieTentEvent',
+      defaultObjClass: 'WaveActionZombieTentProps',
+      initialDataFactory: () => WaveActionZombieTentPropsData(),
+      summaryProvider: (obj) {
+        try {
+          final data = WaveActionZombieTentPropsData.fromJson(
+            obj.objData as Map<String, dynamic>,
+          );
+          return '${data.zombieTents.length}';
+        } catch (_) {
+          return '';
+        }
+      },
+    ),
     'BungeeWaveActionProps': EventMetadata(
       titleKey: 'eventTitle_BungeeWaveActionProps',
       descriptionKey: 'eventDesc_BungeeWaveActionProps',
@@ -595,27 +616,6 @@ class EventRegistry {
             obj.objData as Map<String, dynamic>,
           );
           return '${data.zombies.length}';
-        } catch (_) {
-          return '';
-        }
-      },
-    ),
-    'WaveActionZombieTentProps': EventMetadata(
-      titleKey: 'eventTitle_WaveActionZombieTentProps',
-      descriptionKey: 'eventDesc_WaveActionZombieTentProps',
-      icon: Icons.festival,
-      color: const Color(0xFFC62828),
-      darkColor: const Color(0xFFEF9A9A),
-      category: EventCategory.gridItemSpawn,
-      defaultAlias: 'FestivalZombieTentEvent',
-      defaultObjClass: 'WaveActionZombieTentProps',
-      initialDataFactory: () => WaveActionZombieTentPropsData(),
-      summaryProvider: (obj) {
-        try {
-          final data = WaveActionZombieTentPropsData.fromJson(
-            obj.objData as Map<String, dynamic>,
-          );
-          return '${data.zombieTents.length}';
         } catch (_) {
           return '';
         }

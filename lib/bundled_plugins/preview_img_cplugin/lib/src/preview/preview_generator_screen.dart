@@ -34,6 +34,8 @@ import 'package:c_editor/data/registry/module_registry.dart';
 import 'package:c_editor/l10n/resource_names.dart';
 import 'package:c_editor/widgets/editor_components.dart';
 import 'package:c_editor/widgets/app_ui_scale.dart';
+import 'package:c_editor/widgets/asset_image.dart'
+    show canonicalImageAssetPath;
 import 'package:c_editor/plugin_api/c_plugin_host.dart';
 import 'dart:ui' as ui;
 
@@ -1302,7 +1304,11 @@ class _PreviewGeneratorScreenState extends State<PreviewGeneratorScreen> {
       PreviewLayerKind.text => layer.plainText,
       PreviewLayerKind.iconGrid => layer.gridTitle ?? '',
       PreviewLayerKind.image =>
-        stickers[layer.imageAsset]?.localizedName(context, _t) ?? '',
+        stickers[canonicalImageAssetPath(layer.imageAsset ?? '')]?.localizedName(
+              context,
+              _t,
+            ) ??
+            '',
       PreviewLayerKind.shape => _t(
         'previewFigure_${layer.shapeKind?.name ?? 'rect'}',
       ),

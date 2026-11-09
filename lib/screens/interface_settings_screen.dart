@@ -4,6 +4,7 @@ import 'package:c_editor/data/registry/module_registry.dart';
 import 'package:c_editor/screens/editor/tabs/level_settings_tab.dart';
 import 'package:c_editor/l10n/app_localizations.dart';
 import 'package:c_editor/plugins/plugin_host_hooks.dart';
+import 'package:c_editor/plugins/interface_menu_plugin_actions.dart';
 import 'package:c_editor/plugins/plugin_manager.dart';
 import 'package:c_editor/widgets/app_ui_scale.dart';
 import 'package:c_editor/widgets/dropdown_pointer_focus.dart';
@@ -569,6 +570,8 @@ class _InterfaceSettingsScreenState extends State<InterfaceSettingsScreen> {
       InterfaceMenuActionIds.importFiles ||
       InterfaceMenuActionIds.importFolder ||
       InterfaceMenuActionIds.downloadAll => kIsWeb,
+      InterfaceMenuActionIds.levelTestingMod =>
+        workspacePluginMenuElement(id) != null,
       _ => true,
     };
   }
@@ -589,6 +592,9 @@ class _InterfaceSettingsScreenState extends State<InterfaceSettingsScreen> {
       InterfaceMenuActionIds.clearCache => l10n.clearCache,
       InterfaceMenuActionIds.plugins => l10n.pluginsTitle,
       InterfaceMenuActionIds.about => l10n.aboutSoftware,
+      InterfaceMenuActionIds.levelTestingMod =>
+        workspacePluginMenuElement(id)?.resolvedTitle(context) ??
+            l10n.exportLevels,
       InterfaceMenuActionIds.viewJson => l10n.tooltipJsonViewer,
       InterfaceMenuActionIds.levelOverview => l10n.levelOverview,
       InterfaceMenuActionIds.toggleJsonView => l10n.tooltipToggleObjectView,
@@ -615,6 +621,8 @@ class _InterfaceSettingsScreenState extends State<InterfaceSettingsScreen> {
       InterfaceMenuActionIds.clearCache => Icons.delete_outline,
       InterfaceMenuActionIds.plugins => Icons.extension,
       InterfaceMenuActionIds.about => Icons.info_outline,
+      InterfaceMenuActionIds.levelTestingMod =>
+        workspacePluginMenuElement(id)?.icon ?? Icons.inventory_2,
       InterfaceMenuActionIds.viewJson => Icons.code,
       InterfaceMenuActionIds.levelOverview => Icons.visibility,
       InterfaceMenuActionIds.toggleJsonView => Icons.data_object,

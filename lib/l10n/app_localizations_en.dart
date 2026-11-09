@@ -6057,7 +6057,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get airdropZombieReplaceWarning =>
-      'This zombie is outside the editor’s list of available zombies for this module. Switching will permanently overwrite the original zombie\'s codename. Continue?';
+      'The zombie currently used by this event is not in the editor’s list of available options. Switching will permanently overwrite its original codename. Continue?';
 
   @override
   String get noneSelected => 'None selected';
@@ -9810,6 +9810,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get customStageBeachMinigame => 'Use minigame version';
+
+  @override
+  String get customStageMoonPart2Appearance => 'Use part 2 lawn appearance';
 
   @override
   String get customStageOnePerLevelLimit =>

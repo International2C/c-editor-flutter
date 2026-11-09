@@ -11,6 +11,11 @@ const List<String> kImageExtensions = [
   '.bmp',
 ];
 
+String canonicalImageAssetPath(String assetPath) =>
+    assetPath == 'assets/images/round_icons/Stage_Autumn.webp'
+    ? 'assets/images/round_icons/Stage_AutumnLate.webp'
+    : assetPath;
+
 /// Display-only trims for the original 390×390 armor sprites. Keep all
 /// nontransparent pixels (including the sword, feet, and faint shadow).
 Rect? livingArmorDisplayCrop(String assetPath) {
@@ -26,6 +31,7 @@ Rect? livingArmorDisplayCrop(String assetPath) {
 /// Returns alternate asset paths for fallback when primary path fails.
 /// Prefers .gif first so animated icons display correctly.
 List<String> imageAltCandidates(String assetPath) {
+  assetPath = canonicalImageAssetPath(assetPath);
   final idx = assetPath.lastIndexOf('.');
   final base = idx == -1 ? assetPath : assetPath.substring(0, idx);
   final currentExt = idx == -1 ? '' : assetPath.substring(idx).toLowerCase();
@@ -84,7 +90,10 @@ class AssetImageWidget extends StatefulWidget {
       return _pathCache[cacheKey];
     }
 
-    final candidates = <String>[assetPath, ...?altCandidates];
+    final candidates = <String>[
+      assetPath,
+      ...?altCandidates,
+    ].map(canonicalImageAssetPath);
     if (_preloadComplete) {
       for (final path in candidates) {
         if (_manifestPaths.contains(path)) {
@@ -156,7 +165,10 @@ class _AssetImageWidgetState extends State<AssetImageWidget> {
         _resolvedPath = null;
       });
     }
-    final candidates = <String>[widget.assetPath, ...?widget.altCandidates];
+    final candidates = <String>[
+      widget.assetPath,
+      ...?widget.altCandidates,
+    ].map(canonicalImageAssetPath);
     for (final path in candidates) {
       try {
         await rootBundle.load(path);

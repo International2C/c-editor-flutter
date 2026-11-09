@@ -155,4 +155,76 @@ void main() {
       25.5,
     );
   });
+
+  for (final objclass in ['MoonStageProperties', 'EgyptStageProperties']) {
+    testWidgets('Moon part 2 appearance persists on $objclass', (tester) async {
+      final options = StageCatalogRepository.stageBaseOptions();
+      final base = options.firstWhere((option) => option.objclass == objclass);
+      final moon = options.firstWhere((option) => option.alias == 'MoonStage');
+      final stage = PvzObject(
+        aliases: ['CustomMoonAppearance'],
+        objClass: objclass,
+        objData: {
+          ...CustomStageLevelUtils.cloneJson(base.objdata) as Map,
+          ...CustomStageLevelUtils.snapshotLawnAppearance(moon.objdata),
+          'ResourceGroupNames': [...moon.objdata['ResourceGroupNames'] as List],
+          'GroupsToUnloadForAds': [
+            ...moon.objdata['GroupsToUnloadForAds'] as List,
+          ],
+        },
+      );
+      Future<void> open(PvzLevelFile level) async {
+        await tester.pumpWidget(
+          MaterialApp(
+            locale: const Locale('zh'),
+            supportedLocales: AppLocalizations.supportedLocales,
+            localizationsDelegates: AppLocalizations.localizationsDelegates,
+            home: CustomStagePropertiesScreen(
+              key: ValueKey(level),
+              alias: 'CustomMoonAppearance',
+              levelFile: level,
+              onChanged: () {},
+              onBack: () {},
+            ),
+          ),
+        );
+        await tester.pumpAndSettle();
+      }
+
+      final toggle = find.byKey(const ValueKey('moonPart2AppearanceSwitch'));
+      await open(PvzLevelFile(objects: [stage]));
+      expect(tester.widget<SwitchListTile>(toggle).value, isFalse);
+      await tester.ensureVisible(toggle);
+      await tester.pumpAndSettle();
+      await tester.tap(toggle);
+      await tester.pumpAndSettle();
+      final data = stage.objData as Map;
+      expect(data['BackgroundImageLeft'], 'MOON_LEFT');
+      expect(data['BackgroundImageMiddle'], 'MOONPART2');
+      expect(data['BackgroundImageRight'], 'MOONPART2_RIGHT');
+
+      final restored = PvzLevelFile.fromJson(
+        PvzLevelFile(objects: [stage]).toJson(),
+      );
+      await open(restored);
+      expect(tester.widget<SwitchListTile>(toggle).value, isTrue);
+      await tester.ensureVisible(toggle);
+      await tester.pumpAndSettle();
+      await tester.tap(toggle);
+      await tester.pumpAndSettle();
+      final reset = restored.objects.single.objData as Map;
+      expect(reset['BackgroundImageLeft'], 'MOON_LEFT');
+      expect(reset['BackgroundImageMiddle'], 'MOON');
+      expect(reset['BackgroundImageRight'], 'MOON_RIGHT');
+
+      final otherAppearance = PvzObject(
+        aliases: ['CustomMoonAppearance'],
+        objClass: objclass,
+        objData: {...reset, 'BackgroundImagePrefix': 'IMAGE_BACKGROUNDS_EGYPT'},
+      );
+      await open(PvzLevelFile(objects: [otherAppearance]));
+      expect(toggle, findsNothing);
+      expect(tester.takeException(), isNull);
+    });
+  }
 }

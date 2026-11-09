@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:collection/collection.dart' show compareNatural;
 import 'package:c_editor/data/narrative_catalog.dart';
 import 'package:c_editor/screens/select/narrative_preview_screen.dart';
 import 'package:c_editor/utils/selection_view_memory.dart';
@@ -27,7 +28,7 @@ NarrativeSearchResults searchNarratives(
   String query,
 ) {
   final normalized = query.trim().toLowerCase();
-  final entries = catalog.forCategory(category);
+  var entries = catalog.forCategory(category);
   if (normalized.isEmpty) {
     return NarrativeSearchResults(
       byTitle: entries,
@@ -35,6 +36,7 @@ NarrativeSearchResults searchNarratives(
       bySpeaker: const [],
     );
   }
+  entries = _orderSearchProgression(catalog, entries);
 
   bool contains(Iterable<String> values) =>
       values.any((value) => value.toLowerCase().contains(normalized));
@@ -52,6 +54,44 @@ NarrativeSearchResults searchNarratives(
         )
         .toList(growable: false),
   );
+}
+
+List<NarrativeEntry> _orderSearchProgression(
+  NarrativeCatalog catalog,
+  List<NarrativeEntry> entries,
+) {
+  // Sort numbered title families in their existing slots so section grouping,
+  // tutorial placement and same-day variant order stay consistent.
+  final numberedGroups =
+      <(NarrativeSectionId, String), List<({int index, String numbers})>>{};
+  final numberPattern = RegExp(r'\d+');
+  for (var index = 0; index < entries.length; index++) {
+    final entry = entries[index];
+    final title = entry.title.split(RegExp(r'[（(:：]')).first;
+    final numbers = numberPattern.allMatches(title).toList();
+    if (numbers.isEmpty) continue;
+    final key = (
+      catalog.sectionForEntry(entry).id,
+      title.substring(0, numbers.first.start),
+    );
+    numberedGroups.putIfAbsent(key, () => []).add((
+      index: index,
+      numbers: numbers.map((match) => match.group(0)!).join('.'),
+    ));
+  }
+
+  final ordered = List<NarrativeEntry>.of(entries);
+  for (final group in numberedGroups.values) {
+    final positions = group.map((item) => item.index).toList();
+    group.sort((a, b) {
+      final numericOrder = compareNatural(a.numbers, b.numbers);
+      return numericOrder != 0 ? numericOrder : a.index.compareTo(b.index);
+    });
+    for (var index = 0; index < group.length; index++) {
+      ordered[positions[index]] = entries[group[index].index];
+    }
+  }
+  return ordered;
 }
 
 class NarrativeSelectionScreen extends StatefulWidget {

@@ -57,6 +57,7 @@ abstract final class InterfaceMenuActionIds {
   static const clearCache = 'cache';
   static const plugins = 'plugins';
   static const about = 'about';
+  static const levelTestingMod = 'level_testing_mod';
 
   static const viewJson = 'json';
   static const levelOverview = 'level_overview';
@@ -118,6 +119,10 @@ const _workspaceDefaults = <InterfaceMenuActionPreference>[
   ),
   InterfaceMenuActionPreference(
     id: InterfaceMenuActionIds.about,
+    placement: InterfaceMenuPlacement.overflow,
+  ),
+  InterfaceMenuActionPreference(
+    id: InterfaceMenuActionIds.levelTestingMod,
     placement: InterfaceMenuPlacement.overflow,
   ),
   InterfaceMenuActionPreference(

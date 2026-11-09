@@ -26,6 +26,8 @@
   "previewGenExportEncodingFail": "Could not encode the preview image. Please try again.",
   "previewGenExportLibraryNotConfigured": "Set up the level library folder before exporting a preview image.",
   "previewGenChooseBanner": "Choose background image",
+  "previewGenMoonPart1Banner": "Moon BaseZ - Part 1",
+  "previewGenMoonPart2Banner": "Moon BaseZ - Part 2",
   "previewGenUnknownBanner": "Spacetime Main Menu",
   "previewGenCustomBanner": "Custom background image",
   "previewGenScale": "Element scale",

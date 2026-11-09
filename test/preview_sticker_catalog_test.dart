@@ -252,6 +252,29 @@ void main() {
     expect(_messages('ru')['previewStickerNameJamNone'], 'Level Jam — нет');
   });
 
+  test('autumn stickers keep distinct early and late localized names', () {
+    const autumnIcons = {
+      'Stage_AutumnEarly': 'customStagePreset_autumnEarly',
+      'Stage_AutumnLate': 'stage_AutumnLateStage',
+    };
+    for (final entry in autumnIcons.entries) {
+      final path = 'assets/images/round_icons/${entry.key}.webp';
+      final sticker = stickers.singleWhere((item) => item.assetPath == path);
+      expect(sticker.tag, 'round_icons');
+      expect(sticker.resourceNameKey, entry.value);
+      for (final locale in ['zh', 'en', 'ru']) {
+        expect(
+          ResourceNames.lookupWithLocale(locale, entry.value),
+          isNot(entry.value),
+        );
+      }
+    }
+    expect(
+      stickers.any((item) => item.assetPath.endsWith('/Stage_Autumn.webp')),
+      isFalse,
+    );
+  });
+
   test('mode and NPC icons use dedicated tags and three-language names', () {
     for (final entry in kPreviewModeStickerLabels.entries) {
       final path = 'assets/images/round_icons/${entry.key}.webp';

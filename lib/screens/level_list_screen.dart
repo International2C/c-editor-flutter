@@ -20,6 +20,7 @@ import 'package:c_editor/l10n/app_localizations.dart';
 import 'package:c_editor/plugin_api/c_plugin_host.dart';
 import 'package:c_editor/plugins/plugin_constants.dart';
 import 'package:c_editor/plugins/plugin_install_dialog.dart';
+import 'package:c_editor/plugins/interface_menu_plugin_actions.dart';
 import 'package:c_editor/plugins/plugin_manager.dart';
 import 'package:c_editor/plugins/plugin_ui_host.dart';
 import 'package:c_editor/screens/level_list_platform.dart';
@@ -502,6 +503,9 @@ class _LevelListScreenState extends State<LevelListScreen> {
     _showUploadFabAfterLevelReturn =
         widget.showUploadAfterLevelReturn && _pendingReturnLevelPath != null;
     _listScrollController.addListener(_onListScroll);
+    if (PluginManager.isInitialized) {
+      PluginManager.instance.addListener(_onPluginsChanged);
+    }
     _seedRootFromStartupCache();
     _loadSavedPathAndList();
   }
@@ -539,10 +543,17 @@ class _LevelListScreenState extends State<LevelListScreen> {
 
   @override
   void dispose() {
+    if (PluginManager.isInitialized) {
+      PluginManager.instance.removeListener(_onPluginsChanged);
+    }
     _listScrollController.removeListener(_onListScroll);
     _listScrollController.dispose();
     _searchController.dispose();
     super.dispose();
+  }
+
+  void _onPluginsChanged() {
+    if (mounted) setState(() {});
   }
 
   void _onListScroll() {
@@ -1596,6 +1607,8 @@ class _LevelListScreenState extends State<LevelListScreen> {
       InterfaceMenuActionIds.importFiles ||
       InterfaceMenuActionIds.importFolder ||
       InterfaceMenuActionIds.downloadAll => kIsWeb,
+      InterfaceMenuActionIds.levelTestingMod =>
+        workspacePluginMenuElement(id) != null,
       _ => true,
     };
   }
@@ -1621,6 +1634,9 @@ class _LevelListScreenState extends State<LevelListScreen> {
       InterfaceMenuActionIds.clearCache => l10n.clearCache,
       InterfaceMenuActionIds.plugins => l10n.pluginsTitle,
       InterfaceMenuActionIds.about => l10n.aboutSoftware,
+      InterfaceMenuActionIds.levelTestingMod =>
+        workspacePluginMenuElement(id)?.resolvedTitle(context) ??
+            l10n.exportLevels,
       _ => id,
     };
   }
@@ -1644,6 +1660,8 @@ class _LevelListScreenState extends State<LevelListScreen> {
       InterfaceMenuActionIds.clearCache => Icons.delete_outline,
       InterfaceMenuActionIds.plugins => Icons.extension,
       InterfaceMenuActionIds.about => Icons.info_outline,
+      InterfaceMenuActionIds.levelTestingMod =>
+        workspacePluginMenuElement(id)?.icon ?? Icons.inventory_2,
       _ => Icons.more_horiz,
     };
   }
@@ -1684,6 +1702,9 @@ class _LevelListScreenState extends State<LevelListScreen> {
         widget.onPluginsClick();
       case InterfaceMenuActionIds.about:
         widget.onAboutClick();
+      case InterfaceMenuActionIds.levelTestingMod:
+        final element = workspacePluginMenuElement(id);
+        if (element != null) openPluginUiElement(context, element);
     }
   }
 
@@ -1805,6 +1826,12 @@ class _LevelListScreenState extends State<LevelListScreen> {
                 context: context,
                 slot: CPluginUiSlots.levelListOverflow,
                 valuePrefix: 'plugin:',
+                excludedElementKeys: {
+                  for (final action in configuredActions)
+                    if (workspacePluginMenuElement(action.id)
+                        case final element?)
+                      element.key,
+                },
               ),
             ],
             onSelected: (value) async {
