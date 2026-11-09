@@ -960,7 +960,7 @@ class LevelIssueRegistry {
       isActive: (ctx) =>
           ctx.hasModule('SpeedUpTileModuleProperties') &&
           (ctx.hasTunnelDefend || ctx.hasExpeditionTiles),
-      title: (_, l10n) => l10n.warning,
+      title: (_, l10n) => l10n.tunnelExpeditionCompatibilityWarningTitle,
       message: (_, l10n) => l10n.speedUpTileCompatibilityWarning,
     ),
     LevelIssueRule(
